@@ -9,4 +9,9 @@ public class Sparx extends LineTraveller {
     Sparx(int x, int y, int width, int height, Image[] sprite) {
         super(x, y, width, height, sprite);
     }
+
+    @Override
+    public void draw() {
+
+    }
 }
