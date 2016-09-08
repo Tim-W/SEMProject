@@ -10,8 +10,5 @@ public class Cursor extends LineTraveller {
         super(x, y, width, height, sprite);
     }
 
-    @Override
-    public void draw() {
 
-    }
 }
