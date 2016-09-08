@@ -1,8 +1,6 @@
-import javafx.scene.image.Image;
+package Units;
 
-/**
- * Created by gijs on 8-9-2016.
- */
+import javafx.scene.image.Image;
 abstract class Unit {
     public int x;
     public int y;
