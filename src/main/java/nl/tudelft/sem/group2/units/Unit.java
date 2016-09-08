@@ -8,14 +8,10 @@ import javafx.scene.canvas.Canvas;
 public abstract class Unit {
     protected int x;
     protected int y;
-    protected int width;
-    protected int height;
     protected Canvas canvas;
-    Unit(int x, int y, int width, int height, Canvas canvas){
+    Unit(int x, int y, Canvas canvas){
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
         this.canvas = canvas;
     }
     public abstract void draw();
@@ -26,14 +22,6 @@ public abstract class Unit {
 
     public int getY() {
         return this.y;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
-    public int getWidth() {
-        return this.width;
     }
 }
 

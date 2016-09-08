@@ -10,4 +10,5 @@ public class Cursor extends LineTraveller {
     Cursor(int x, int y, int width, int height, Canvas canvas, Image[] sprite) {
         super(x, y, width, height, canvas, sprite);
     }
+
 }

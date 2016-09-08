@@ -11,8 +11,12 @@ abstract public class LineTraveller extends Unit{
 
     private Image[] sprite;
     private int spriteIndex = 0;
+    protected int width;
+    protected int height;
     LineTraveller(int x, int y, int width, int height, Canvas canvas, Image[] sprite) {
-        super(x, y, width, height,canvas);
+        super(x, y, canvas);
+        this.width = width;
+        this.height = height;
         this.sprite = sprite;
     }
     //Todo needs to be implemented
@@ -24,5 +28,11 @@ abstract public class LineTraveller extends Unit{
     public void draw() {
         canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
+    }
+    public int getHeight() {
+        return this.height;
+    }
+    public int getWidth() {
+        return this.width;
     }
 }
