@@ -1,5 +1,7 @@
 package Units;
-
+/**
+ * Created by gijs on 8-9-2016.
+ */
 import javafx.scene.image.Image;
 abstract class Unit {
     public int x;
@@ -16,5 +18,3 @@ abstract class Unit {
     }
     public abstract void draw();
 }
-
-
