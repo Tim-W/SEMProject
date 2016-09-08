@@ -1,4 +1,4 @@
-
+package main.java.nl.tudelft.sem.group2;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
