@@ -1,24 +1,28 @@
-package main.java.nl.tudelft.sem.group2.units;
+package nl.tudelft.sem.group2.units;
 
-import javafx.scene.image.Image;
+import javafx.scene.canvas.Canvas;
 
 /**
  * Created by gijs on 8-9-2016.
  */
-abstract class Unit {
-    public int x;
-    public int y;
-    public int width;
-    public int height;
-    private Image[] sprite;
-    Unit(int x, int y, int width, int height, Image[] sprite){
+public abstract class Unit {
+    protected int x;
+    protected int y;
+    protected Canvas canvas;
+    Unit(int x, int y, Canvas canvas){
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
-        this.sprite = sprite;
+        this.canvas = canvas;
     }
     public abstract void draw();
+
+    public int getX(){
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
 }
 
 
