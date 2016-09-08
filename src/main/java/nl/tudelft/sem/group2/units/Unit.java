@@ -1,11 +1,11 @@
-package Units;
+package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 
 /**
  * Created by gijs on 8-9-2016.
  */
-abstract class Unit {
+public abstract class Unit {
     protected int x;
     protected int y;
     protected int width;
