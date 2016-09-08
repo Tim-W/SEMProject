@@ -26,26 +26,28 @@ public class LaunchApp extends Application{
 
 		// Start stage
 		stage.setTitle("Qix");
-		stage.setResizable(false);
 		stage.setWidth(340);
 		stage.setHeight(400);
-		stage.getIcons().add(new Image("http://www.arcadeboss.com/games/qix/qix.gif"));
+		//TODO fix image path
+		//stage.getIcons().add(new Image("../res/images.stageIcon.png"));
 		
 		Scene scene;
 		Group root = new Group();
-		
-		scene = new Scene(root,340,400, Color.BLACK);
 
 		//EXAMPLE ON HOW TO USE CANVAS
-//		final Canvas canvas = new Canvas(300,300);	
-//		GraphicsContext gc = canvas.getGraphicsContext2D();
-//		 
-//		gc.setFill(Color.BLUE);
-//		gc.fillRect(75,75,100,100);
-//		root.getChildren().add(canvas);
+		Canvas canvas = new Canvas(340,400);
+		GraphicsContext gc = canvas.getGraphicsContext2D();
 		
+		//BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
+		gc.setFill(Color.BLUE);
+		gc.fillRect(20,80,300,300);
+		root.getChildren().add(canvas);
+		
+		scene = new Scene(root, Color.BLACK);
 
 		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.sizeToScene();
 		stage.show();
 
 	}
