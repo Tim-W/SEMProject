@@ -1,5 +1,7 @@
 package Units;
 
+
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 
 /**
@@ -9,8 +11,8 @@ abstract public class LineTraveller extends Unit{
 
     private Image[] sprite;
     private int spriteIndex = 0;
-    LineTraveller(int x, int y, int width, int height, Image[] sprite) {
-        super(x, y, width, height);
+    LineTraveller(int x, int y, int width, int height, Canvas canvas, Image[] sprite) {
+        super(x, y, width, height,canvas);
         this.sprite = sprite;
     }
     //Todo needs to be implemented
@@ -19,8 +21,8 @@ abstract public class LineTraveller extends Unit{
         return false;
     }
     @Override
-    //todo create image on scene.
     public void draw() {
+        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }
 }

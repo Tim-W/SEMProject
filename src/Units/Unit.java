@@ -1,4 +1,7 @@
 package Units;
+
+import javafx.scene.canvas.Canvas;
+
 /**
  * Created by gijs on 8-9-2016.
  */
@@ -7,11 +10,13 @@ abstract class Unit {
     protected int y;
     protected int width;
     protected int height;
-    Unit(int x, int y, int width, int height){
+    protected Canvas canvas;
+    Unit(int x, int y, int width, int height, Canvas canvas){
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.canvas = canvas;
     }
     public abstract void draw();
 
