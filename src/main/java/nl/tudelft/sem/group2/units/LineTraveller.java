@@ -13,7 +13,7 @@ abstract public class LineTraveller extends Unit{
     private int spriteIndex = 0;
     protected int width;
     protected int height;
-    LineTraveller(int x, int y, int width, int height, Canvas canvas, Image[] sprite) {
+    public LineTraveller(int x, int y, int width, int height, Canvas canvas, Image[] sprite) {
         super(x, y, canvas);
         this.width = width;
         this.height = height;
