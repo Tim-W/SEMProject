@@ -1,9 +1,9 @@
-package nl.tudelft.sem.group2.scenes;
+package main.java.nl.tudelft.sem.group2.scenes;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
-import nl.tudelft.sem.group2.LaunchApp;
+import main.java.nl.tudelft.sem.group2.LaunchApp;
 
 public class ScoreScene extends Scene{
 
