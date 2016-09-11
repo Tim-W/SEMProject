@@ -17,7 +17,7 @@ public class areaTracker {
 
     private LinkedList<Point> stix = new LinkedList<Point>();
 
-    private areaStates[][] totalArea = new areaStates[LaunchApp.getBoardWidth()][LaunchApp.getBoardHeight()];
+    private areaStates[][] totalArea = new areaStates[LaunchApp.getGridWidth()][LaunchApp.getGridHeight()];
 
     public areaTracker () {
         for (int i=0;i<totalArea.length;i++) {
