@@ -60,6 +60,7 @@ public class LaunchApp extends Application {
         stage.sizeToScene();
         stage.show();
 
+        areaTracker areaState = new areaTracker();
     }
 
     public static void main(String[] args) {
