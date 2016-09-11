@@ -1,6 +1,7 @@
 package main.java.nl.tudelft.sem.group2;
 
 
+import main.java.nl.tudelft.sem.group2.scenes.GameScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Group;
@@ -31,7 +32,7 @@ public class LaunchApp extends Application {
         //TODO fix image path
         stage.getIcons().add(new Image("/res/images/stageIcon.png"));
 
-        Scene scene;
+        GameScene scene;
         Group root = new Group();
 
         //EXAMPLE ON HOW TO USE CANVAS
@@ -43,7 +44,7 @@ public class LaunchApp extends Application {
         gc.fillRect(20, 80, 300, 300);
         root.getChildren().add(canvas);
 
-        scene = new Scene(root, Color.BLACK);
+        scene = new GameScene(root, Color.BLACK);
 
         stage.setScene(scene);
         stage.setResizable(false);
