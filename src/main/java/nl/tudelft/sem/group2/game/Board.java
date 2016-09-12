@@ -19,7 +19,7 @@ public class Board {
         gc = canvas.getGraphicsContext2D();
         //BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
-        gc.fillRect(20, 80, 300, 300);
+        gc.fillRect(0, 0, 300, 300);
     }
 
     public void setUnits(Set<Unit> units) {
@@ -39,10 +39,22 @@ public class Board {
     }
 
     public void draw() {
-        gc.fillRect(20, 80, 300, 300);
+        gc.fillRect(0, 0, 300, 300);
         for (Unit unit : units) {
             unit.move();
             unit.draw(canvas);
         }
+    }
+    
+    public void collisions(){
+    	for (Unit collider: units) {
+    		for(Unit collidee : units){
+    			if(collider != collidee){
+    				if(collider.getX() == collidee.getX() && collider.getY() == collidee.getY()){
+    					System.out.println(collider.toString() + " collided with " + collidee.toString());
+    				}
+    			}
+    		}
+    	}
     }
 }
