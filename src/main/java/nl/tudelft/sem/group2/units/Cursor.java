@@ -9,9 +9,7 @@ public class Cursor extends LineTraveller {
     }
 
     @Override
-    public void move(Canvas canvas){
-
-        draw(canvas);
+    public void move(){
     }
 
 }

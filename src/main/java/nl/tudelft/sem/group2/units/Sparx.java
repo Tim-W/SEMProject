@@ -9,8 +9,8 @@ public class Sparx extends LineTraveller {
     }
 
     @Override
-    public void move(Canvas canvas){
+    public void move(){
 
-        draw(canvas);
+
     }
 }

@@ -9,8 +9,6 @@ public class Fuse extends LineTraveller {
     }
 
     @Override
-    public void move(Canvas canvas){
-
-        draw(canvas);
+    public void move(){
     }
 }

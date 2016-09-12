@@ -9,7 +9,7 @@ public abstract class Unit {
         this.x = x;
         this.y = y;
     }
-    public abstract void move(Canvas canvas);
+    public abstract void move();
     public abstract void draw(Canvas canvas);
     public int getX(){
         return this.x;

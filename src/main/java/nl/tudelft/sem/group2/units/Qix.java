@@ -8,9 +8,8 @@ public class Qix extends Unit {
         super(x, y);
     }
     @Override
-    public void move(Canvas canvas){
+    public void move(){
 
-        draw(canvas);
     }
     public void draw(Canvas canvas) {
     }
