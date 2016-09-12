@@ -32,5 +32,9 @@ public class Cursor extends LineTraveller {
     public void setCurrentMove(KeyCode currentMove) {
         this.currentMove = currentMove;
     }
+    
+    public String toString() {
+    	return "Cursor";
+    }
 
 }
