@@ -1,4 +1,4 @@
-package nl.tudelft.sem.group2.units;
+package main.java.nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 
@@ -19,6 +19,14 @@ public abstract class Unit {
 
     public int getY() {
         return this.y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }
 
