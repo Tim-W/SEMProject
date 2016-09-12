@@ -20,6 +20,7 @@ public class Board {
         //BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, 300, 300);
+
     }
 
     public void setUnits(Set<Unit> units) {
@@ -44,8 +45,7 @@ public class Board {
             unit.move();
             unit.draw(canvas);
         }
-    }
-    
+    }  
     public void collisions(){
     	for (Unit collider: units) {
     		for(Unit collidee : units){
