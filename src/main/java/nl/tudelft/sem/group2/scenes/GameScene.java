@@ -1,17 +1,12 @@
 package main.java.nl.tudelft.sem.group2.scenes;
 
-import java.util.ArrayList;
-
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 public class GameScene extends Scene {
 
@@ -42,7 +37,6 @@ public class GameScene extends Scene {
 		scoreScene.setClaimedPercentage(34);
 		root.getChildren().add(scoreScene);
 
-		final ArrayList<String> input = new ArrayList<String>();
 		previousTime = System.nanoTime();
 
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -57,6 +51,7 @@ public class GameScene extends Scene {
 			}
 		});
 
+		//animation timer for handling a loop
 		animationTimer = new AnimationTimer() {
 			public void handle(long now) {
 				// 33333333.3 = 30 FPS
@@ -77,6 +72,7 @@ public class GameScene extends Scene {
 
 			}
 		};
+		//TODO remove this start and start using game
 		animationTimer.start();
 	}
 
