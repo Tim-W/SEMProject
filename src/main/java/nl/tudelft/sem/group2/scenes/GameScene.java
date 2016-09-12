@@ -4,9 +4,13 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.game.Board;
+import nl.tudelft.sem.group2.units.Cursor;
 
 public class GameScene extends Scene {
 
@@ -14,6 +18,8 @@ public class GameScene extends Scene {
 	private int claimedPercentage;
 	private int targetPercentage;
 	private long previousTime;
+	private Cursor cursor;
+	private Board board;
 	private KeyCode currentMove = null;
 
 	AnimationTimer animationTimer;
@@ -23,6 +29,14 @@ public class GameScene extends Scene {
 
 	public GameScene(final Group root, Color black) {
 		super(root, black);
+
+		Canvas canvas = new Canvas(340, 400);
+		board = new Board(canvas);
+
+		Image[] cursorSprite = new Image[1];
+		cursorSprite[0] = new Image("/res/images/cursor.png");
+		cursor = new Cursor(100,100,20,20, cursorSprite);
+		board.addUnit(cursor);
 
 		score = 0;
 		claimedPercentage = 0;
@@ -38,38 +52,28 @@ public class GameScene extends Scene {
 		scoreScene.setClaimedPercentage(0);
 		
 		root.getChildren().add(scoreScene);
-
+		root.getChildren().add(canvas);
 		previousTime = System.nanoTime();
 
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-				currentMove = e.getCode();
+				cursor.setCurrentMove(e.getCode());
 			}
 		});
 
 		setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-				currentMove = null;
-			}
+				cursor.setCurrentMove(null);			}
 		});
 
 		//animation timer for handling a loop
 		animationTimer = new AnimationTimer() {
 			public void handle(long now) {
-				// 33333333.3 = 30 FPS
-				if (now - previousTime > (long) 33333333.3) {
+				// 3333333.3 = 300 FPS
+				if (now - previousTime > (long) 3333333.3) {
 					previousTime = now;
-					if (currentMove != null) {
-						if (currentMove.equals(KeyCode.LEFT)) {
-							// TODO code to move left
-						} else if (currentMove.equals(KeyCode.RIGHT)) {
-							// TODO code to move right
-						} else if (currentMove.equals(KeyCode.UP)) {
-							// TODO code to move up
-						} else if (currentMove.equals(KeyCode.DOWN)) {
-							// TODO code to move down
-						}
-					}
+					//draw
+					board.draw();
 				}
 
 			}
