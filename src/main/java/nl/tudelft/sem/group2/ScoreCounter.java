@@ -4,10 +4,10 @@ public class ScoreCounter {
 
 
     //Total score accumulated by player.
-    private int totalScore;
+    private int totalScore = 0;
 
     //Total percentage of current level is covered by player.
-    private double totalPercentage;
+    private double totalPercentage = 0;
 
     /**
      * Method to update current score and percentage
