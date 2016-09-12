@@ -1,7 +1,7 @@
-package main.java.nl.tudelft.sem.group2;
+package nl.tudelft.sem.group2;
 
 
-import main.java.nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.scenes.GameScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Group;

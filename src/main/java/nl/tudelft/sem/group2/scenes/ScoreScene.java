@@ -1,4 +1,4 @@
-package main.java.nl.tudelft.sem.group2.scenes;
+package nl.tudelft.sem.group2.scenes;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

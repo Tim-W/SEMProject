@@ -1,4 +1,4 @@
-package main.java.nl.tudelft.sem.group2.units;
+package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 
