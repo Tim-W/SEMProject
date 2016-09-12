@@ -25,11 +25,11 @@ public class LaunchApp extends Application {
 
     // a grid is 3x3 pixels, so a board contains 100x100
     public static int getGridHeight() {
-        return boardHeight/3;
+        return boardHeight/2;
     }
 
     public static int getGridWidth() {
-        return boardWidth/3;
+        return boardWidth/2;
     }
 
     private static int boardWidth = 300;

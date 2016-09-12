@@ -19,6 +19,10 @@ public class areaTracker {
 
     private areaStates[][] totalArea = new areaStates[LaunchApp.getGridWidth()][LaunchApp.getGridHeight()];
 
+    private LinkedList<Point> area1, area2, newArea;
+
+    private ScoreCounter scoreCounter = new ScoreCounter();
+
     public areaTracker () {
         for (int i=0;i<totalArea.length;i++) {
             for (int j=0;j<totalArea[i].length;j++) {
@@ -33,24 +37,63 @@ public class areaTracker {
         }
     }
 
-    public void calculateNewArea(Point qixCoordinates) {
-        Point previous = stix.getFirst();
-        Point current;
-        boolean inXDirection;
-        //TODO create to areaTracker units dingen je weet zelf van die die de area van de current stix berekenen
-        for (int i=0;i<stix.size();i++){
-            current = stix.get(i);
-            if (i!=0) {
-                //Check if current stix straight is moving in x direction
-                if (previous.getX()!=current.getX()) {
-                    //TODO check both y-directions for border  include all coordinates that are not border and if qix coordinate found delete that area and only count other one
-                }
-                //TODO do same for y-directions moving
+    public void calculateNewArea (Point qixCoordinates, boolean fastArea) {
+        for (Point current : stix) {
+            totalArea[(int) current.getX()][(int) current.getY()] = areaStates.BORDER;
+        }
+
+        Point start = stix.getFirst();
+        Point dir = stix.get(1);
+
+        area1 = new LinkedList<Point>();
+        area2 = new LinkedList<Point>();
+
+        if (start.getX() != dir.getX()) {
+            Point beginPoint1 = new Point((int) dir.getX(), (int) dir.getY()-1);
+            floodFill(beginPoint1, qixCoordinates, areaStates.UNCOVERED, true);
+            Point beginPoint2 = new Point((int) dir.getX(), (int) dir.getY()+1);
+            floodFill(beginPoint2, qixCoordinates, areaStates.UNCOVERED, true);
+        }
+        else if (start.getY() != dir.getY()) {
+            Point beginPoint1 = new Point((int) dir.getX()-1, (int) dir.getY());
+            floodFill(beginPoint1, qixCoordinates, areaStates.UNCOVERED, false);
+            Point beginPoint2 = new Point((int) dir.getX()+1, (int) dir.getY());
+            floodFill(beginPoint2, qixCoordinates, areaStates.UNCOVERED, false);
+        }
+
+        if (area1 == null) { newArea = area2; }
+        else if (area2 == null) {newArea = area1; }
+
+        scoreCounter.updateScore(newArea.size()+stix.size(), fastArea);
+
+        for (Point current : newArea) {
+            if (fastArea) { totalArea[(int) current.getX()][(int) current.getY()] = areaStates.FAST; }
+            else { totalArea[(int) current.getX()][(int) current.getY()] = areaStates.SLOW; }
+        }
+    }
+
+    public void floodFill (Point pointToCheck, Point qixCoorinates, areaStates chosenState, boolean addToArea1) {
+        if (totalArea[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==chosenState) {
+            if (pointToCheck.equals(qixCoorinates)) {
+                if (addToArea1) { area1=null; }
+                else { area2=null; }
+            }
+            else {
+                if (addToArea1) { area1.add(pointToCheck); }
+                else { area2.add(pointToCheck); }
+                Point point1 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()-1);
+                Point point2 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()+1);
+                Point point3 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY());
+                Point point4 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY());
+                floodFill(point1, qixCoorinates, chosenState, addToArea1);
+                floodFill(point2, qixCoorinates, chosenState, addToArea1);
+                floodFill(point3, qixCoorinates, chosenState, addToArea1);
+                floodFill(point4, qixCoorinates, chosenState, addToArea1);
             }
         }
     }
 
-    public void addToStix(Point coordinates) {
+    public void addToStix (Point coordinates) {
         stix.add(coordinates);
     }
 

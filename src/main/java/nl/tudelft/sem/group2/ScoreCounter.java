@@ -15,7 +15,7 @@ public class ScoreCounter {
      * @param fastArea boolean that tells if the just covered area was created slow (double points) or fast (normal points)
      */
     public void updateScore(int completedArea, boolean fastArea) {
-        int totalArea = LaunchApp.getBoardWidth()*LaunchApp.getBoardHeight();
+        int totalArea = LaunchApp.getGridWidth()*LaunchApp.getGridHeight();
         double percentageIncrease = completedArea/totalArea*100;
         totalPercentage += percentageIncrease;
 
