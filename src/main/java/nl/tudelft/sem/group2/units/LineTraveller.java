@@ -10,11 +10,10 @@ abstract public class LineTraveller extends Unit{
     protected int spriteIndex = 0;
     protected int width;
     protected int height;
-    public LineTraveller(int x, int y, int width, int height, Image[] sprite) {
+    public LineTraveller(int x, int y, int width, int height) {
         super(x, y);
         this.width = width;
         this.height = height;
-        this.sprite = sprite;
     }
     //Todo needs to be implemented
     //returns true if there is a line on the given coordinates.

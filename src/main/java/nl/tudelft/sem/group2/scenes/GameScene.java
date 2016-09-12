@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -33,9 +32,7 @@ public class GameScene extends Scene {
 		Canvas canvas = new Canvas(340, 400);
 		board = new Board(canvas);
 
-		Image[] cursorSprite = new Image[1];
-		cursorSprite[0] = new Image("/res/images/cursor.png");
-		cursor = new Cursor(100,100,20,20, cursorSprite);
+		cursor = new Cursor(200,300,20,20);
 		board.addUnit(cursor);
 
 		score = 0;
@@ -70,12 +67,11 @@ public class GameScene extends Scene {
 		animationTimer = new AnimationTimer() {
 			public void handle(long now) {
 				// 3333333.3 = 300 FPS
-				if (now - previousTime > (long) 3333333.3) {
+				if (now - previousTime > (long) 33333333.3) {
 					previousTime = now;
 					//draw
 					board.draw();
 				}
-
 			}
 		};
 		//TODO remove this start and start using game

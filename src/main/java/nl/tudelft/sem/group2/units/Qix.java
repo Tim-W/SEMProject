@@ -11,6 +11,7 @@ public class Qix extends Unit {
     public void move(){
 
     }
+    @Override
     public void draw(Canvas canvas) {
     }
 }
