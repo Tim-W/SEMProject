@@ -33,8 +33,10 @@ public class GameScene extends Scene {
 		Group group = new Group();
 		ScoreScene scoreScene = new ScoreScene(group, 340, 60);
 
-		scoreScene.setScore(40);
-		scoreScene.setClaimedPercentage(34);
+		//TODO shift this to a game class and save/load score
+		scoreScene.setScore(0);
+		scoreScene.setClaimedPercentage(0);
+		
 		root.getChildren().add(scoreScene);
 
 		previousTime = System.nanoTime();

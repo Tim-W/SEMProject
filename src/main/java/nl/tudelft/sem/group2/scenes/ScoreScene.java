@@ -1,37 +1,26 @@
 package main.java.nl.tudelft.sem.group2.scenes;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import main.java.nl.tudelft.sem.group2.LaunchApp;
 
 public class ScoreScene extends SubScene{
 
 	private Label score;
 	private Label claimedPercentage;
 	private Label title;
-	private int targetPercentage;
+	//standard target percentage
+	private int targetPercentage = 75;
 	private Label claimed = new Label("Claimed");
-	
-
 	
 	public ScoreScene(Group root, double width, double height){
 		super(root, width, height);
-		targetPercentage = 75;
+		
 		claimed.setTextFill(Color.YELLOW);
 		claimed.setStyle("-fx-font-size:14;");
 		
@@ -46,7 +35,7 @@ public class ScoreScene extends SubScene{
 		VBox right = new VBox();
 		right.setAlignment(Pos.CENTER_LEFT);
 		
-		score = new Label();
+		score = new Label("0");
 		score.setTextFill(Color.WHITE);
 		score.setStyle("-fx-font-size:24;");
 
