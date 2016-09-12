@@ -1,14 +1,12 @@
 package main.java.nl.tudelft.sem.group2;
 
 
-import main.java.nl.tudelft.sem.group2.scenes.GameScene;
 import javafx.application.Application;
-import javafx.stage.Stage;
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import main.java.nl.tudelft.sem.group2.scenes.GameScene;
 
 public class LaunchApp extends Application {
 
@@ -30,15 +28,6 @@ public class LaunchApp extends Application {
 
         GameScene scene;
         Group root = new Group();
-
-        //EXAMPLE ON HOW TO USE CANVAS
-        Canvas canvas = new Canvas(340, 400);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        //BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
-        gc.setFill(Color.BLUE);
-        gc.fillRect(20, 80, 300, 300);
-        root.getChildren().add(canvas);
 
         scene = new GameScene(root, Color.BLACK);
 
