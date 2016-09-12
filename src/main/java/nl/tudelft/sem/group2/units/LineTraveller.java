@@ -4,9 +4,6 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 
-/**
- * Created by gijs on 8-9-2016.
- */
 abstract public class LineTraveller extends Unit{
 
     private Image[] sprite;
@@ -24,7 +21,6 @@ abstract public class LineTraveller extends Unit{
     private boolean checkLine(int x, int y){
         return false;
     }
-    @Override
     public void draw() {
         canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;

@@ -2,9 +2,6 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 
-/**
- * Created by gijs on 8-9-2016.
- */
 public abstract class Unit {
     protected int x;
     protected int y;
@@ -14,8 +11,8 @@ public abstract class Unit {
         this.y = y;
         this.canvas = canvas;
     }
+    public abstract void animate();
     public abstract void draw();
-
     public int getX(){
         return this.x;
     }
