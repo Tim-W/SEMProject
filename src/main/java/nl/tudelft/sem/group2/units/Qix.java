@@ -4,13 +4,14 @@ import javafx.scene.canvas.Canvas;
 
 public class Qix extends Unit {
 
-    public Qix(int x, int y, Canvas canvas) {
-        super(x, y, canvas);
+    public Qix(int x, int y) {
+        super(x, y);
     }
     @Override
-    public void animate(){
+    public void move(Canvas canvas){
 
+        draw(canvas);
     }
-    public void draw() {
+    public void draw(Canvas canvas) {
     }
 }

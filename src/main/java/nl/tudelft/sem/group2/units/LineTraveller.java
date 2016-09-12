@@ -10,8 +10,8 @@ abstract public class LineTraveller extends Unit{
     private int spriteIndex = 0;
     protected int width;
     protected int height;
-    public LineTraveller(int x, int y, int width, int height, Canvas canvas, Image[] sprite) {
-        super(x, y, canvas);
+    public LineTraveller(int x, int y, int width, int height, Image[] sprite) {
+        super(x, y);
         this.width = width;
         this.height = height;
         this.sprite = sprite;
@@ -21,7 +21,7 @@ abstract public class LineTraveller extends Unit{
     private boolean checkLine(int x, int y){
         return false;
     }
-    public void draw() {
+    public void draw(Canvas canvas) {
         canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }

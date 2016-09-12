@@ -5,12 +5,12 @@ import javafx.scene.image.Image;
 
 public class Sparx extends LineTraveller {
     public Sparx(int x, int y, int width, int height, Canvas canvas, Image[] sprite) {
-        super(x, y, width, height, canvas, sprite);
+        super(x, y, width, height, sprite);
     }
 
     @Override
-    public void animate(){
+    public void move(Canvas canvas){
 
-        draw();
+        draw(canvas);
     }
 }
