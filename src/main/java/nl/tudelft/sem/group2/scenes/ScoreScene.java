@@ -29,8 +29,8 @@ public class ScoreScene extends SubScene{
 	
 
 	
-	public ScoreScene(Group stage, double width, double height){
-		super(stage, width, height);
+	public ScoreScene(Group root, double width, double height){
+		super(root, width, height);
 		targetPercentage = 75;
 		claimed.setTextFill(Color.YELLOW);
 		claimed.setStyle("-fx-font-size:14;");
@@ -74,7 +74,7 @@ public class ScoreScene extends SubScene{
 		tilePane.getChildren().add(right);
 
 		
-		stage.getChildren().add(tilePane);
+		root.getChildren().add(tilePane);
 	}
 
 
