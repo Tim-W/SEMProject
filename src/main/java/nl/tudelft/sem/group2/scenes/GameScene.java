@@ -28,7 +28,7 @@ public class GameScene extends Scene {
 
 	public GameScene(final Group root, Color black) {
 		super(root, black);
-		Canvas canvas = new Canvas(300, 300);
+		Canvas canvas = new Canvas(310, 310);
 		canvas.setLayoutX(20);
 		canvas.setLayoutY(80);
 		board = new Board(canvas);
@@ -50,7 +50,6 @@ public class GameScene extends Scene {
 		//TODO shift this to a game class and save/load score
 		scoreScene.setScore(0);
 		scoreScene.setClaimedPercentage(0);
-		
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
 		root.getChildren().add(bottomBorder);

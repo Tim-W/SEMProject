@@ -39,7 +39,7 @@ public class Board {
     }
 
     public void draw() {
-        gc.fillRect(0, 0, 300, 300);
+        gc.fillRect(0, 0, 310, 310);
         for (Unit unit : units) {
             unit.move();
             unit.draw(canvas);

@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 public class Cursor extends LineTraveller {
     private KeyCode currentMove = null;
     private int loops = 0;
+    private int speed = 2;
     public Cursor(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.sprite = new Image[1];
@@ -17,15 +18,17 @@ public class Cursor extends LineTraveller {
 
     @Override
     public void move(){
-        if (currentMove != null) {
-            if (currentMove.equals(KeyCode.LEFT) && x>1) {
-                x--;
-            } else if (currentMove.equals(KeyCode.RIGHT) && x<300) {
-                x++;
-            } else if (currentMove.equals(KeyCode.UP) && y > 0) {
-                y--;
-            } else if (currentMove.equals(KeyCode.DOWN) && y<300) {
-                y++;
+        for (int i = 0; i < speed; i++) {
+            if (currentMove != null) {
+                if (currentMove.equals(KeyCode.LEFT) && x > 1) {
+                    x--;
+                } else if (currentMove.equals(KeyCode.RIGHT) && x < 300) {
+                    x++;
+                } else if (currentMove.equals(KeyCode.UP) && y > 0) {
+                    y--;
+                } else if (currentMove.equals(KeyCode.DOWN) && y < 300) {
+                    y++;
+                }
             }
         }
     }
