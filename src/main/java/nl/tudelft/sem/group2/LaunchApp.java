@@ -1,10 +1,11 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.scenes.GameScene;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import nl.tudelft.sem.group2.scenes.GameScene;
 
 public class LaunchApp extends Application {
 
@@ -46,7 +47,7 @@ public class LaunchApp extends Application {
         //TODO fix image path
         stage.getIcons().add(new Image("/images/stageIcon.png"));
 
-        nl.tudelft.sem.group2.scenes.GameScene scene;
+        GameScene scene;
         Group root = new Group();
 
         scene = new GameScene(root, Color.BLACK);
