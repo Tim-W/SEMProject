@@ -7,6 +7,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaTracker;
 
+import java.awt.*;
+
+import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+
 public class Cursor extends LineTraveller {
     private KeyCode currentMove = null;
     private int loops = 0;
@@ -23,21 +27,26 @@ public class Cursor extends LineTraveller {
     public void move(){
         for (int i = 0; i < speed; i++) {
             if (currentMove != null) {
-                if (currentMove.equals(KeyCode.LEFT) && x > 5) {
+                System.out.println(x+" Y:"+y);
+                if (currentMove.equals(KeyCode.LEFT) && x > 0) {
                     if(checkLine(x-1,y)) {
                         x--;
+                        areaTracker.addToStix(new Point(x,y));
                     }
                 } else if (currentMove.equals(KeyCode.RIGHT) && x < 150) {
                     if(checkLine(x+1,y)) {
                         x++;
+                        areaTracker.addToStix(new Point(x,y));
                     }
-                } else if (currentMove.equals(KeyCode.UP) && y > 5) {
+                } else if (currentMove.equals(KeyCode.UP) && y > 0) {
                     if(checkLine(x,y-1)) {
                         y--;
+                        areaTracker.addToStix(new Point(x,y));
                     }
                 } else if (currentMove.equals(KeyCode.DOWN) && y < 150) {
                     if(checkLine(x,y+1)) {
                         y++;
+                        areaTracker.addToStix(new Point(x,y));
                     }
                 }
             }
@@ -53,8 +62,8 @@ public class Cursor extends LineTraveller {
     @Override
     public void draw(Canvas canvas){
         int animationSpeed = 30;
-        int drawX = x*2;
-        int drawY = y*2;
+        int drawX = gridToCanvas(x);
+        int drawY = gridToCanvas(y);
         if(loops<animationSpeed) {
             GraphicsContext gC = canvas.getGraphicsContext2D();
             double height = canvas.getHeight();
@@ -80,7 +89,7 @@ public class Cursor extends LineTraveller {
             gC.stroke();
             loops++;
         }
-        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],drawX-width/2,drawY-height/2,width,height);
+        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],drawX-width/2+1,drawY-height/2+1,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }
     public String toString() {
