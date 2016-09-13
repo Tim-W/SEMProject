@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -39,9 +38,8 @@ public class GameScene extends Scene {
 		bottomBorder.setLayoutY(380);
 		
 
-		Image[] cursorSprite = new Image[1];
-		cursorSprite[0] = new Image("/images/cursor.png");
-		cursor = new Cursor(150,150,20,20, cursorSprite);
+		
+		cursor = new Cursor(150,150,20,20);
 		board.addUnit(cursor);
 		
 		score = 0;

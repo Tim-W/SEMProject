@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2;
 
 import nl.tudelft.sem.group2.scenes.GameScene;
-
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
