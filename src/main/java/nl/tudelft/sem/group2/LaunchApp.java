@@ -3,11 +3,8 @@ package nl.tudelft.sem.group2;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 public class LaunchApp extends Application {
 
@@ -45,21 +42,12 @@ public class LaunchApp extends Application {
         // Start stage
         stage.setTitle("Qix");
         stage.setWidth(340);
-        stage.setHeight(400);
+        stage.setHeight(420);
         //TODO fix image path
-        stage.getIcons().add(new Image("/res/images/stageIcon.png"));
+        stage.getIcons().add(new Image("/images/stageIcon.png"));
 
         nl.tudelft.sem.group2.scenes.GameScene scene;
         Group root = new Group();
-
-        //EXAMPLE ON HOW TO USE CANVAS
-        Canvas canvas = new Canvas(340, 400);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        //BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
-        gc.setFill(Color.BLUE);
-        gc.fillRect(20, 80, boardWidth, boardHeight);
-        root.getChildren().add(canvas);
 
         scene = new GameScene(root, Color.BLACK);
 
@@ -68,7 +56,6 @@ public class LaunchApp extends Application {
         stage.sizeToScene();
         stage.show();
 
-        AreaTracker areaState = new AreaTracker();
     }
 
     public static void main(String[] args) {
