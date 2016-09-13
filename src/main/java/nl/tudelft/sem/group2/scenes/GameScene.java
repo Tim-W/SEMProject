@@ -8,6 +8,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
 
@@ -20,6 +22,8 @@ public class GameScene extends Scene {
 	private Cursor cursor;
 	private Board board;
 	private KeyCode currentMove = null;
+	private static AreaTracker areaTracker;
+    private static ScoreCounter scoreCounter;
 
 	AnimationTimer animationTimer;
 
@@ -38,9 +42,8 @@ public class GameScene extends Scene {
 		bottomBorder.setLayoutY(380);
 		board.addUnit(cursor);
 
-		score = 0;
-		claimedPercentage = 0;
-		targetPercentage = 75;
+        areaTracker = new AreaTracker();
+        scoreCounter = new ScoreCounter();
 
 		// lifes = 0;
 
@@ -114,4 +117,11 @@ public class GameScene extends Scene {
 		animationTimer.stop();
 	}
 
+    public static AreaTracker getAreaTracker() {
+        return areaTracker;
+    }
+
+    public static ScoreCounter getScoreCounter() {
+        return scoreCounter;
+    }
 }
