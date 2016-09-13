@@ -17,8 +17,8 @@ abstract public class LineTraveller extends Unit{
     }
     //Todo needs to be implemented
     //returns true if there is a line on the given coordinates.
-    private boolean checkLine(int x, int y){
-        return false;
+    protected boolean checkLine(int x, int y){
+        return true;
     }
     @Override
     public void draw(Canvas canvas) {
