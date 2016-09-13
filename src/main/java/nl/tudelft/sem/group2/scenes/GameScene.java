@@ -29,15 +29,21 @@ public class GameScene extends Scene {
 
 	public GameScene(final Group root, Color black) {
 		super(root, black);
-
-		Canvas canvas = new Canvas(340, 400);
+		Canvas canvas = new Canvas(300, 300);
+		canvas.setLayoutX(20);
+		canvas.setLayoutY(80);
 		board = new Board(canvas);
+
+		//Hacky way to create black bottom border
+		Canvas bottomBorder = new Canvas(300,20);
+		bottomBorder.setLayoutY(380);
+		
 
 		Image[] cursorSprite = new Image[1];
 		cursorSprite[0] = new Image("/res/images/cursor.png");
-		cursor = new Cursor(100,100,20,20, cursorSprite);
+		cursor = new Cursor(300,300,20,20, cursorSprite);
 		board.addUnit(cursor);
-
+		
 		score = 0;
 		claimedPercentage = 0;
 		targetPercentage = 75;
@@ -53,6 +59,7 @@ public class GameScene extends Scene {
 		
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
+		root.getChildren().add(bottomBorder);
 		previousTime = System.nanoTime();
 
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -74,6 +81,7 @@ public class GameScene extends Scene {
 					previousTime = now;
 					//draw
 					board.draw();
+					board.collisions();
 				}
 
 			}

@@ -21,7 +21,7 @@ public class LaunchApp extends Application {
         // Start stage
         stage.setTitle("Qix");
         stage.setWidth(340);
-        stage.setHeight(400);
+        stage.setHeight(420);
         //TODO fix image path
         stage.getIcons().add(new Image("/res/images/stageIcon.png"));
 
