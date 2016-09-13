@@ -4,6 +4,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 
+import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+
 abstract public class LineTraveller extends Unit{
 
     protected Image[] sprite;
@@ -22,7 +24,7 @@ abstract public class LineTraveller extends Unit{
     }
     @Override
     public void draw(Canvas canvas) {
-        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x*2-width/2,y*2-height/2,width,height);
+        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],gridToCanvas(x)-width/2,gridToCanvas(y)-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }
     public int getHeight() {
