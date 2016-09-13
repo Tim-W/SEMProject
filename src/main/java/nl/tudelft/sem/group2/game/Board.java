@@ -1,3 +1,4 @@
+
 package nl.tudelft.sem.group2.game;
 
 import javafx.scene.canvas.Canvas;
