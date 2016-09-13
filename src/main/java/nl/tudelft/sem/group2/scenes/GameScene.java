@@ -1,4 +1,4 @@
-package main.java.nl.tudelft.sem.group2.scenes;
+package nl.tudelft.sem.group2.scenes;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -8,8 +8,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import main.java.nl.tudelft.sem.group2.game.Board;
-import main.java.nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.game.Board;
+import nl.tudelft.sem.group2.units.Cursor;
 
 public class GameScene extends Scene {
 
@@ -37,7 +37,7 @@ public class GameScene extends Scene {
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
 		board.addUnit(cursor);
-		
+
 		score = 0;
 		claimedPercentage = 0;
 		targetPercentage = 75;

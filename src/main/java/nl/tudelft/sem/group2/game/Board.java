@@ -1,9 +1,9 @@
-package main.java.nl.tudelft.sem.group2.game;
+package nl.tudelft.sem.group2.game;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import main.java.nl.tudelft.sem.group2.units.Unit;
+import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.HashSet;
 import java.util.Set;

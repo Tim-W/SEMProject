@@ -1,4 +1,4 @@
-package main.java.nl.tudelft.sem.group2.units;
+package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,7 +13,7 @@ public class Cursor extends LineTraveller {
     public Cursor(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.sprite = new Image[1];
-        this.sprite[0] = new Image("/res/images/cursor.png");
+        this.sprite[0] = new Image("/images/cursor.png");
     }
 
     @Override

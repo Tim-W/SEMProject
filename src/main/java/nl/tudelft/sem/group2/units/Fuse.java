@@ -1,4 +1,4 @@
-package main.java.nl.tudelft.sem.group2.units;
+package nl.tudelft.sem.group2.units;
 
 public class Fuse extends LineTraveller {
     public Fuse(int x, int y, int width, int height) {

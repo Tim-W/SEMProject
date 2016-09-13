@@ -1,4 +1,4 @@
-package main.java.nl.tudelft.sem.group2.units;
+package nl.tudelft.sem.group2.units;
 
 public class Sparx extends LineTraveller {
     public Sparx(int x, int y, int width, int height) {
