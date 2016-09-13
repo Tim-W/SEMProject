@@ -23,8 +23,6 @@ public class AreaTracker {
 
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
 
-    private ScoreCounter scoreCounter;
-
     /**
      * Constructor for the AreaTracker class
      * The constructor sets all the grid points to border and the rest to uncovered
@@ -94,7 +92,7 @@ public class AreaTracker {
             newBorder = border1;
         }
 
-        scoreCounter = GameScene.getScoreCounter();
+        ScoreCounter scoreCounter = GameScene.getScoreCounter();
         //Update score and percentage with newly created area, thefore it's needed to know the stix was created fast or slow
         scoreCounter.updateScore(newArea.size()+stix.size(), fastArea);
 
@@ -114,6 +112,10 @@ public class AreaTracker {
         area2 = null;
         border1 = null;
         border2 = null;
+
+        //Empty the current stix
+        stix = null;
+        stix = new LinkedList<Point>();
     }
 
     /**
