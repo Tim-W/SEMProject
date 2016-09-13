@@ -1,21 +1,16 @@
-package main.java.nl.tudelft.sem.group2.units;
+package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 
-/**
- * Created by gijs on 8-9-2016.
- */
 public abstract class Unit {
     protected int x;
     protected int y;
-    protected Canvas canvas;
-    Unit(int x, int y, Canvas canvas){
+    Unit(int x, int y){
         this.x = x;
         this.y = y;
-        this.canvas = canvas;
     }
-    public abstract void draw();
-
+    public abstract void move();
+    public abstract void draw(Canvas canvas);
     public int getX(){
         return this.x;
     }
