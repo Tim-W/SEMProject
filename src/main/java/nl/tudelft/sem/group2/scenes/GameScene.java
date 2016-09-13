@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.game.Board;
+import nl.tudelft.sem.group2.units.Cursor;
 
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -60,7 +62,9 @@ public class GameScene extends Scene {
 		
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
+
 		root.getChildren().add(bottomBorder);
+
 		previousTime = System.nanoTime();
 
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -83,6 +87,7 @@ public class GameScene extends Scene {
 					//draw
 					board.draw();
 					board.collisions();
+
 				}
 
 			}
