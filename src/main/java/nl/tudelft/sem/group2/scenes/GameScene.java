@@ -14,7 +14,6 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Sparx;
 
 public class GameScene extends Scene {
 
@@ -24,6 +23,7 @@ public class GameScene extends Scene {
 	private long previousTime;
 	private Cursor cursor;
 	private Board board;
+	private KeyCode currentMove = null;
 	private static AreaTracker areaTracker;
 	private static ScoreCounter scoreCounter;
 	private boolean isRunning = false;
@@ -36,22 +36,23 @@ public class GameScene extends Scene {
 
 	public GameScene(final Group root, Color black) {
 		super(root, black);
-		Canvas canvas = new Canvas(310, 310);
+		Canvas canvas = new Canvas(316, 316);
 		canvas.setLayoutX(15);
 		canvas.setLayoutY(75);
+		areaTracker = new AreaTracker();
 		board = new Board(canvas);
-		cursor = new Cursor(50, 50, 20, 20);
-		// Hacky way to create black bottom border
-		Canvas bottomBorder = new Canvas(300, 20);
+
+		scoreCounter = new ScoreCounter();
+
+		cursor = new Cursor(75,75,16,16);
+		//Hacky way to create black bottom border
+		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
 		board.addUnit(cursor);
-		
-		Sparx sparx = new Sparx(10,10,20,20);
-		board.addUnit(sparx);
 
 		areaTracker = new AreaTracker();
 		scoreCounter = new ScoreCounter();
-		
+
 		pressSpaceLabel.setLayoutX(60);
 		pressSpaceLabel.setLayoutY(200);
 		pressSpaceLabel.setStyle("-fx-font-size: 24px");
@@ -145,7 +146,7 @@ public class GameScene extends Scene {
 	public static ScoreCounter getScoreCounter() {
 		return scoreCounter;
 	}
-	
+
 	public boolean isRunning(){
 		return isRunning;
 	}
