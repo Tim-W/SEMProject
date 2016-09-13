@@ -5,13 +5,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.AreaTracker;
 
 public class Cursor extends LineTraveller {
     private KeyCode currentMove = null;
     private int loops = 0;
     private int speed = 2;
-    public Cursor(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public Cursor(int x, int y, int width, int height, AreaTracker areaTracker) {
+        super(x, y, width, height,areaTracker);
         this.sprite = new Image[1];
         this.sprite[0] = new Image("/images/cursor.png");
     }

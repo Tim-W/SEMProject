@@ -2,6 +2,7 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
+import nl.tudelft.sem.group2.AreaTracker;
 
 abstract public class LineTraveller extends Unit{
 
@@ -9,8 +10,8 @@ abstract public class LineTraveller extends Unit{
     protected int spriteIndex = 0;
     protected int width;
     protected int height;
-    public LineTraveller(int x, int y, int width, int height) {
-        super(x, y);
+    public LineTraveller(int x, int y, int width, int height, AreaTracker areaTracker) {
+        super(x, y, areaTracker);
         this.width = width;
         this.height = height;
     }
