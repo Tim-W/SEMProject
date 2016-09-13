@@ -1,10 +1,8 @@
 package nl.tudelft.sem.group2;
 
-
+import nl.tudelft.sem.group2.scenes.GameScene;
 import javafx.application.Application;
-import javafx.stage.Stage;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -24,7 +22,7 @@ public class LaunchApp extends Application {
         return boardHeight;
     }
 
-    // a grid is 3x3 pixels, so a board contains 100x100
+    // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
     public static int getGridHeight() {
         return boardHeight/2;
     }
@@ -51,7 +49,7 @@ public class LaunchApp extends Application {
         //TODO fix image path
         stage.getIcons().add(new Image("/res/images/stageIcon.png"));
 
-        GameScene scene;
+        nl.tudelft.sem.group2.scenes.GameScene scene;
         Group root = new Group();
 
         //EXAMPLE ON HOW TO USE CANVAS
@@ -70,7 +68,7 @@ public class LaunchApp extends Application {
         stage.sizeToScene();
         stage.show();
 
-        areaTracker areaState = new areaTracker();
+        AreaTracker areaState = new AreaTracker();
     }
 
     public static void main(String[] args) {

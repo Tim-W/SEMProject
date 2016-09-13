@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.ScoreCounter;
 
 public class GameScene extends Scene {
 
@@ -15,6 +17,8 @@ public class GameScene extends Scene {
 	private int targetPercentage;
 	private long previousTime;
 	private KeyCode currentMove = null;
+	private static AreaTracker areaTracker;
+    private static ScoreCounter scoreCounter;
 
 	AnimationTimer animationTimer;
 
@@ -24,9 +28,8 @@ public class GameScene extends Scene {
 	public GameScene(final Group root, Color black) {
 		super(root, black);
 
-		score = 0;
-		claimedPercentage = 0;
-		targetPercentage = 75;
+        areaTracker = new AreaTracker();
+        scoreCounter = new ScoreCounter();
 
 		// lifes = 0;
 
@@ -78,30 +81,6 @@ public class GameScene extends Scene {
 		animationTimer.start();
 	}
 
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public int getClaimedPercentage() {
-		return claimedPercentage;
-	}
-
-	public void setClaimedPercentage(int claimedPercentage) {
-		this.claimedPercentage = claimedPercentage;
-	}
-
-	public int getTargetPercentage() {
-		return targetPercentage;
-	}
-
-	public void setTargetPercentage(int targetPercentage) {
-		this.targetPercentage = targetPercentage;
-	}
-
 	public void animationTimerStart() {
 		animationTimer.start();
 	}
@@ -110,4 +89,11 @@ public class GameScene extends Scene {
 		animationTimer.stop();
 	}
 
+    public static AreaTracker getAreaTracker() {
+        return areaTracker;
+    }
+
+    public static ScoreCounter getScoreCounter() {
+        return scoreCounter;
+    }
 }

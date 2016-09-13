@@ -1,13 +1,15 @@
-package main.java.nl.tudelft.sem.group2;
+package nl.tudelft.sem.group2;
 
 public class ScoreCounter {
 
 
     //Total score accumulated by player.
-    private int totalScore = 0;
+    private int totalScore;
 
     //Total percentage of current level is covered by player.
-    private double totalPercentage = 0;
+    private double totalPercentage;
+
+    private double targetPercentage;
 
     /**
      * Method to update current score and percentage
@@ -23,6 +25,18 @@ public class ScoreCounter {
         else totalScore += percentageIncrease*200;
 
 
+    }
+
+    public ScoreCounter() {
+        this.totalPercentage = 0;
+        this.totalScore = 0;
+        this.targetPercentage = 75;
+    }
+
+    public ScoreCounter(double totalPercentage, double targetPercentage, int totalScore) {
+        this.totalPercentage = totalPercentage;
+        this.targetPercentage = targetPercentage;
+        this.totalScore = totalScore;
     }
 
     public double getTotalPercentage() {
@@ -41,4 +55,11 @@ public class ScoreCounter {
         this.totalScore = totalScore;
     }
 
+    public double getTargetPercentage() {
+        return targetPercentage;
+    }
+
+    public void setTargetPercentage(double targetPercentage) {
+        this.targetPercentage = targetPercentage;
+    }
 }
