@@ -44,6 +44,7 @@ public class Board {
             unit.move();
             unit.draw(canvas);
         }
+
     }
     
     public void collisions(){
