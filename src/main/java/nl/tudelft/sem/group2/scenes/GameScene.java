@@ -37,7 +37,7 @@ public class GameScene extends Scene {
 		canvas.setLayoutX(20);
 		canvas.setLayoutY(80);
 		board = new Board(canvas);
-		cursor = new Cursor(200,300,20,20);
+		cursor = new Cursor(150,150,20,20);
 		//Hacky way to create black bottom border
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);

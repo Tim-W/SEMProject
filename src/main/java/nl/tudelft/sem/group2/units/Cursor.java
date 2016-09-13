@@ -19,11 +19,11 @@ public class Cursor extends LineTraveller {
     @Override
     public void move(){
         if (currentMove != null) {
-            if (currentMove.equals(KeyCode.LEFT) && x>1) {
+            if (currentMove.equals(KeyCode.LEFT) && x>10) {
                 x--;
             } else if (currentMove.equals(KeyCode.RIGHT) && x<150) {
                 x++;
-            } else if (currentMove.equals(KeyCode.UP) && y > 0) {
+            } else if (currentMove.equals(KeyCode.UP) && y > 10) {
                 y--;
             } else if (currentMove.equals(KeyCode.DOWN) && y<150) {
                 y++;
@@ -65,7 +65,7 @@ public class Cursor extends LineTraveller {
             gC.stroke();
             loops++;
         }
-        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
+        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x*2-width/2,y*2-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }
     public String toString() {
