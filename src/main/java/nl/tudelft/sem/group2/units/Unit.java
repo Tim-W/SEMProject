@@ -53,7 +53,8 @@ public abstract class Unit {
 	
     public boolean intersect (Unit collidee){
 		Rectangle colliderR = new Rectangle(this.getX(),this.getY(), this.getWidth()/2, this.getHeight()/2);
-		Rectangle collideeR = new Rectangle(collidee.getX(),collidee.getY(), collidee.getWidth()/2, collidee.getHeight()/2);
+		//subtract one from width&height to make collisions look more real
+		Rectangle collideeR = new Rectangle(collidee.getX(),collidee.getY(), collidee.getWidth()/2-1, collidee.getHeight()/2-1);
 		if(colliderR.intersects(collideeR)){
 			return true;
 		}

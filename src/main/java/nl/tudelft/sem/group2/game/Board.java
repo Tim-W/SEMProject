@@ -4,6 +4,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Fuse;
+import nl.tudelft.sem.group2.units.Qix;
+import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.HashSet;
@@ -51,9 +54,13 @@ public class Board {
     public void collisions(){
     	for (Unit collider: units) {
     		for(Unit collidee : units){
-    			if(collider instanceof Cursor && collider != collidee){
-    				if(collider.intersect(collidee)){
+    			if(collider instanceof Qix || collidee instanceof Qix){
+    				//TODO code for qix collisions/intersect
+    			}
+    			else if(collider instanceof Cursor && collider != collidee){
+    				if((collidee instanceof Sparx || collidee instanceof Fuse) &&collider.intersect(collidee)){
     					System.out.println("dood");
+    					//TODO code to start game over sequence
     				}
     			}
     		}
