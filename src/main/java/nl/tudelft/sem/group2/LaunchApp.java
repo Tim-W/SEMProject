@@ -26,7 +26,7 @@ public class LaunchApp extends Application {
         stage.setWidth(340);
         stage.setHeight(400);
         //TODO fix image path
-        stage.getIcons().add(new Image("/res/images/stageIcon.png"));
+        stage.getIcons().add(new Image("/images/stageIcon.png"));
 
         GameScene scene;
         Group root = new Group();
