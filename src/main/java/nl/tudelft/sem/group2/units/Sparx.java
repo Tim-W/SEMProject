@@ -10,4 +10,8 @@ public class Sparx extends LineTraveller {
 
 
     }
+    
+    public String toString() {
+    	return "Sparx";
+    }
 }

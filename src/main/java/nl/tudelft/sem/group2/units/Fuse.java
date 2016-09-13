@@ -8,4 +8,8 @@ public class Fuse extends LineTraveller {
     @Override
     public void move(){
     }
+    
+    public String toString() {
+    	return "Fuse";
+    }
 }

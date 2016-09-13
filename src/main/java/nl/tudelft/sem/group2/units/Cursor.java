@@ -18,13 +18,13 @@ public class Cursor extends LineTraveller {
     @Override
     public void move(){
         if (currentMove != null) {
-            if (currentMove.equals(KeyCode.LEFT)) {
+            if (currentMove.equals(KeyCode.LEFT) && x>1) {
                 x--;
-            } else if (currentMove.equals(KeyCode.RIGHT)) {
+            } else if (currentMove.equals(KeyCode.RIGHT) && x<300) {
                 x++;
-            } else if (currentMove.equals(KeyCode.UP)) {
+            } else if (currentMove.equals(KeyCode.UP) && y > 0) {
                 y--;
-            } else if (currentMove.equals(KeyCode.DOWN)) {
+            } else if (currentMove.equals(KeyCode.DOWN) && y<300) {
                 y++;
             }
         }
@@ -66,5 +66,8 @@ public class Cursor extends LineTraveller {
         }
         canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
+    }
+    public String toString() {
+    	return "Cursor";
     }
 }

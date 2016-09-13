@@ -14,4 +14,8 @@ public class Qix extends Unit {
     @Override
     public void draw(Canvas canvas) {
     }
+    
+    public String toString() {
+    	return "Qix";
+    }
 }
