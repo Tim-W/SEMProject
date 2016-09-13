@@ -64,14 +64,6 @@ public class Board {
 
     }
 
-    public AreaTracker getAreaTracker() {
-        return areaTracker;
-    }
-
-    public void setAreaTracker(AreaTracker areaTracker) {
-        this.areaTracker = areaTracker;
-    }
-
     public void collisions(){
     	for (Unit collider: units) {
     		for(Unit collidee : units){
