@@ -46,9 +46,9 @@ public class GameScene extends Scene {
 
 		scoreCounter = new ScoreCounter();
 
-		cursor = new Cursor(75,75,16,16);
+		cursor = new Cursor(12,10,16,16);
 		
-		Sparx sparx = new Sparx(0,0,16,16);
+		Sparx sparx = new Sparx(10,10,16,16);
 		board.addUnit(sparx);
 		
 		//Hacky way to create black bottom border
@@ -66,7 +66,7 @@ public class GameScene extends Scene {
 		
 		gameOverLabel.setLayoutX(100);
 		gameOverLabel.setLayoutY(200);
-		gameOverLabel.setStyle("-fx-font-size: 24px; \n-fx-effect: dropshadow(gaussian, rgba(255,255,255,0.5), 0,0, 0,5);");
+		gameOverLabel.setStyle("-fx-font-size: 24px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0), 0,0,0,1);");
 		gameOverLabel.setTextFill(Color.YELLOW);
 
 		// lifes = 0;
