@@ -19,11 +19,11 @@ public class Cursor extends LineTraveller {
     @Override
     public void move(){
         if (currentMove != null) {
-            if (currentMove.equals(KeyCode.LEFT) && x>10) {
+            if (currentMove.equals(KeyCode.LEFT) && x>5) {
                 x--;
             } else if (currentMove.equals(KeyCode.RIGHT) && x<150) {
                 x++;
-            } else if (currentMove.equals(KeyCode.UP) && y > 10) {
+            } else if (currentMove.equals(KeyCode.UP) && y > 5) {
                 y--;
             } else if (currentMove.equals(KeyCode.DOWN) && y<150) {
                 y++;
