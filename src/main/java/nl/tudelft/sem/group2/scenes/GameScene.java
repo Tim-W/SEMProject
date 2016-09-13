@@ -62,7 +62,6 @@ public class GameScene extends Scene {
 		
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
-
 		root.getChildren().add(bottomBorder);
 
 		previousTime = System.nanoTime();
@@ -87,7 +86,6 @@ public class GameScene extends Scene {
 					//draw
 					board.draw();
 					board.collisions();
-
 				}
 
 			}

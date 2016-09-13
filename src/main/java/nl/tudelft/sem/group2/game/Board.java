@@ -56,4 +56,16 @@ public class Board {
     		}
     	}
     }
+    
+    public void collisions(){
+    	for (Unit collider: units) {
+    		for(Unit collidee : units){
+    			if(collider != collidee){
+    				if(collider.getX() == collidee.getX() && collider.getY() == collidee.getY()){
+    					System.out.println(collider.toString() + " collided with " + collidee.toString());
+    				}
+    			}
+    		}
+    	}
+    }
 }
