@@ -40,7 +40,7 @@ public class GameScene extends Scene {
 		
 
 		Image[] cursorSprite = new Image[1];
-		cursorSprite[0] = new Image("/res/images/cursor.png");
+		cursorSprite[0] = new Image("/images/cursor.png");
 		cursor = new Cursor(300,300,20,20, cursorSprite);
 		board.addUnit(cursor);
 		
