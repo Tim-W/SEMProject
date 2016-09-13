@@ -12,8 +12,8 @@ abstract public class LineTraveller extends Unit{
     protected int spriteIndex = 0;
     protected int width;
     protected int height;
-    public LineTraveller(int x, int y, int width, int height, AreaTracker areaTracker) {
-        super(x, y, areaTracker);
+    public LineTraveller(int x, int y, int width, int height) {
+        super(x, y);
         this.width = width;
         this.height = height;
     }

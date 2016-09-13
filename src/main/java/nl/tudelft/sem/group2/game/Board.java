@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.*;
@@ -17,14 +18,14 @@ public class Board {
     private GraphicsContext gc;
     private AreaTracker areaTracker;
     private final static int MARGIN = 8;
-    public Board(Canvas canvas, AreaTracker areaTracker) {
+    public Board(Canvas canvas) {
         this.units = new HashSet<Unit>();
         this.canvas = canvas;
         gc = canvas.getGraphicsContext2D();
         //BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, 316, 316);
-        this.areaTracker = areaTracker;
+        this.areaTracker = GameScene.getAreaTracker();
     }
 
     public void setUnits(Set<Unit> units) {

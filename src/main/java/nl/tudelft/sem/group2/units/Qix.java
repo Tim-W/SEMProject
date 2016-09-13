@@ -1,12 +1,11 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
-import nl.tudelft.sem.group2.AreaTracker;
 
 public class Qix extends Unit {
 
-    public Qix(int x, int y, AreaTracker areaTracker) {
-        super(x, y, areaTracker);
+    public Qix(int x, int y) {
+        super(x, y);
     }
     @Override
     public void move(){

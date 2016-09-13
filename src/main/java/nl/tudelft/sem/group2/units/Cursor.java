@@ -17,8 +17,8 @@ public class Cursor extends LineTraveller {
     private int speed = 2;
     //todo set stix to false when implementation is done
     private boolean stix = true;
-    public Cursor(int x, int y, int width, int height, AreaTracker areaTracker) {
-        super(x, y, width, height,areaTracker);
+    public Cursor(int x, int y, int width, int height) {
+        super(x, y, width, height);
         this.sprite = new Image[1];
         this.sprite[0] = new Image("/images/cursor.png");
     }
