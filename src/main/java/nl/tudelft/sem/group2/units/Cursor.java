@@ -28,25 +28,34 @@ public class Cursor extends LineTraveller {
         for (int i = 0; i < speed; i++) {
             if (currentMove != null) {
                 System.out.println(x+" Y:"+y);
-                if (currentMove.equals(KeyCode.LEFT) && x > 0) {
-                    if(checkLine(x-1,y)) {
-                        x--;
-                        areaTracker.addToStix(new Point(x,y));
+                switch (currentMove){
+                    case LEFT: {
+                        if(x>0&&checkLine(x-1,y)) {
+                            x--;
+                            areaTracker.addToStix(new Point(x,y));
+                        }
+                        break;
                     }
-                } else if (currentMove.equals(KeyCode.RIGHT) && x < 150) {
-                    if(checkLine(x+1,y)) {
-                        x++;
-                        areaTracker.addToStix(new Point(x,y));
+                    case RIGHT: {
+                        if(x < 150&&checkLine(x+1,y)) {
+                            x++;
+                            areaTracker.addToStix(new Point(x,y));
+                        }
+                        break;
                     }
-                } else if (currentMove.equals(KeyCode.UP) && y > 0) {
-                    if(checkLine(x,y-1)) {
-                        y--;
-                        areaTracker.addToStix(new Point(x,y));
+                    case UP: {
+                        if(y > 0&&checkLine(x,y-1)) {
+                            y--;
+                            areaTracker.addToStix(new Point(x,y));
+                        }
+                        break;
                     }
-                } else if (currentMove.equals(KeyCode.DOWN) && y < 150) {
-                    if(checkLine(x,y+1)) {
-                        y++;
-                        areaTracker.addToStix(new Point(x,y));
+                    case DOWN: {
+                        if(y < 150&&checkLine(x,y+1)) {
+                            y++;
+                            areaTracker.addToStix(new Point(x,y));
+                        }
+                        break;
                     }
                 }
             }
