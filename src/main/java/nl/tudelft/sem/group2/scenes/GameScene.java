@@ -8,6 +8,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+
+import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
 
@@ -20,6 +23,8 @@ public class GameScene extends Scene {
 	private Cursor cursor;
 	private Board board;
 	private KeyCode currentMove = null;
+	private static AreaTracker areaTracker;
+    private static ScoreCounter scoreCounter;
 
 	AnimationTimer animationTimer;
 
@@ -28,23 +33,18 @@ public class GameScene extends Scene {
 
 	public GameScene(final Group root, Color black) {
 		super(root, black);
-		Canvas canvas = new Canvas(300, 300);
+		Canvas canvas = new Canvas(310, 310);
 		canvas.setLayoutX(20);
 		canvas.setLayoutY(80);
 		board = new Board(canvas);
-
+		cursor = new Cursor(200,300,20,20);
 		//Hacky way to create black bottom border
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
-		
-
-		
-		cursor = new Cursor(150,150,20,20);
 		board.addUnit(cursor);
-		
-		score = 0;
-		claimedPercentage = 0;
-		targetPercentage = 75;
+
+        areaTracker = new AreaTracker();
+        scoreCounter = new ScoreCounter();
 
 		// lifes = 0;
 
@@ -54,7 +54,6 @@ public class GameScene extends Scene {
 		//TODO shift this to a game class and save/load score
 		scoreScene.setScore(0);
 		scoreScene.setClaimedPercentage(0);
-		
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
 		root.getChildren().add(bottomBorder);
@@ -75,13 +74,12 @@ public class GameScene extends Scene {
 		animationTimer = new AnimationTimer() {
 			public void handle(long now) {
 				// 3333333.3 = 300 FPS
-				if (now - previousTime > (long) 3333333.3) {
+				if (now - previousTime > (long) 33333333.3) {
 					previousTime = now;
 					//draw
 					board.draw();
 					board.collisions();
 				}
-
 			}
 		};
 		//TODO remove this start and start using game
@@ -120,4 +118,11 @@ public class GameScene extends Scene {
 		animationTimer.stop();
 	}
 
+    public static AreaTracker getAreaTracker() {
+        return areaTracker;
+    }
+
+    public static ScoreCounter getScoreCounter() {
+        return scoreCounter;
+    }
 }
