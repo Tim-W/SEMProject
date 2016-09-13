@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.game;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.HashSet;
@@ -50,12 +51,14 @@ public class Board {
     public void collisions(){
     	for (Unit collider: units) {
     		for(Unit collidee : units){
-    			if(collider != collidee){
-    				if(collider.getX() == collidee.getX() && collider.getY() == collidee.getY()){
-    					System.out.println(collider.toString() + " collided with " + collidee.toString());
+    			if(collider instanceof Cursor && collider != collidee){
+    				if(collider.intersect(collidee)){
+    					System.out.println("dood");
     				}
     			}
     		}
     	}
     }
+    
+
 }

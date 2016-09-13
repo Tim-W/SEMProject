@@ -14,6 +14,7 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Sparx;
 
 public class GameScene extends Scene {
 
@@ -23,7 +24,6 @@ public class GameScene extends Scene {
 	private long previousTime;
 	private Cursor cursor;
 	private Board board;
-	private KeyCode currentMove = null;
 	private static AreaTracker areaTracker;
 	private static ScoreCounter scoreCounter;
 	private boolean isRunning = false;
@@ -45,6 +45,9 @@ public class GameScene extends Scene {
 		Canvas bottomBorder = new Canvas(300, 20);
 		bottomBorder.setLayoutY(380);
 		board.addUnit(cursor);
+		
+		Sparx sparx = new Sparx(10,10,20,20);
+		board.addUnit(sparx);
 
 		areaTracker = new AreaTracker();
 		scoreCounter = new ScoreCounter();
