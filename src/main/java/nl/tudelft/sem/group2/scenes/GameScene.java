@@ -28,16 +28,20 @@ public class GameScene extends Scene {
 
 	public GameScene(final Group root, Color black) {
 		super(root, black);
-		Canvas canvas = new Canvas(310, 310);
+		Canvas canvas = new Canvas(300, 300);
 		canvas.setLayoutX(20);
 		canvas.setLayoutY(80);
 		board = new Board(canvas);
-		cursor = new Cursor(200,300,20,20);
+
 		//Hacky way to create black bottom border
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
-		board.addUnit(cursor);
+		
 
+		
+		cursor = new Cursor(150,150,20,20);
+		board.addUnit(cursor);
+		
 		score = 0;
 		claimedPercentage = 0;
 		targetPercentage = 75;
@@ -50,6 +54,7 @@ public class GameScene extends Scene {
 		//TODO shift this to a game class and save/load score
 		scoreScene.setScore(0);
 		scoreScene.setClaimedPercentage(0);
+		
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
 		root.getChildren().add(bottomBorder);
@@ -70,12 +75,13 @@ public class GameScene extends Scene {
 		animationTimer = new AnimationTimer() {
 			public void handle(long now) {
 				// 3333333.3 = 300 FPS
-				if (now - previousTime > (long) 33333333.3) {
+				if (now - previousTime > (long) 3333333.3) {
 					previousTime = now;
 					//draw
 					board.draw();
 					board.collisions();
 				}
+
 			}
 		};
 		//TODO remove this start and start using game

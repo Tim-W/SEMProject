@@ -18,17 +18,15 @@ public class Cursor extends LineTraveller {
 
     @Override
     public void move(){
-        for (int i = 0; i < speed; i++) {
-            if (currentMove != null) {
-                if (currentMove.equals(KeyCode.LEFT) && x > 1) {
-                    x--;
-                } else if (currentMove.equals(KeyCode.RIGHT) && x < 300) {
-                    x++;
-                } else if (currentMove.equals(KeyCode.UP) && y > 0) {
-                    y--;
-                } else if (currentMove.equals(KeyCode.DOWN) && y < 300) {
-                    y++;
-                }
+        if (currentMove != null) {
+            if (currentMove.equals(KeyCode.LEFT) && x>1) {
+                x--;
+            } else if (currentMove.equals(KeyCode.RIGHT) && x<150) {
+                x++;
+            } else if (currentMove.equals(KeyCode.UP) && y > 0) {
+                y--;
+            } else if (currentMove.equals(KeyCode.DOWN) && y<150) {
+                y++;
             }
         }
     }
