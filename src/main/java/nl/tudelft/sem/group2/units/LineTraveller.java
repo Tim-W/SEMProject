@@ -22,7 +22,7 @@ abstract public class LineTraveller extends Unit{
     }
     @Override
     public void draw(Canvas canvas) {
-        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
+        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x*2-width/2,y*2-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }
     public int getHeight() {

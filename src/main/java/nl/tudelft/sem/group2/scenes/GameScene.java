@@ -5,9 +5,11 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
@@ -23,7 +25,9 @@ public class GameScene extends Scene {
 	private Board board;
 	private KeyCode currentMove = null;
 	private static AreaTracker areaTracker;
-    private static ScoreCounter scoreCounter;
+	private static ScoreCounter scoreCounter;
+	private boolean isRunning = false;
+	private Label pressSpaceLabel = new Label("Press Space to begin!");
 
 	AnimationTimer animationTimer;
 
@@ -33,8 +37,8 @@ public class GameScene extends Scene {
 	public GameScene(final Group root, Color black) {
 		super(root, black);
 		Canvas canvas = new Canvas(316, 316);
-		canvas.setLayoutX(20);
-		canvas.setLayoutY(80);
+		canvas.setLayoutX(15);
+		canvas.setLayoutY(75);
 		areaTracker = new AreaTracker();
 		board = new Board(canvas,areaTracker);
 
@@ -46,45 +50,61 @@ public class GameScene extends Scene {
 		bottomBorder.setLayoutY(380);
 		board.addUnit(cursor);
 
+		areaTracker = new AreaTracker();
+		scoreCounter = new ScoreCounter();
+
+		pressSpaceLabel.setLayoutX(60);
+		pressSpaceLabel.setLayoutY(200);
+		pressSpaceLabel.setStyle("-fx-font-size: 24px");
+		pressSpaceLabel.setTextFill(Color.YELLOW);
 
 		// lifes = 0;
 
 		Group group = new Group();
 		ScoreScene scoreScene = new ScoreScene(group, 340, 60);
 
-		//TODO shift this to a game class and save/load score
+		// TODO shift this to a game class and save/load score
 		scoreScene.setScore(0);
 		scoreScene.setClaimedPercentage(0);
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
 		root.getChildren().add(bottomBorder);
+		root.getChildren().add(pressSpaceLabel);
 		previousTime = System.nanoTime();
+		board.draw();
 
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-				cursor.setCurrentMove(e.getCode());
+				if (e.getCode().equals(KeyCode.SPACE) && !isRunning  ) {
+					// TODO remove this start and start using game
+					animationTimer.start();
+					isRunning = true;
+					root.getChildren().remove(pressSpaceLabel);
+				} else {
+					cursor.setCurrentMove(e.getCode());
+				}
 			}
 		});
 
 		setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-				cursor.setCurrentMove(null);			}
+				cursor.setCurrentMove(null);
+			}
 		});
 
-		//animation timer for handling a loop
+		// animation timer for handling a loop
 		animationTimer = new AnimationTimer() {
 			public void handle(long now) {
 				// 3333333.3 = 300 FPS
 				if (now - previousTime > (long) 33333333.3) {
 					previousTime = now;
-					//draw
+					// draw
 					board.draw();
 					board.collisions();
 				}
 			}
 		};
-		//TODO remove this start and start using game
-		animationTimer.start();
+
 	}
 
 	public int getScore() {
@@ -119,11 +139,15 @@ public class GameScene extends Scene {
 		animationTimer.stop();
 	}
 
-    public static AreaTracker getAreaTracker() {
-        return areaTracker;
-    }
+	public static AreaTracker getAreaTracker() {
+		return areaTracker;
+	}
 
-    public static ScoreCounter getScoreCounter() {
-        return scoreCounter;
-    }
+	public static ScoreCounter getScoreCounter() {
+		return scoreCounter;
+	}
+
+	public boolean isRunning(){
+		return isRunning;
+	}
 }
