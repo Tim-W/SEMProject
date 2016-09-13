@@ -32,7 +32,7 @@ public class GameScene extends Scene {
 
 	public GameScene(final Group root, Color black) {
 		super(root, black);
-		Canvas canvas = new Canvas(310, 310);
+		Canvas canvas = new Canvas(316, 316);
 		canvas.setLayoutX(20);
 		canvas.setLayoutY(80);
 		areaTracker = new AreaTracker();

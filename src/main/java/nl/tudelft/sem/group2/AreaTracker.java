@@ -12,7 +12,7 @@ public class AreaTracker {
 
     private LinkedList<Point> stix = new LinkedList<Point>();
 
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth()][LaunchApp.getGridHeight()];
+    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth()+1][LaunchApp.getGridHeight()+1];
 
     private LinkedList<Point> area1, area2, newArea;
 

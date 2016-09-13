@@ -23,7 +23,7 @@ public class Board {
         gc = canvas.getGraphicsContext2D();
         //BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
-        gc.fillRect(0, 0, 310, 310);
+        gc.fillRect(0, 0, 316, 316);
         this.areaTracker = areaTracker;
     }
 
@@ -45,7 +45,7 @@ public class Board {
 
     public void draw() {
         gc.setFill(Color.BLUE);
-        gc.fillRect(0, 0, 310, 310);
+        gc.fillRect(0, 0, 316, 316);
         gc.setFill(Color.WHITE);
         for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
             for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
@@ -83,6 +83,6 @@ public class Board {
     }
     //transform grid to canvas coordinates
     public static int gridToCanvas(int b){
-        return b*2+MARGIN;
+        return b*2+MARGIN-1;
     }
 }
