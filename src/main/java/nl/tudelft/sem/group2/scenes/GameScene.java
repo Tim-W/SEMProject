@@ -14,6 +14,7 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Sparx;
 
 public class GameScene extends Scene {
 
@@ -28,8 +29,9 @@ public class GameScene extends Scene {
 	private static ScoreCounter scoreCounter;
 	private boolean isRunning = false;
 	private Label pressSpaceLabel = new Label("Press Space to begin!");
+	private static Label gameOverLabel = new Label("");
 
-	AnimationTimer animationTimer;
+	static AnimationTimer animationTimer;
 
 	// TODO implement life system
 	// private int lifes;
@@ -45,6 +47,10 @@ public class GameScene extends Scene {
 		scoreCounter = new ScoreCounter();
 
 		cursor = new Cursor(75,75,16,16);
+		
+		Sparx sparx = new Sparx(0,0,16,16);
+		board.addUnit(sparx);
+		
 		//Hacky way to create black bottom border
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
@@ -57,6 +63,11 @@ public class GameScene extends Scene {
 		pressSpaceLabel.setLayoutY(200);
 		pressSpaceLabel.setStyle("-fx-font-size: 24px");
 		pressSpaceLabel.setTextFill(Color.YELLOW);
+		
+		gameOverLabel.setLayoutX(100);
+		gameOverLabel.setLayoutY(200);
+		gameOverLabel.setStyle("-fx-font-size: 24px; \n-fx-effect: dropshadow(gaussian, rgba(255,255,255,0.5), 0,0, 0,5);");
+		gameOverLabel.setTextFill(Color.YELLOW);
 
 		// lifes = 0;
 
@@ -70,6 +81,7 @@ public class GameScene extends Scene {
 		root.getChildren().add(canvas);
 		root.getChildren().add(bottomBorder);
 		root.getChildren().add(pressSpaceLabel);
+		root.getChildren().add(gameOverLabel);
 		previousTime = System.nanoTime();
 		board.draw();
 
@@ -131,11 +143,11 @@ public class GameScene extends Scene {
 		this.targetPercentage = targetPercentage;
 	}
 
-	public void animationTimerStart() {
+	public static void animationTimerStart() {
 		animationTimer.start();
 	}
 
-	public void animationTimerStop() {
+	public static void animationTimerStop() {
 		animationTimer.stop();
 	}
 
@@ -149,5 +161,11 @@ public class GameScene extends Scene {
 
 	public boolean isRunning(){
 		return isRunning;
+	}
+	
+	public static void gameOver(){
+		//TODO add code for gameover
+		animationTimerStop();
+		gameOverLabel.setText("Game Over!");
 	}
 }

@@ -85,6 +85,7 @@ public class Board {
 					if ((collidee instanceof Sparx || collidee instanceof Fuse) && collider.intersect(collidee)) {
 						System.out.println("dood");
 						// TODO code to start game over sequence
+						GameScene.gameOver();
 					}
 				}
 			}
