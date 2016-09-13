@@ -6,20 +6,13 @@ import java.awt.*;
 import java.util.LinkedList;
 
 /**
- * Enum for all the posible states of a pixel on the board
- */
-enum AreaStates {
-    UNCOVERED, FAST, SLOW, INNERBORDER, OUTERBORDER
-}
-
-/**
  * Tracks the area of the current level, of which pixels are covered by the player.e
  */
 public class AreaTracker {
 
     private LinkedList<Point> stix = new LinkedList<Point>();
 
-    private AreaStates[][] boardGrid = new AreaStates[LaunchApp.getGridWidth()][LaunchApp.getGridHeight()];
+    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth()+1][LaunchApp.getGridHeight()+1];
 
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
 
@@ -31,15 +24,15 @@ public class AreaTracker {
         for (int i=0;i<boardGrid.length;i++) {
             for (int j=0;j<boardGrid[i].length;j++) {
                 //If the current row is the first row set all grid points border on that row
-                if (j==0) boardGrid[j][i] = AreaStates.OUTERBORDER;
+                if (j==0) boardGrid[j][i] = AreaState.OUTERBORDER;
                 //If the current row is the bottom row set all grid points border on that row
-                else if (j==boardGrid[i].length-1) boardGrid[j][i] = AreaStates.OUTERBORDER;
+                else if (j==boardGrid[i].length-1) boardGrid[j][i] = AreaState.OUTERBORDER;
                 //If current column is the last column set the grid point on that column and the current row border
-                else if (i==0) boardGrid[j][i] = AreaStates.OUTERBORDER;
+                else if (i==0) boardGrid[j][i] = AreaState.OUTERBORDER;
                 //If the current column is the last column set the grid point on that column and the current row border
-                else if (i==boardGrid.length-1) boardGrid[j][i] = AreaStates.OUTERBORDER;
+                else if (i==boardGrid.length-1) boardGrid[j][i] = AreaState.OUTERBORDER;
                 //If the current point is none of the above set that point to uncovered
-                else boardGrid[j][i] = AreaStates.UNCOVERED;
+                else boardGrid[j][i] = AreaState.UNCOVERED;
             }
         }
     }
@@ -52,7 +45,7 @@ public class AreaTracker {
     public void calculateNewArea (Point qixCoordinates, boolean fastArea) {
         //Set all the points from the current stix to border points on the grid
         for (Point current : stix) {
-            boardGrid[(int) current.getX()][(int) current.getY()] = AreaStates.OUTERBORDER;
+            boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
         }
 
         //Obtain first and second point from the stix to determine beginposition for the floodfill algorithm
@@ -70,16 +63,16 @@ public class AreaTracker {
         if (start.getX() != dir.getX()) {
             //If stix was first moving in X direction get points above and under the first stix point and start the floodfill algorithm from there
             Point beginPoint1 = new Point((int) dir.getX(), (int) dir.getY()-1);
-            floodFill(beginPoint1, qixCoordinates, AreaStates.UNCOVERED, true);
+            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true);
             Point beginPoint2 = new Point((int) dir.getX(), (int) dir.getY()+1);
-            floodFill(beginPoint2, qixCoordinates, AreaStates.UNCOVERED, true);
+            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, true);
         }
         else if (start.getY() != dir.getY()) {
             //If stix was first moving in Y direction get points left and right the first stix point and start the floodfill algorithm from there
             Point beginPoint1 = new Point((int) dir.getX()-1, (int) dir.getY());
-            floodFill(beginPoint1, qixCoordinates, AreaStates.UNCOVERED, false);
+            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, false);
             Point beginPoint2 = new Point((int) dir.getX()+1, (int) dir.getY());
-            floodFill(beginPoint2, qixCoordinates, AreaStates.UNCOVERED, false);
+            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false);
         }
 
         //Check in which of the two area the qix was found and set the other one to the newly created area
@@ -104,7 +97,7 @@ public class AreaTracker {
 
         //Update the grid with the new inner borders
         for (Point current : newBorder) {
-            boardGrid[(int) current.getX()][(int) current.getY()] = AreaStates.INNERBORDER;
+            boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
         }
 
         //Reset the temporary area tracker
@@ -125,7 +118,7 @@ public class AreaTracker {
      * @param chosenState begin state of the area that gets added to the new area, practically always AreaStates.UNCOVERED
      * @param addToArea1 boolean that keeps thrack of which temporary AreaTracker to use.
      */
-    public void floodFill (Point pointToCheck, Point qixCoorinates, AreaStates chosenState, boolean addToArea1) {
+    public void floodFill (Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
         // Check if the current point on the grid is the chosen beginstate
         if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==chosenState) {
             // Check if that point is the coordinate of the qix
@@ -155,7 +148,7 @@ public class AreaTracker {
                 floodFill(point4, qixCoorinates, chosenState, addToArea1);
             }
         }
-        else if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==AreaStates.OUTERBORDER &&
+        else if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==AreaState.OUTERBORDER &&
                 !stix.contains(pointToCheck)) {
             if (addToArea1) border1.add(pointToCheck);
             else border2.add(pointToCheck);
@@ -182,7 +175,7 @@ public class AreaTracker {
      * Getter for the boardGrid
      * @return the boardGrid
      */
-    public AreaStates[][] getBoardGrid() {
+    public AreaState[][] getBoardGrid() {
         return boardGrid;
     }
 }

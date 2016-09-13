@@ -2,6 +2,9 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
+import nl.tudelft.sem.group2.AreaTracker;
+
+import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 
 abstract public class LineTraveller extends Unit{
 
@@ -16,12 +19,12 @@ abstract public class LineTraveller extends Unit{
     }
     //Todo needs to be implemented
     //returns true if there is a line on the given coordinates.
-    private boolean checkLine(int x, int y){
-        return false;
+    protected boolean checkLine(int x, int y){
+        return true;
     }
     @Override
     public void draw(Canvas canvas) {
-        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
+        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],gridToCanvas(x)-width/2,gridToCanvas(y)-height/2,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }
     public int getHeight() {

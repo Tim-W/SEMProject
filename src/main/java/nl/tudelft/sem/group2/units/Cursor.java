@@ -5,11 +5,18 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.AreaTracker;
+
+import java.awt.*;
+
+import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 
 public class Cursor extends LineTraveller {
     private KeyCode currentMove = null;
     private int loops = 0;
     private int speed = 2;
+    //todo set stix to false when implementation is done
+    private boolean stix = true;
     public Cursor(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.sprite = new Image[1];
@@ -20,14 +27,36 @@ public class Cursor extends LineTraveller {
     public void move(){
         for (int i = 0; i < speed; i++) {
             if (currentMove != null) {
-                if (currentMove.equals(KeyCode.LEFT) && x > 1) {
-                    x--;
-                } else if (currentMove.equals(KeyCode.RIGHT) && x < 300) {
-                    x++;
-                } else if (currentMove.equals(KeyCode.UP) && y > 0) {
-                    y--;
-                } else if (currentMove.equals(KeyCode.DOWN) && y < 300) {
-                    y++;
+                System.out.println(x+" Y:"+y);
+                switch (currentMove){
+                    case LEFT: {
+                        if(x>0&&checkLine(x-1,y)) {
+                            x--;
+                            areaTracker.addToStix(new Point(x,y));
+                        }
+                        break;
+                    }
+                    case RIGHT: {
+                        if(x < 150&&checkLine(x+1,y)) {
+                            x++;
+                            areaTracker.addToStix(new Point(x,y));
+                        }
+                        break;
+                    }
+                    case UP: {
+                        if(y > 0&&checkLine(x,y-1)) {
+                            y--;
+                            areaTracker.addToStix(new Point(x,y));
+                        }
+                        break;
+                    }
+                    case DOWN: {
+                        if(y < 150&&checkLine(x,y+1)) {
+                            y++;
+                            areaTracker.addToStix(new Point(x,y));
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -41,33 +70,35 @@ public class Cursor extends LineTraveller {
     }
     @Override
     public void draw(Canvas canvas){
-        int speed = 30;
-        if(loops<speed) {
+        int animationSpeed = 30;
+        int drawX = gridToCanvas(x);
+        int drawY = gridToCanvas(y);
+        if(loops<animationSpeed) {
             GraphicsContext gC = canvas.getGraphicsContext2D();
             double height = canvas.getHeight();
-            double heightVar = height/speed*loops;
+            double heightVar = height/animationSpeed*loops;
             double width = canvas.getWidth();
-            double widthVar = width/speed*loops;
+            double widthVar = width/animationSpeed*loops;
             double lineSize = 40.0;
-            double lineSizeVar = (lineSize/speed) * loops;
+            double lineSizeVar = (lineSize/animationSpeed) * loops;
             gC.beginPath();
             gC.setStroke(Color.WHITE);
             //upRightCorner
-            gC.moveTo(width-widthVar + getX() - (lineSize-lineSizeVar) , -(height-heightVar) + getY());
-            gC.lineTo(width-widthVar + getX(), -(height-heightVar) + getY() + (lineSize-lineSizeVar));
+            gC.moveTo(width-widthVar + drawX - (lineSize-lineSizeVar) , -(height-heightVar) + drawY);
+            gC.lineTo(width-widthVar + drawX, -(height-heightVar) + drawY + (lineSize-lineSizeVar));
             //downRightCorner
-            gC.moveTo(width-widthVar + getX() - (lineSize-lineSizeVar) , height-heightVar + getY());
-            gC.lineTo(width-widthVar + getX(), height-heightVar + getY() - (lineSize-lineSizeVar));
+            gC.moveTo(width-widthVar + drawX - (lineSize-lineSizeVar) , height-heightVar + drawY);
+            gC.lineTo(width-widthVar + drawX, height-heightVar + drawY - (lineSize-lineSizeVar));
             //upLeftCorner
-            gC.moveTo(-(width-widthVar) + getX() + (lineSize-lineSizeVar) , -(height-heightVar) + getY());
-            gC.lineTo(-(width-widthVar) + getX(), -(height-heightVar) + getY() + (lineSize-lineSizeVar));
+            gC.moveTo(-(width-widthVar) + drawX + (lineSize-lineSizeVar) , -(height-heightVar) + drawY);
+            gC.lineTo(-(width-widthVar) + drawX, -(height-heightVar) + drawY + (lineSize-lineSizeVar));
             //downLeftCorner
-            gC.moveTo(-(width-widthVar) + getX() + (lineSize-lineSizeVar) , height-heightVar + getY());
-            gC.lineTo(-(width-widthVar) + getX(), height-heightVar + getY() - (lineSize-lineSizeVar));
+            gC.moveTo(-(width-widthVar) + drawX + (lineSize-lineSizeVar) , height-heightVar + drawY);
+            gC.lineTo(-(width-widthVar) + drawX, height-heightVar + drawY - (lineSize-lineSizeVar));
             gC.stroke();
             loops++;
         }
-        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],x-width/2,y-height/2,width,height);
+        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],drawX-width/2+1,drawY-height/2+1,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }
     public String toString() {
