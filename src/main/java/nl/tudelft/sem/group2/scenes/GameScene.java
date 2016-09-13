@@ -12,9 +12,6 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
 
-import nl.tudelft.sem.group2.game.Board;
-import nl.tudelft.sem.group2.units.Cursor;
-
 public class GameScene extends Scene {
 
 	private int score;
@@ -63,7 +60,6 @@ public class GameScene extends Scene {
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
 		root.getChildren().add(bottomBorder);
-
 		previousTime = System.nanoTime();
 
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
