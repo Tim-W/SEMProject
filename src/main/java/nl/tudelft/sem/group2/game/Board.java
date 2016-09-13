@@ -50,7 +50,7 @@ public class Board {
         gc.setFill(Color.WHITE);
         for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
             for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
-                if(areaTracker.getBoardGrid()[i][j]== AreaState.BORDER)
+                if(areaTracker.getBoardGrid()[i][j]== AreaState.OUTERBORDER||areaTracker.getBoardGrid()[i][j]== AreaState.INNERBORDER)
                     gc.fillRect(gridToCanvas(i),gridToCanvas(j),2,2);
             }
         }

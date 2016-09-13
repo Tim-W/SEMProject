@@ -91,8 +91,8 @@ public class AreaTracker {
 
         //Update the grid with the newly created area
         for (Point current : newArea) {
-            if (fastArea) { boardGrid[(int) current.getX()][(int) current.getY()] = AreaStates.FAST; }
-            else { boardGrid[(int) current.getX()][(int) current.getY()] = AreaStates.SLOW; }
+            if (fastArea) { boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.FAST; }
+            else { boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW; }
         }
 
         //Update the grid with the new inner borders
