@@ -4,7 +4,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -128,12 +127,11 @@ public class Cursor extends LineTraveller {
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
             gC.setStroke(javafx.scene.paint.Color.WHITE);
-            for (int j = 0; j < oldLines.size(); j++) {
-                double[][] l = oldLines.get(j);
+            for (double[][] l : oldLines) {
                 gC.beginPath();
                 for (int i = 0; i < 4; i++) {
-                    gC.moveTo(l[i][0],l[i][1] );
-                    gC.lineTo(l[i][2],l[i][3] );
+                    gC.moveTo(l[i][0], l[i][1]);
+                    gC.lineTo(l[i][2], l[i][3]);
 
                 }
                 gC.stroke();

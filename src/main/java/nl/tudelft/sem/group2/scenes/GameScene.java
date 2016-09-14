@@ -154,7 +154,7 @@ public class GameScene extends Scene {
 	protected void calculateArea() {
 		// TODO turn on if isdrawing is implemented
 		// if (cursor.isDrawing()) {
-		
+
 		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
 				&& !areaTracker.getStix().isEmpty()) {
 			System.out.println("ja");
