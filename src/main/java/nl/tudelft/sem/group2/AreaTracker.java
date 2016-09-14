@@ -3,18 +3,22 @@ package nl.tudelft.sem.group2;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
 import java.awt.*;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.e
  */
 public class AreaTracker {
 
-    private LinkedList<Point> stix = new LinkedList<Point>();
+    private static LinkedList<Point> stix = new LinkedList<Point>();
 
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth()+1][LaunchApp.getGridHeight()+1];
+    private static AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth()+1][LaunchApp.getGridHeight()+1];
 
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
+    
+    private Set<Point> visited;
 
     /**
      * Constructor for the AreaTracker class
@@ -43,6 +47,8 @@ public class AreaTracker {
      * @param fastArea tells if stix was created fast or slow (double points if slow)
      */
     public void calculateNewArea (Point qixCoordinates, boolean fastArea) {
+    	visited = new HashSet<Point>();
+    	
         //Set all the points from the current stix to border points on the grid
         for (Point current : stix) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
@@ -63,8 +69,12 @@ public class AreaTracker {
         if (start.getX() != dir.getX()) {
             //If stix was first moving in X direction get points above and under the first stix point and start the floodfill algorithm from there
             Point beginPoint1 = new Point((int) dir.getX(), (int) dir.getY()-1);
+            visited.add(beginPoint1);
             floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true);
+            visited.clear();
+            
             Point beginPoint2 = new Point((int) dir.getX(), (int) dir.getY()+1);
+            visited.add(beginPoint2);
             floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, true);
         }
         else if (start.getY() != dir.getY()) {
@@ -119,7 +129,11 @@ public class AreaTracker {
      * @param addToArea1 boolean that keeps thrack of which temporary AreaTracker to use.
      */
     public void floodFill (Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
-        // Check if the current point on the grid is the chosen beginstate
+        if (visited.contains(pointToCheck)){
+        	return;
+        }
+    	
+    	// Check if the current point on the grid is the chosen beginstate
         if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==chosenState) {
             // Check if that point is the coordinate of the qix
             if (pointToCheck.equals(qixCoorinates)) {
@@ -132,11 +146,13 @@ public class AreaTracker {
                     area2 = null;
                     border2 = null;
                 }
+                System.out.println("BaseCase");
             }
             else {
                 // If that point was not the coordinate of the qix add that point to the right temporary area tracker
                 if (addToArea1) { area1.add(pointToCheck); }
                 else { area2.add(pointToCheck); }
+                visited.add(pointToCheck);
                 // Check all the four neighbours of the current point recursively
                 Point point1 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()-1);
                 Point point2 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()+1);
@@ -152,6 +168,8 @@ public class AreaTracker {
                 !stix.contains(pointToCheck)) {
             if (addToArea1) border1.add(pointToCheck);
             else border2.add(pointToCheck);
+            visited.add(pointToCheck);
+			System.out.println("BaseCase");
         }
     }
 
@@ -185,14 +203,19 @@ public class AreaTracker {
                 switch (state) {
                     case OUTERBORDER:
                         System.out.print("[X]");
+                        break;
                     case INNERBORDER:
                         System.out.print("[*]");
+                        break;
                     case UNCOVERED:
                         System.out.print("[ ]");
+                        break;
                     case FAST:
                         System.out.print("[F]");
+                        break;
                     case SLOW:
                         System.out.print("[S]");
+                        break;
                 }
             }
             System.out.println();

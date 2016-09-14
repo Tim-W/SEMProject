@@ -34,7 +34,7 @@ public class GameScene extends Scene {
 	private boolean isRunning = false;
 	private static Label messageLabel = new Label(" Press SPACE to begin! ");
 	private static VBox messageBox = new VBox(10);
-	
+	private Qix qix;
 	static AnimationTimer animationTimer;
 
 	// TODO implement life system
@@ -55,7 +55,7 @@ public class GameScene extends Scene {
 		Sparx sparx = new Sparx(0,0,16,16);
 		board.addUnit(sparx);
 		
-		Qix qix = new Qix();
+		qix = new Qix();
 		//Hacky way to create black bottom border
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
@@ -115,7 +115,7 @@ public class GameScene extends Scene {
 				if (claimedPercentage >= targetPercentage){
 					gameWon();
 				}
-				
+				areaTracker.printBoardGrid();
 				// 3333333.3 = 300 FPS
 				if (now - previousTime > (long) 33333333.3) {
 					previousTime = now;
@@ -133,7 +133,7 @@ public class GameScene extends Scene {
 			//if (cursor.isDrawing()) {
 				if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER && !areaTracker.getStix().isEmpty()) {
 					System.out.println("ja");
-					areaTracker.calculateNewArea(new Point(10,10), cursor.isFast());
+					areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()), cursor.isFast());
 				}
 			//}	
 	}
