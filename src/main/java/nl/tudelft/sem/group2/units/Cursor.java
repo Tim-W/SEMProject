@@ -17,19 +17,11 @@ public class Cursor extends LineTraveller {
     private LinkedList<double[][]> oldLines = new LinkedList<double[][]>();
 
     private int animationSpeed = 30;
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    private boolean isDrawing = false;
 
     //todo set stix to false when implementation is done
     private boolean stix = true;
-
+    private boolean isDrawing;
+    private boolean isFast;
     public Cursor(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.sprite = new Image[1];
@@ -135,12 +127,11 @@ public class Cursor extends LineTraveller {
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
             gC.setStroke(javafx.scene.paint.Color.WHITE);
-            for (int j = 0; j < oldLines.size(); j++) {
-                double[][] l = oldLines.get(j);
+            for (double[][] l : oldLines) {
                 gC.beginPath();
                 for (int i = 0; i < 4; i++) {
-                    gC.moveTo(l[i][0],l[i][1] );
-                    gC.lineTo(l[i][2],l[i][3] );
+                    gC.moveTo(l[i][0], l[i][1]);
+                    gC.lineTo(l[i][2], l[i][3]);
 
                 }
                 gC.stroke();
@@ -159,7 +150,24 @@ public class Cursor extends LineTraveller {
         isDrawing = drawing;
     }
 
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+
     public String toString() {
         return "Cursor";
     }
+
+	public boolean isFast() {
+		return isFast;
+	}
+
+	public void setFast(boolean isFast) {
+		this.isFast = isFast;
+	}
 }

@@ -111,4 +111,13 @@ public class Qix extends Unit {
     public String toString() {
         return "Qix";
     }
+	public LinkedList<float[]> getOldCoordinates() {
+		return oldCoordinates;
+	}
+	public float[] getCoordinate() {
+		return coordinate;
+	}
+	public LinkedList<float[]> getOldDirections() {
+		return oldDirections;
+	}
 }
