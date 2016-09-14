@@ -1,7 +1,5 @@
 package nl.tudelft.sem.group2.scenes;
 
-import java.awt.Point;
-
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -18,11 +16,11 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Qix;
+import nl.tudelft.sem.group2.units.Sparx;
 
+import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class GameScene extends Scene {
 
@@ -104,7 +102,7 @@ public class GameScene extends Scene {
 					animationTimer.start();
 					isRunning = true;
 					messageLabel.setText("");
-				} else {
+				} else if (arrowKeys.contains(e.getCode())) {
 					cursor.setCurrentMove(e.getCode());
 				} else if (e.getCode().equals(KeyCode.X)) {
 					cursor.setSpeed(1);
