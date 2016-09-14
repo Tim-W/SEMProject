@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.game.Board.gridToCanvas;

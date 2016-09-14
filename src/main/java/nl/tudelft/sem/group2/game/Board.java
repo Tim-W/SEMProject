@@ -10,8 +10,6 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.ArrayList;
-import java.awt.Rectangle;
-import java.awt.Polygon;
 import java.awt.Point;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
