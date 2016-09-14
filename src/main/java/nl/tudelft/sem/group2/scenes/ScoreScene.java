@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -13,7 +15,7 @@ public class ScoreScene extends SubScene{
 
 	private Label score;
 	private Label claimedPercentage;
-	private Label title;
+	private ImageView title;
 	//standard target percentage
 	private int targetPercentage = 75;
 	private Label claimed = new Label("Claimed");
@@ -45,9 +47,9 @@ public class ScoreScene extends SubScene{
 		claimedPercentage.setStyle("-fx-font-size:14;");
 
 		
-		title = new Label("Qix");
-		title.setTextFill(Color.YELLOW);
-		title.setStyle("-fx-font-size:30;");
+		title = new ImageView("/images/logo.png");
+		title.setFitWidth(100);
+		title.setFitHeight(40);
 
 		//TODO Fix font
 		//Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
