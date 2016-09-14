@@ -45,6 +45,13 @@ public class Board {
 	}
 
 	public void addUnit(Unit unit) {
+		if (unit instanceof Fuse) {
+			for (Unit unit1 : this.units) {
+				if (unit1 instanceof Fuse) {
+					return;
+				}
+			}
+		}
 		this.units.add(unit);
 	}
 
@@ -127,5 +134,17 @@ public class Board {
 	// transform grid to canvas coordinates
 	public static int gridToCanvas(int b) {
 		return b * 2 + MARGIN - 1;
+	}
+
+	public void removeFuse() {
+		Unit removingItem = null;
+		for (Unit unit : units) {
+			if (unit instanceof Fuse) {
+				removingItem = unit;
+			}
+		}
+		if (removingItem != null) {
+			units.remove(removingItem);
+		}
 	}
 }
