@@ -38,7 +38,7 @@ public class Cursor extends LineTraveller {
                             if (uncoveredOn(x-1,y) && isDrawing) {
                                 x--;
                                 areaTracker.addToStix(new Point(x, y));
-                            } else if(OuterBorderOn(x - 1, y)) {
+                            } else if(outerBorderOn(x - 1, y)) {
                                 x--;
                             }
                         }
@@ -49,7 +49,7 @@ public class Cursor extends LineTraveller {
                             if (uncoveredOn(x + 1, y) && isDrawing) {
                                 x++;
                                 areaTracker.addToStix(new Point(x, y));
-                            } else if(OuterBorderOn(x + 1, y)) {
+                            } else if(outerBorderOn(x + 1, y)) {
                                 x++;
                             }
                         }
@@ -60,7 +60,7 @@ public class Cursor extends LineTraveller {
                             if (uncoveredOn(x, y - 1) && isDrawing) {
                                 y--;
                                 areaTracker.addToStix(new Point(x, y));
-                            } else if(OuterBorderOn(x, y - 1)) {
+                            } else if(outerBorderOn(x, y - 1)) {
                                 y--;
                             }
                         }
@@ -71,7 +71,7 @@ public class Cursor extends LineTraveller {
                             if (uncoveredOn(x, y + 1) && isDrawing) {
                                 y++;
                                 areaTracker.addToStix(new Point(x, y));
-                            } else if(OuterBorderOn(x, y +1)) {
+                            } else if(outerBorderOn(x, y +1)) {
                                 y++;
                             }
                         }
