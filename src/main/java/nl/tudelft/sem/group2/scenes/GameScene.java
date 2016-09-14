@@ -146,7 +146,7 @@ public class GameScene extends Scene {
 					scoreScene.setScore(scoreCounter.getTotalScore());
 					scoreScene.setClaimedPercentage((int) scoreCounter.getTotalPercentage());
 					// TODO turn this on for area calculation
-					//calculateArea();
+					calculateArea();
 				}
 			}
 		};
@@ -156,6 +156,7 @@ public class GameScene extends Scene {
 	protected void calculateArea() {
 		// TODO turn on if isdrawing is implemented
 		// if (cursor.isDrawing()) {
+		
 		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
 				&& !areaTracker.getStix().isEmpty()) {
 			System.out.println("ja");
