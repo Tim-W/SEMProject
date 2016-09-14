@@ -5,7 +5,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaTracker;
 
 import java.awt.*;
 
@@ -27,7 +26,6 @@ public class Cursor extends LineTraveller {
     public void move(){
         for (int i = 0; i < speed; i++) {
             if (currentMove != null) {
-                System.out.println(x+" Y:"+y);
                 switch (currentMove){
                     case LEFT: {
                         if(x>0&&checkLine(x-1,y)) {
