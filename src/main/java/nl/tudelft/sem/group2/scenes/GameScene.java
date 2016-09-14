@@ -14,6 +14,7 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Qix;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -47,11 +48,13 @@ public class GameScene extends Scene {
 		scoreCounter = new ScoreCounter();
 
 		cursor = new Cursor(75,150,16,16);
+
+		Qix qix = new Qix();
 		//Hacky way to create black bottom border
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
 		board.addUnit(cursor);
-
+		board.addUnit(qix);
 		areaTracker = new AreaTracker();
 		scoreCounter = new ScoreCounter();
 
