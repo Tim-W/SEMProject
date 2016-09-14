@@ -25,7 +25,7 @@ abstract public class LineTraveller extends Unit{
     protected boolean innerBorderOn(int x, int y){
         return areaTracker.getBoardGrid()[x][y].equals(AreaState.INNERBORDER);
     }
-    protected boolean OuterBorderOn(int x, int y){
+    protected boolean outerBorderOn(int x, int y){
         return areaTracker.getBoardGrid()[x][y].equals(AreaState.OUTERBORDER);
     }
     @Override

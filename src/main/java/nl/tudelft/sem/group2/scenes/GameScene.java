@@ -15,9 +15,7 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
-import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Qix;
-import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.*;
 
 import java.awt.Point;
 import java.awt.Polygon;
@@ -52,8 +50,10 @@ public class GameScene extends Scene {
 
 		cursor = new Cursor(75, 150, 16, 16);
 
-		Sparx sparx = new Sparx(0, 0, 16, 16);
-		board.addUnit(sparx);
+		Sparx sparxRight = new Sparx(75, 0, 16, 16, SparxDirection.RIGHT);
+		Sparx sparxLeft = new Sparx(75, 0, 16, 16, SparxDirection.LEFT);
+		board.addUnit(sparxRight);
+		board.addUnit(sparxLeft);
 
 		qix = new Qix();
 		// Hacky way to create black bottom border
@@ -121,6 +121,9 @@ public class GameScene extends Scene {
 			public void handle(KeyEvent e) {
 				KeyCode keyCode = e.getCode();
 				if (keyCode.equals(cursor.getCurrentMove())) {
+					if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
+						board.addUnit(new Fuse((int) areaTracker.getStix().getFirst().getX(), (int) areaTracker.getStix().getFirst().getY(), 16, 16));
+					}
 					cursor.setCurrentMove(null);
 				} else if (keyCode.equals(KeyCode.X)) {
 					cursor.setDrawing(false);
@@ -173,7 +176,10 @@ public class GameScene extends Scene {
 		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
 				&& !areaTracker.getStix().isEmpty()) {
 			System.out.println("ja");
-			areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()), cursor.isFast());
+			areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
+					cursor.isFast());
+			//Remove the Fuse from the board when completing an area
+			board.removeFuse();
 		}
 		// }
 	}
