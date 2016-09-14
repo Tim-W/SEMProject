@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import java.awt.*;
 
 public class Sparx extends LineTraveller {
-    private int speed = 10;
+    private int speed = 5;
     private int lastX = 0;
     private int lastY = 0;
 
@@ -18,20 +18,21 @@ public class Sparx extends LineTraveller {
 
     @Override
     public void move() {
-        System.out.println("X: " + x);
-        System.out.println("Y: " + y);
-//        for (int i = 0; i < speed; i++) {
-            if (x < 150 && !(lastX == x + 1 && lastY == y) && outerBorderOn(x + 1, y)) {
+        for (int i = 0; i < speed; i++) {
+            if (x < 150 && !(x + 1 == lastX) && outerBorderOn(x + 1, y)) {
+                setLastCoordinates(x, y);
                 setX(x + 1);
-            } else if (y < 150 && !(lastY == y + 1 && lastX == x) && outerBorderOn(x, y + 1)) {
+            } else if (y < 150 && !(lastY == y + 1) && outerBorderOn(x, y + 1)) {
+                setLastCoordinates(x, y);
                 setY(y + 1);
-            } else if (x > 0 && !(lastX == x - 1 && lastY == y) && outerBorderOn(x - 1, y)) {
+            } else if (x > 0 && !(lastX == x - 1) && outerBorderOn(x - 1, y)) {
+                setLastCoordinates(x, y);
                 setX(x - 1);
-            } else if (y > 0 && !(lastY == y - 1 && lastX == x) && outerBorderOn(x, y - 1)) {
+            } else if (y > 0 && !(lastY == y - 1) && outerBorderOn(x, y - 1)) {
+                setLastCoordinates(x, y);
                 setY(y - 1);
             }
-            setLastCoordinates(x, y);
-//        }
+        }
     }
 
     private void setLastCoordinates(int x, int y) {
