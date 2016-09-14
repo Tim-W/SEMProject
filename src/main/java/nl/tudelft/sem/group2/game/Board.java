@@ -45,8 +45,8 @@ public class Board {
     }
 
     public void draw() {
-        gc.setFill(Color.BLUE);
-        gc.fillRect(0, 0, 316, 316);
+        //gc.setFill(Color.BLACK);
+        gc.clearRect(0, 0, 316, 316);
         gc.setFill(Color.WHITE);
         for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
             for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
