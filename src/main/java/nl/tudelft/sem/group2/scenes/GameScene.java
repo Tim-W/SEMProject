@@ -1,15 +1,19 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Point;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
+import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
@@ -19,18 +23,17 @@ import nl.tudelft.sem.group2.units.Sparx;
 public class GameScene extends Scene {
 
 	private int score;
-	private int claimedPercentage;
-	private int targetPercentage;
+	private int claimedPercentage = 0;
+	private int targetPercentage = 75;
 	private long previousTime;
 	private Cursor cursor;
 	private Board board;
-	private KeyCode currentMove = null;
 	private static AreaTracker areaTracker;
 	private static ScoreCounter scoreCounter;
 	private boolean isRunning = false;
-	private Label pressSpaceLabel = new Label("Press Space to begin!");
-	private static Label gameOverLabel = new Label("");
-
+	private static Label messageLabel = new Label(" Press SPACE to begin! ");
+	private static VBox messageBox = new VBox(10);
+	
 	static AnimationTimer animationTimer;
 
 	// TODO implement life system
@@ -46,9 +49,9 @@ public class GameScene extends Scene {
 
 		scoreCounter = new ScoreCounter();
 
-		cursor = new Cursor(12,10,16,16);
+		cursor = new Cursor(75,150,16,16);
 		
-		Sparx sparx = new Sparx(10,10,16,16);
+		Sparx sparx = new Sparx(0,0,16,16);
 		board.addUnit(sparx);
 		
 		//Hacky way to create black bottom border
@@ -59,15 +62,14 @@ public class GameScene extends Scene {
 		areaTracker = new AreaTracker();
 		scoreCounter = new ScoreCounter();
 
-		pressSpaceLabel.setLayoutX(60);
-		pressSpaceLabel.setLayoutY(200);
-		pressSpaceLabel.setStyle("-fx-font-size: 24px");
-		pressSpaceLabel.setTextFill(Color.YELLOW);
-		
-		gameOverLabel.setLayoutX(100);
-		gameOverLabel.setLayoutY(200);
-		gameOverLabel.setStyle("-fx-font-size: 24px; -fx-effect: dropshadow(gaussian, rgba(255,255,255,0), 0,0,0,1);");
-		gameOverLabel.setTextFill(Color.YELLOW);
+		//Messagebox&label for displaying start and end messages
+		messageBox.setAlignment(Pos.CENTER);
+		messageBox.getChildren().add(messageLabel);
+		messageBox.setStyle("-fx-background-color: #000000;");
+		messageBox.setLayoutX(50);
+		messageBox.setLayoutY(176);
+		messageLabel.setStyle("-fx-font-size: 24px;");
+		messageLabel.setTextFill(Color.YELLOW);
 
 		// lifes = 0;
 
@@ -77,11 +79,12 @@ public class GameScene extends Scene {
 		// TODO shift this to a game class and save/load score
 		scoreScene.setScore(0);
 		scoreScene.setClaimedPercentage(0);
+		
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
 		root.getChildren().add(bottomBorder);
-		root.getChildren().add(pressSpaceLabel);
-		root.getChildren().add(gameOverLabel);
+		root.getChildren().add(messageBox);
+
 		previousTime = System.nanoTime();
 		board.draw();
 
@@ -91,7 +94,7 @@ public class GameScene extends Scene {
 					// TODO remove this start and start using game
 					animationTimer.start();
 					isRunning = true;
-					root.getChildren().remove(pressSpaceLabel);
+					messageLabel.setText("");
 				} else {
 					cursor.setCurrentMove(e.getCode());
 				}
@@ -107,16 +110,30 @@ public class GameScene extends Scene {
 		// animation timer for handling a loop
 		animationTimer = new AnimationTimer() {
 			public void handle(long now) {
+				if (claimedPercentage >= targetPercentage){
+					gameWon();
+				}
+				
 				// 3333333.3 = 300 FPS
 				if (now - previousTime > (long) 33333333.3) {
 					previousTime = now;
 					// draw
 					board.draw();
 					board.collisions();
+					calculateArea();
 				}
 			}
 		};
 
+	}
+	
+	protected void calculateArea() {
+			//if (cursor.isDrawing()) {
+				if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER && !areaTracker.getStix().isEmpty()) {
+					System.out.println("ja");
+					areaTracker.calculateNewArea(new Point(10,10), cursor.isFast());
+				}
+			//}	
 	}
 
 	public int getScore() {
@@ -166,6 +183,14 @@ public class GameScene extends Scene {
 	public static void gameOver(){
 		//TODO add code for gameover
 		animationTimerStop();
-		gameOverLabel.setText("Game Over!");
+		messageBox.setLayoutX(103);
+		messageLabel.setText(" Game Over! ");
 	}
+	
+	public static void gameWon() {
+		animationTimerStop();
+		messageBox.setLayoutX(106);
+		messageLabel.setText(" You Won! ");
+	}
+
 }

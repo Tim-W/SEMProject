@@ -14,7 +14,6 @@ import java.awt.*;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.scenes.GameScene;
-import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -83,24 +82,29 @@ public class Board {
 			for (Unit collidee : unitsList) {
 				if (collider instanceof Qix) {
 					// TODO code for qix collisions/intersect
-					if(collidee instanceof Cursor && collider.intersect(collidee)){
+					if (collidee instanceof Cursor
+							&& collider.intersect(collidee)) {
 						GameScene.gameOver();
 					}
 				} else if (collider instanceof Cursor) {
-					if ((collidee instanceof Sparx || collidee instanceof Fuse) && collider.intersect(collidee)) {
+					if ((collidee instanceof Sparx || collidee instanceof Fuse)
+							&& collider.intersect(collidee)) {
 						GameScene.gameOver();
-					} else if (collidee instanceof Qix && collider.intersect(collidee)) {
+					} else if (collidee instanceof Qix
+							&& collider.intersect(collidee)) {
 						GameScene.gameOver();
 						// TODO collisions with qix
 					}
 				} else if (collider instanceof Sparx) {
 					// TODO collisions with sparx
-					if(collidee instanceof Cursor && collider.intersect(collidee)){
+					if (collidee instanceof Cursor
+							&& collider.intersect(collidee)) {
 						GameScene.gameOver();
 					}
 				} else if (collider instanceof Fuse) {
 					// TODO collisions with sparx
-					if (collidee instanceof Cursor && collider.intersect(collidee)){
+					if (collidee instanceof Cursor
+							&& collider.intersect(collidee)) {
 						GameScene.gameOver();
 					}
 				}
