@@ -120,12 +120,10 @@ public class AreaTracker {
         if (area1 == null) {
             newArea = area2;
             newBorder = border2;
-            System.out.println("Area1");
         }
         else if (area2 == null) {
             newArea = area1;
             newBorder = border1;
-            System.out.println("Area2");
         }
 
         ScoreCounter scoreCounter = GameScene.getScoreCounter();
@@ -137,19 +135,15 @@ public class AreaTracker {
         scoreCounter.updateScore(newArea.size()+stix.size(), fastArea);
 
 
-        System.out.println("Size new Area: " + newArea.size());
-        System.out.println("Size new Border: " + newBorder.size());
         //Update the grid with the newly created area
         for (Point current : newArea) {
             if (fastArea) { boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.FAST; }
             else { boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW; }
-            System.out.println("Updating area");
         }
 
         //Update the grid with the new inner borders
         for (Point current : newBorder) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
-            System.out.println("Updating border");
         }
 
         //Reset the temporary area tracker
@@ -172,11 +166,9 @@ public class AreaTracker {
      */
     public void floodFill (Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
         if (visited.contains(pointToCheck)) {
-            System.out.println("Yo Momma visited");
             return;
         }
         if (foundQix) {
-            System.out.println("Yo Momma found the qix");
             return;
         }
         // Check if the current point on the grid is the chosen beginstate
@@ -193,14 +185,12 @@ public class AreaTracker {
                     border2 = null;
                 }
                 foundQix = true;
-                System.out.println("Point: ["+pointToCheck.getX()+"]["+pointToCheck.getY()+"] is qix");
             }
             else {
                 // If that point was not the coordinate of the qix add that point to the right temporary area tracker
                 if (addToArea1) { area1.add(pointToCheck); }
                 else { area2.add(pointToCheck); }
                 visited.add(pointToCheck);
-                System.out.println("Point: ["+pointToCheck.getX()+"]["+pointToCheck.getY()+"] is area");
                 // Check all the four neighbours of the current point recursively
                 Point point1 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()-1);
                 Point point2 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()+1);
@@ -225,7 +215,6 @@ public class AreaTracker {
             if (addToArea1) border1.add(pointToCheck);
             else border2.add(pointToCheck);
             visited.add(pointToCheck);
-            System.out.println("Point: ["+pointToCheck.getX()+"]["+pointToCheck.getY()+"] is border");
         }
     }
 
