@@ -13,12 +13,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -99,7 +104,26 @@ public class GameScene extends Scene {
 			public void handle(KeyEvent e) {
 				if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
 					// TODO remove this start and start using game
-					animationTimer.start();
+                    new Thread(new Runnable() {
+                        // The wrapper thread is unnecessary, unless it blocks on the
+                        // Clip finishing; see comments.
+                        public void run() {
+                            try {
+                                Clip clip = AudioSystem.getClip();
+                                AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                                        LaunchApp.class.getResourceAsStream("/sounds/Qix_NewLife.wav"));
+                                clip.open(inputStream);
+                                FloatControl gainControl =
+                                        (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                                gainControl.setValue(-10.0f);
+                                clip.start();
+                            } catch (Exception e) {
+                                System.err.println(e.getMessage());
+                            }
+                        }
+                    }).start();
+
+                    animationTimer.start();
 					isRunning = true;
 					messageLabel.setText("");
 				} else if (arrowKeys.contains(e.getCode())) {
@@ -159,8 +183,25 @@ public class GameScene extends Scene {
 
 		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
 				&& !areaTracker.getStix().isEmpty()) {
-			System.out.println("ja");
-			areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
+            new Thread(new Runnable() {
+                // The wrapper thread is unnecessary, unless it blocks on the
+                // Clip finishing; see comments.
+                public void run() {
+                    try {
+                        Clip clip = AudioSystem.getClip();
+                        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                                LaunchApp.class.getResourceAsStream("/sounds/Qix_Success.wav"));
+                        clip.open(inputStream);
+                        FloatControl gainControl =
+                                (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                        gainControl.setValue(-10.0f);
+                        clip.start();
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                    }
+                }
+            }).start();
+            areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
 					cursor.isFast());
 		}
 		// }
@@ -192,9 +233,29 @@ public class GameScene extends Scene {
 		animationTimerStop();
 		messageBox.setLayoutX(103);
 		messageLabel.setText(" Game Over! ");
+
+        //Plays game over sound
+        new Thread(new Runnable() {
+            // The wrapper thread is unnecessary, unless it blocks on the
+            // Clip finishing; see comments.
+            public void run() {
+                try {
+                    Clip clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                            LaunchApp.class.getResourceAsStream("/sounds/Qix_Death.wav"));
+                    clip.open(inputStream);
+                    FloatControl gainControl =
+                            (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    gainControl.setValue(-10.0f);
+                    clip.start();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
 	}
 
-	public static void gameWon() {
+    public static void gameWon() {
 		animationTimerStop();
 		messageBox.setLayoutX(115);
 		messageLabel.setText(" You Won! ");
