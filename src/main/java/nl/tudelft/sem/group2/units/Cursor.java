@@ -4,7 +4,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -17,6 +16,7 @@ public class Cursor extends LineTraveller {
     private int speed = 2;
     private LinkedList<double[][]> oldLines = new LinkedList<double[][]>();
 
+    private int animationSpeed = 30;
     public void setSpeed(int speed) {
         this.speed = speed;
     }
@@ -100,11 +100,9 @@ public class Cursor extends LineTraveller {
 
     @Override
     public void draw(Canvas canvas) {
-        int animationSpeed = 30;
         int drawX = gridToCanvas(x);
         int drawY = gridToCanvas(y);
         if (loops < animationSpeed) {
-            GraphicsContext gC = canvas.getGraphicsContext2D();
             double height = canvas.getHeight();
             double heightVar = height / animationSpeed * loops;
             double width = canvas.getWidth();
@@ -129,13 +127,15 @@ public class Cursor extends LineTraveller {
             line[3][2]=-(width - widthVar) + drawX;
             line[3][3]=height - heightVar + drawY - (lineSize - lineSizeVar);
             oldLines.addFirst(line);
-            if(oldLines.size()>10){
+        }
+        if(loops<animationSpeed+10){
+            if(oldLines.size()>10||oldLines.size()>animationSpeed-loops){
                 oldLines.removeLast();
             }
-
-            gC.setStroke(Color.WHITE);
-            for (double[][] l :oldLines
-                 ) {
+            GraphicsContext gC = canvas.getGraphicsContext2D();
+            gC.setStroke(javafx.scene.paint.Color.WHITE);
+            for (int j = 0; j < oldLines.size(); j++) {
+                double[][] l = oldLines.get(j);
                 gC.beginPath();
                 for (int i = 0; i < 4; i++) {
                     gC.moveTo(l[i][0],l[i][1] );
@@ -144,9 +144,6 @@ public class Cursor extends LineTraveller {
                 }
                 gC.stroke();
             }
-
-
-
             loops++;
         }
         canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex], drawX - width / 2 + 1, drawY - height / 2 + 1, width, height);
