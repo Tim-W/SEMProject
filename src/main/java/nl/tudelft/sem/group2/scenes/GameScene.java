@@ -19,6 +19,7 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.Qix;
 
 public class GameScene extends Scene {
 
@@ -54,11 +55,12 @@ public class GameScene extends Scene {
 		Sparx sparx = new Sparx(0,0,16,16);
 		board.addUnit(sparx);
 		
+		Qix qix = new Qix();
 		//Hacky way to create black bottom border
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
 		board.addUnit(cursor);
-
+		board.addUnit(qix);
 		areaTracker = new AreaTracker();
 		scoreCounter = new ScoreCounter();
 

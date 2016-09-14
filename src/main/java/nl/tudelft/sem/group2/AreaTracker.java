@@ -178,4 +178,24 @@ public class AreaTracker {
     public AreaState[][] getBoardGrid() {
         return boardGrid;
     }
+
+    public void printBoardGrid() {
+        for (AreaState[] column : boardGrid) {
+            for (AreaState state : column) {
+                switch (state) {
+                    case OUTERBORDER:
+                        System.out.print("[X]");
+                    case INNERBORDER:
+                        System.out.print("[*]");
+                    case UNCOVERED:
+                        System.out.print("[ ]");
+                    case FAST:
+                        System.out.print("[F]");
+                    case SLOW:
+                        System.out.print("[S]");
+                }
+            }
+            System.out.println();
+        }
+    }
 }
