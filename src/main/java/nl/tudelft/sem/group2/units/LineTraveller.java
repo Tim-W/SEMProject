@@ -24,7 +24,7 @@ abstract public class LineTraveller extends Unit{
         AreaState state = areaTracker.getBoardGrid()[x][y];
         switch (state){
             case OUTERBORDER: return true;
-            case UNCOVERED: return true;
+            case UNCOVERED: return false;
             default: return false;
         }
 
