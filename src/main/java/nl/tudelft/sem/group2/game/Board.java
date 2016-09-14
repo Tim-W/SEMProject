@@ -52,37 +52,38 @@ public class Board {
 		return this.units.remove(unit);
 	}
 
-    public void draw() {
-        //gc.setFill(Color.BLACK);
-        gc.clearRect(0, 0, 316, 316);
-        gc.setFill(Color.WHITE);
-        for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
-            for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
-                if(areaTracker.getBoardGrid()[i][j]== AreaState.OUTERBORDER||areaTracker.getBoardGrid()[i][j]== AreaState.INNERBORDER)
-                    gc.fillRect(gridToCanvas(i),gridToCanvas(j),2,2);
-            }
-        }
-        for (Point p: areaTracker.getStix()) {
-            gc.fillRect(gridToCanvas(p.x),gridToCanvas(p.y),2,2);
-        }
-        gc.setFill(Color.BLUE);
-        for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
-            for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
-                if(areaTracker.getBoardGrid()[i][j]== AreaState.FAST)
-                    gc.fillRect(gridToCanvas(i),gridToCanvas(j),2,2);
-            }
-        }
-        gc.setFill(Color.RED);
-        for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
-            for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
-                if(areaTracker.getBoardGrid()[i][j]== AreaState.SLOW)
-                    gc.fillRect(gridToCanvas(i),gridToCanvas(j),2,2);
-            }
-        }
-        for (Unit unit : units) {
-            unit.move();
-            unit.draw(canvas);
-        }
+	public void draw() {
+		// gc.setFill(Color.BLACK);
+		gc.clearRect(0, 0, 316, 316);
+		gc.setFill(Color.WHITE);
+		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+				if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
+						|| areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER)
+					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+			}
+		}
+		for (Point p : areaTracker.getStix()) {
+			gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+		}
+		gc.setFill(Color.BLUE);
+		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+				if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST)
+					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+			}
+		}
+		gc.setFill(Color.RED);
+		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+				if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW)
+					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+			}
+		}
+		for (Unit unit : units) {
+			unit.move();
+			unit.draw(canvas);
+		}
 
 	}
 
@@ -95,29 +96,27 @@ public class Board {
 			for (Unit collidee : unitsList) {
 				if (collider instanceof Qix) {
 					// TODO code for qix collisions/intersect
-					if (collidee instanceof Cursor
-							&& collider.intersect(collidee)) {
-						GameScene.gameOver();
+					if (collidee instanceof Cursor) {
+						Cursor temp = (Cursor) collidee;
+						if (collider.intersect(collidee) && temp.isDrawing()) {
+							GameScene.gameOver();
+						}
 					}
 				} else if (collider instanceof Cursor) {
-					if ((collidee instanceof Sparx || collidee instanceof Fuse)
-							&& collider.intersect(collidee)) {
+					if ((collidee instanceof Sparx || collidee instanceof Fuse) && collider.intersect(collidee)) {
 						GameScene.gameOver();
-					} else if (collidee instanceof Qix
-							&& collider.intersect(collidee)) {
-						GameScene.gameOver();
-						// TODO collisions with qix
+					} else if (collidee instanceof Qix) {
+						Cursor temp = (Cursor) collider;
+						if (collider.intersect(collidee) && temp.isDrawing()) {
+							GameScene.gameOver();
+						}
 					}
 				} else if (collider instanceof Sparx) {
-					// TODO collisions with sparx
-					if (collidee instanceof Cursor
-							&& collider.intersect(collidee)) {
+					if (collidee instanceof Cursor && collider.intersect(collidee)) {
 						GameScene.gameOver();
 					}
 				} else if (collider instanceof Fuse) {
-					// TODO collisions with sparx
-					if (collidee instanceof Cursor
-							&& collider.intersect(collidee)) {
+					if (collidee instanceof Cursor && collider.intersect(collidee)) {
 						GameScene.gameOver();
 					}
 				}
