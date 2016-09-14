@@ -18,20 +18,20 @@ public class Sparx extends LineTraveller {
 
     @Override
     public void move() {
-        for (int i = 0; i < speed; i++) {
-            if (x < 150 && lastX != x + 1 || lastY != y && outerBorderOn(x + 1, y)) {
+        System.out.println("X: " + x);
+        System.out.println("Y: " + y);
+//        for (int i = 0; i < speed; i++) {
+            if (x < 150 && !(lastX == x + 1 && lastY == y) && outerBorderOn(x + 1, y)) {
                 setX(x + 1);
-            } else if (y < 150 && lastY != y + 1 || lastX != x && outerBorderOn(x, y + 1)) {
+            } else if (y < 150 && !(lastY == y + 1 && lastX == x) && outerBorderOn(x, y + 1)) {
                 setY(y + 1);
-            } else if (x > 0 && lastX != x - 1 || lastY != y && outerBorderOn(x - 1, y)) {
+            } else if (x > 0 && !(lastX == x - 1 && lastY == y) && outerBorderOn(x - 1, y)) {
                 setX(x - 1);
-            } else if (y > 0 && lastY != y - 1 || lastX != x && outerBorderOn(x, y - 1)) {
+            } else if (y > 0 && !(lastY == y - 1 && lastX == x) && outerBorderOn(x, y - 1)) {
                 setY(y - 1);
             }
-            setX(x);
-            setY(y);
             setLastCoordinates(x, y);
-        }
+//        }
     }
 
     private void setLastCoordinates(int x, int y) {
