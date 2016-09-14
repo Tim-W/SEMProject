@@ -23,7 +23,7 @@ import nl.tudelft.sem.group2.units.Qix;
 
 public class GameScene extends Scene {
 
-	private int score;
+	private int score = 0;
 	private int claimedPercentage = 0;
 	private int targetPercentage = 75;
 	private long previousTime;
@@ -36,6 +36,7 @@ public class GameScene extends Scene {
 	private static VBox messageBox = new VBox(10);
 	private Qix qix;
 	static AnimationTimer animationTimer;
+	private ScoreScene scoreScene;
 
 	// TODO implement life system
 	// private int lifes;
@@ -76,7 +77,7 @@ public class GameScene extends Scene {
 		// lifes = 0;
 
 		Group group = new Group();
-		ScoreScene scoreScene = new ScoreScene(group, 340, 60);
+		scoreScene = new ScoreScene(group, 340, 60);
 
 		// TODO shift this to a game class and save/load score
 		scoreScene.setScore(0);
@@ -112,17 +113,19 @@ public class GameScene extends Scene {
 		// animation timer for handling a loop
 		animationTimer = new AnimationTimer() {
 			public void handle(long now) {
-				if (claimedPercentage >= targetPercentage){
-					gameWon();
-				}
-				areaTracker.printBoardGrid();
 				// 3333333.3 = 300 FPS
 				if (now - previousTime > (long) 33333333.3) {
+					if (claimedPercentage >= targetPercentage){
+						gameWon();
+					}
 					previousTime = now;
 					// draw
 					board.draw();
 					board.collisions();
-					calculateArea();
+					scoreScene.setScore(score);
+					scoreScene.setClaimedPercentage(claimedPercentage);
+					//TODO turn this on for area calculation
+					//calculateArea();
 				}
 			}
 		};
@@ -130,6 +133,7 @@ public class GameScene extends Scene {
 	}
 	
 	protected void calculateArea() {
+		//TODO turn on if isdrawing is implemented
 			//if (cursor.isDrawing()) {
 				if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER && !areaTracker.getStix().isEmpty()) {
 					System.out.println("ja");
@@ -191,7 +195,7 @@ public class GameScene extends Scene {
 	
 	public static void gameWon() {
 		animationTimerStop();
-		messageBox.setLayoutX(106);
+		messageBox.setLayoutX(115);
 		messageLabel.setText(" You Won! ");
 	}
 
