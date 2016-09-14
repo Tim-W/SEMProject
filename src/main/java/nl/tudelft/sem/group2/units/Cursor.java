@@ -16,10 +16,14 @@ public class Cursor extends LineTraveller {
     private int speed = 2;
     //todo set stix to false when implementation is done
     private boolean stix = true;
+    private boolean isDrawing;
+    private boolean isFast;
     public Cursor(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.sprite = new Image[1];
         this.sprite[0] = new Image("/images/cursor.png");
+        isDrawing = false;
+        isFast = true;
     }
 
     @Override
@@ -28,28 +32,28 @@ public class Cursor extends LineTraveller {
             if (currentMove != null) {
                 switch (currentMove){
                     case LEFT: {
-                        if(x>0&&checkLine(x-1,y)) {
+                        if(x>0 && checkLine(x-1,y)) {
                             x--;
                             areaTracker.addToStix(new Point(x,y));
                         }
                         break;
                     }
                     case RIGHT: {
-                        if(x < 150&&checkLine(x+1,y)) {
+                        if(x < 150 && checkLine(x+1,y)) {
                             x++;
                             areaTracker.addToStix(new Point(x,y));
                         }
                         break;
                     }
                     case UP: {
-                        if(y > 0&&checkLine(x,y-1)) {
+                        if(y > 0 && checkLine(x,y-1)) {
                             y--;
                             areaTracker.addToStix(new Point(x,y));
                         }
                         break;
                     }
                     case DOWN: {
-                        if(y < 150&&checkLine(x,y+1)) {
+                        if(y < 150 && checkLine(x,y+1)) {
                             y++;
                             areaTracker.addToStix(new Point(x,y));
                         }
@@ -99,7 +103,24 @@ public class Cursor extends LineTraveller {
         canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex],drawX-width/2+1,drawY-height/2+1,width,height);
         spriteIndex = (spriteIndex+1)%sprite.length;
     }
+    
     public String toString() {
     	return "Cursor";
     }
+
+	public boolean isDrawing() {
+		return isDrawing;
+	}
+
+	public void setDrawing(boolean isDrawing) {
+		this.isDrawing = isDrawing;
+	}
+
+	public boolean isFast() {
+		return isFast;
+	}
+
+	public void setFast(boolean isFast) {
+		this.isFast = isFast;
+	}
 }

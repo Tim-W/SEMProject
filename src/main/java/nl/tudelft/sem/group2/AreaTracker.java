@@ -12,12 +12,12 @@ import java.util.Set;
  */
 public class AreaTracker {
 
-    private LinkedList<Point> stix = new LinkedList<Point>();
+    private static LinkedList<Point> stix = new LinkedList<Point>();
 
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth()+1][LaunchApp.getGridHeight()+1];
+    private static AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth()+1][LaunchApp.getGridHeight()+1];
 
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
-
+    
     private Set<Point> visited;
 
     private boolean foundQix;
