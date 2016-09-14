@@ -10,7 +10,7 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.ArrayList;
-import java.awt.*;
+import java.awt.Point;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.scenes.GameScene;
@@ -66,14 +66,14 @@ public class Board {
 		for (Point p : areaTracker.getStix()) {
 			gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
 		}
-		gc.setFill(Color.BLUE);
+		gc.setFill(Color.DARKBLUE);
 		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
 			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
 				if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST)
 					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
 			}
 		}
-		gc.setFill(Color.RED);
+		gc.setFill(Color.DARKRED);
 		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
 			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
 				if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW)
