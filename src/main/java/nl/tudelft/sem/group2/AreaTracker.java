@@ -92,6 +92,8 @@ public class AreaTracker {
         //Initialize the set which contains the visited points for the floodfill algorithm
         visited = new HashSet<Point>();
 
+        printBoardGrid();
+        
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX()) {
             //If stix was first moving in X direction get points above and under the first stix point and start the floodfill algorithm from there
@@ -145,6 +147,7 @@ public class AreaTracker {
         for (Point current : newBorder) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
         }
+        
 
         //Reset the temporary area tracker
         area1 = null;
@@ -196,18 +199,18 @@ public class AreaTracker {
                 Point point2 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()+1);
                 Point point3 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY());
                 Point point4 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY());
-                Point point5 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY()-1);
-                Point point6 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY()+1);
-                Point point7 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY()-1);
-                Point point8 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY()+1);
+                //Point point5 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY()-1);
+                //Point point6 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY()+1);
+                //Point point7 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY()-1);
+                //Point point8 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY()+1);
                 floodFill(point1, qixCoorinates, chosenState, addToArea1);
                 floodFill(point2, qixCoorinates, chosenState, addToArea1);
                 floodFill(point3, qixCoorinates, chosenState, addToArea1);
                 floodFill(point4, qixCoorinates, chosenState, addToArea1);
-                floodFill(point5, qixCoorinates, chosenState, addToArea1);
-                floodFill(point6, qixCoorinates, chosenState, addToArea1);
-                floodFill(point7, qixCoorinates, chosenState, addToArea1);
-                floodFill(point8, qixCoorinates, chosenState, addToArea1);
+                //floodFill(point5, qixCoorinates, chosenState, addToArea1);
+                //floodFill(point6, qixCoorinates, chosenState, addToArea1);
+                //floodFill(point7, qixCoorinates, chosenState, addToArea1);
+                //floodFill(point8, qixCoorinates, chosenState, addToArea1);
             }
         }
         else if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==AreaState.OUTERBORDER &&
