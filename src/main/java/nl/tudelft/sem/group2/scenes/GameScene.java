@@ -21,6 +21,9 @@ import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Qix;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class GameScene extends Scene {
 
 	private long previousTime;
@@ -88,6 +91,12 @@ public class GameScene extends Scene {
 		previousTime = System.nanoTime();
 		board.draw();
 
+		final ArrayList<KeyCode> arrowKeys = new ArrayList<KeyCode>();
+		arrowKeys.add(KeyCode.UP);
+		arrowKeys.add(KeyCode.DOWN);
+		arrowKeys.add(KeyCode.LEFT);
+		arrowKeys.add(KeyCode.RIGHT);
+
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
@@ -97,13 +106,28 @@ public class GameScene extends Scene {
 					messageLabel.setText("");
 				} else {
 					cursor.setCurrentMove(e.getCode());
+				} else if (e.getCode().equals(KeyCode.X)) {
+					cursor.setSpeed(1);
+					cursor.setDrawing(true);
+				} else if (e.getCode().equals(KeyCode.Z)) {
+					cursor.setSpeed(2);
+					cursor.setDrawing(true);
 				}
 			}
 		});
 
 		setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-				cursor.setCurrentMove(null);
+				KeyCode keyCode = e.getCode();
+				if (keyCode.equals(cursor.getCurrentMove())) {
+					cursor.setCurrentMove(null);
+				} else if (keyCode.equals(KeyCode.X)) {
+					cursor.setDrawing(false);
+					cursor.setSpeed(2);
+				} else if (keyCode.equals(KeyCode.Z)) {
+					cursor.setDrawing(false);
+					cursor.setSpeed(2);
+				}
 			}
 		});
 

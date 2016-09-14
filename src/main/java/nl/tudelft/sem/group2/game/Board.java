@@ -52,24 +52,23 @@ public class Board {
 		return this.units.remove(unit);
 	}
 
-	public void draw() {
-		gc.setFill(Color.BLUE);
-		gc.fillRect(0, 0, 316, 316);
-		gc.setFill(Color.WHITE);
-		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-				if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
-						|| areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER)
-					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-			}
-		}
-		for (Point p : areaTracker.getStix()) {
-			gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
-		}
-		for (Unit unit : units) {
-			unit.move();
-			unit.draw(canvas);
-		}
+    public void draw() {
+        //gc.setFill(Color.BLACK);
+        gc.clearRect(0, 0, 316, 316);
+        gc.setFill(Color.WHITE);
+        for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
+            for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
+                if(areaTracker.getBoardGrid()[i][j]== AreaState.OUTERBORDER||areaTracker.getBoardGrid()[i][j]== AreaState.INNERBORDER)
+                    gc.fillRect(gridToCanvas(i),gridToCanvas(j),2,2);
+            }
+        }
+        for (Point p: areaTracker.getStix()) {
+            gc.fillRect(gridToCanvas(p.x),gridToCanvas(p.y),2,2);
+        }
+        for (Unit unit : units) {
+            unit.move();
+            unit.draw(canvas);
+        }
 
 	}
 

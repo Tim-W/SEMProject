@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.AreaState;
 
 import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 
@@ -20,7 +21,13 @@ abstract public class LineTraveller extends Unit{
     //Todo needs to be implemented
     //returns true if there is a line on the given coordinates.
     protected boolean checkLine(int x, int y){
-        return true;
+        AreaState state = areaTracker.getBoardGrid()[x][y];
+        switch (state){
+            case OUTERBORDER: return true;
+            case UNCOVERED: return false;
+            default: return false;
+        }
+
     }
     @Override
     public void draw(Canvas canvas) {
