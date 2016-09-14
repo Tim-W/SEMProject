@@ -92,8 +92,6 @@ public class AreaTracker {
         //Initialize the set which contains the visited points for the floodfill algorithm
         visited = new HashSet<Point>();
 
-        printBoardGrid();
-        
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX()) {
             //If stix was first moving in X direction get points above and under the first stix point and start the floodfill algorithm from there
@@ -147,7 +145,7 @@ public class AreaTracker {
         for (Point current : newBorder) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
         }
-        
+
 
         //Reset the temporary area tracker
         area1 = null;
@@ -175,50 +173,52 @@ public class AreaTracker {
             return;
         }
         // Check if the current point on the grid is the chosen beginstate
-        if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==chosenState) {
-            // Check if that point is the coordinate of the qix
-            if (pointToCheck.equals(qixCoorinates)) {
-                // If that point was the coordinate of the qix set the temporary area tracker that is currently in use to null
-                if (addToArea1) {
-                    area1 = null;
-                    border1 = null;
+        try {
+            if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==chosenState) {
+                // Check if that point is the coordinate of the qix
+                if (pointToCheck.equals(qixCoorinates)) {
+                    // If that point was the coordinate of the qix set the temporary area tracker that is currently in use to null
+                    if (addToArea1) {
+                        area1 = null;
+                        border1 = null;
+                    }
+                    else {
+                        area2 = null;
+                        border2 = null;
+                    }
+                    foundQix = true;
                 }
                 else {
-                    area2 = null;
-                    border2 = null;
+                    // If that point was not the coordinate of the qix add that point to the right temporary area tracker
+                    if (addToArea1) { area1.add(pointToCheck); }
+                    else { area2.add(pointToCheck); }
+                    visited.add(pointToCheck);
+                    // Check all the four neighbours of the current point recursively
+                    Point point1 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()-1);
+                    Point point2 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()+1);
+                    Point point3 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY());
+                    Point point4 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY());
+                    floodFill(point1, qixCoorinates, chosenState, addToArea1);
+                    floodFill(point2, qixCoorinates, chosenState, addToArea1);
+                    floodFill(point3, qixCoorinates, chosenState, addToArea1);
+                    floodFill(point4, qixCoorinates, chosenState, addToArea1);
                 }
-                foundQix = true;
             }
-            else {
-                // If that point was not the coordinate of the qix add that point to the right temporary area tracker
-                if (addToArea1) { area1.add(pointToCheck); }
-                else { area2.add(pointToCheck); }
+            else if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==AreaState.OUTERBORDER &&
+                    !stix.contains(pointToCheck)) {
+                if (addToArea1) border1.add(pointToCheck);
+                else border2.add(pointToCheck);
                 visited.add(pointToCheck);
-                // Check all the four neighbours of the current point recursively
-                Point point1 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()-1);
-                Point point2 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()+1);
-                Point point3 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY());
-                Point point4 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY());
-                //Point point5 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY()-1);
-                //Point point6 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY()+1);
-                //Point point7 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY()-1);
-                //Point point8 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY()+1);
-                floodFill(point1, qixCoorinates, chosenState, addToArea1);
-                floodFill(point2, qixCoorinates, chosenState, addToArea1);
-                floodFill(point3, qixCoorinates, chosenState, addToArea1);
-                floodFill(point4, qixCoorinates, chosenState, addToArea1);
-                //floodFill(point5, qixCoorinates, chosenState, addToArea1);
-                //floodFill(point6, qixCoorinates, chosenState, addToArea1);
-                //floodFill(point7, qixCoorinates, chosenState, addToArea1);
-                //floodFill(point8, qixCoorinates, chosenState, addToArea1);
+            }
+            else if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==AreaState.INNERBORDER) {
+                visited.add(pointToCheck);
             }
         }
-        else if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==AreaState.OUTERBORDER &&
-                !stix.contains(pointToCheck)) {
-            if (addToArea1) border1.add(pointToCheck);
-            else border2.add(pointToCheck);
-            visited.add(pointToCheck);
+        catch (ArrayIndexOutOfBoundsException exception) {
+            System.out.println("Floodfill {X: "+pointToCheck.getX()+" Y: "+pointToCheck.getY()+"}");
+            printBoardGrid();
         }
+
     }
 
     /**

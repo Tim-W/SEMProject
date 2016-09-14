@@ -1,13 +1,12 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.scenes.GameScene;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public abstract class Unit {
 	protected int x;
@@ -94,8 +93,8 @@ public abstract class Unit {
 			Iterator<Integer> yIterator = yCor.iterator();
 
 			for (int i = 0; i < xArr.length; i++) {
-				xArr[i] = xIterator.next().intValue();
-				yArr[i] = yIterator.next().intValue();
+				xArr[i] = xIterator.next();
+				yArr[i] = yIterator.next();
 			}
 
 			Polygon colliderP = new Polygon(xArr, yArr, xArr.length);
@@ -104,10 +103,7 @@ public abstract class Unit {
 			Rectangle collideeR = new Rectangle(collidee.getX(),
 					collidee.getY(), collidee.getWidth() / 2 - 1,
 					collidee.getHeight() / 2 - 1);
-			if (colliderP.intersects(collideeR)) {
-				return true;
-			}
-			return false;
+			return colliderP.intersects(collideeR);
 		}
 
 		if (collidee instanceof Qix) {
@@ -135,8 +131,8 @@ public abstract class Unit {
 			Iterator<Integer> yIterator = yCor.iterator();
 
 			for (int i = 0; i < xArr.length; i++) {
-				xArr[i] = xIterator.next().intValue();
-				yArr[i] = yIterator.next().intValue();
+				xArr[i] = xIterator.next();
+				yArr[i] = yIterator.next();
 			}
 
 			Polygon collideeP = new Polygon(xArr, yArr, xArr.length);
@@ -144,10 +140,7 @@ public abstract class Unit {
 			// subtract one from width&height to make collisions look more real
 			Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
 					this.getWidth() / 2 - 1, this.getHeight() / 2 - 1);
-			if (collideeP.intersects(colliderR)) {
-				return true;
-			}
-			return false;
+			return collideeP.intersects(colliderR);
 		}
 
 		Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
@@ -155,9 +148,6 @@ public abstract class Unit {
 		// subtract one from width&height to make collisions look more real
 		Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(),
 				collidee.getWidth() / 2 - 1, collidee.getHeight() / 2 - 1);
-		if (colliderR.intersects(collideeR)) {
-			return true;
-		}
-		return false;
+		return colliderR.intersects(collideeR);
 	}
 }
