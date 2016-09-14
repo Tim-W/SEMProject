@@ -41,10 +41,10 @@ public class Cursor extends LineTraveller {
                 switch (currentMove){
                     case LEFT: {
                         if (x > 0) {
-                            if (!checkLine(x - 1, y) && isDrawing) {
+                            if (uncoveredOn(x-1,y) && isDrawing) {
                                 x--;
                                 areaTracker.addToStix(new Point(x, y));
-                            } else if(checkLine(x - 1, y)) {
+                            } else if(OuterBorderOn(x - 1, y)) {
                                 x--;
                             }
                         }
@@ -52,10 +52,10 @@ public class Cursor extends LineTraveller {
                     }
                     case RIGHT: {
                         if (x < 150) {
-                            if (!checkLine(x + 1, y) && isDrawing) {
+                            if (uncoveredOn(x + 1, y) && isDrawing) {
                                 x++;
                                 areaTracker.addToStix(new Point(x, y));
-                            } else if(checkLine(x + 1, y)) {
+                            } else if(OuterBorderOn(x + 1, y)) {
                                 x++;
                             }
                         }
@@ -63,10 +63,10 @@ public class Cursor extends LineTraveller {
                     }
                     case UP: {
                         if (y > 0) {
-                            if (!checkLine(x, y - 1) && isDrawing) {
+                            if (uncoveredOn(x, y - 1) && isDrawing) {
                                 y--;
                                 areaTracker.addToStix(new Point(x, y));
-                            } else if(checkLine(x, y - 1)) {
+                            } else if(OuterBorderOn(x, y - 1)) {
                                 y--;
                             }
                         }
@@ -74,10 +74,10 @@ public class Cursor extends LineTraveller {
                     }
                     case DOWN: {
                         if (y < 150) {
-                            if (!checkLine(x, y + 1) && isDrawing) {
+                            if (uncoveredOn(x, y + 1) && isDrawing) {
                                 y++;
                                 areaTracker.addToStix(new Point(x, y));
-                            } else if(checkLine(x, y +1)) {
+                            } else if(OuterBorderOn(x, y +1)) {
                                 y++;
                             }
                         }
