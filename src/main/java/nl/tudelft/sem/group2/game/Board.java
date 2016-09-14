@@ -65,6 +65,20 @@ public class Board {
         for (Point p: areaTracker.getStix()) {
             gc.fillRect(gridToCanvas(p.x),gridToCanvas(p.y),2,2);
         }
+        gc.setFill(Color.BLUE);
+        for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
+            for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
+                if(areaTracker.getBoardGrid()[i][j]== AreaState.FAST)
+                    gc.fillRect(gridToCanvas(i),gridToCanvas(j),2,2);
+            }
+        }
+        gc.setFill(Color.RED);
+        for (int i=0;i<areaTracker.getBoardGrid().length;i++) {
+            for (int j=0;j<areaTracker.getBoardGrid()[i].length;j++) {
+                if(areaTracker.getBoardGrid()[i][j]== AreaState.SLOW)
+                    gc.fillRect(gridToCanvas(i),gridToCanvas(j),2,2);
+            }
+        }
         for (Unit unit : units) {
             unit.move();
             unit.draw(canvas);
