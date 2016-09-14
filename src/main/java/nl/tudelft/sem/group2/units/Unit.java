@@ -70,34 +70,7 @@ public abstract class Unit {
 	public boolean intersect(Unit collidee) {
 		if (this instanceof Qix) {
 			Qix qix = (Qix) this;
-
-			ArrayList<Integer> xCor = new ArrayList<Integer>();
-			ArrayList<Integer> yCor = new ArrayList<Integer>();
-
-			for (int i = 0; i < qix.getOldCoordinates().size(); i++) {
-				xCor.add(Math.round(qix.getOldCoordinates().get(i)[0]
-						+ qix.getOldDirections().get(i)[1]));
-				xCor.add(Math.round(qix.getOldCoordinates().get(i)[0]
-						- qix.getOldDirections().get(i)[1]));
-
-				yCor.add(Math.round(qix.getOldCoordinates().get(i)[1]
-						+ qix.getOldDirections().get(i)[0]));
-				yCor.add(Math.round(qix.getOldCoordinates().get(i)[1]
-						- qix.getOldDirections().get(i)[0]));
-			}
-
-			int[] xArr = new int[xCor.size()];
-			int[] yArr = new int[xCor.size()];
-
-			Iterator<Integer> xIterator = xCor.iterator();
-			Iterator<Integer> yIterator = yCor.iterator();
-
-			for (int i = 0; i < xArr.length; i++) {
-				xArr[i] = xIterator.next();
-				yArr[i] = yIterator.next();
-			}
-
-			Polygon colliderP = new Polygon(xArr, yArr, xArr.length);
+			Polygon colliderP = qix.toPolygon();
 
 			// subtract one from width&height to make collisions look more real
 			Rectangle collideeR = new Rectangle(collidee.getX(),
@@ -108,34 +81,7 @@ public abstract class Unit {
 
 		if (collidee instanceof Qix) {
 			Qix qix = (Qix) collidee;
-
-			ArrayList<Integer> xCor = new ArrayList<Integer>();
-			ArrayList<Integer> yCor = new ArrayList<Integer>();
-
-			for (int i = 0; i < qix.getOldCoordinates().size(); i++) {
-				xCor.add(Math.round(qix.getOldCoordinates().get(i)[0]
-						+ qix.getOldDirections().get(i)[1]));
-				xCor.add(Math.round(qix.getOldCoordinates().get(i)[0]
-						- qix.getOldDirections().get(i)[1]));
-
-				yCor.add(Math.round(qix.getOldCoordinates().get(i)[1]
-						+ qix.getOldDirections().get(i)[0]));
-				yCor.add(Math.round(qix.getOldCoordinates().get(i)[1]
-						- qix.getOldDirections().get(i)[0]));
-			}
-
-			int[] xArr = new int[xCor.size()];
-			int[] yArr = new int[xCor.size()];
-
-			Iterator<Integer> xIterator = xCor.iterator();
-			Iterator<Integer> yIterator = yCor.iterator();
-
-			for (int i = 0; i < xArr.length; i++) {
-				xArr[i] = xIterator.next();
-				yArr[i] = yIterator.next();
-			}
-
-			Polygon collideeP = new Polygon(xArr, yArr, xArr.length);
+			Polygon collideeP = qix.toPolygon();
 
 			// subtract one from width&height to make collisions look more real
 			Rectangle colliderR = new Rectangle(this.getX(), this.getY(),

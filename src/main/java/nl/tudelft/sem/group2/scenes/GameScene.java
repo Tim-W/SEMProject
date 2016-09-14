@@ -16,15 +16,14 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
-import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Qix;
-import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.*;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 
 public class GameScene extends Scene {
@@ -56,8 +55,10 @@ public class GameScene extends Scene {
 
 		cursor = new Cursor(75, 150, 16, 16);
 
-		Sparx sparx = new Sparx(0, 0, 16, 16);
-		board.addUnit(sparx);
+		Sparx sparxRight = new Sparx(75, 0, 16, 16, SparxDirection.RIGHT);
+		Sparx sparxLeft = new Sparx(75, 0, 16, 16, SparxDirection.LEFT);
+		board.addUnit(sparxRight);
+		board.addUnit(sparxLeft);
 
 		qix = new Qix();
 		// Hacky way to create black bottom border
@@ -144,6 +145,9 @@ public class GameScene extends Scene {
 			public void handle(KeyEvent e) {
 				KeyCode keyCode = e.getCode();
 				if (keyCode.equals(cursor.getCurrentMove())) {
+					if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
+						board.addUnit(new Fuse((int) areaTracker.getStix().getFirst().getX(), (int) areaTracker.getStix().getFirst().getY(), 16, 16));
+					}
 					cursor.setCurrentMove(null);
 				} else if (keyCode.equals(KeyCode.X)) {
 					cursor.setDrawing(false);
@@ -167,17 +171,29 @@ public class GameScene extends Scene {
 					// draw
 					board.draw();
 					board.collisions();
+					qixStixCollisions();
 					scoreScene.setScore(scoreCounter.getTotalScore());
 					scoreScene.setClaimedPercentage((int) scoreCounter.getTotalPercentage());
 					// TODO turn this on for area calculation
 					calculateArea();
 				}
 			}
+
 		};
+	}
+
+	private void qixStixCollisions() {
+		Polygon qixP = qix.toPolygon();
+		for (Point point : areaTracker.getStix()) {
+			if (qixP.intersects(point.getX(), point.getY(), 1, 1)){
+				gameOver();
+			}
+				
+		}
 
 	}
 
-	protected void calculateArea() {
+	private void calculateArea() {
 		// TODO turn on if isdrawing is implemented
 		// if (cursor.isDrawing()) {
 
@@ -203,10 +219,11 @@ public class GameScene extends Scene {
             }).start();
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
 					cursor.isFast());
+			//Remove the Fuse from the board when completing an area
+			board.removeFuse();
 		}
 		// }
 	}
-
 
 	public static void animationTimerStart() {
 		animationTimer.start();
