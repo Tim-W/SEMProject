@@ -23,9 +23,6 @@ import nl.tudelft.sem.group2.units.Qix;
 
 public class GameScene extends Scene {
 
-	private int score = 0;
-	private int claimedPercentage = 0;
-	private int targetPercentage = 75;
 	private long previousTime;
 	private Cursor cursor;
 	private Board board;
@@ -115,17 +112,17 @@ public class GameScene extends Scene {
 			public void handle(long now) {
 				// 3333333.3 = 300 FPS
 				if (now - previousTime > (long) 33333333.3) {
-					if (claimedPercentage >= targetPercentage) {
+					if (scoreCounter.getTotalPercentage() >= scoreCounter.getTargetPercentage()) {
 						gameWon();
 					}
 					previousTime = now;
 					// draw
 					board.draw();
 					board.collisions();
-					scoreScene.setScore(score);
-					scoreScene.setClaimedPercentage(claimedPercentage);
+					scoreScene.setScore(scoreCounter.getTotalScore());
+					scoreScene.setClaimedPercentage((int) scoreCounter.getTotalPercentage());
 					// TODO turn this on for area calculation
-					// calculateArea();
+					//calculateArea();
 				}
 			}
 		};
@@ -144,29 +141,6 @@ public class GameScene extends Scene {
 		// }
 	}
 
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public int getClaimedPercentage() {
-		return claimedPercentage;
-	}
-
-	public void setClaimedPercentage(int claimedPercentage) {
-		this.claimedPercentage = claimedPercentage;
-	}
-
-	public int getTargetPercentage() {
-		return targetPercentage;
-	}
-
-	public void setTargetPercentage(int targetPercentage) {
-		this.targetPercentage = targetPercentage;
-	}
 
 	public static void animationTimerStart() {
 		animationTimer.start();
