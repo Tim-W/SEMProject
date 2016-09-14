@@ -102,34 +102,35 @@ public class Cursor extends LineTraveller {
     public void draw(Canvas canvas) {
         int drawX = gridToCanvas(x);
         int drawY = gridToCanvas(y);
-        if (loops < animationSpeed) {
-            double height = canvas.getHeight();
-            double heightVar = height / animationSpeed * loops;
-            double width = canvas.getWidth();
-            double widthVar = width / animationSpeed * loops;
-            double lineSize = 80.0;
-            double lineSizeVar = (lineSize / animationSpeed) * loops;
-            double[][] line = new double[4][4];
-            line[0][0]=width - widthVar + drawX - (lineSize - lineSizeVar);
-            line[0][1]=-(height - heightVar) + drawY;
-            line[0][2]=width - widthVar + drawX;
-            line[0][3]=-(height - heightVar) + drawY + (lineSize - lineSizeVar);
-            line[1][0]=width - widthVar + drawX - (lineSize - lineSizeVar);
-            line[1][1]=height - heightVar + drawY;
-            line[1][2]=width - widthVar + drawX;
-            line[1][3]=height - heightVar + drawY - (lineSize - lineSizeVar);
-            line[2][0]=-(width - widthVar) + drawX + (lineSize - lineSizeVar);
-            line[2][1]=-(height - heightVar) + drawY;
-            line[2][2]=-(width - widthVar) + drawX;
-            line[2][3]=-(height - heightVar) + drawY + (lineSize - lineSizeVar);
-            line[3][0]=-(width - widthVar) + drawX + (lineSize - lineSizeVar);
-            line[3][1]=height - heightVar + drawY;
-            line[3][2]=-(width - widthVar) + drawX;
-            line[3][3]=height - heightVar + drawY - (lineSize - lineSizeVar);
-            oldLines.addFirst(line);
-        }
-        if(loops<animationSpeed+10){
-            if(oldLines.size()>10||oldLines.size()>animationSpeed-loops){
+        int lineCount = 10;
+        if(loops<animationSpeed+lineCount){
+            if (loops < animationSpeed) {
+                double height = canvas.getHeight();
+                double heightVar = height / animationSpeed * loops;
+                double width = canvas.getWidth();
+                double widthVar = width / animationSpeed * loops;
+                double lineSize = 80.0;
+                double lineSizeVar = (lineSize / animationSpeed) * loops;
+                double[][] line = new double[4][4];
+                line[0][0]=width - widthVar + drawX - (lineSize - lineSizeVar);
+                line[0][1]=-(height - heightVar) + drawY;
+                line[0][2]=width - widthVar + drawX;
+                line[0][3]=-(height - heightVar) + drawY + (lineSize - lineSizeVar);
+                line[1][0]=width - widthVar + drawX - (lineSize - lineSizeVar);
+                line[1][1]=height - heightVar + drawY;
+                line[1][2]=width - widthVar + drawX;
+                line[1][3]=height - heightVar + drawY - (lineSize - lineSizeVar);
+                line[2][0]=-(width - widthVar) + drawX + (lineSize - lineSizeVar);
+                line[2][1]=-(height - heightVar) + drawY;
+                line[2][2]=-(width - widthVar) + drawX;
+                line[2][3]=-(height - heightVar) + drawY + (lineSize - lineSizeVar);
+                line[3][0]=-(width - widthVar) + drawX + (lineSize - lineSizeVar);
+                line[3][1]=height - heightVar + drawY;
+                line[3][2]=-(width - widthVar) + drawX;
+                line[3][3]=height - heightVar + drawY - (lineSize - lineSizeVar);
+                oldLines.addFirst(line);
+            }
+            if(oldLines.size()>lineCount||oldLines.size()>animationSpeed-loops){
                 oldLines.removeLast();
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
