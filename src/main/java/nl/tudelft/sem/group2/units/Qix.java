@@ -4,6 +4,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.AreaState.INNERBORDER;
@@ -106,6 +109,36 @@ public class Qix extends Unit {
                 }
             }
         }
+    }
+    
+    public Polygon toPolygon(){
+    	ArrayList<Integer> xCor = new ArrayList<Integer>();
+		ArrayList<Integer> yCor = new ArrayList<Integer>();
+
+		for (int i = 0; i < this.getOldCoordinates().size(); i++) {
+			xCor.add(Math.round(this.getOldCoordinates().get(i)[0]
+					+ this.getOldDirections().get(i)[1]));
+			xCor.add(Math.round(this.getOldCoordinates().get(i)[0]
+					- this.getOldDirections().get(i)[1]));
+
+			yCor.add(Math.round(this.getOldCoordinates().get(i)[1]
+					+ this.getOldDirections().get(i)[0]));
+			yCor.add(Math.round(this.getOldCoordinates().get(i)[1]
+					- this.getOldDirections().get(i)[0]));
+		}
+
+		int[] xArr = new int[xCor.size()];
+		int[] yArr = new int[xCor.size()];
+
+		Iterator<Integer> xIterator = xCor.iterator();
+		Iterator<Integer> yIterator = yCor.iterator();
+
+		for (int i = 0; i < xArr.length; i++) {
+			xArr[i] = xIterator.next();
+			yArr[i] = yIterator.next();
+		}
+
+		return new Polygon(xArr, yArr, xArr.length);
     }
 
     public String toString() {
