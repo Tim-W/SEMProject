@@ -99,44 +99,6 @@ public class Qix extends Unit {
                 }
             }
         }
-        /*int gridLength = areaTracker.getBoardGrid().length;
-        float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
-        float Nx = direction[0]/length;
-        float Ny = direction[1]/length;
-        float newX= coordinate[0];
-        float newY=coordinate[1];
-        for (int k = 0; k < Math.ceil(length)+; k++) {
-            for (int i = 0; i < gridLength; i++) {
-                for (int j = 0; j < gridLength; j++) {
-                    if (areaTracker.getBoardGrid()[i][j] == INNERBORDER || areaTracker.getBoardGrid()[i][j] == OUTERBORDER) {
-                        float dx = i - newX;
-                        float dy = j - newY;
-                        float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);
-                        if (lengthNew < 3) {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            newX += Nx;
-            newY += Ny;
-        }
-        return false;*/
-        /*if(hit) {
-            *//*int biggestDimension = 0;
-            if (Math.abs(direction[0]) < Math.abs(direction[1])) {
-                biggestDimension = 1;
-            }*//*
-            direction[0]*=-1;
-            direction[1]*=-1;
-            //animationLoops+=4;
-            *//*direction[0]/=length;
-            direction[0]*=lengthNew;
-            direction[1]/=length;
-            direction[1]*=lengthNew;*//*
-        }*/
-
     }
 
     public String toString() {
