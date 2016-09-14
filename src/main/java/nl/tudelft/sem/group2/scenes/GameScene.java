@@ -44,7 +44,7 @@ public class GameScene extends Scene {
 
 		scoreCounter = new ScoreCounter();
 
-		cursor = new Cursor(75,75,16,16);
+		cursor = new Cursor(75,150,16,16);
 		//Hacky way to create black bottom border
 		Canvas bottomBorder = new Canvas(300,20);
 		bottomBorder.setLayoutY(380);
