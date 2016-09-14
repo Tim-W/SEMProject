@@ -107,9 +107,11 @@ public class GameScene extends Scene {
 				} else if (e.getCode().equals(KeyCode.X)) {
 					cursor.setSpeed(1);
 					cursor.setDrawing(true);
+					cursor.setFast(false);
 				} else if (e.getCode().equals(KeyCode.Z)) {
 					cursor.setSpeed(2);
 					cursor.setDrawing(true);
+					cursor.setFast(true);
 				}
 			}
 		});
