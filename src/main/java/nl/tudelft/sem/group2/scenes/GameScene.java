@@ -51,21 +51,21 @@ public class GameScene extends Scene {
 
 		scoreCounter = new ScoreCounter();
 
-		cursor = new Cursor(75,150,16,16);
-		
-		Sparx sparx = new Sparx(0,0,16,16);
+		cursor = new Cursor(75, 150, 16, 16);
+
+		Sparx sparx = new Sparx(0, 0, 16, 16);
 		board.addUnit(sparx);
-		
+
 		qix = new Qix();
-		//Hacky way to create black bottom border
-		Canvas bottomBorder = new Canvas(300,20);
+		// Hacky way to create black bottom border
+		Canvas bottomBorder = new Canvas(300, 20);
 		bottomBorder.setLayoutY(380);
 		board.addUnit(cursor);
 		board.addUnit(qix);
 		areaTracker = new AreaTracker();
 		scoreCounter = new ScoreCounter();
 
-		//Messagebox&label for displaying start and end messages
+		// Messagebox&label for displaying start and end messages
 		messageBox.setAlignment(Pos.CENTER);
 		messageBox.getChildren().add(messageLabel);
 		messageBox.setStyle("-fx-background-color: #000000;");
@@ -82,7 +82,7 @@ public class GameScene extends Scene {
 		// TODO shift this to a game class and save/load score
 		scoreScene.setScore(0);
 		scoreScene.setClaimedPercentage(0);
-		
+
 		root.getChildren().add(scoreScene);
 		root.getChildren().add(canvas);
 		root.getChildren().add(bottomBorder);
@@ -93,7 +93,7 @@ public class GameScene extends Scene {
 
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-				if (e.getCode().equals(KeyCode.SPACE) && !isRunning  ) {
+				if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
 					// TODO remove this start and start using game
 					animationTimer.start();
 					isRunning = true;
@@ -115,7 +115,7 @@ public class GameScene extends Scene {
 			public void handle(long now) {
 				// 3333333.3 = 300 FPS
 				if (now - previousTime > (long) 33333333.3) {
-					if (claimedPercentage >= targetPercentage){
+					if (claimedPercentage >= targetPercentage) {
 						gameWon();
 					}
 					previousTime = now;
@@ -124,22 +124,24 @@ public class GameScene extends Scene {
 					board.collisions();
 					scoreScene.setScore(score);
 					scoreScene.setClaimedPercentage(claimedPercentage);
-					//TODO turn this on for area calculation
-					//calculateArea();
+					// TODO turn this on for area calculation
+					// calculateArea();
 				}
 			}
 		};
 
 	}
-	
+
 	protected void calculateArea() {
-		//TODO turn on if isdrawing is implemented
-			//if (cursor.isDrawing()) {
-				if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER && !areaTracker.getStix().isEmpty()) {
-					System.out.println("ja");
-					areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()), cursor.isFast());
-				}
-			//}	
+		// TODO turn on if isdrawing is implemented
+		// if (cursor.isDrawing()) {
+		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
+				&& !areaTracker.getStix().isEmpty()) {
+			System.out.println("ja");
+			areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
+					cursor.isFast());
+		}
+		// }
 	}
 
 	public int getScore() {
@@ -182,17 +184,17 @@ public class GameScene extends Scene {
 		return scoreCounter;
 	}
 
-	public boolean isRunning(){
+	public boolean isRunning() {
 		return isRunning;
 	}
-	
-	public static void gameOver(){
-		//TODO add code for gameover
+
+	public static void gameOver() {
+		// TODO add code for gameover
 		animationTimerStop();
 		messageBox.setLayoutX(103);
 		messageLabel.setText(" Game Over! ");
 	}
-	
+
 	public static void gameWon() {
 		animationTimerStop();
 		messageBox.setLayoutX(115);

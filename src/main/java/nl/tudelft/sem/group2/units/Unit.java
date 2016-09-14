@@ -102,17 +102,16 @@ public abstract class Unit {
 
 			// subtract one from width&height to make collisions look more real
 			Rectangle collideeR = new Rectangle(collidee.getX(),
-					collidee.getY(), collidee.getWidth() / 2-1,
-					collidee.getHeight() / 2-1);
+					collidee.getY(), collidee.getWidth() / 2 - 1,
+					collidee.getHeight() / 2 - 1);
 			if (colliderP.intersects(collideeR)) {
 				return true;
 			}
 			return false;
 		}
 
-		 if (collidee instanceof Qix) {
-		 Qix qix = (Qix) collidee;
-
+		if (collidee instanceof Qix) {
+			Qix qix = (Qix) collidee;
 
 			ArrayList<Integer> xCor = new ArrayList<Integer>();
 			ArrayList<Integer> yCor = new ArrayList<Integer>();
@@ -141,15 +140,15 @@ public abstract class Unit {
 			}
 
 			Polygon collideeP = new Polygon(xArr, yArr, xArr.length);
-		 
-		 // subtract one from width&height to make collisions look more real
-		 Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
-		 this.getWidth() / 2 - 1, this.getHeight() / 2 - 1);
-		 if (collideeP.intersects(colliderR)) {
-		 return true;
-		 }
-		 return false;
-		 }
+
+			// subtract one from width&height to make collisions look more real
+			Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
+					this.getWidth() / 2 - 1, this.getHeight() / 2 - 1);
+			if (collideeP.intersects(colliderR)) {
+				return true;
+			}
+			return false;
+		}
 
 		Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
 				this.getWidth() / 2, this.getHeight() / 2);
