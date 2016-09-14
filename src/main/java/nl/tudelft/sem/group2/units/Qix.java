@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import sun.security.util.Length;
 
 import java.util.LinkedList;
 
@@ -29,13 +30,23 @@ public class Qix extends Unit {
                 direction[i]*=-1;
         }
         if(animationLoops<=0) {
-            direction[0] = Math.round(Math.random() * 6) - 3;
-            direction[1] = Math.round(Math.random() * 6) - 3;
-            float length = (float) Math.sqrt(direction[0]*direction[0]+direction[1]*direction[1]);
+            float length;
+            do {
+                direction[0] = Math.round(Math.random() * 6) - 3;
+                direction[1] = Math.round(Math.random() * 6) - 3;
+                length = (float) Math.sqrt(direction[0]*direction[0]+direction[1]*direction[1]);
+            }while(length==0);
+
             float random = (float) Math.random() * 4 -2;
             float scale = (PositionLength+random)/length;
             direction[0]*=scale;
             direction[1]*=scale;
+            if(Math.abs(scale)<0.01){
+                System.out.println();
+            }
+            if(Math.abs(scale)>10000){
+                System.out.println();
+            }
             animationLoops = (int) (Math.random() * 10);
         }
         this.x = (int)(coordinate[0]+direction[0]);
