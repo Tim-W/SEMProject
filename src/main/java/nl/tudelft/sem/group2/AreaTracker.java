@@ -6,6 +6,7 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.e
@@ -19,6 +20,7 @@ public class AreaTracker {
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     
     private Set<Point> visited;
+    Stack<Point> visiting = new Stack<Point>();
 
     private boolean foundQix;
 
@@ -158,17 +160,20 @@ public class AreaTracker {
         stix = new LinkedList<Point>();
     }
 
+    public void floodFill(Point pointToCheck,Point qixCoorinates, AreaState chosenState, boolean addToArea1){
+        visiting.push(pointToCheck);
+        while(!visiting.isEmpty())
+            floodFill(qixCoorinates, chosenState, addToArea1);
+    }
     /**
      * Floodfill algorithm, this algorithm checks one point if it's a point that gets added to new area and if the qix is found and adds that to one of the two area trackers
-     * @param pointToCheck a Point which is either the starting point determined in the calculateNewArea method or a recursively determined point
+     * pointToCheck a Point which is either the starting point determined in the calculateNewArea method or a recursively determined point
      * @param qixCoorinates the current qix coordinates
      * @param chosenState begin state of the area that gets added to the new area, practically always AreaStates.UNCOVERED
      * @param addToArea1 boolean that keeps thrack of which temporary AreaTracker to use.
      */
-    public void floodFill (Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
-        if (visited.contains(pointToCheck)) {
-            return;
-        }
+    public void floodFill (Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
+        Point pointToCheck = visiting.pop();
         if (foundQix) {
             return;
         }
@@ -194,14 +199,15 @@ public class AreaTracker {
                     else { area2.add(pointToCheck); }
                     visited.add(pointToCheck);
                     // Check all the four neighbours of the current point recursively
-                    Point point1 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()-1);
-                    Point point2 = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()+1);
-                    Point point3 = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY());
-                    Point point4 = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY());
-                    floodFill(point1, qixCoorinates, chosenState, addToArea1);
-                    floodFill(point2, qixCoorinates, chosenState, addToArea1);
-                    floodFill(point3, qixCoorinates, chosenState, addToArea1);
-                    floodFill(point4, qixCoorinates, chosenState, addToArea1);
+                    Point[] points = new Point[4];
+                    points[0] = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()-1);
+                    points[1] = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY()+1);
+                    points[2] = new Point((int) pointToCheck.getX()-1, (int) pointToCheck.getY());
+                    points[3] = new Point((int) pointToCheck.getX()+1, (int) pointToCheck.getY());
+                    for (Point point : points) {
+                        if (!visited.contains(point))
+                            visiting.push(point);
+                    }
                 }
             }
             else if (boardGrid[(int)pointToCheck.getX()][(int)pointToCheck.getY()]==AreaState.OUTERBORDER &&
