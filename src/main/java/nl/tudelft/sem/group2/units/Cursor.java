@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import nl.tudelft.sem.group2.AreaState;
 
 import java.awt.Point;
 import java.util.LinkedList;
@@ -36,8 +37,14 @@ public class Cursor extends LineTraveller {
                     case LEFT: {
                         if (x > 0) {
                             if (uncoveredOn(x-1,y) && isDrawing) {
-                                x--;
-                                areaTracker.addToStix(new Point(x, y));
+                                if(!areaTracker.getStix().contains(new Point(x-1, y))&&
+                                        !areaTracker.getStix().contains(new Point(x-2, y))) {
+                                    if(areaTracker.getBoardGrid()[x-1][y-1].equals(AreaState.UNCOVERED)&&
+                                            areaTracker.getBoardGrid()[x-1][y+1].equals(AreaState.UNCOVERED)) {
+                                        x--;
+                                        areaTracker.addToStix(new Point(x, y));
+                                    }
+                                }
                             } else if(outerBorderOn(x - 1, y)) {
                                 x--;
                             }
@@ -47,8 +54,14 @@ public class Cursor extends LineTraveller {
                     case RIGHT: {
                         if (x < 150) {
                             if (uncoveredOn(x + 1, y) && isDrawing) {
-                                x++;
-                                areaTracker.addToStix(new Point(x, y));
+                                if(!areaTracker.getStix().contains(new Point(x+1, y))&&
+                                        !areaTracker.getStix().contains(new Point(x+2, y))) {
+                                    if(areaTracker.getBoardGrid()[x+1][y-1].equals(AreaState.UNCOVERED)&&
+                                            areaTracker.getBoardGrid()[x+1][y+1].equals(AreaState.UNCOVERED)) {
+                                        x++;
+                                        areaTracker.addToStix(new Point(x, y));
+                                    }
+                                }
                             } else if(outerBorderOn(x + 1, y)) {
                                 x++;
                             }
@@ -58,8 +71,14 @@ public class Cursor extends LineTraveller {
                     case UP: {
                         if (y > 0) {
                             if (uncoveredOn(x, y - 1) && isDrawing) {
-                                y--;
-                                areaTracker.addToStix(new Point(x, y));
+                                if(!areaTracker.getStix().contains(new Point(x, y-1))&&
+                                        !areaTracker.getStix().contains(new Point(x, y-2))) {
+                                    if(areaTracker.getBoardGrid()[x+1][y-1].equals(AreaState.UNCOVERED) &&
+                                            areaTracker.getBoardGrid()[x-1][y-1].equals(AreaState.UNCOVERED)) {
+                                        y--;
+                                        areaTracker.addToStix(new Point(x, y));
+                                    }
+                                }
                             } else if(outerBorderOn(x, y - 1)) {
                                 y--;
                             }
@@ -69,8 +88,14 @@ public class Cursor extends LineTraveller {
                     case DOWN: {
                         if (y < 150) {
                             if (uncoveredOn(x, y + 1) && isDrawing) {
-                                y++;
-                                areaTracker.addToStix(new Point(x, y));
+                                if(!areaTracker.getStix().contains(new Point(x, y+1))&&
+                                        !areaTracker.getStix().contains(new Point(x, y+2))) {
+                                    if(areaTracker.getBoardGrid()[x+1][y+1].equals(AreaState.UNCOVERED) &&
+                                            areaTracker.getBoardGrid()[x-1][y+1].equals(AreaState.UNCOVERED)) {
+                                        y++;
+                                        areaTracker.addToStix(new Point(x, y));
+                                    }
+                                }
                             } else if(outerBorderOn(x, y +1)) {
                                 y++;
                             }
@@ -89,6 +114,7 @@ public class Cursor extends LineTraveller {
     public void setCurrentMove(KeyCode currentMove) {
         this.currentMove = currentMove;
     }
+
 
     @Override
     public void draw(Canvas canvas) {
@@ -132,7 +158,6 @@ public class Cursor extends LineTraveller {
                 for (int i = 0; i < 4; i++) {
                     gC.moveTo(l[i][0], l[i][1]);
                     gC.lineTo(l[i][2], l[i][3]);
-
                 }
                 gC.stroke();
             }
@@ -158,7 +183,6 @@ public class Cursor extends LineTraveller {
         return speed;
     }
 
-
     public String toString() {
         return "Cursor";
     }
@@ -166,6 +190,7 @@ public class Cursor extends LineTraveller {
 	public boolean isFast() {
 		return isFast;
 	}
+
 
 	public void setFast(boolean isFast) {
 		this.isFast = isFast;
