@@ -98,7 +98,6 @@ public class GameScene extends Scene {
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
-					// TODO remove this start and start using game
 					animationTimer.start();
 					isRunning = true;
 					messageLabel.setText("");
@@ -148,7 +147,6 @@ public class GameScene extends Scene {
 					board.collisions();
 					scoreScene.setScore(scoreCounter.getTotalScore());
 					scoreScene.setClaimedPercentage((int) scoreCounter.getTotalPercentage());
-					// TODO turn this on for area calculation
 					calculateArea();
 				}
 			}
@@ -157,9 +155,6 @@ public class GameScene extends Scene {
 	}
 
 	protected void calculateArea() {
-		// TODO turn on if isdrawing is implemented
-		// if (cursor.isDrawing()) {
-
 		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
 				&& !areaTracker.getStix().isEmpty()) {
 			System.out.println("ja");
@@ -168,7 +163,6 @@ public class GameScene extends Scene {
 			//Remove the Fuse from the board when completing an area
 			board.removeFuse();
 		}
-		// }
 	}
 
 
@@ -193,7 +187,6 @@ public class GameScene extends Scene {
 	}
 
 	public static void gameOver() {
-		// TODO add code for gameover
 		animationTimerStop();
 		messageBox.setLayoutX(103);
 		messageLabel.setText(" Game Over! ");
