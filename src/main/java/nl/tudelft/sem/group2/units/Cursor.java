@@ -36,7 +36,7 @@ public class Cursor extends LineTraveller {
                     case LEFT: {
                         if (x > 0) {
                             if (uncoveredOn(x-1,y) && isDrawing) {
-                                if(!areaTracker.getStix().contains(new Point(x-1, y))) {
+                                if(!areaTracker.getStix().contains(new Point(x-1, y))&&!areaTracker.getStix().contains(new Point(x-2, y))) {
                                     x--;
                                     areaTracker.addToStix(new Point(x, y));
                                 }
@@ -49,7 +49,7 @@ public class Cursor extends LineTraveller {
                     case RIGHT: {
                         if (x < 150) {
                             if (uncoveredOn(x + 1, y) && isDrawing) {
-                                if(!areaTracker.getStix().contains(new Point(x+1, y))) {
+                                if(!areaTracker.getStix().contains(new Point(x+1, y))&&!areaTracker.getStix().contains(new Point(x+2, y))) {
                                     x++;
                                     areaTracker.addToStix(new Point(x, y));
                                 }
@@ -62,7 +62,7 @@ public class Cursor extends LineTraveller {
                     case UP: {
                         if (y > 0) {
                             if (uncoveredOn(x, y - 1) && isDrawing) {
-                                if(!areaTracker.getStix().contains(new Point(x, y-1))) {
+                                if(!areaTracker.getStix().contains(new Point(x, y-1))&& !areaTracker.getStix().contains(new Point(x, y-2))) {
                                     y--;
                                     areaTracker.addToStix(new Point(x, y));
                                 }
@@ -75,7 +75,7 @@ public class Cursor extends LineTraveller {
                     case DOWN: {
                         if (y < 150) {
                             if (uncoveredOn(x, y + 1) && isDrawing) {
-                                if(!areaTracker.getStix().contains(new Point(x, y+1))) {
+                                if(!areaTracker.getStix().contains(new Point(x, y+1))&&!areaTracker.getStix().contains(new Point(x, y+2))) {
                                     y++;
                                     areaTracker.addToStix(new Point(x, y));
                                 }
@@ -88,6 +88,18 @@ public class Cursor extends LineTraveller {
                 }
             }
         }
+    }
+
+    private boolean isAvailable(Point newPoint){
+        if(!areaTracker.getStix().contains(newPoint)){
+            switch (currentMove){
+                case LEFT: {break;}
+                case RIGHT:{break;}
+                case UP:{break;}
+                case DOWN:{break;}
+            }
+        }
+        return false;
     }
 
     public KeyCode getCurrentMove() {
@@ -165,7 +177,7 @@ public class Cursor extends LineTraveller {
     public int getSpeed() {
         return speed;
     }
-    
+
     public String toString() {
         return "Cursor";
     }
