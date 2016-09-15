@@ -17,7 +17,7 @@ public class ScoreScene extends SubScene{
 	private Label claimedPercentage;
 	private ImageView title;
 	//standard target percentage
-	private int targetPercentage = 75;
+	private int targetPercentage = 65;
 	private Label claimed = new Label("Claimed");
 	
 	public ScoreScene(Group root, double width, double height){
