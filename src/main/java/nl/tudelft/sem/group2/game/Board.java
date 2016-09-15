@@ -3,18 +3,14 @@ package nl.tudelft.sem.group2.game;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Fuse;
-import nl.tudelft.sem.group2.units.Qix;
-import nl.tudelft.sem.group2.units.Sparx;
-import nl.tudelft.sem.group2.units.Unit;
-
-import java.util.ArrayList;
-import java.awt.Point;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.*;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -104,7 +100,7 @@ public class Board {
 				if (collider instanceof Qix) {
 					if (collidee instanceof Cursor) {
 						Cursor temp = (Cursor) collidee;
-						if (collider.intersect(collidee) && temp.isDrawing()) {
+						if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(),temp.getY())) {
 							GameScene.gameOver();
 						}
 					}
@@ -113,7 +109,7 @@ public class Board {
 						GameScene.gameOver();
 					} else if (collidee instanceof Qix) {
 						Cursor temp = (Cursor) collider;
-						if (collider.intersect(collidee) && temp.isDrawing()) {
+						if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(),temp.getY())) {
 							GameScene.gameOver();
 						}
 					}
