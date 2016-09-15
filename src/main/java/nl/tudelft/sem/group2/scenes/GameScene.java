@@ -18,6 +18,7 @@ import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.*;
 
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 
 public class GameScene extends Scene {
@@ -145,15 +146,26 @@ public class GameScene extends Scene {
 					// draw
 					board.draw();
 					board.collisions();
+					qixStixCollisions();
 					scoreScene.setScore(scoreCounter.getTotalScore());
 					scoreScene.setClaimedPercentage((int) scoreCounter.getTotalPercentage());
 					calculateArea();
 				}
 			}
-		};
 
+		};
 	}
 
+	private void qixStixCollisions() {
+		Polygon qixP = qix.toPolygon();
+		for (Point point : areaTracker.getStix()) {
+			if (qixP.intersects(point.getX(), point.getY(), 1, 1)){
+				gameOver();
+			}
+				
+		}
+
+	}
 	protected void calculateArea() {
 		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
 				&& !areaTracker.getStix().isEmpty()) {
@@ -164,7 +176,6 @@ public class GameScene extends Scene {
 			board.removeFuse();
 		}
 	}
-
 
 	public static void animationTimerStart() {
 		animationTimer.start();

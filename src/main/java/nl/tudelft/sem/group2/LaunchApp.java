@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -55,8 +59,29 @@ public class LaunchApp extends Application {
         stage.setResizable(false);
         stage.sizeToScene();
         stage.show();
+        
+        //Comment to mute empty sound
+        playSound();
 
     }
+    
+    public static synchronized void playSound() {
+    	  new Thread(new Runnable() {
+    	  // The wrapper thread is unnecessary, unless it blocks on the 
+    	  // Clip finishing; see comments. 
+    	    public void run() { 
+    	      try { 
+    	        Clip clip = AudioSystem.getClip();
+    	        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+    	          LaunchApp.class.getResourceAsStream("/sounds/qix.wav"));
+    	        clip.open(inputStream);
+    	        clip.start(); 
+    	      } catch (Exception e) {
+    	        System.err.println(e.getMessage());
+    	      } 
+    	    } 
+    	  }).start();
+    	} 
 
     public static void main(String[] args) {
         launch(args);
