@@ -19,7 +19,7 @@ abstract public class LineTraveller extends Unit{
     }
     //Todo needs to be implemented
     //returns true if there is a line on the given coordinates.
-    protected boolean uncoveredOn(int x, int y){
+    public boolean uncoveredOn(int x, int y){
         return areaTracker.getBoardGrid()[x][y].equals(AreaState.UNCOVERED);
     }
     protected boolean innerBorderOn(int x, int y){
