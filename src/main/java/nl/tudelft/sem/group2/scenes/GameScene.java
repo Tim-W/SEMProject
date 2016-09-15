@@ -128,6 +128,11 @@ public class GameScene extends Scene {
 					isRunning = true;
 					messageLabel.setText("");
 				} else if (arrowKeys.contains(e.getCode())) {
+					for (Unit unit : board.getUnits()) {
+						if (unit instanceof Fuse) {
+							((Fuse) unit).setMoving(false);
+						}
+					}
 					cursor.setCurrentMove(e.getCode());
 				} else if (e.getCode().equals(KeyCode.X)) {
 					cursor.setSpeed(1);
@@ -146,7 +151,16 @@ public class GameScene extends Scene {
 				KeyCode keyCode = e.getCode();
 				if (keyCode.equals(cursor.getCurrentMove())) {
 					if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
-						board.addUnit(new Fuse((int) areaTracker.getStix().getFirst().getX(), (int) areaTracker.getStix().getFirst().getY(), 16, 16));
+						boolean fuseExists = false;
+						for (Unit unit : board.getUnits()) {
+							if (unit instanceof Fuse) {
+								fuseExists = true;
+								((Fuse) unit).setMoving(true);
+							}
+						}
+						if (!fuseExists) {
+							board.addUnit(new Fuse((int) areaTracker.getStix().getFirst().getX(), (int) areaTracker.getStix().getFirst().getY(), 16, 16));
+						}
 					}
 					cursor.setCurrentMove(null);
 				} else if (keyCode.equals(KeyCode.X)) {
