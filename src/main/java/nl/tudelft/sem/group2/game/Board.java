@@ -78,20 +78,20 @@ public class Board {
             }
         }
 		for (Point p : areaTracker.getStix()) {
-            if (foundFuse) {
-                if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
-                else gc.setFill(Color.DARKRED);
-            }
-            else {
-                if (p.equals(fuse)) {
-                    foundFuse = true;
-                    if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
-                    else gc.setFill(Color.DARKRED);
-                }
-                else gc.setFill(Color.GRAY);
-            }
+			if (!p.equals(areaTracker.getStix().getFirst())) {
+				if (foundFuse) {
+					if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
+					else gc.setFill(Color.DARKRED);
+				} else {
+					if (p.equals(fuse)) {
+						foundFuse = true;
+						if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
+						else gc.setFill(Color.DARKRED);
+					} else gc.setFill(Color.GRAY);
+				}
 
-			gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+				gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+			}
 		}
 		gc.setFill(Color.DARKBLUE);
 		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
