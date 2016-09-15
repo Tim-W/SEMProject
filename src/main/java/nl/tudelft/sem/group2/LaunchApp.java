@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -75,6 +76,9 @@ public class LaunchApp extends Application {
     	        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
     	          LaunchApp.class.getResourceAsStream("/sounds/qix.wav"));
     	        clip.open(inputStream);
+                  FloatControl gainControl =
+                          (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                  gainControl.setValue(0.0f);
     	        clip.start(); 
     	      } catch (Exception e) {
     	        System.err.println(e.getMessage());
