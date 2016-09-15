@@ -18,11 +18,11 @@ public class ScoreCounter {
      */
     public void updateScore(int completedArea, boolean fastArea) {
         int totalArea = LaunchApp.getGridWidth()*LaunchApp.getGridHeight();
-        double percentageIncrease = completedArea/totalArea*100;
+        double percentageIncrease = (double) completedArea / (double) totalArea;
         totalPercentage += percentageIncrease;
 
-        if (fastArea) totalScore += percentageIncrease*100;
-        else totalScore += percentageIncrease*200;
+        if (fastArea) totalScore += percentageIncrease*10000;
+        else totalScore += percentageIncrease*20000;
 
 
     }
@@ -30,7 +30,7 @@ public class ScoreCounter {
     public ScoreCounter() {
         this.totalPercentage = 0;
         this.totalScore = 0;
-        this.targetPercentage = 75;
+        this.targetPercentage = .65;
     }
 
     public ScoreCounter(double totalPercentage, double targetPercentage, int totalScore) {

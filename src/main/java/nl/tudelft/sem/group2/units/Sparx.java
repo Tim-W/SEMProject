@@ -36,6 +36,18 @@ public class Sparx extends LineTraveller {
                     } else if (y < 150 && !(lastY == y + 1) && outerBorderOn(x, y + 1)) {
                         setLastCoordinates(x, y);
                         setY(y + 1);
+                    } else if (x > 0 && !(lastX == x - 1) && innerBorderOn(x - 1, y)) {
+                        setLastCoordinates(x, y);
+                        setX(x - 1);
+                    } else if (y > 0 && !(lastY == y - 1) && innerBorderOn(x, y - 1)) {
+                        setLastCoordinates(x, y);
+                        setY(y - 1);
+                    } else if (x < 150 && !(x + 1 == lastX) && innerBorderOn(x + 1, y)) {
+                        setLastCoordinates(x, y);
+                        setX(x + 1);
+                    } else if (y < 150 && !(lastY == y + 1) && innerBorderOn(x, y + 1)) {
+                        setLastCoordinates(x, y);
+                        setY(y + 1);
                     }
                 }
                 break;
@@ -51,6 +63,18 @@ public class Sparx extends LineTraveller {
                         setLastCoordinates(x, y);
                         setX(x - 1);
                     } else if (y > 0 && !(lastY == y - 1) && outerBorderOn(x, y - 1)) {
+                        setLastCoordinates(x, y);
+                        setY(y - 1);
+                    } else if (x < 150 && !(x + 1 == lastX) && innerBorderOn(x + 1, y)) {
+                        setLastCoordinates(x, y);
+                        setX(x + 1);
+                    } else if (y < 150 && !(lastY == y + 1) && innerBorderOn(x, y + 1)) {
+                        setLastCoordinates(x, y);
+                        setY(y + 1);
+                    } else if (x > 0 && !(lastX == x - 1) && innerBorderOn(x - 1, y)) {
+                        setLastCoordinates(x, y);
+                        setX(x - 1);
+                    } else if (y > 0 && !(lastY == y - 1) && innerBorderOn(x, y - 1)) {
                         setLastCoordinates(x, y);
                         setY(y - 1);
                     }

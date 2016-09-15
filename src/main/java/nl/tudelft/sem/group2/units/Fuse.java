@@ -1,14 +1,12 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.scene.image.*;
-
 import java.awt.*;
-import java.awt.Image;
 
 public class Fuse extends LineTraveller {
     private int speed = 1;
     private int lastX = 75;
     private int lastY = 150;
+    private boolean moving = true;
 
     public Fuse(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -19,19 +17,21 @@ public class Fuse extends LineTraveller {
 
     @Override
     public void move(){
-        for (int i = 0; i < speed; i++) {
-            if (x < 150 && !(x + 1 == lastX) && areaTracker.getStix().contains(new Point(x + 1, y))) {
-                setLastCoordinates(x, y);
-                setX(x + 1);
-            } else if (y < 150 && !(lastY == y + 1) && areaTracker.getStix().contains(new Point(x, y + 1))) {
-                setLastCoordinates(x, y);
-                setY(y + 1);
-            } else if (x > 0 && !(lastX == x - 1) && areaTracker.getStix().contains(new Point(x - 1, y))) {
-                setLastCoordinates(x, y);
-                setX(x - 1);
-            } else if (y > 0 && !(lastY == y - 1) && areaTracker.getStix().contains(new Point(x, y - 1))) {
-                setLastCoordinates(x, y);
-                setY(y - 1);
+        if (moving) {
+            for (int i = 0; i < speed; i++) {
+                if (x < 150 && !(x + 1 == lastX) && areaTracker.getStix().contains(new Point(x + 1, y))) {
+                    setLastCoordinates(x, y);
+                    setX(x + 1);
+                } else if (y < 150 && !(lastY == y + 1) && areaTracker.getStix().contains(new Point(x, y + 1))) {
+                    setLastCoordinates(x, y);
+                    setY(y + 1);
+                } else if (x > 0 && !(lastX == x - 1) && areaTracker.getStix().contains(new Point(x - 1, y))) {
+                    setLastCoordinates(x, y);
+                    setX(x - 1);
+                } else if (y > 0 && !(lastY == y - 1) && areaTracker.getStix().contains(new Point(x, y - 1))) {
+                    setLastCoordinates(x, y);
+                    setY(y - 1);
+                }
             }
         }
     }
@@ -43,5 +43,9 @@ public class Fuse extends LineTraveller {
 
     public String toString() {
     	return "Fuse";
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 }

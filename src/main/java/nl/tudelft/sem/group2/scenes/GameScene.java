@@ -128,6 +128,11 @@ public class GameScene extends Scene {
 					isRunning = true;
 					messageLabel.setText("");
 				} else if (arrowKeys.contains(e.getCode())) {
+					for (Unit unit : board.getUnits()) {
+						if (unit instanceof Fuse) {
+							((Fuse) unit).setMoving(false);
+						}
+					}
 					cursor.setCurrentMove(e.getCode());
 				} else if (e.getCode().equals(KeyCode.X)) {
 					cursor.setSpeed(1);
@@ -146,7 +151,16 @@ public class GameScene extends Scene {
 				KeyCode keyCode = e.getCode();
 				if (keyCode.equals(cursor.getCurrentMove())) {
 					if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
-						board.addUnit(new Fuse((int) areaTracker.getStix().getFirst().getX(), (int) areaTracker.getStix().getFirst().getY(), 16, 16));
+						boolean fuseExists = false;
+						for (Unit unit : board.getUnits()) {
+							if (unit instanceof Fuse) {
+								fuseExists = true;
+								((Fuse) unit).setMoving(true);
+							}
+						}
+						if (!fuseExists) {
+							board.addUnit(new Fuse((int) areaTracker.getStix().getFirst().getX(), (int) areaTracker.getStix().getFirst().getY(), 16, 16));
+						}
 					}
 					cursor.setCurrentMove(null);
 				} else if (keyCode.equals(KeyCode.X)) {
@@ -173,7 +187,8 @@ public class GameScene extends Scene {
 					board.collisions();
 					qixStixCollisions();
 					scoreScene.setScore(scoreCounter.getTotalScore());
-					scoreScene.setClaimedPercentage((int) scoreCounter.getTotalPercentage());
+					scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
+					// TODO turn this on for area calculation
 					calculateArea();
 				}
 			}
@@ -191,7 +206,11 @@ public class GameScene extends Scene {
 		}
 
 	}
-	protected void calculateArea() {
+
+	private void calculateArea() {
+		// TODO turn on if isdrawing is implemented
+		// if (cursor.isDrawing()) {
+
 		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
 				&& !areaTracker.getStix().isEmpty()) {
             new Thread(new Runnable() {
@@ -217,6 +236,7 @@ public class GameScene extends Scene {
 			//Remove the Fuse from the board when completing an area
 			board.removeFuse();
 		}
+		// }
 	}
 
 	public static void animationTimerStart() {
@@ -240,6 +260,7 @@ public class GameScene extends Scene {
 	}
 
 	public static void gameOver() {
+		// TODO add code for gameover
 		animationTimerStop();
 		messageBox.setLayoutX(103);
 		messageLabel.setText(" Game Over! ");
