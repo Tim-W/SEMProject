@@ -95,25 +95,18 @@ public class AreaTracker {
         visited = new HashSet<Point>();
 
         //Check in which direction the stix first started to move
-        if (start.getX() != dir.getX()) {
+        if(start.getX() != dir.getX()||start.getY() != dir.getY()) {
             //If stix was first moving in X direction get points above and under the first stix point and start the floodfill algorithm from there
-            Point beginPoint1 = new Point((int) dir.getX(), (int) dir.getY()-1);
+            Point beginPoint1 = new Point((int) dir.getX(), (int) dir.getY() - 1);
+            Point beginPoint2 = new Point((int) dir.getX(), (int) dir.getY() + 1);
+            if (start.getY() != dir.getY()) {
+                //If stix was first moving in Y direction get points left and right the first stix point and start the floodfill algorithm from there
+                beginPoint1 = new Point((int) dir.getX() - 1, (int) dir.getY());
+                beginPoint2 = new Point((int) dir.getX() + 1, (int) dir.getY());
+            }
             foundQix = false;
             floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true);
             visited.clear();
-
-            Point beginPoint2 = new Point((int) dir.getX(), (int) dir.getY()+1);
-            foundQix = false;
-            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false);
-        }
-        else if (start.getY() != dir.getY()) {
-            //If stix was first moving in Y direction get points left and right the first stix point and start the floodfill algorithm from there
-            Point beginPoint1 = new Point((int) dir.getX()-1, (int) dir.getY());
-            foundQix = false;
-            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true);
-            visited.clear();
-
-            Point beginPoint2 = new Point((int) dir.getX()+1, (int) dir.getY());
             foundQix = false;
             floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false);
         }
