@@ -102,7 +102,6 @@ public class Board {
 			unitsList.remove(i);
 			for (Unit collidee : unitsList) {
 				if (collider instanceof Qix) {
-					// TODO code for qix collisions/intersect
 					if (collidee instanceof Cursor) {
 						Cursor temp = (Cursor) collidee;
 						if (collider.intersect(collidee) && temp.isDrawing()) {
