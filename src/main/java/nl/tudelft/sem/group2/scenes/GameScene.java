@@ -34,8 +34,8 @@ public class GameScene extends Scene {
 	private static AreaTracker areaTracker;
 	private static ScoreCounter scoreCounter;
 	private boolean isRunning = false;
-	private static Label messageLabel = new Label(" Press SPACE to begin! ");
-	private static VBox messageBox = new VBox(10);
+	private static Label messageLabel;
+	private static VBox messageBox;
 	private Qix qix;
 	static AnimationTimer animationTimer;
 	private ScoreScene scoreScene;
@@ -54,6 +54,9 @@ public class GameScene extends Scene {
 		scoreCounter = new ScoreCounter();
 
 		cursor = new Cursor(75, 150, 16, 16);
+
+        messageLabel = new Label(" Press SPACE to begin! ");
+        messageBox = new VBox(10);
 
 		Sparx sparxRight = new Sparx(75, 0, 16, 16, SparxDirection.RIGHT);
 		Sparx sparxLeft = new Sparx(75, 0, 16, 16, SparxDirection.LEFT);

@@ -89,11 +89,10 @@ public abstract class Unit {
 			return collideeP.intersects(colliderR);
 		}
 
-		Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
-				this.getWidth() / 2, this.getHeight() / 2);
+		Rectangle colliderR = new Rectangle(this.getX(), this.getY(),2,2);
 		// subtract one from width&height to make collisions look more real
 		Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(),
-				collidee.getWidth() / 2 - 1, collidee.getHeight() / 2 - 1);
+				2, 2);
 		return colliderR.intersects(collideeR);
 	}
 }
