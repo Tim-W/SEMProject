@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class GameScene extends Scene {
 
 	private long previousTime;
-	private Cursor cursor;
+	private static Cursor cursor;
 	private Board board;
 	private static AreaTracker areaTracker;
 	private static ScoreCounter scoreCounter;
@@ -49,11 +49,10 @@ public class GameScene extends Scene {
 		canvas.setLayoutX(15);
 		canvas.setLayoutY(75);
 		areaTracker = new AreaTracker();
+        cursor = new Cursor(75, 150, 16, 16);
 		board = new Board(canvas);
 
 		scoreCounter = new ScoreCounter();
-
-		cursor = new Cursor(75, 150, 16, 16);
 
         messageLabel = new Label(" Press SPACE to begin! ");
         messageBox = new VBox(10);
@@ -262,7 +261,11 @@ public class GameScene extends Scene {
 		return isRunning;
 	}
 
-	public static void gameOver() {
+    public static Cursor getQixCursor() {
+        return cursor;
+    }
+
+    public static void gameOver() {
 		// TODO add code for gameover
 		animationTimerStop();
 		messageBox.setLayoutX(103);
