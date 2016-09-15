@@ -36,8 +36,10 @@ public class Cursor extends LineTraveller {
                     case LEFT: {
                         if (x > 0) {
                             if (uncoveredOn(x-1,y) && isDrawing) {
-                                x--;
-                                areaTracker.addToStix(new Point(x, y));
+                                if(!areaTracker.getStix().contains(new Point(x-1, y))) {
+                                    x--;
+                                    areaTracker.addToStix(new Point(x, y));
+                                }
                             } else if(outerBorderOn(x - 1, y)) {
                                 x--;
                             }
@@ -47,8 +49,10 @@ public class Cursor extends LineTraveller {
                     case RIGHT: {
                         if (x < 150) {
                             if (uncoveredOn(x + 1, y) && isDrawing) {
-                                x++;
-                                areaTracker.addToStix(new Point(x, y));
+                                if(!areaTracker.getStix().contains(new Point(x+1, y))) {
+                                    x++;
+                                    areaTracker.addToStix(new Point(x, y));
+                                }
                             } else if(outerBorderOn(x + 1, y)) {
                                 x++;
                             }
@@ -58,8 +62,10 @@ public class Cursor extends LineTraveller {
                     case UP: {
                         if (y > 0) {
                             if (uncoveredOn(x, y - 1) && isDrawing) {
-                                y--;
-                                areaTracker.addToStix(new Point(x, y));
+                                if(!areaTracker.getStix().contains(new Point(x, y-1))) {
+                                    y--;
+                                    areaTracker.addToStix(new Point(x, y));
+                                }
                             } else if(outerBorderOn(x, y - 1)) {
                                 y--;
                             }
@@ -69,8 +75,10 @@ public class Cursor extends LineTraveller {
                     case DOWN: {
                         if (y < 150) {
                             if (uncoveredOn(x, y + 1) && isDrawing) {
-                                y++;
-                                areaTracker.addToStix(new Point(x, y));
+                                if(!areaTracker.getStix().contains(new Point(x, y+1))) {
+                                    y++;
+                                    areaTracker.addToStix(new Point(x, y));
+                                }
                             } else if(outerBorderOn(x, y +1)) {
                                 y++;
                             }
@@ -85,6 +93,7 @@ public class Cursor extends LineTraveller {
     public KeyCode getCurrentMove() {
         return currentMove;
     }
+
 
     public void setCurrentMove(KeyCode currentMove) {
         this.currentMove = currentMove;
@@ -132,7 +141,6 @@ public class Cursor extends LineTraveller {
                 for (int i = 0; i < 4; i++) {
                     gC.moveTo(l[i][0], l[i][1]);
                     gC.lineTo(l[i][2], l[i][3]);
-
                 }
                 gC.stroke();
             }
@@ -157,8 +165,7 @@ public class Cursor extends LineTraveller {
     public int getSpeed() {
         return speed;
     }
-
-
+    
     public String toString() {
         return "Cursor";
     }
