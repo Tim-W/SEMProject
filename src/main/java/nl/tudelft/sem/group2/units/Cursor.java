@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import nl.tudelft.sem.group2.AreaState;
 
 import java.awt.Point;
 import java.util.LinkedList;
@@ -38,8 +39,11 @@ public class Cursor extends LineTraveller {
                             if (uncoveredOn(x-1,y) && isDrawing) {
                                 if(!areaTracker.getStix().contains(new Point(x-1, y))&&
                                         !areaTracker.getStix().contains(new Point(x-2, y))) {
-                                    x--;
-                                    areaTracker.addToStix(new Point(x, y));
+                                    if(areaTracker.getBoardGrid()[x-1][y-1].equals(AreaState.UNCOVERED)&&
+                                            areaTracker.getBoardGrid()[x-1][y+1].equals(AreaState.UNCOVERED)) {
+                                        x--;
+                                        areaTracker.addToStix(new Point(x, y));
+                                    }
                                 }
                             } else if(outerBorderOn(x - 1, y)) {
                                 x--;
@@ -52,8 +56,11 @@ public class Cursor extends LineTraveller {
                             if (uncoveredOn(x + 1, y) && isDrawing) {
                                 if(!areaTracker.getStix().contains(new Point(x+1, y))&&
                                         !areaTracker.getStix().contains(new Point(x+2, y))) {
-                                    x++;
-                                    areaTracker.addToStix(new Point(x, y));
+                                    if(areaTracker.getBoardGrid()[x+1][y-1].equals(AreaState.UNCOVERED)&&
+                                            areaTracker.getBoardGrid()[x+1][y+1].equals(AreaState.UNCOVERED)) {
+                                        x++;
+                                        areaTracker.addToStix(new Point(x, y));
+                                    }
                                 }
                             } else if(outerBorderOn(x + 1, y)) {
                                 x++;
@@ -66,8 +73,11 @@ public class Cursor extends LineTraveller {
                             if (uncoveredOn(x, y - 1) && isDrawing) {
                                 if(!areaTracker.getStix().contains(new Point(x, y-1))&&
                                         !areaTracker.getStix().contains(new Point(x, y-2))) {
-                                    y--;
-                                    areaTracker.addToStix(new Point(x, y));
+                                    if(areaTracker.getBoardGrid()[x+1][y-1].equals(AreaState.UNCOVERED) &&
+                                            areaTracker.getBoardGrid()[x-1][y-1].equals(AreaState.UNCOVERED)) {
+                                        y--;
+                                        areaTracker.addToStix(new Point(x, y));
+                                    }
                                 }
                             } else if(outerBorderOn(x, y - 1)) {
                                 y--;
@@ -80,8 +90,11 @@ public class Cursor extends LineTraveller {
                             if (uncoveredOn(x, y + 1) && isDrawing) {
                                 if(!areaTracker.getStix().contains(new Point(x, y+1))&&
                                         !areaTracker.getStix().contains(new Point(x, y+2))) {
-                                    y++;
-                                    areaTracker.addToStix(new Point(x, y));
+                                    if(areaTracker.getBoardGrid()[x+1][y+1].equals(AreaState.UNCOVERED) &&
+                                            areaTracker.getBoardGrid()[x-1][y+1].equals(AreaState.UNCOVERED)) {
+                                        y++;
+                                        areaTracker.addToStix(new Point(x, y));
+                                    }
                                 }
                             } else if(outerBorderOn(x, y +1)) {
                                 y++;
