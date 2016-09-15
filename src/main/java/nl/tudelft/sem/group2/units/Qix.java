@@ -58,7 +58,7 @@ public class Qix extends Unit {
         direction[1] *= scale;
         double[] colors = new double[3];
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = Math.random();
+            colors[i] = Math.random()*0.7+0.3;
         }
         colorArray.addFirst(colors);
         oldDirections.addFirst(new float[]{direction[0], direction[1]});
