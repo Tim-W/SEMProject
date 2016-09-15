@@ -18,7 +18,7 @@ public class ScoreCounter {
      */
     public void updateScore(int completedArea, boolean fastArea) {
         int totalArea = LaunchApp.getGridWidth()*LaunchApp.getGridHeight();
-        double percentageIncrease = (double) completedArea / (double) totalArea;
+        double percentageIncrease = (double) completedArea / ((double) totalArea * 2);
         totalPercentage += percentageIncrease;
 
         if (fastArea) totalScore += percentageIncrease*10000;
