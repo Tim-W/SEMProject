@@ -11,8 +11,8 @@ public class Fuse extends LineTraveller {
     public Fuse(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.sprite = new javafx.scene.image.Image[2];
-        this.sprite[0] = new javafx.scene.image.Image("/images/supersparx-1.png");
-        this.sprite[1] = new javafx.scene.image.Image("/images/supersparx-2.png");
+        this.sprite[0] = new javafx.scene.image.Image("/images/fuse-1.png");
+        this.sprite[1] = new javafx.scene.image.Image("/images/fuse-2.png");
     }
 
     @Override
