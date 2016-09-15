@@ -173,7 +173,7 @@ public class GameScene extends Scene {
 					board.collisions();
 					qixStixCollisions();
 					scoreScene.setScore(scoreCounter.getTotalScore());
-					scoreScene.setClaimedPercentage((int) scoreCounter.getTotalPercentage());
+					scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
 					// TODO turn this on for area calculation
 					calculateArea();
 				}
