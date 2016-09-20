@@ -16,154 +16,154 @@ import java.util.Set;
 
 public class Board {
 
-	private Canvas canvas;
-	private Set<Unit> units;
-	private GraphicsContext gc;
-	private AreaTracker areaTracker;
+    private final static int MARGIN = 8;
+    private Canvas canvas;
+    private Set<Unit> units;
+    private GraphicsContext gc;
+    private AreaTracker areaTracker;
     private Cursor cursor;
-	private final static int MARGIN = 8;
 
-	public Board(Canvas canvas) {
-		this.units = new HashSet<Unit>();
-		this.canvas = canvas;
-		gc = canvas.getGraphicsContext2D();
-		// BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
-		gc.setFill(Color.BLUE);
-		gc.fillRect(0, 0, 316, 316);
-		this.areaTracker = GameScene.getAreaTracker();
+    public Board(Canvas canvas) {
+        this.units = new HashSet<Unit>();
+        this.canvas = canvas;
+        gc = canvas.getGraphicsContext2D();
+        // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
+        gc.setFill(Color.BLUE);
+        gc.fillRect(0, 0, 316, 316);
+        this.areaTracker = GameScene.getAreaTracker();
         this.cursor = GameScene.getQixCursor();
 
-	}
+    }
 
-	public void setUnits(Set<Unit> units) {
-		this.units = units;
-	}
+    // transform grid to canvas coordinates
+    public static int gridToCanvas(int b) {
+        return b * 2 + MARGIN - 1;
+    }
 
-	public Set<Unit> getUnits() {
-		return units;
-	}
+    public Set<Unit> getUnits() {
+        return units;
+    }
 
-	public void addUnit(Unit unit) {
-		if (unit instanceof Fuse) {
-			for (Unit unit1 : this.units) {
-				if (unit1 instanceof Fuse) {
-					return;
-				}
-			}
-		}
-		this.units.add(unit);
-	}
+    public void setUnits(Set<Unit> units) {
+        this.units = units;
+    }
 
-	public boolean removeUnit(Unit unit) {
-		return this.units.remove(unit);
-	}
+    public void addUnit(Unit unit) {
+        if (unit instanceof Fuse) {
+            for (Unit unit1 : this.units) {
+                if (unit1 instanceof Fuse) {
+                    return;
+                }
+            }
+        }
+        this.units.add(unit);
+    }
 
-	public void draw() {
-		// gc.setFill(Color.BLACK);
-		gc.clearRect(0, 0, 316, 316);
-		gc.setFill(Color.WHITE);
-		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-				if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
-						|| areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER)
-					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-			}
-		}
-        boolean foundFuse=  true;
-        Point fuse = new Point(-1,-1);
+    public boolean removeUnit(Unit unit) {
+        return this.units.remove(unit);
+    }
+
+    public void draw() {
+        // gc.setFill(Color.BLACK);
+        gc.clearRect(0, 0, 316, 316);
+        gc.setFill(Color.WHITE);
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
+                        || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER)
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+            }
+        }
+        boolean foundFuse = true;
+        Point fuse = new Point(-1, -1);
         for (Unit unit : units) {
-            if (unit instanceof  Fuse) {
+            if (unit instanceof Fuse) {
                 foundFuse = false;
                 fuse = new Point(unit.getX(), unit.getY());
             }
         }
-		for (Point p : areaTracker.getStix()) {
-			if (!p.equals(areaTracker.getStix().getFirst())) {
-				if (foundFuse) {
-					if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
-					else gc.setFill(Color.DARKRED);
-				} else {
-					if (p.equals(fuse)) {
-						foundFuse = true;
-						if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
-						else gc.setFill(Color.DARKRED);
-					} else gc.setFill(Color.GRAY);
-				}
+        for (Point p : areaTracker.getStix()) {
+            if (!p.equals(areaTracker.getStix().getFirst())) {
+                if (foundFuse) {
+                    if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
+                    else gc.setFill(Color.DARKRED);
+                } else {
+                    if (p.equals(fuse)) {
+                        foundFuse = true;
+                        if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
+                        else gc.setFill(Color.DARKRED);
+                    } else gc.setFill(Color.GRAY);
+                }
 
-				gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
-			}
-		}
-		gc.setFill(Color.DARKBLUE);
-		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-				if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST)
-					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-			}
-		}
-		gc.setFill(Color.DARKRED);
-		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-			for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-				if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW)
-					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-			}
-		}
-		for (Unit unit : units) {
-			unit.move();
-			unit.draw(canvas);
-		}
+                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+            }
+        }
+        gc.setFill(Color.DARKBLUE);
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST)
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+            }
+        }
+        gc.setFill(Color.DARKRED);
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW)
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+            }
+        }
+        for (Unit unit : units) {
+            unit.move();
+            unit.draw(canvas);
+        }
 
-	}
+    }
 
-	public void collisions() {
-		ArrayList<Unit> unitsList = new ArrayList<Unit>();
-		unitsList.addAll(units);
-		for (int i = 0; i < unitsList.size(); i++) {
-			Unit collider = unitsList.get(i);
-			unitsList.remove(i);
-			for (Unit collidee : unitsList) {
-				if (collider instanceof Qix) {
-					if (collidee instanceof Cursor) {
-						Cursor temp = (Cursor) collidee;
-						if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(),temp.getY())) {
-							GameScene.gameOver();
-						}
-					}
-				} else if (collider instanceof Cursor) {
-					if ((collidee instanceof Sparx || collidee instanceof Fuse) && collider.intersect(collidee)) {
-						GameScene.gameOver();
-					} else if (collidee instanceof Qix) {
-						Cursor temp = (Cursor) collider;
-						if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(),temp.getY())) {
-							GameScene.gameOver();
-						}
-					}
-				} else if (collider instanceof Sparx) {
-					if (collidee instanceof Cursor && collider.intersect(collidee)) {
-						GameScene.gameOver();
-					}
-				} else if (collider instanceof Fuse) {
-					if (collidee instanceof Cursor && collider.intersect(collidee)) {
-						GameScene.gameOver();
-					}
-				}
-			}
-		}
-	}
+    public void collisions() {
+        ArrayList<Unit> unitsList = new ArrayList<Unit>();
+        unitsList.addAll(units);
+        for (int i = 0; i < unitsList.size(); i++) {
+            Unit collider = unitsList.get(i);
+            unitsList.remove(i);
+            for (Unit collidee : unitsList) {
+                if (collider instanceof Qix) {
+                    if (collidee instanceof Cursor) {
+                        Cursor temp = (Cursor) collidee;
+                        if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(), temp.getY())) {
+                            GameScene.gameOver();
+                        }
+                    }
+                } else if (collider instanceof Cursor) {
+                    if ((collidee instanceof Sparx || collidee instanceof Fuse) && collider.intersect(collidee)) {
+                        GameScene.gameOver();
+                    } else if (collidee instanceof Qix) {
+                        Cursor temp = (Cursor) collider;
+                        if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(), temp.getY())) {
+                            GameScene.gameOver();
+                        }
+                    }
+                } else if (collider instanceof Sparx) {
+                    if (collidee instanceof Cursor && collider.intersect(collidee)) {
+                        GameScene.gameOver();
+                    }
+                } else if (collider instanceof Fuse) {
+                    if (collidee instanceof Cursor && collider.intersect(collidee)) {
+                        GameScene.gameOver();
+                    }
+                }
+            }
+        }
+    }
 
-	// transform grid to canvas coordinates
-	public static int gridToCanvas(int b) {
-		return b * 2 + MARGIN - 1;
-	}
-
-	public void removeFuse() {
-		Unit removingItem = null;
-		for (Unit unit : units) {
-			if (unit instanceof Fuse) {
-				removingItem = unit;
-			}
-		}
-		if (removingItem != null) {
-			units.remove(removingItem);
-		}
-	}
+    public void removeFuse() {
+        Unit removingItem = null;
+        for (Unit unit : units) {
+            if (unit instanceof Fuse) {
+                removingItem = unit;
+            }
+        }
+        if (removingItem != null) {
+            units.remove(removingItem);
+        }
+    }
 }
