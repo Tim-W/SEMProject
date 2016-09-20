@@ -1,13 +1,11 @@
 package nl.tudelft.sem.group2;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.GameScene;
@@ -33,6 +31,8 @@ public class LaunchApp extends Application {
     public static int getGridWidth() {
         return boardWidth/2;
     }
+
+    public static MediaView mediaView;
 
     private static int boardWidth = 300;
 
@@ -62,24 +62,23 @@ public class LaunchApp extends Application {
         stage.show();
         
         //Comment to mute empty sound
-        playSound();
+        playSound("/sounds/qix.mp3",1);
+        mediaView = new MediaView();
+        ((Group)scene.getRoot()).getChildren().add(mediaView);
 
     }
     
-    public static synchronized void playSound() {
+    public static synchronized void playSound(final String string, final double volume) {
     	  new Thread(new Runnable() {
     	  // The wrapper thread is unnecessary, unless it blocks on the 
     	  // Clip finishing; see comments. 
     	    public void run() { 
-    	      try { 
-    	        Clip clip = AudioSystem.getClip();
-    	        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-    	          LaunchApp.class.getResourceAsStream("/sounds/qix.wav"));
-    	        clip.open(inputStream);
-                  FloatControl gainControl =
-                          (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                  gainControl.setValue(0.0f);
-    	        clip.start(); 
+    	      try {
+                  Media hit = new Media(getClass().getResource(string).toString());
+                  MediaPlayer mediaPlayer = new MediaPlayer(hit);
+                  mediaPlayer.setVolume(volume);
+                  mediaPlayer.play();
+                  mediaView.setMediaPlayer(mediaPlayer);
     	      } catch (Exception e) {
     	        System.err.println(e.getMessage());
     	      } 
@@ -90,5 +89,4 @@ public class LaunchApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }
