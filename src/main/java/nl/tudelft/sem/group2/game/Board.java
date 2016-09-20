@@ -65,7 +65,7 @@ public class Board {
 						|| areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER)
 					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
 			}
-		}
+ 		}
 		for (Point p : areaTracker.getStix()) {
 			gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
 		}
