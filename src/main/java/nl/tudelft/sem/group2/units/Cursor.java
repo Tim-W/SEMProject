@@ -41,6 +41,9 @@ public class Cursor extends LineTraveller {
                                         !areaTracker.getStix().contains(new Point(x-2, y))) {
                                     if(areaTracker.getBoardGrid()[x-1][y-1].equals(AreaState.UNCOVERED)&&
                                             areaTracker.getBoardGrid()[x-1][y+1].equals(AreaState.UNCOVERED)) {
+
+                                        if(outerBorderOn(x,y))
+                                            areaTracker.addToStix(new Point(x, y));
                                         x--;
                                         areaTracker.addToStix(new Point(x, y));
                                     }
@@ -58,6 +61,8 @@ public class Cursor extends LineTraveller {
                                         !areaTracker.getStix().contains(new Point(x+2, y))) {
                                     if(areaTracker.getBoardGrid()[x+1][y-1].equals(AreaState.UNCOVERED)&&
                                             areaTracker.getBoardGrid()[x+1][y+1].equals(AreaState.UNCOVERED)) {
+                                        if(outerBorderOn(x,y))
+                                            areaTracker.addToStix(new Point(x, y));
                                         x++;
                                         areaTracker.addToStix(new Point(x, y));
                                     }
@@ -75,6 +80,8 @@ public class Cursor extends LineTraveller {
                                         !areaTracker.getStix().contains(new Point(x, y-2))) {
                                     if(areaTracker.getBoardGrid()[x+1][y-1].equals(AreaState.UNCOVERED) &&
                                             areaTracker.getBoardGrid()[x-1][y-1].equals(AreaState.UNCOVERED)) {
+                                        if(outerBorderOn(x,y))
+                                            areaTracker.addToStix(new Point(x, y));
                                         y--;
                                         areaTracker.addToStix(new Point(x, y));
                                     }
@@ -92,6 +99,8 @@ public class Cursor extends LineTraveller {
                                         !areaTracker.getStix().contains(new Point(x, y+2))) {
                                     if(areaTracker.getBoardGrid()[x+1][y+1].equals(AreaState.UNCOVERED) &&
                                             areaTracker.getBoardGrid()[x-1][y+1].equals(AreaState.UNCOVERED)) {
+                                        if(outerBorderOn(x,y))
+                                            areaTracker.addToStix(new Point(x, y));
                                         y++;
                                         areaTracker.addToStix(new Point(x, y));
                                     }
