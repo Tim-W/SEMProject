@@ -20,6 +20,7 @@ public class Board {
 	private Set<Unit> units;
 	private GraphicsContext gc;
 	private AreaTracker areaTracker;
+    private Cursor cursor;
 	private final static int MARGIN = 8;
 
 	public Board(Canvas canvas) {
@@ -30,6 +31,8 @@ public class Board {
 		gc.setFill(Color.BLUE);
 		gc.fillRect(0, 0, 316, 316);
 		this.areaTracker = GameScene.getAreaTracker();
+        this.cursor = GameScene.getQixCursor();
+
 	}
 
 	public void setUnits(Set<Unit> units) {
@@ -66,8 +69,29 @@ public class Board {
 					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
 			}
  		}
+        boolean foundFuse=  true;
+        Point fuse = new Point(-1,-1);
+        for (Unit unit : units) {
+            if (unit instanceof  Fuse) {
+                foundFuse = false;
+                fuse = new Point(unit.getX(), unit.getY());
+            }
+        }
 		for (Point p : areaTracker.getStix()) {
-			gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+			if (!p.equals(areaTracker.getStix().getFirst())) {
+				if (foundFuse) {
+					if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
+					else gc.setFill(Color.DARKRED);
+				} else {
+					if (p.equals(fuse)) {
+						foundFuse = true;
+						if (cursor.isFast()) gc.setFill(Color.MEDIUMBLUE);
+						else gc.setFill(Color.DARKRED);
+					} else gc.setFill(Color.GRAY);
+				}
+
+				gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+			}
 		}
 		gc.setFill(Color.DARKBLUE);
 		for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
