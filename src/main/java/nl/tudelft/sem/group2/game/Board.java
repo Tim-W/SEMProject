@@ -68,7 +68,7 @@ public class Board {
 						|| areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER)
 					gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
 			}
- 		}
+		}
         boolean foundFuse=  true;
         Point fuse = new Point(-1,-1);
         for (Unit unit : units) {
