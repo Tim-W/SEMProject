@@ -1,43 +1,52 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.scenes.GameScene;
-
-import java.awt.*;
+import java.awt.Point;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
+import nl.tudelft.sem.group2.scenes.GameScene;
 
 /**
- * Tracks the area of the current level, of which pixels are covered by the player.e
+ * Tracks the area of the current level, of which pixels are covered by the player.
  */
 public class AreaTracker {
 
     private static LinkedList<Point> stix = new LinkedList<Point>();
 
     private static AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
-    Stack<Point> visiting = new Stack<Point>();
+    private Stack<Point> visiting = new Stack<Point>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
 
     /**
-     * Constructor for the AreaTracker class
+     * Constructor for the AreaTracker class.
      * The constructor sets all the grid points to border and the rest to uncovered
      */
     public AreaTracker() {
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
                 //If the current row is the first row set all grid points border on that row
-                if (j == 0) boardGrid[j][i] = AreaState.OUTERBORDER;
-                    //If the current row is the bottom row set all grid points border on that row
-                else if (j == boardGrid[i].length - 1) boardGrid[j][i] = AreaState.OUTERBORDER;
-                    //If current column is the last column set the grid point on that column and the current row border
-                else if (i == 0) boardGrid[j][i] = AreaState.OUTERBORDER;
-                    //If the current column is the last column set the grid point on that column and the current row border
-                else if (i == boardGrid.length - 1) boardGrid[j][i] = AreaState.OUTERBORDER;
-                    //If the current point is none of the above set that point to uncovered
-                else boardGrid[j][i] = AreaState.UNCOVERED;
+                if (j == 0) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If the current row is the bottom row set all grid points border on that row
+                else if (j == boardGrid[i].length - 1) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If current column is the last column set the grid point on that column and the current row border
+                else if (i == 0) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If the current column is the last column set the grid point on that column and the current row border
+                else if (i == boardGrid.length - 1) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If the current point is none of the above set that point to uncovered
+                else {
+                    boardGrid[j][i] = AreaState.UNCOVERED;
+                }
             }
         }
     }
