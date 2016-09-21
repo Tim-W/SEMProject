@@ -7,7 +7,10 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.*;
+import nl.tudelft.sem.group2.units.Fuse;
+import nl.tudelft.sem.group2.units.Qix;
+import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.*;
 import java.util.ArrayList;

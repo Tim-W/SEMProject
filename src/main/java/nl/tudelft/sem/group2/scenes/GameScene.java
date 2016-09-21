@@ -17,7 +17,11 @@ import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.*;
+import nl.tudelft.sem.group2.units.Fuse;
+import nl.tudelft.sem.group2.units.Qix;
+import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.SparxDirection;
+import nl.tudelft.sem.group2.units.Unit;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
