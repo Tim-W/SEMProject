@@ -32,7 +32,7 @@ public class ScoreCounter {
 
 		if (fastArea) {
 			totalScore += percentageIncrease * 10000;
-			LOGGER.log(Level.INFO, "Score updated with " + Math.round(percentageIncrease * 10000), this.getClass());
+			LOGGER.log(Level.INFO, "Score increased with " + Math.round(percentageIncrease * 10000), this.getClass());
 		} else {
 			totalScore += percentageIncrease * 20000;
 			LOGGER.log(Level.INFO, "Score updated with " + Math.round(percentageIncrease * 20000), this.getClass());

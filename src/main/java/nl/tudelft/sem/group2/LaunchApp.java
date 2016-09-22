@@ -50,8 +50,6 @@ public class LaunchApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-    	//LOGGER.setLevel(Level.WARNING);
-
         // Init variables
         stage = primaryStage;
 
@@ -99,6 +97,11 @@ public class LaunchApp extends Application {
     	} 
 
     public static void main(String[] args) {
+    	System.out.println("test");
+    	if(args[0].equals("detailedLogging")){
+    		System.out.println("hoi");
+    		LOGGER.setLevel(Level.ALL);
+    	}
         launch(args);
     }
 }
