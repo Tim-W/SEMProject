@@ -1,8 +1,5 @@
 package nl.tudelft.sem.group2.scenes;
 
-import java.awt.Point;
-import java.awt.Polygon;
-import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -14,19 +11,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
-import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.*;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Fuse;
-import nl.tudelft.sem.group2.units.Qix;
-import nl.tudelft.sem.group2.units.Sparx;
-import nl.tudelft.sem.group2.units.SparxDirection;
-import nl.tudelft.sem.group2.units.Unit;
+import nl.tudelft.sem.group2.units.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 

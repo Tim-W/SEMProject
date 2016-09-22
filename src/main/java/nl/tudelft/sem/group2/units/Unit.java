@@ -6,7 +6,7 @@ import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.logging.Level;
 
 public abstract class Unit {

@@ -1,7 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import java.util.logging.Level;
-
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -11,6 +9,8 @@ import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.GameScene;
+
+import java.util.logging.Level;
 
 public class LaunchApp extends Application {
 
@@ -62,10 +62,6 @@ public class LaunchApp extends Application {
         }).start();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -96,24 +92,6 @@ public class LaunchApp extends Application {
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 
     }
-    
-    public static synchronized void playSound(final String string, final double volume) {
-    	  new Thread(new Runnable() {
-    	  // The wrapper thread is unnecessary, unless it blocks on the 
-    	  // Clip finishing; see comments. 
-    	    public void run() { 
-    	      try {
-                  Media hit = new Media(getClass().getResource(string).toString());
-                  MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                  mediaPlayer.setVolume(volume);
-                  mediaPlayer.play();
-                  mediaView.setMediaPlayer(mediaPlayer);
-    	      } catch (Exception e) {
-    	        System.err.println(e.getMessage());
-    	      } 
-    	    } 
-    	  }).start();
-    	} 
 
     public static void main(String[] args) {
     	if(args.length > 0 && args[0].equals("detailedLogging")){
