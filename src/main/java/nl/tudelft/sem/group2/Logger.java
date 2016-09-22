@@ -15,7 +15,7 @@ public class Logger {
 	public void log(Level logLevel, String message, Class<?> logClass) {
 		if (level.intValue() <= logLevel.intValue()) {
 			String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-			System.err.println(time + " " + logClass.getName() + "\n" + message);
+			System.err.println("[" + logLevel.toString() + "] " + time + " " + logClass.getName() + "\n" + "\t" + message);
 		}
 	}
 
