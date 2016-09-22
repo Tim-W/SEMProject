@@ -135,7 +135,6 @@ public class Qix extends Unit {
     /**
      * Converts to a polygon.
      * TODO what does this even do?
-     *
      * @return some polygon
      */
     public Polygon toPolygon() {
