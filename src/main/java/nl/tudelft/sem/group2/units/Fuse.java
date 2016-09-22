@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
 import java.awt.Point;
+import javafx.scene.image.Image;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -28,9 +29,10 @@ public class Fuse extends LineTraveller {
      */
     public Fuse(int x, int y, int width, int height) {
         super(x, y, width, height);
-        this.sprite = new javafx.scene.image.Image[2];
-        this.sprite[0] = new javafx.scene.image.Image("/images/fuse-1.png");
-        this.sprite[1] = new javafx.scene.image.Image("/images/fuse-2.png");
+        Image[] sprite = new javafx.scene.image.Image[2];
+        sprite[0] = new javafx.scene.image.Image("/images/fuse-1.png");
+        sprite[1] = new javafx.scene.image.Image("/images/fuse-2.png");
+        setSprite(sprite);
     }
 
     @Override

@@ -23,8 +23,8 @@ public class Cursor extends LineTraveller {
     private LinkedList<double[][]> oldLines = new LinkedList<double[][]>();
     //todo set stix to false when implementation is done
     private boolean stix = true;
-    private boolean isDrawing;
-    private boolean isFast;
+    private boolean isDrawing = false;
+    private boolean isFast = true;
 
     /**
      * Create a cursor.
@@ -36,8 +36,9 @@ public class Cursor extends LineTraveller {
      */
     public Cursor(int x, int y, int width, int height) {
         super(x, y, width, height);
-        this.sprite = new Image[1];
-        this.sprite[0] = new Image("/images/cursor.png");
+        Image[] sprite = new Image[1];
+        sprite[0] = new Image("/images/cursor.png");
+        setSprite(sprite);
     }
 
     @Override
@@ -183,13 +184,14 @@ public class Cursor extends LineTraveller {
             loops++;
         }
         canvas.getGraphicsContext2D().drawImage(
-                sprite[spriteIndex],
-                drawX - width / 2 + 1,
-                drawY - height / 2 + 1,
-                width,
-                height
+                getSprite()[getSpriteIndex()],
+                drawX - getWidth() / 2 + 1,
+                drawY - getHeight() / 2 + 1,
+                getWidth(),
+                getHeight()
         );
-        spriteIndex = (spriteIndex + 1) % sprite.length;
+
+        setSpriteIndex(getSpriteIndex() + 1 % getSprite().length);
     }
 
     private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {

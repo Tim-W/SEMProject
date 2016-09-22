@@ -52,7 +52,7 @@ import static nl.tudelft.sem.group2.global.Globals.SUCCESS_SOUND_VOLUME;
  */
 public class GameScene extends Scene {
 
-    private static final int NANO_SECONDS_PER_SECOND = 1000000000;
+    private static final int NANO_SECONDS_PER_SECOND = 100000000;
     private static AnimationTimer animationTimer;
     private static Cursor cursor;
     private static AreaTracker areaTracker;
@@ -81,8 +81,8 @@ public class GameScene extends Scene {
         canvas.setLayoutX(GAME_OFFSET_X);
         canvas.setLayoutY(GAME_OFFSET_Y);
         areaTracker = new AreaTracker();
+        cursor = new Cursor(CURSOR_START_X, CURSOR_START_Y, BOARD_MARGIN * 2, BOARD_MARGIN * 2);
         board = new Board(canvas);
-        addCursor();
 
         scoreCounter = new ScoreCounter();
 
@@ -95,6 +95,7 @@ public class GameScene extends Scene {
         // Hacky way to create black bottom border
         Canvas bottomBorder = new Canvas(BOARD_WIDTH, BORDER_BOTTOM_HEIGHT);
         bottomBorder.setLayoutY(BORDER_BOTTOM_POSITION_Y);
+        board.addUnit(cursor);
         board.addUnit(qix);
         areaTracker = new AreaTracker();
         scoreCounter = new ScoreCounter();
@@ -174,11 +175,6 @@ public class GameScene extends Scene {
         // TODO shift this to a game class and save/load score
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
-    }
-
-    private void addCursor() {
-        cursor = new Cursor(CURSOR_START_X, CURSOR_START_Y, BOARD_MARGIN * 2, BOARD_MARGIN * 2);
-        board.addUnit(cursor);
     }
 
     private void addSparx() {
