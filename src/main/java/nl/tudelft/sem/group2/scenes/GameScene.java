@@ -221,6 +221,8 @@ public class GameScene extends Scene {
 		Polygon qixP = qix.toPolygon();
 		for (Point point : areaTracker.getStix()) {
 			if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
+                LOGGER.log(Level.INFO, "Qix collided with stix  at (" + point.getX() +
+                        "," + point.getY() + ")", GameScene.class);
 				gameOver();
 			}
 
