@@ -29,6 +29,8 @@ public final class Globals {
     public static final int FUSE_HEIGHT = 16;
     public static final int QIX_START_X = 30;
     public static final int QIX_START_Y = 30;
+    public static final int FAST_AREA_MULTIPLIER = 10000;
+    public static final int SLOW_AREA_MULTIPLIER = 20000;
 
 
     private Globals() {
