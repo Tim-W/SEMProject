@@ -42,7 +42,7 @@
             <property name="max" value="120"/>
         </module>
         <module name="MethodLength">
-            <property name="max" value="30"/>
+            <property name="max" value="40"/>
         </module>
         <module name="ParameterNumber"/>
         <module name="EmptyForIteratorPad"/>
@@ -99,7 +99,7 @@
         <module name="UpperEll"/>
         <module name="FallThrough"/>
         <module name="MethodLength">
-            <property name="max" value="30"/>
+            <property name="max" value="40"/>
         </module>
     </module>
     <module name="NewlineAtEndOfFile">
