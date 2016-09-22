@@ -95,10 +95,7 @@ public class AreaTracker {
      * @param fastArea       tells if stix was created fast or slow (double points if slow)
      */
     public void calculateNewArea(Point qixCoordinates, boolean fastArea) {
-        //Set all the points from the current stix to border points on the grid
-        for (Point current : stix) {
-            boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
-        }
+        setOuterBorders();
 
         //Obtain first and second point from the stix to determine beginposition for the floodfill algorithm
         Point start = stix.getFirst();
@@ -107,14 +104,92 @@ public class AreaTracker {
         //Instantiate the two temporary area trackers,
         // these linkedlists accumulate all the points on one side of the stix.
         //When the floodfill algorithm finds a qix however the linkedlist is set to null
-        area1 = new LinkedList<Point>();
-        area2 = new LinkedList<Point>();
-        border1 = new LinkedList<Point>();
-        border2 = new LinkedList<Point>();
+        resetAreas();
+        resetBorders();
 
         //Initialize the set which contains the visited points for the floodfill algorithm
         visited = new HashSet<Point>();
 
+        checkDirections(qixCoordinates, start, dir);
+
+        //Check in which of the two areas the qix was found and set the other one to the newly created area
+        setBorders();
+        updateScoreCounter(fastArea);
+
+        //Update the grid with the newly created area
+        for (Point current : newArea) {
+            if (fastArea) {
+                boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.FAST;
+            } else {
+                boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW;
+            }
+        }
+
+        //Update the grid with the new inner borders
+        for (Point current : newBorder) {
+            boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
+        }
+
+        resetAreaTracker();
+
+        emptyStix();
+    }
+
+    private void resetBorders() {
+        border1 = new LinkedList<Point>();
+        border2 = new LinkedList<Point>();
+    }
+
+    private void resetAreas() {
+        area1 = new LinkedList<Point>();
+        area2 = new LinkedList<Point>();
+    }
+
+    private void setOuterBorders() {
+        //Set all the points from the current stix to border points on the grid
+        for (Point current : stix) {
+            boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
+        }
+    }
+
+    private void emptyStix() {
+        //Empty the current stix
+        stix = null;
+        stix = new LinkedList<Point>();
+    }
+
+    private void resetAreaTracker() {
+        //Reset the temporary area tracker
+        area1 = null;
+        area2 = null;
+        border1 = null;
+        border2 = null;
+    }
+
+    private void updateScoreCounter(boolean fastArea) {
+        ScoreCounter scoreCounter = GameScene.getScoreCounter();
+
+        //When testing create own scoreCounter
+        if (scoreCounter == null) {
+            scoreCounter = new ScoreCounter();
+        }
+
+        //Update score and percentage with newly created area,
+        // therefore it's needed to know the stix was created fast or slow
+        scoreCounter.updateScore(newArea.size() + stix.size(), fastArea);
+    }
+
+    private void setBorders() {
+        if (area1 == null) {
+            newArea = area2;
+            newBorder = border2;
+        } else if (area2 == null) {
+            newArea = area1;
+            newBorder = border1;
+        }
+    }
+
+    private void checkDirections(Point qixCoordinates, Point start, Point dir) {
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX() || start.getY() != dir.getY()) {
             //If stix was first moving in X direction get points above and under the first stix point,
@@ -133,52 +208,6 @@ public class AreaTracker {
             foundQix = false;
             floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false);
         }
-
-        //Check in which of the two areas the qix was found and set the other one to the newly created area
-        if (area1 == null) {
-            newArea = area2;
-            newBorder = border2;
-        } else if (area2 == null) {
-            newArea = area1;
-            newBorder = border1;
-        }
-
-        ScoreCounter scoreCounter = GameScene.getScoreCounter();
-
-        //When testing create own scoreCounter
-        if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter();
-        }
-
-        //Update score and percentage with newly created area,
-        // therefore it's needed to know the stix was created fast or slow
-        scoreCounter.updateScore(newArea.size() + stix.size(), fastArea);
-
-
-        //Update the grid with the newly created area
-        for (Point current : newArea) {
-            if (fastArea) {
-                boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.FAST;
-            } else {
-                boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW;
-            }
-        }
-
-        //Update the grid with the new inner borders
-        for (Point current : newBorder) {
-            boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
-        }
-
-
-        //Reset the temporary area tracker
-        area1 = null;
-        area2 = null;
-        border1 = null;
-        border2 = null;
-
-        //Empty the current stix
-        stix = null;
-        stix = new LinkedList<Point>();
     }
 
 
@@ -221,34 +250,11 @@ public class AreaTracker {
             if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == chosenState) {
                 // Check if that point is the coordinate of the qix
                 if (pointToCheck.equals(qixCoorinates)) {
-                    // If that point was the coordinate of the qix set the temporary area tracker that is currently in use to null
-                    if (addToArea1) {
-                        area1 = null;
-                        border1 = null;
-                    } else {
-                        area2 = null;
-                        border2 = null;
-                    }
-                    foundQix = true;
+                    hitQix(addToArea1);
                 } else {
-                    // If that point was not the coordinate of the qix add that point to the right temporary area tracker
-                    if (addToArea1) {
-                        area1.add(pointToCheck);
-                    } else {
-                        area2.add(pointToCheck);
-                    }
-                    visited.add(pointToCheck);
-                    // Check all the four neighbours of the current point recursively
-                    Point[] points = new Point[4];
-                    points[0] = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY() - 1);
-                    points[1] = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY() + 1);
-                    points[2] = new Point((int) pointToCheck.getX() - 1, (int) pointToCheck.getY());
-                    points[3] = new Point((int) pointToCheck.getX() + 1, (int) pointToCheck.getY());
-                    for (Point point : points) {
-                        if (!visited.contains(point)) {
-                            visiting.push(point);
-                        }
-                    }
+                    // If that point was not the coordinate of the qix,
+                    // add that point to the right temporary area tracker
+                    addPointToAreaTracker(addToArea1, pointToCheck);
                 }
             } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.OUTERBORDER
                     && !stix.contains(pointToCheck)) {
@@ -266,6 +272,38 @@ public class AreaTracker {
             printBoardGrid();
         }
 
+    }
+
+    private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
+        if (addToArea1) {
+            area1.add(pointToCheck);
+        } else {
+            area2.add(pointToCheck);
+        }
+        visited.add(pointToCheck);
+        // Check all the four neighbours of the current point recursively
+        Point[] points = new Point[4];
+        points[0] = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY() - 1);
+        points[1] = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY() + 1);
+        points[2] = new Point((int) pointToCheck.getX() - 1, (int) pointToCheck.getY());
+        points[3] = new Point((int) pointToCheck.getX() + 1, (int) pointToCheck.getY());
+        for (Point point : points) {
+            if (!visited.contains(point)) {
+                visiting.push(point);
+            }
+        }
+    }
+
+    private void hitQix(boolean addToArea1) {
+        // If that point was the coordinate of the qix set the temporary area tracker that is currently in use to null
+        if (addToArea1) {
+            area1 = null;
+            border1 = null;
+        } else {
+            area2 = null;
+            border2 = null;
+        }
+        foundQix = true;
     }
 
     /**
