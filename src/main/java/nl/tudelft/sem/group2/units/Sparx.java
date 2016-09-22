@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 
-import java.awt.*;
 import java.util.logging.Level;
 
 public class Sparx extends LineTraveller {
@@ -98,7 +97,7 @@ public class Sparx extends LineTraveller {
     public String toString() {
         return "Sparx";
     }
-    
+
 	public void logCurrentMove(){
         LOGGER.log(Level.FINE, "Sparx moved to (" + x + "," + y + ")", this.getClass());
 	}

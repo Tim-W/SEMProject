@@ -15,11 +15,14 @@ import nl.tudelft.sem.group2.scenes.GameScene;
 public class LaunchApp extends Application {
 
     public static Stage stage;
-    
+    public static MediaView mediaView;
+    private static int boardWidth = 300;
+    private static int boardHeight = 300;
+
     //private static final Logger LOGGER = Logger.getLogger(LaunchApp.class.getName());
 
     private static final Logger LOGGER = new Logger();
-    
+
     public static Logger getLogger(){
     	return LOGGER;
     }
@@ -34,18 +37,34 @@ public class LaunchApp extends Application {
 
     // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
     public static int getGridHeight() {
-        return boardHeight/2;
+        return boardHeight / 2;
     }
 
     public static int getGridWidth() {
-        return boardWidth/2;
+        return boardWidth / 2;
     }
 
-    public static MediaView mediaView;
+    public static synchronized void playSound(final String string, final double volume) {
+        new Thread(new Runnable() {
+            // The wrapper thread is unnecessary, unless it blocks on the
+            // Clip finishing; see comments.
+            public void run() {
+                try {
+                    Media hit = new Media(getClass().getResource(string).toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(hit);
+                    mediaPlayer.setVolume(volume);
+                    mediaPlayer.play();
+                    mediaView.setMediaPlayer(mediaPlayer);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
+    }
 
-    private static int boardWidth = 300;
-
-    private static int boardHeight = 300;
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -69,11 +88,11 @@ public class LaunchApp extends Application {
         stage.setResizable(false);
         stage.sizeToScene();
         stage.show();
-        
+
         //Comment to mute empty sound
-        playSound("/sounds/qix.mp3",1);
+        playSound("/sounds/qix.mp3", 1);
         mediaView = new MediaView();
-        ((Group)scene.getRoot()).getChildren().add(mediaView);
+        ((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 
     }

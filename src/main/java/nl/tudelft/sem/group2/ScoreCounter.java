@@ -12,11 +12,24 @@ public class ScoreCounter {
 	// Total percentage of current level is covered by player.
 	private double totalPercentage;
 
+	// Percentage which player needs to achieve to win the level.
 	private double targetPercentage;
+
+	public ScoreCounter() {
+		this.totalPercentage = 0;
+		this.totalScore = 0;
+		this.targetPercentage = .65;
+	}
+
+	public ScoreCounter(double totalPercentage, double targetPercentage, int totalScore) {
+		this.totalPercentage = totalPercentage;
+		this.targetPercentage = targetPercentage;
+		this.totalScore = totalScore;
+	}
 
 	/**
 	 * Method to update current score and percentage
-	 * 
+	 *
 	 * @param completedArea
 	 *            the area (in pixels) that the player newly covered
 	 * @param fastArea
@@ -36,26 +49,13 @@ public class ScoreCounter {
 		} else {
 			totalScore += percentageIncrease * 20000;
 			LOGGER.log(Level.INFO, "Score updated with " + Math.round(percentageIncrease * 20000), this.getClass());
-
 		}
 
-	}
+    }
 
-	public ScoreCounter() {
-		this.totalPercentage = 0;
-		this.totalScore = 0;
-		this.targetPercentage = .65;
-	}
-
-	public ScoreCounter(double totalPercentage, double targetPercentage, int totalScore) {
-		this.totalPercentage = totalPercentage;
-		this.targetPercentage = targetPercentage;
-		this.totalScore = totalScore;
-	}
-
-	public double getTotalPercentage() {
-		return totalPercentage;
-	}
+    public double getTotalPercentage() {
+        return totalPercentage;
+    }
 
 	public void setTotalPercentage(double totalPercentage) {
 		this.totalPercentage = totalPercentage;

@@ -1,17 +1,15 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.scenes.GameScene;
-
-import java.awt.*;
+import java.awt.Point;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
+import nl.tudelft.sem.group2.scenes.GameScene;
 import java.util.logging.Level;
 
 /**
- * Tracks the area of the current level, of which pixels are covered by the
- * player.e
+ * Tracks the area of the current level, of which pixels are covered by the player.
  */
 public class AreaTracker {
 
@@ -19,85 +17,83 @@ public class AreaTracker {
 
 	private static LinkedList<Point> stix = new LinkedList<Point>();
 
-	private static AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private static AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private Stack<Point> visiting = new Stack<Point>();
+    private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
+    private Set<Point> visited;
+    private boolean foundQix;
 
-	private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
+    /**
+     * Constructor for the AreaTracker class.
+     * The constructor sets all the grid points to border and the rest to uncovered
+     */
+    public AreaTracker() {
+        for (int i = 0; i < boardGrid.length; i++) {
+            for (int j = 0; j < boardGrid[i].length; j++) {
+                //If the current row is the first row set all grid points border on that row
+                if (j == 0) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If the current row is the bottom row set all grid points border on that row
+                else if (j == boardGrid[i].length - 1) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If current column is the last column set the grid point on that column and the current row border
+                else if (i == 0) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If the current column is the last column set the grid point on that column and the current row border
+                else if (i == boardGrid.length - 1) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If the current point is none of the above set that point to uncovered
+                else {
+                    boardGrid[j][i] = AreaState.UNCOVERED;
+                }
+            }
+        }
+    }
 
-	private Set<Point> visited;
-	Stack<Point> visiting = new Stack<Point>();
-
-	private boolean foundQix;
-
-	/**
-	 * Constructor for the AreaTracker class The constructor sets all the grid
-	 * points to border and the rest to uncovered
-	 */
-	public AreaTracker() {
-		for (int i = 0; i < boardGrid.length; i++) {
-			for (int j = 0; j < boardGrid[i].length; j++) {
-				// If the current row is the first row set all grid points
-				// border on that row
-				if (j == 0)
-					boardGrid[j][i] = AreaState.OUTERBORDER;
-				// If the current row is the bottom row set all grid points
-				// border on that row
-				else if (j == boardGrid[i].length - 1)
-					boardGrid[j][i] = AreaState.OUTERBORDER;
-				// If current column is the last column set the grid point on
-				// that column and the current row border
-				else if (i == 0)
-					boardGrid[j][i] = AreaState.OUTERBORDER;
-				// If the current column is the last column set the grid point
-				// on that column and the current row border
-				else if (i == boardGrid.length - 1)
-					boardGrid[j][i] = AreaState.OUTERBORDER;
-				// If the current point is none of the above set that point to
-				// uncovered
-				else
-					boardGrid[j][i] = AreaState.UNCOVERED;
-			}
-		}
-	}
-
-	/**
-	 * Custom constructor mainly created for testing purposes
-	 * 
-	 * @param width
-	 *            width of the boardGrid
-	 * @param height
-	 *            height of the boardGrid
-	 */
-	public AreaTracker(int width, int height) {
-		boardGrid = new AreaState[width][height];
-		for (int i = 0; i < boardGrid.length; i++) {
-			for (int j = 0; j < boardGrid[i].length; j++) {
-				// If the current row is the first row set all grid points
-				// border on that row
-				if (j == 0)
-					boardGrid[j][i] = AreaState.OUTERBORDER;
-				// If the current row is the bottom row set all grid points
-				// border on that row
-				else if (j == boardGrid[i].length - 1)
-					boardGrid[j][i] = AreaState.OUTERBORDER;
-				// If current column is the last column set the grid point on
-				// that column and the current row border
-				else if (i == 0)
-					boardGrid[j][i] = AreaState.OUTERBORDER;
-				// If the current column is the last column set the grid point
-				// on that column and the current row border
-				else if (i == boardGrid.length - 1)
-					boardGrid[j][i] = AreaState.OUTERBORDER;
-				// If the current point is none of the above set that point to
-				// uncovered
-				else
-					boardGrid[j][i] = AreaState.UNCOVERED;
-			}
-		}
-	}
+    /**
+     * Custom constructor mainly created for testing purposes.
+     *
+     * @param width  width of the boardGrid
+     * @param height height of the boardGrid
+     */
+    public AreaTracker(int width, int height) {
+        boardGrid = new AreaState[width][height];
+        for (int i = 0; i < boardGrid.length; i++) {
+            for (int j = 0; j < boardGrid[i].length; j++) {
+                //If the current row is the first row set all grid points border on that row
+                if (j == 0) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If the current row is the bottom row set all grid points border on that row
+                else if (j == boardGrid[i].length - 1) {
+                    boardGrid[j][i] = AreaState.OUTERBORDER;
+                }
+                //If current column is the last column set the grid point on that column and the current row border
+                else {
+                    if (i == 0) {
+                        boardGrid[j][i] = AreaState.OUTERBORDER;
+                    }
+                    //If the current column is the last column,
+                    // set the grid point on that column and the current row border
+                    else if (i == boardGrid.length - 1) {
+                        boardGrid[j][i] = AreaState.OUTERBORDER;
+                    }
+                    //If the current point is none of the above set that point to uncovered
+                    else {
+                        boardGrid[j][i] = AreaState.UNCOVERED;
+                    }
+                }
+            }
+        }
+    }
 
 	/**
 	 * Method that updates the grid when a stix is completed
-	 * 
+	 *
 	 * @param qixCoordinates
 	 *            current qix coordinates
 	 * @param fastArea
@@ -161,22 +157,24 @@ public class AreaTracker {
 
 		ScoreCounter scoreCounter = GameScene.getScoreCounter();
 
-		// When testing create own scoreCounter
-		if (scoreCounter == null)
-			scoreCounter = new ScoreCounter();
+        //When testing create own scoreCounter
+        if (scoreCounter == null) {
+            scoreCounter = new ScoreCounter();
+        }
 
-		// Update score and percentage with newly created area, thefore it's
-		// needed to know the stix was created fast or slow
-		scoreCounter.updateScore(newArea.size() + stix.size(), fastArea);
+        //Update score and percentage with newly created area,
+        // therefore it's needed to know the stix was created fast or slow
+        scoreCounter.updateScore(newArea.size() + stix.size(), fastArea);
 
-		// Update the grid with the newly created area
-		for (Point current : newArea) {
-			if (fastArea) {
-				boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.FAST;
-			} else {
-				boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW;
-			}
-		}
+
+        //Update the grid with the newly created area
+        for (Point current : newArea) {
+            if (fastArea) {
+                boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.FAST;
+            } else {
+                boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW;
+            }
+        }
 
 		// Update the grid with the new inner borders
 		for (Point current : newBorder) {
@@ -213,7 +211,7 @@ public class AreaTracker {
 	 * the two area trackers pointToCheck a Point which is either the starting
 	 * point determined in the calculateNewArea method or a recursively
 	 * determined point
-	 * 
+	 *
 	 * @param qixCoorinates
 	 *            the current qix coordinates
 	 * @param chosenState
@@ -283,7 +281,7 @@ public class AreaTracker {
 
 	/**
 	 * Method that adds a point to the current stix
-	 * 
+	 *
 	 * @param coordinates
 	 *            point that gets added to the stix
 	 */
@@ -293,7 +291,7 @@ public class AreaTracker {
 
 	/**
 	 * Getter for the stix
-	 * 
+	 *
 	 * @return the current stix
 	 */
 	public LinkedList<Point> getStix() {
@@ -302,13 +300,16 @@ public class AreaTracker {
 
 	/**
 	 * Getter for the boardGrid
-	 * 
+	 *
 	 * @return the boardGrid
 	 */
 	public AreaState[][] getBoardGrid() {
 		return boardGrid;
 	}
 
+	/**
+	 * Shows a log which visualise the current board grid state.
+	 */
 	public void printBoardGrid() {
 		for (AreaState[] column : boardGrid) {
 			for (AreaState state : column) {
