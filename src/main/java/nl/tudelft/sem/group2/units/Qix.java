@@ -3,13 +3,14 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
 
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static nl.tudelft.sem.group2.AreaState.INNERBORDER;
 import static nl.tudelft.sem.group2.AreaState.OUTERBORDER;
@@ -17,7 +18,7 @@ import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 
 public class Qix extends Unit {
 
-	private static final Logger LOGGER = Logger.getLogger(Qix.class.getName());
+	private static final Logger LOGGER = LaunchApp.getLogger();
     private int animationLoops = 0;
     private float[] direction = new float[2];
     private LinkedList<float[]> oldDirections = new LinkedList<float[]>();
@@ -158,6 +159,6 @@ public class Qix extends Unit {
 		return oldDirections;
 	}
 	public void logCurrentMove(){
-        LOGGER.log(Level.FINE, "Qix moved to (" + x + "," + y + ")");
+        LOGGER.log(Level.FINE, "Qix moved to (" + x + "," + y + ")", this.getClass());
 	}
 }

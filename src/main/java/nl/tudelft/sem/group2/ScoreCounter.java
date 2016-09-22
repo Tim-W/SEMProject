@@ -1,11 +1,10 @@
 package nl.tudelft.sem.group2;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ScoreCounter {
 
-	private static final Logger LOGGER = Logger.getLogger(ScoreCounter.class.getName());
+	private static final Logger LOGGER = LaunchApp.getLogger();
 
 	// Total score accumulated by player.
 	private int totalScore;
@@ -29,14 +28,14 @@ public class ScoreCounter {
 		double percentageIncrease = (double) completedArea / ((double) totalArea * 2);
 		totalPercentage += percentageIncrease;
 		LOGGER.log(Level.INFO, "Percentage increased with " + Math.round(percentageIncrease * 10000.0) / 100.0 + " to "
-				+ Math.round(totalPercentage * 10000.0) / 100.0);
+				+ Math.round(totalPercentage * 10000.0) / 100.0, this.getClass());
 
 		if (fastArea) {
 			totalScore += percentageIncrease * 10000;
-			LOGGER.log(Level.INFO, "Score updated with " + Math.round(percentageIncrease * 10000));
+			LOGGER.log(Level.INFO, "Score updated with " + Math.round(percentageIncrease * 10000), this.getClass());
 		} else {
 			totalScore += percentageIncrease * 20000;
-			LOGGER.log(Level.INFO, "Score updated with " + Math.round(percentageIncrease * 20000));
+			LOGGER.log(Level.INFO, "Score updated with " + Math.round(percentageIncrease * 20000), this.getClass());
 
 		}
 

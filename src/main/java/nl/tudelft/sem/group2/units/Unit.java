@@ -2,11 +2,12 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
 import java.awt.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public abstract class Unit {
 	protected int x;
@@ -14,7 +15,7 @@ public abstract class Unit {
 	protected int width;
 	protected int height;
 	protected AreaTracker areaTracker;
-	private static final Logger LOGGER = Logger.getLogger(Unit.class.getName());
+	private static final Logger LOGGER = LaunchApp.getLogger();
 
 	Unit(int x, int y) {
 		this.x = x;
@@ -22,7 +23,7 @@ public abstract class Unit {
 		this.width = 1;
 		this.height = 1;
 		this.areaTracker = GameScene.getAreaTracker();
-		LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")");
+		LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
 	}
 
 	Unit(int x, int y, int width, int height) {
@@ -79,7 +80,7 @@ public abstract class Unit {
 					collidee.getHeight() / 2 - 1);
 			if (colliderP.intersects(collideeR)) {
 				LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
-						+ "," + this.getY() + ")");
+						+ "," + this.getY() + ")", this.getClass());
 				return true;
 			} else {
 				return false;
@@ -95,7 +96,7 @@ public abstract class Unit {
 					this.getHeight() / 2 - 1);
 			if (collideeP.intersects(colliderR)) {
 				LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
-						+ "," + this.getY() + ")");
+						+ "," + this.getY() + ")", this.getClass());
 				return true;
 			} else {
 				return false;
@@ -107,7 +108,7 @@ public abstract class Unit {
 		Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(), 2, 2);
 		if (colliderR.intersects(collideeR)) {
 			LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
-					+ "," + this.getY() + ")");
+					+ "," + this.getY() + ")", this.getClass());
 			return true;
 		} else {
 			return false;

@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class AreaTracker {
 
-	private static final Logger LOGGER = Logger.getLogger(AreaTracker.class.getName());
+	private static final Logger LOGGER = LaunchApp.getLogger();
 
 	private static LinkedList<Point> stix = new LinkedList<Point>();
 
@@ -195,9 +194,9 @@ public class AreaTracker {
 		stix = new LinkedList<Point>();
 
 		if (fastArea) {
-			LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size());
+			LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
 		} else {
-			LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size());
+			LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size(), this.getClass());
 		}
 
 	}

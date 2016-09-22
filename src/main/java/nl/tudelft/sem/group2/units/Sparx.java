@@ -1,13 +1,14 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
 
 import java.awt.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Sparx extends LineTraveller {
-	private static final Logger LOGGER = Logger.getLogger(Cursor.class.getName());
+	private static final Logger LOGGER = LaunchApp.getLogger();
 	private final SparxDirection sparxDirection;
     private int speed = 2;
     private int lastX = 0;
@@ -99,6 +100,6 @@ public class Sparx extends LineTraveller {
     }
     
 	public void logCurrentMove(){
-        LOGGER.log(Level.FINE, "Sparx moved to (" + x + "," + y + ")");
+        LOGGER.log(Level.FINE, "Sparx moved to (" + x + "," + y + ")", this.getClass());
 	}
 }
