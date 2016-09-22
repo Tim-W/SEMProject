@@ -10,15 +10,16 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GAME_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
+
 /**
  * Starts the application.
  */
 public class LaunchApp extends Application {
 
-    private static final int BOARD_WIDTH = 300;
-    private static final int BOARD_HEIGHT = 300;
-    private static final int GAME_WIDTH = 340;
-    private static final int GAME_HEIGHT = 420;
     private static Stage stage;
     private static MediaView mediaView;
 

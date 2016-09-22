@@ -1,5 +1,10 @@
 package nl.tudelft.sem.group2;
 
+import static nl.tudelft.sem.group2.global.Globals.TARGET_PERCENTAGE;
+
+/**
+ * Keeps track of current score and percentage.
+ */
 public class ScoreCounter {
 
 
@@ -11,10 +16,13 @@ public class ScoreCounter {
 
     private double targetPercentage;
 
+    /**
+     * Default score counter constructor.
+     */
     public ScoreCounter() {
         this.totalPercentage = 0;
         this.totalScore = 0;
-        this.targetPercentage = .65;
+        this.targetPercentage = TARGET_PERCENTAGE;
     }
 
     public ScoreCounter(double totalPercentage, double targetPercentage, int totalScore) {
