@@ -97,9 +97,7 @@ public class LaunchApp extends Application {
     	} 
 
     public static void main(String[] args) {
-    	System.out.println("test");
-    	if(args[0].equals("detailedLogging")){
-    		System.out.println("hoi");
+    	if(args.length > 0 && args[0].equals("detailedLogging")){
     		LOGGER.setLevel(Level.ALL);
     	}
         launch(args);
