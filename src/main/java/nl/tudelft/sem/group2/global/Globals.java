@@ -27,6 +27,8 @@ public final class Globals {
     public static final double GAME_OVER_SOUND_VOLUME = 0.2;
     public static final int FUSE_WIDTH = 16;
     public static final int FUSE_HEIGHT = 16;
+    public static final int QIX_START_X = 30;
+    public static final int QIX_START_Y = 30;
 
 
     private Globals() {
