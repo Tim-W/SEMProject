@@ -1,5 +1,8 @@
 package nl.tudelft.sem.group2;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -13,6 +16,8 @@ import nl.tudelft.sem.group2.scenes.GameScene;
 public class LaunchApp extends Application {
 
     public static Stage stage;
+    
+    private static final Logger LOGGER = Logger.getLogger(LaunchApp.class.getName());
 
 
     public static int getBoardWidth() {
@@ -50,12 +55,13 @@ public class LaunchApp extends Application {
         stage.setWidth(340);
         stage.setHeight(420);
         stage.getIcons().add(new Image("/images/stageIcon.png"));
+        LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded");
 
         GameScene scene;
         Group root = new Group();
 
         scene = new GameScene(root, Color.BLACK);
-
+        LOGGER.log(Level.INFO, "GameScene created succesfully");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.sizeToScene();
@@ -65,6 +71,7 @@ public class LaunchApp extends Application {
         playSound("/sounds/qix.mp3",1);
         mediaView = new MediaView();
         ((Group)scene.getRoot()).getChildren().add(mediaView);
+        LOGGER.log(Level.INFO, "Audio Loaded succesfully");
 
     }
     

@@ -20,6 +20,8 @@ import nl.tudelft.sem.group2.units.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
 
@@ -36,6 +38,8 @@ public class GameScene extends Scene {
 	private Qix qix;
 	static AnimationTimer animationTimer;
 	private ScoreScene scoreScene;
+    private static final Logger LOGGER = Logger.getLogger(GameScene.class.getName());
+
 
 	// TODO implement life system
 	// private int lifes;
@@ -106,6 +110,7 @@ public class GameScene extends Scene {
 					// TODO remove this start and start using game
 					playSound("/sounds/Qix_NewLife.mp3",0.09);
                     animationTimer.start();
+            		LOGGER.log(Level.INFO, "Game started succesfully");
 					isRunning = true;
 					messageLabel.setText("");
 				} else if (arrowKeys.contains(e.getCode())) {
@@ -234,12 +239,14 @@ public class GameScene extends Scene {
 
         //Plays game over sound
 		playSound("/sounds/Qix_Death.mp3",0.2);
+		LOGGER.log(Level.INFO, "Game Over, player died with a score of " + scoreCounter.getTotalScore());
 	}
 
     public static void gameWon() {
 		animationTimerStop();
 		messageBox.setLayoutX(115);
 		messageLabel.setText(" You Won! ");
-	}
+		LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore());
+}
 
 }

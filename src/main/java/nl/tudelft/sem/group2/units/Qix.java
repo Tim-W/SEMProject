@@ -8,6 +8,8 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static nl.tudelft.sem.group2.AreaState.INNERBORDER;
 import static nl.tudelft.sem.group2.AreaState.OUTERBORDER;
@@ -15,6 +17,7 @@ import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 
 public class Qix extends Unit {
 
+	private static final Logger LOGGER = Logger.getLogger(Qix.class.getName());
     private int animationLoops = 0;
     private float[] direction = new float[2];
     private LinkedList<float[]> oldDirections = new LinkedList<float[]>();
@@ -69,6 +72,7 @@ public class Qix extends Unit {
             colorArray.removeLast();
         }
         animationLoops--;
+        logCurrentMove();
     }
 
     @Override
@@ -152,5 +156,8 @@ public class Qix extends Unit {
 	}
 	public LinkedList<float[]> getOldDirections() {
 		return oldDirections;
+	}
+	public void logCurrentMove(){
+        LOGGER.log(Level.FINE, "Qix moved to (" + x + "," + y + ")");
 	}
 }

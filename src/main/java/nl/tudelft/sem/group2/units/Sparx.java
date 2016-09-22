@@ -3,9 +3,12 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Sparx extends LineTraveller {
-    private final SparxDirection sparxDirection;
+	private static final Logger LOGGER = Logger.getLogger(Cursor.class.getName());
+	private final SparxDirection sparxDirection;
     private int speed = 2;
     private int lastX = 0;
     private int lastY = 0;
@@ -50,6 +53,7 @@ public class Sparx extends LineTraveller {
                         setY(y + 1);
                     }
                 }
+                logCurrentMove();
                 break;
             case RIGHT:
                 for (int i = 0; i < speed; i++) {
@@ -79,6 +83,7 @@ public class Sparx extends LineTraveller {
                         setY(y - 1);
                     }
                 }
+                logCurrentMove();
                 break;
         }
 
@@ -92,4 +97,8 @@ public class Sparx extends LineTraveller {
     public String toString() {
         return "Sparx";
     }
+    
+	public void logCurrentMove(){
+        LOGGER.log(Level.FINE, "Sparx moved to (" + x + "," + y + ")");
+	}
 }
