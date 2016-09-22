@@ -39,26 +39,26 @@ public class Fuse extends LineTraveller {
     public void move() {
         if (moving) {
             for (int i = 0; i < speed; i++) {
-                if (x < BOARD_WIDTH / 2
-                        && !(x + 1 == lastX)
-                        && areaTracker.getStix().contains(new Point(x + 1, y))) {
-                    setLastCoordinates(x, y);
-                    setX(x + 1);
-                } else if (y < BOARD_HEIGHT / 2
-                        && !(lastY == y + 1)
-                        && areaTracker.getStix().contains(new Point(x, y + 1))) {
-                    setLastCoordinates(x, y);
-                    setY(y + 1);
-                } else if (x > 0
-                        && !(lastX == x - 1)
-                        && areaTracker.getStix().contains(new Point(x - 1, y))) {
-                    setLastCoordinates(x, y);
-                    setX(x - 1);
-                } else if (y > 0
-                        && !(lastY == y - 1)
-                        && areaTracker.getStix().contains(new Point(x, y - 1))) {
-                    setLastCoordinates(x, y);
-                    setY(y - 1);
+                if (getX() < BOARD_WIDTH / 2
+                        && !(getX() + 1 == lastX)
+                        && getAreaTracker().getStix().contains(new Point(getX() + 1, getY()))) {
+                    setLastCoordinates(getX(), getY());
+                    setX(getX() + 1);
+                } else if (getY() < BOARD_HEIGHT / 2
+                        && !(lastY == getY() + 1)
+                        && getAreaTracker().getStix().contains(new Point(getX(), getY() + 1))) {
+                    setLastCoordinates(getX(), getY());
+                    setY(getY() + 1);
+                } else if (getX() > 0
+                        && !(lastX == getX() - 1)
+                        && getAreaTracker().getStix().contains(new Point(getX() - 1, getY()))) {
+                    setLastCoordinates(getX(), getY());
+                    setX(getX() - 1);
+                } else if (getY() > 0
+                        && !(lastY == getY() - 1)
+                        && getAreaTracker().getStix().contains(new Point(getX(), getY() - 1))) {
+                    setLastCoordinates(getX(), getY());
+                    setY(getY() - 1);
                 }
             }
         }

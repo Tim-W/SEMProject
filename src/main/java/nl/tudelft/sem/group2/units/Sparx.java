@@ -52,60 +52,60 @@ public class Sparx extends LineTraveller {
 
     private void moveRight() {
         for (int i = 0; i < speed; i++) {
-            if (x < BOARD_WIDTH / 2 && !(x + 1 == lastX) && outerBorderOn(x + 1, y)) {
-                setLastCoordinates(x, y);
-                setX(x + 1);
-            } else if (y < BOARD_HEIGHT / 2 && !(lastY == y + 1) && outerBorderOn(x, y + 1)) {
-                setLastCoordinates(x, y);
-                setY(y + 1);
-            } else if (x > 0 && !(lastX == x - 1) && outerBorderOn(x - 1, y)) {
-                setLastCoordinates(x, y);
-                setX(x - 1);
-            } else if (y > 0 && !(lastY == y - 1) && outerBorderOn(x, y - 1)) {
-                setLastCoordinates(x, y);
-                setY(y - 1);
-            } else if (x < BOARD_WIDTH / 2 && !(x + 1 == lastX) && innerBorderOn(x + 1, y)) {
-                setLastCoordinates(x, y);
-                setX(x + 1);
-            } else if (y < BOARD_HEIGHT / 2 && !(lastY == y + 1) && innerBorderOn(x, y + 1)) {
-                setLastCoordinates(x, y);
-                setY(y + 1);
-            } else if (x > 0 && !(lastX == x - 1) && innerBorderOn(x - 1, y)) {
-                setLastCoordinates(x, y);
-                setX(x - 1);
-            } else if (y > 0 && !(lastY == y - 1) && innerBorderOn(x, y - 1)) {
-                setLastCoordinates(x, y);
-                setY(y - 1);
+            if (getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX) && outerBorderOn(getX() + 1, getY())) {
+                setLastCoordinates(getX(), getY());
+                setX(getX() + 1);
+            } else if (getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1) && outerBorderOn(getX(), getY() + 1)) {
+                setLastCoordinates(getX(), getY());
+                setY(getY() + 1);
+            } else if (getX() > 0 && !(lastX == getX() - 1) && outerBorderOn(getX() - 1, getY())) {
+                setLastCoordinates(getX(), getY());
+                setX(getX() - 1);
+            } else if (getY() > 0 && !(lastY == getY() - 1) && outerBorderOn(getX(), getY() - 1)) {
+                setLastCoordinates(getX(), getY());
+                setY(getY() - 1);
+            } else if (getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX) && innerBorderOn(getX() + 1, getY())) {
+                setLastCoordinates(getX(), getY());
+                setX(getX() + 1);
+            } else if (getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1) && innerBorderOn(getX(), getY() + 1)) {
+                setLastCoordinates(getX(), getY());
+                setY(getY() + 1);
+            } else if (getX() > 0 && !(lastX == getX() - 1) && innerBorderOn(getX() - 1, getY())) {
+                setLastCoordinates(getX(), getY());
+                setX(getX() - 1);
+            } else if (getY() > 0 && !(lastY == getY() - 1) && innerBorderOn(getX(), getY() - 1)) {
+                setLastCoordinates(getX(), getY());
+                setY(getY() - 1);
             }
         }
     }
 
     private void moveLeft() {
         for (int i = 0; i < speed; i++) {
-            if (x > 0 && !(lastX == x - 1) && outerBorderOn(x - 1, y)) {
-                setLastCoordinates(x, y);
-                setX(x - 1);
-            } else if (y > 0 && !(lastY == y - 1) && outerBorderOn(x, y - 1)) {
-                setLastCoordinates(x, y);
-                setY(y - 1);
-            } else if (x < BOARD_WIDTH / 2 && !(x + 1 == lastX) && outerBorderOn(x + 1, y)) {
-                setLastCoordinates(x, y);
-                setX(x + 1);
-            } else if (y < BOARD_HEIGHT / 2 && !(lastY == y + 1) && outerBorderOn(x, y + 1)) {
-                setLastCoordinates(x, y);
-                setY(y + 1);
-            } else if (x > 0 && !(lastX == x - 1) && innerBorderOn(x - 1, y)) {
-                setLastCoordinates(x, y);
-                setX(x - 1);
-            } else if (y > 0 && !(lastY == y - 1) && innerBorderOn(x, y - 1)) {
-                setLastCoordinates(x, y);
-                setY(y - 1);
-            } else if (x < BOARD_WIDTH / 2 && !(x + 1 == lastX) && innerBorderOn(x + 1, y)) {
-                setLastCoordinates(x, y);
-                setX(x + 1);
-            } else if (y < BOARD_HEIGHT / 2 && !(lastY == y + 1) && innerBorderOn(x, y + 1)) {
-                setLastCoordinates(x, y);
-                setY(y + 1);
+            if (getX() > 0 && !(lastX == getX() - 1) && outerBorderOn(getX() - 1, getY())) {
+                setLastCoordinates(getX(), getY());
+                setX(getX() - 1);
+            } else if (getY() > 0 && !(lastY == getY() - 1) && outerBorderOn(getX(), getY() - 1)) {
+                setLastCoordinates(getX(), getY());
+                setY(getY() - 1);
+            } else if (getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX) && outerBorderOn(getX() + 1, getY())) {
+                setLastCoordinates(getX(), getY());
+                setX(getX() + 1);
+            } else if (getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1) && outerBorderOn(getX(), getY() + 1)) {
+                setLastCoordinates(getX(), getY());
+                setY(getY() + 1);
+            } else if (getX() > 0 && !(lastX == getX() - 1) && innerBorderOn(getX() - 1, getY())) {
+                setLastCoordinates(getX(), getY());
+                setX(getX() - 1);
+            } else if (getY() > 0 && !(lastY == getY() - 1) && innerBorderOn(getX(), getY() - 1)) {
+                setLastCoordinates(getX(), getY());
+                setY(getY() - 1);
+            } else if (getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX) && innerBorderOn(getX() + 1, getY())) {
+                setLastCoordinates(getX(), getY());
+                setX(getX() + 1);
+            } else if (getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1) && innerBorderOn(getX(), getY() + 1)) {
+                setLastCoordinates(getX(), getY());
+                setY(getY() + 1);
             }
         }
     }

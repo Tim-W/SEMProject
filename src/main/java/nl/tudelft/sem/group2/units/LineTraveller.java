@@ -37,7 +37,7 @@ public abstract class LineTraveller extends Unit {
      * TODO implement
      */
     public boolean uncoveredOn(int x, int y) {
-        return areaTracker.getBoardGrid()[x][y].equals(AreaState.UNCOVERED);
+        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.UNCOVERED);
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class LineTraveller extends Unit {
      * @return true if the tile at (x,y) has an INNERBORDER AreaState
      */
     protected boolean innerBorderOn(int x, int y) {
-        return areaTracker.getBoardGrid()[x][y].equals(AreaState.INNERBORDER);
+        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.INNERBORDER);
     }
 
     /**
@@ -55,15 +55,15 @@ public abstract class LineTraveller extends Unit {
      * @return true if the tile at (x,y) has an OUTERBORDER AreaState
      */
     protected boolean outerBorderOn(int x, int y) {
-        return areaTracker.getBoardGrid()[x][y].equals(AreaState.OUTERBORDER);
+        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.OUTERBORDER);
     }
 
     @Override
     public void draw(Canvas canvas) {
         canvas.getGraphicsContext2D().drawImage(
                 sprite[spriteIndex],
-                gridToCanvas(x) - width / 2,
-                gridToCanvas(y) - height / 2,
+                gridToCanvas(getX()) - width / 2,
+                gridToCanvas(getY()) - height / 2,
                 width,
                 height
         );

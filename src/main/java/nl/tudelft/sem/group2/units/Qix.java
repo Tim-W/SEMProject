@@ -46,17 +46,17 @@ public class Qix extends Unit {
 
     @Override
     public void move() {
-        coordinate[0] = x;
-        coordinate[1] = y;
+        coordinate[0] = getX();
+        coordinate[1] = getY();
         if (animationLoops <= 0) {
             changeDirection();
         }
 
         checkLineCollision();
-        this.x = (int) (coordinate[0] + direction[0]);
-        this.y = (int) (coordinate[1] + direction[1]);
-        coordinate[0] = x;
-        coordinate[1] = y;
+        this.setX((int) (coordinate[0] + direction[0]));
+        this.setY((int) (coordinate[1] + direction[1]));
+        coordinate[0] = getX();
+        coordinate[1] = getY();
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         float random = (float) Math.random() * 2 - 1;
         float scale = (LINE_LENGTH + random) / length;
@@ -109,12 +109,12 @@ public class Qix extends Unit {
     }
 
     private void checkLineCollision() {
-        int gridLength = areaTracker.getBoardGrid().length;
+        int gridLength = getAreaTracker().getBoardGrid().length;
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         for (int i = 0; i < gridLength; i++) {
             for (int j = 0; j < gridLength; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == INNERBORDER
-                        || areaTracker.getBoardGrid()[i][j] == OUTERBORDER) {
+                if (getAreaTracker().getBoardGrid()[i][j] == INNERBORDER
+                        || getAreaTracker().getBoardGrid()[i][j] == OUTERBORDER) {
                     float dx = coordinate[0] - i;
                     float dy = coordinate[1] - j;
                     float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);
