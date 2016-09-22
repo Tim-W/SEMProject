@@ -16,7 +16,7 @@ public class Fuse extends LineTraveller {
     }
 
     @Override
-    public void move(){
+    public void move() {
         if (moving) {
             for (int i = 0; i < speed; i++) {
                 if (x < 150 && !(x + 1 == lastX) && areaTracker.getStix().contains(new Point(x + 1, y))) {
@@ -42,7 +42,7 @@ public class Fuse extends LineTraveller {
     }
 
     public String toString() {
-    	return "Fuse";
+        return "Fuse";
     }
 
     public void setMoving(boolean moving) {

@@ -2,8 +2,6 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
 
-import java.awt.*;
-
 public class Sparx extends LineTraveller {
     private final SparxDirection sparxDirection;
     private int speed = 2;

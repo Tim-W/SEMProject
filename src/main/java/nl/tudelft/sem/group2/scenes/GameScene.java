@@ -1,5 +1,8 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Point;
+import java.awt.Polygon;
+import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -16,25 +19,26 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.*;
-
-import java.awt.*;
-import java.util.ArrayList;
+import nl.tudelft.sem.group2.units.Fuse;
+import nl.tudelft.sem.group2.units.Qix;
+import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.SparxDirection;
+import nl.tudelft.sem.group2.units.Unit;
 
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
 
 public class GameScene extends Scene {
 
-	private long previousTime;
+	static AnimationTimer animationTimer;
 	private static Cursor cursor;
-	private Board board;
 	private static AreaTracker areaTracker;
 	private static ScoreCounter scoreCounter;
-	private boolean isRunning = false;
 	private static Label messageLabel;
 	private static VBox messageBox;
+	private long previousTime;
+	private Board board;
+	private boolean isRunning = false;
 	private Qix qix;
-	static AnimationTimer animationTimer;
 	private ScoreScene scoreScene;
 
 	// TODO implement life system
@@ -46,7 +50,7 @@ public class GameScene extends Scene {
 		canvas.setLayoutX(15);
 		canvas.setLayoutY(75);
 		areaTracker = new AreaTracker();
-        cursor = new Cursor(75, 150, 16, 16);
+		cursor = new Cursor(75, 150, 16, 16);
 		board = new Board(canvas);
 
 		scoreCounter = new ScoreCounter();
@@ -104,8 +108,8 @@ public class GameScene extends Scene {
 			public void handle(KeyEvent e) {
 				if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
 					// TODO remove this start and start using game
-					playSound("/sounds/Qix_NewLife.mp3",0.09);
-                    animationTimer.start();
+					playSound("/sounds/Qix_NewLife.mp3", 0.09);
+					animationTimer.start();
 					isRunning = true;
 					messageLabel.setText("");
 				} else if (arrowKeys.contains(e.getCode())) {
@@ -177,31 +181,6 @@ public class GameScene extends Scene {
 		};
 	}
 
-	private void qixStixCollisions() {
-		Polygon qixP = qix.toPolygon();
-		for (Point point : areaTracker.getStix()) {
-			if (qixP.intersects(point.getX(), point.getY(), 1, 1)){
-				gameOver();
-			}
-				
-		}
-
-	}
-
-	private void calculateArea() {
-		// TODO turn on if isdrawing is implemented
-		// if (cursor.isDrawing()) {
-
-		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
-				&& !areaTracker.getStix().isEmpty()) {
-			playSound("/sounds/Qix_Success.mp3",0.5);
-            areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
-					cursor.isFast());
-			//Remove the Fuse from the board when completing an area
-			board.removeFuse();
-		}
-	}
-
 	public static void animationTimerStart() {
 		animationTimer.start();
 	}
@@ -218,10 +197,6 @@ public class GameScene extends Scene {
 		return scoreCounter;
 	}
 
-	public boolean isRunning() {
-		return isRunning;
-	}
-
     public static Cursor getQixCursor() {
         return cursor;
     }
@@ -233,13 +208,42 @@ public class GameScene extends Scene {
 		messageLabel.setText(" Game Over! ");
 
         //Plays game over sound
-		playSound("/sounds/Qix_Death.mp3",0.2);
+		playSound("/sounds/Qix_Death.mp3", 0.2);
 	}
 
     public static void gameWon() {
 		animationTimerStop();
 		messageBox.setLayoutX(115);
 		messageLabel.setText(" You Won! ");
+	}
+
+	private void qixStixCollisions() {
+		Polygon qixP = qix.toPolygon();
+		for (Point point : areaTracker.getStix()) {
+			if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
+				gameOver();
+			}
+
+		}
+
+	}
+
+	private void calculateArea() {
+		// TODO turn on if isdrawing is implemented
+		// if (cursor.isDrawing()) {
+
+		if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
+				&& !areaTracker.getStix().isEmpty()) {
+			playSound("/sounds/Qix_Success.mp3", 0.5);
+			areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
+					cursor.isFast());
+			//Remove the Fuse from the board when completing an area
+			board.removeFuse();
+		}
+	}
+
+	public boolean isRunning() {
+		return isRunning;
 	}
 
 }
