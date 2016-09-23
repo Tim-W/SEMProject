@@ -25,7 +25,7 @@ public class Qix extends Unit {
 
     private static final int LINE_LENGTH = 5;
     private static final int POSITION_LENGTH = 4;
-    private static final double minimumColorBrightness = 0.3;
+    private static final double MINIMUM_COLOR_BRIGHTNESS = 0.3;
     private static final int PRECISION = 6;
     private static final int LINESCOUNT = 10;
     private static final int RANDOMNESSPOSITIONLENGTH = 4;
@@ -65,7 +65,7 @@ public class Qix extends Unit {
         direction[1] *= scale;
         double[] colors = new double[3];
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = Math.random() * (1- minimumColorBrightness) + minimumColorBrightness;
+            colors[i] = Math.random() * (1- MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
         colorArray.addFirst(colors);
         oldDirections.addFirst(new float[]{direction[0], direction[1]});
