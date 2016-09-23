@@ -1,12 +1,16 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.LinkedList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
+
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
@@ -16,8 +20,9 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  * A cursor which can travel over lines and is controlled by user input (arrow keys).
  */
 public class Cursor extends LineTraveller {
+	private static final Logger LOGGER = LaunchApp.getLogger();
+	private KeyCode currentMove = null;
     private final int animationSpeed = 30;
-    private KeyCode currentMove = null;
     private int loops = 0;
     private int speed = 2;
     private LinkedList<double[][]> oldLines = new LinkedList<double[][]>();
@@ -84,11 +89,13 @@ public class Cursor extends LineTraveller {
                         getAreaTracker().addToStix(new Point(getX(), getY()));
                     }
                     setX(getX() - 1);
+                    logCurrentMove();
                     getAreaTracker().addToStix(new Point(getX(), getY()));
                 }
             }
         } else if (outerBorderOn(getX() - 1, getY())) {
             setX(getX() - 1);
+            logCurrentMove();
         }
     }
 
@@ -102,11 +109,13 @@ public class Cursor extends LineTraveller {
                         getAreaTracker().addToStix(new Point(getX(), getY()));
                     }
                     setX(getX() + 1);
+                    logCurrentMove();
                     getAreaTracker().addToStix(new Point(getX(), getY()));
                 }
             }
         } else if (outerBorderOn(getX() + 1, getY())) {
             setX(getX() + 1);
+            logCurrentMove();
         }
     }
 
@@ -120,11 +129,13 @@ public class Cursor extends LineTraveller {
                         getAreaTracker().addToStix(new Point(getX(), getY()));
                     }
                     setY(getY() + 1);
+                    logCurrentMove();
                     getAreaTracker().addToStix(new Point(getX(), getY()));
                 }
             }
         } else if (outerBorderOn(getX(), getY() + 1)) {
             setY(getY() + 1);
+            logCurrentMove();
         }
     }
 
@@ -138,11 +149,13 @@ public class Cursor extends LineTraveller {
                         getAreaTracker().addToStix(new Point(getX(), getY()));
                     }
                     setY(getY() - 1);
+                    logCurrentMove();
                     getAreaTracker().addToStix(new Point(getX(), getY()));
                 }
             }
         } else if (outerBorderOn(getX(), getY() - 1)) {
             setY(getY() - 1);
+            logCurrentMove();
         }
     }
 
@@ -250,7 +263,11 @@ public class Cursor extends LineTraveller {
      *
      * @param isFast whether the cursor is moving fast or slow
      */
-    public void setFast(boolean isFast) {
-        this.isFast = isFast;
-    }
+	public void setFast(boolean isFast) {
+		this.isFast = isFast;
+	}
+
+	public void logCurrentMove(){
+        LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
+	}
 }
