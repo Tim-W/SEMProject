@@ -66,7 +66,7 @@ public abstract class LineTraveller extends Unit {
     }
 
     public Image[] getSprite() {
-        return sprite;
+        return sprite.clone();
     }
 
     public void setSprite(Image[] sprite) {

@@ -38,12 +38,12 @@ import nl.tudelft.sem.group2.global.Globals;
 public class GameScene extends Scene {
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
-    private static AnimationTimer animationTimer;
-    private static Cursor cursor;
-    private static AreaTracker areaTracker;
+    private AnimationTimer animationTimer;
+    private Cursor cursor;
+    private AreaTracker areaTracker;
     private static ScoreCounter scoreCounter;
-    private static Label messageLabel;
-    private static VBox messageBox;
+    private Label messageLabel;
+    private VBox messageBox;
     private long previousTime;
     private Board board;
     private boolean isRunning = false;
@@ -105,15 +105,15 @@ public class GameScene extends Scene {
     /**
      * Stop animations.
      */
-    public static void animationTimerStop() {
+    public void animationTimerStop() {
         animationTimer.stop();
     }
 
-    public static AnimationTimer getAnimationTimer() {
+    public AnimationTimer getAnimationTimer() {
         return animationTimer;
     }
 
-    public static AreaTracker getAreaTracker() {
+    public AreaTracker getAreaTracker() {
         return areaTracker;
     }
 
@@ -121,7 +121,7 @@ public class GameScene extends Scene {
         return scoreCounter;
     }
 
-    public static Cursor getQixCursor() {
+    public Cursor getQixCursor() {
         return cursor;
     }
 
@@ -225,7 +225,7 @@ public class GameScene extends Scene {
     /**
      * Setup an animation timer that runs at 300FPS.
      */
-    public void createAnimationTimer() {
+    private void createAnimationTimer() {
         // animation timer for handling a loop
         animationTimer = new AnimationTimer() {
             public void handle(long now) {
@@ -267,7 +267,7 @@ public class GameScene extends Scene {
      * show game over text,
      * stop the animations.
      */
-    public static void gameOver() {
+    public void gameOver() {
         // TODO add code for gameover
         animationTimerStop();
         messageBox.setLayoutX(Globals.GAMEOVER_POSITION_X);
@@ -284,7 +284,7 @@ public class GameScene extends Scene {
      * stop the animations,
      * show that the player has won
      */
-    public static void gameWon() {
+    public void gameWon() {
         animationTimerStop();
         messageBox.setLayoutX(Globals.GAMEWON_POSITION_X);
         messageLabel.setText(" You Won! ");

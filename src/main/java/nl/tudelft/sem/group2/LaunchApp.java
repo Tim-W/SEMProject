@@ -22,8 +22,8 @@ import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
  */
 public class LaunchApp extends Application {
 
-    private static Stage stage;
-    private static MediaView mediaView;
+    private Stage stage;
+    private static MediaView mediaView = new MediaView();;
 
 
     private static final Logger LOGGER = new Logger();
@@ -112,7 +112,6 @@ public class LaunchApp extends Application {
 
         //Comment to mute empty sound
         playSound("/sounds/qix.mp3", 1);
-        mediaView = new MediaView();
         ((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 

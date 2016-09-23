@@ -18,7 +18,7 @@ public class AreaTracker {
 
     private static LinkedList<Point> stix = new LinkedList<Point>();
 
-    private static AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
     private Stack<Point> visiting = new Stack<Point>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
@@ -334,7 +334,7 @@ public class AreaTracker {
      * @return the boardGrid
      */
     public AreaState[][] getBoardGrid() {
-        return boardGrid;
+        return boardGrid.clone();
     }
 
     /**
