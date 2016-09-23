@@ -1,10 +1,13 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Polygon;
-import java.awt.Rectangle;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.scenes.GameScene;
+
+import java.awt.*;
+import java.util.logging.Level;
 
 /**
  * An object that can be moved an drawn on a 2D grid.
@@ -16,6 +19,7 @@ public abstract class Unit {
     private int width;
     private int height;
     private AreaTracker areaTracker;
+    private static final Logger LOGGER = LaunchApp.getLogger();
 
     /**
      * Create a Unit at (x,y) position.
@@ -29,6 +33,7 @@ public abstract class Unit {
         this.setWidth(1);
         this.setHeight(1);
         this.setAreaTracker(GameScene.getAreaTracker());
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 
     /**
@@ -87,27 +92,46 @@ public abstract class Unit {
             Qix qix = (Qix) this;
             Polygon colliderP = qix.toPolygon();
 
-            // subtract one from width&height to make collisions look more real
-            Rectangle collideeR = new Rectangle(collidee.getX(),
-                    collidee.getY(), collidee.getWidth() / 2 - 1,
-                    collidee.getHeight() / 2 - 1);
-            return colliderP.intersects(collideeR);
-        }
+			// subtract one from width&height to make collisions look more real
+			Rectangle collideeR = new Rectangle(collidee.getX(),
+					collidee.getY(), collidee.getWidth() / 2 - 1,
+					collidee.getHeight() / 2 - 1);
+			if (colliderP.intersects(collideeR)) {
+				LOGGER.log(Level.INFO, this.toString() + " collided with "
+						+ collidee.toString() + " at (" + this.getX()
+						+ "," + this.getY() + ")", this.getClass());
+				return true;
+			} else {
+				return false;
+			}
+		}
 
         if (collidee instanceof Qix) {
             Qix qix = (Qix) collidee;
             Polygon collideeP = qix.toPolygon();
 
-            // subtract one from width&height to make collisions look more real
-            Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
-                    this.getWidth() / 2 - 1, this.getHeight() / 2 - 1);
-            return collideeP.intersects(colliderR);
-        }
+			// subtract one from width&height to make collisions look more real
+			Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
+					this.getWidth() / 2 - 1, this.getHeight() / 2 - 1);
+			if (collideeP.intersects(colliderR)) {
+				LOGGER.log(Level.INFO, this.toString() + " collided with "
+						+ collidee.toString() + " at (" + this.getX()
+						+ "," + this.getY() + ")", this.getClass());
+				return true;
+			} else {
+				return false;
+			}
+		}
 
         Rectangle colliderR = new Rectangle(this.getX(), this.getY(), 2, 2);
         // subtract one from width&height to make collisions look more real
         Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(),
                 2, 2);
+        if (colliderR.intersects(collideeR)) {
+            LOGGER.log(Level.INFO, this.toString() + " collided with "
+                    + collidee.toString() + " at (" + this.getX()
+                    + "," + this.getY() + ")", this.getClass());
+        }
         return colliderR.intersects(collideeR);
     }
 
