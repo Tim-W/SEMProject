@@ -3,6 +3,14 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 
@@ -44,9 +52,10 @@ public class Qix extends Unit {
     /**
      * Create a new Qix.
      * Is by default placed on 30,30.
+     * last parameters are for width and height but its just set to 1
      */
     public Qix() {
-        super(QIX_START_X, QIX_START_Y);
+        super(QIX_START_X, QIX_START_Y,1,1);
     }
 
     @Override
@@ -140,7 +149,6 @@ public class Qix extends Unit {
 
     /**
      * Converts to a polygon.
-     * TODO what does this even do?
      * @return some polygon
      */
     public Polygon toPolygon() {

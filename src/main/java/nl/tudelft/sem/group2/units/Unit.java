@@ -1,12 +1,13 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
-import java.awt.*;
 import java.util.logging.Level;
 
 /**
@@ -26,12 +27,14 @@ public abstract class Unit {
      *
      * @param x x coord
      * @param y y coord
+     * @param width  width, used for collision
+     * @param height height, used for collision
      */
-    Unit(int x, int y) {
+    Unit(int x, int y, int width, int height) {
         this.setX(x);
         this.setY(y);
-        this.setWidth(1);
-        this.setHeight(1);
+        this.setWidth(width);
+        this.setHeight(height);
         this.setAreaTracker(GameScene.getAreaTracker());
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
