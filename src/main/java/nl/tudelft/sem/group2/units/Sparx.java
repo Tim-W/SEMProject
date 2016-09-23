@@ -127,6 +127,10 @@ public class Sparx extends LineTraveller {
         return "Sparx";
     }
 
+    /**
+     * Log the current movement of the sparx.
+     * Only gets executed when log level is on detailledLogging.
+     */
     public void logCurrentMove() {
         LOGGER.log(Level.FINE, "Sparx moved to (" + getX() + "," + getY() + ")", this.getClass());
     }

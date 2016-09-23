@@ -290,7 +290,8 @@ public class GameScene extends Scene {
 
         //Plays game over sound
         playSound("/sounds/Qix_Death.mp3", GAME_OVER_SOUND_VOLUME);
-        LOGGER.log(Level.INFO, "Game Over, player died with a score of " + scoreCounter.getTotalScore(), GameScene.class);
+        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+                + scoreCounter.getTotalScore(), GameScene.class);
     }
 
     /**

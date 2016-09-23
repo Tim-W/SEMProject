@@ -108,7 +108,6 @@ public abstract class Unit {
                 return false;
             }
         }
-
         if (collidee instanceof Qix) {
             Qix qix = (Qix) collidee;
             Polygon collideeP = qix.toPolygon();
@@ -125,7 +124,6 @@ public abstract class Unit {
                 return false;
             }
         }
-
         Rectangle colliderR = new Rectangle(this.getX(), this.getY(), 2, 2);
         // subtract one from width&height to make collisions look more real
         Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(),
