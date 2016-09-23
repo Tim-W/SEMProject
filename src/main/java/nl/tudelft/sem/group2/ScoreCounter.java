@@ -6,6 +6,11 @@ import static nl.tudelft.sem.group2.global.Globals.FAST_AREA_MULTIPLIER;
 import static nl.tudelft.sem.group2.global.Globals.SLOW_AREA_MULTIPLIER;
 import static nl.tudelft.sem.group2.global.Globals.TARGET_PERCENTAGE;
 
+/**
+ * Class which keeps track of the current score of the player.
+ *
+ * @author Rheddes.
+ */
 public class ScoreCounter {
 
     private static final Logger LOGGER = LaunchApp.getLogger();
@@ -41,15 +46,18 @@ public class ScoreCounter {
         double percentageIncrease = (double) completedArea / ((double) totalArea * 2);
         totalPercentage += percentageIncrease;
 
-        LOGGER.log(Level.INFO, "Percentage increased with " + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "
+        LOGGER.log(Level.INFO, "Percentage increased with "
+                + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "
                 + Math.round(totalPercentage * FAST_AREA_MULTIPLIER) / 100.0, this.getClass());
 
         if (fastArea) {
             totalScore += percentageIncrease * FAST_AREA_MULTIPLIER;
-            LOGGER.log(Level.INFO, "Score increased with " + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER), this.getClass());
+            LOGGER.log(Level.INFO, "Score increased with "
+                    + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER), this.getClass());
         } else {
             totalScore += percentageIncrease * SLOW_AREA_MULTIPLIER;
-            LOGGER.log(Level.INFO, "Score updated with " + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
+            LOGGER.log(Level.INFO, "Score updated with "
+                    + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
 
 
