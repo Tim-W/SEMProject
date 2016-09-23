@@ -1,12 +1,13 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.AreaState.INNERBORDER;
 import static nl.tudelft.sem.group2.AreaState.OUTERBORDER;
@@ -41,7 +42,7 @@ public class Qix extends Unit {
      * Is by default placed on 30,30.
      */
     public Qix() {
-        super(QIX_START_X, QIX_START_Y);
+        super(QIX_START_X, QIX_START_Y,1,1);
     }
 
     @Override

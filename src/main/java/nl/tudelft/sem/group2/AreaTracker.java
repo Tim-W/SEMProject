@@ -1,11 +1,12 @@
 package nl.tudelft.sem.group2;
 
-import java.awt.Point;
+import nl.tudelft.sem.group2.scenes.GameScene;
+
+import java.awt.*;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
-import nl.tudelft.sem.group2.scenes.GameScene;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
