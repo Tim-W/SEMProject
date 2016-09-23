@@ -6,36 +6,67 @@ import nl.tudelft.sem.group2.AreaState;
 
 import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 
-abstract public class LineTraveller extends Unit {
+/**
+ * A unit which can travel over outerborders and innerborders.
+ */
+public abstract class LineTraveller extends Unit {
 
-    protected Image[] sprite;
-    protected int spriteIndex = 0;
-    protected int width;
-    protected int height;
+    private Image[] sprite;
+    private int spriteIndex = 0;
+    private int width;
+    private int height;
 
+    /**
+     * Create a new LineTraveller.
+     *
+     * @param x      x coord
+     * @param y      y coord
+     * @param width  width, used for collision
+     * @param height height, used for collision
+     */
     public LineTraveller(int x, int y, int width, int height) {
         super(x, y);
         this.width = width;
         this.height = height;
     }
 
-    //Todo needs to be implemented
-    //returns true if there is a line on the given coordinates.
+    /**
+     * @param x x coord
+     * @param y y coord
+     * @return true if the tile at (x,y) has an UNCOVERED AreaState
+     * TODO implement
+     */
     public boolean uncoveredOn(int x, int y) {
-        return areaTracker.getBoardGrid()[x][y].equals(AreaState.UNCOVERED);
+        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.UNCOVERED);
     }
 
+    /**
+     * @param x x coord
+     * @param y y coord
+     * @return true if the tile at (x,y) has an INNERBORDER AreaState
+     */
     protected boolean innerBorderOn(int x, int y) {
-        return areaTracker.getBoardGrid()[x][y].equals(AreaState.INNERBORDER);
+        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.INNERBORDER);
     }
 
+    /**
+     * @param x x coord
+     * @param y y coord
+     * @return true if the tile at (x,y) has an OUTERBORDER AreaState
+     */
     protected boolean outerBorderOn(int x, int y) {
-        return areaTracker.getBoardGrid()[x][y].equals(AreaState.OUTERBORDER);
+        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.OUTERBORDER);
     }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.getGraphicsContext2D().drawImage(sprite[spriteIndex], gridToCanvas(x) - width / 2, gridToCanvas(y) - height / 2, width, height);
+        canvas.getGraphicsContext2D().drawImage(
+                sprite[spriteIndex],
+                gridToCanvas(getX()) - width / 2,
+                gridToCanvas(getY()) - height / 2,
+                width,
+                height
+        );
         spriteIndex = (spriteIndex + 1) % sprite.length;
     }
 
@@ -45,5 +76,21 @@ abstract public class LineTraveller extends Unit {
 
     public int getWidth() {
         return this.width;
+    }
+
+    public Image[] getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(Image[] sprite) {
+        this.sprite = sprite;
+    }
+
+    public int getSpriteIndex() {
+        return spriteIndex;
+    }
+
+    public void setSpriteIndex(int spriteIndex) {
+        this.spriteIndex = spriteIndex;
     }
 }

@@ -1,22 +1,34 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import static nl.tudelft.sem.group2.AreaState.INNERBORDER;
 import static nl.tudelft.sem.group2.AreaState.OUTERBORDER;
 import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+import static nl.tudelft.sem.group2.global.Globals.QIX_START_X;
+import static nl.tudelft.sem.group2.global.Globals.QIX_START_Y;
 
+/**
+ * A Qix is an enemy unit.
+ * It moves randomly on the GameScene.
+ * When the player touches the Qix while drawing,
+ * or when the Qix touches the stix, it is game over.
+ */
 public class Qix extends Unit {
 
-    private static int LineLength = 5;
-    private static int PositionLength = 4;
+    private static final int LINE_LENGTH = 5;
+    private static final int POSITION_LENGTH = 4;
+    //TODO give these better names
+    private static final double DOUBLE = 0.7;
+    private static final double DOUBLE1 = 0.3;
+    private static final int INT = 6;
+    private static final int INT1 = 10;
     private int animationLoops = 0;
     private float[] direction = new float[2];
     private LinkedList<float[]> oldDirections = new LinkedList<float[]>();
@@ -24,51 +36,59 @@ public class Qix extends Unit {
     private LinkedList<double[]> colorArray = new LinkedList<double[]>();
     private float[] coordinate = new float[2];
 
+    /**
+     * Create a new Qix.
+     * Is by default placed on 30,30.
+     */
     public Qix() {
-        super(30, 30);
+        super(QIX_START_X, QIX_START_Y);
     }
 
     @Override
     public void move() {
-        coordinate[0] = x;
-        coordinate[1] = y;
+        coordinate[0] = getX();
+        coordinate[1] = getY();
         if (animationLoops <= 0) {
-            float length;
-            do {
-                direction[0] = Math.round(Math.random() * 6) - 3;
-                direction[1] = Math.round(Math.random() * 6) - 3;
-                length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
-            } while (length == 0);
-            float random = (float) Math.random() * 4 - 2;
-            float scale = (PositionLength + random) / length;
-            direction[0] *= scale;
-            direction[1] *= scale;
-            animationLoops += (int) (Math.random() * 10);
+            changeDirection();
         }
 
         checkLineCollision();
-        this.x = (int) (coordinate[0] + direction[0]);
-        this.y = (int) (coordinate[1] + direction[1]);
-        coordinate[0] = x;
-        coordinate[1] = y;
+        this.setX((int) (coordinate[0] + direction[0]));
+        this.setY((int) (coordinate[1] + direction[1]));
+        coordinate[0] = getX();
+        coordinate[1] = getY();
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         float random = (float) Math.random() * 2 - 1;
-        float scale = (LineLength + random) / length;
+        float scale = (LINE_LENGTH + random) / length;
         direction[0] *= scale;
         direction[1] *= scale;
         double[] colors = new double[3];
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = Math.random() * 0.7 + 0.3;
+            colors[i] = Math.random() * DOUBLE + DOUBLE1;
         }
         colorArray.addFirst(colors);
         oldDirections.addFirst(new float[]{direction[0], direction[1]});
         oldCoordinates.addFirst(new float[]{coordinate[0], coordinate[1]});
-        if (oldDirections.size() > 10) {
+        if (oldDirections.size() > INT1) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();
             colorArray.removeLast();
         }
         animationLoops--;
+    }
+
+    private void changeDirection() {
+        float length;
+        do {
+            direction[0] = Math.round(Math.random() * INT) - 3;
+            direction[1] = Math.round(Math.random() * INT) - 3;
+            length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
+        } while (length == 0);
+        float random = (float) Math.random() * 4 - 2;
+        float scale = (POSITION_LENGTH + random) / length;
+        direction[0] *= scale;
+        direction[1] *= scale;
+        animationLoops += (int) (Math.random() * INT1);
     }
 
     @Override
@@ -89,15 +109,16 @@ public class Qix extends Unit {
     }
 
     private void checkLineCollision() {
-        int gridLength = areaTracker.getBoardGrid().length;
+        int gridLength = getAreaTracker().getBoardGrid().length;
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         for (int i = 0; i < gridLength; i++) {
             for (int j = 0; j < gridLength; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == INNERBORDER || areaTracker.getBoardGrid()[i][j] == OUTERBORDER) {
+                if (getAreaTracker().getBoardGrid()[i][j] == INNERBORDER
+                        || getAreaTracker().getBoardGrid()[i][j] == OUTERBORDER) {
                     float dx = coordinate[0] - i;
                     float dy = coordinate[1] - j;
                     float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);
-                    if (lengthNew < 10) {
+                    if (lengthNew < INT1) {
                         dx /= lengthNew;
                         dy /= lengthNew;
                         dx *= length;
@@ -111,6 +132,11 @@ public class Qix extends Unit {
         }
     }
 
+    /**
+     * Converts to a polygon.
+     * TODO what does this even do?
+     * @return some polygon
+     */
     public Polygon toPolygon() {
         ArrayList<Integer> xCor = new ArrayList<Integer>();
         ArrayList<Integer> yCor = new ArrayList<Integer>();
@@ -141,6 +167,10 @@ public class Qix extends Unit {
         return new Polygon(xArr, yArr, xArr.length);
     }
 
+    /**
+     *
+     * @return string representation of a Qix
+     */
     public String toString() {
         return "Qix";
     }

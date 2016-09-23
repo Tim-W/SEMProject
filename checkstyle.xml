@@ -16,6 +16,7 @@
         <module name="JavadocMethod">
             <property name="scope" value="package"/>
             <property name="suppressLoadErrors" value="true"/>
+            <property name="allowMissingPropertyJavadoc" value="true"/>
         </module>
         <module name="JavadocType"/>
         <module name="JavadocVariable">
@@ -42,7 +43,7 @@
             <property name="max" value="120"/>
         </module>
         <module name="MethodLength">
-            <property name="max" value="30"/>
+            <property name="max" value="40"/>
         </module>
         <module name="ParameterNumber"/>
         <module name="EmptyForIteratorPad"/>
@@ -75,7 +76,9 @@
         </module>
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
-        <module name="MagicNumber"/>
+        <module name="MagicNumber">
+            <property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 100"/>
+        </module>
         <module name="MissingSwitchDefault"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
@@ -99,7 +102,7 @@
         <module name="UpperEll"/>
         <module name="FallThrough"/>
         <module name="MethodLength">
-            <property name="max" value="30"/>
+            <property name="max" value="40"/>
         </module>
     </module>
     <module name="NewlineAtEndOfFile">
