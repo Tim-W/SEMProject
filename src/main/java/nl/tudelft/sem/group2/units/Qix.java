@@ -3,11 +3,14 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
 
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.AreaState.INNERBORDER;
 import static nl.tudelft.sem.group2.AreaState.OUTERBORDER;
@@ -45,7 +48,7 @@ public class Qix extends Unit {
      * last parameters are for width and height but its just set to 1
      */
     public Qix() {
-        super(QIX_START_X, QIX_START_Y,1,1);
+        super(QIX_START_X, QIX_START_Y, 1, 1);
     }
 
     @Override
@@ -61,17 +64,17 @@ public class Qix extends Unit {
         coordinate[0] = getX();
         coordinate[1] = getY();
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
-        float random = (float) Math.random() * RANDOMNESSLINELENGTH - RANDOMNESSLINELENGTH/2;
+        float random = (float) Math.random() * RANDOMNESSLINELENGTH - RANDOMNESSLINELENGTH / 2;
         float scale = (LINE_LENGTH + random) / length;
         direction[0] *= scale;
         direction[1] *= scale;
         double[] colors = new double[3];
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = Math.random() * (1- MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
+            colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
         colorArray.addFirst(colors);
-        oldDirections.addFirst(new float[]{direction[0], direction[1]});
-        oldCoordinates.addFirst(new float[]{coordinate[0], coordinate[1]});
+        oldDirections.addFirst(new float[] {direction[0], direction[1]});
+        oldCoordinates.addFirst(new float[] {coordinate[0], coordinate[1]});
         if (oldDirections.size() > LINESCOUNT) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();
@@ -80,25 +83,27 @@ public class Qix extends Unit {
         animationLoops--;
         logCurrentMove();
     }
+
     /**
-        create random direction for the qix
+     * create random direction for the qix
      */
     private void changeDirection() {
         float length;
         do {
-            direction[0] = Math.round(Math.random() * PRECISION) - PRECISION /2;
-            direction[1] = Math.round(Math.random() * PRECISION) - PRECISION /2;
+            direction[0] = Math.round(Math.random() * PRECISION) - PRECISION / 2;
+            direction[1] = Math.round(Math.random() * PRECISION) - PRECISION / 2;
             length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         } while (length == 0);
-        float random = (float) Math.random() * RANDOMNESSPOSITIONLENGTH - RANDOMNESSPOSITIONLENGTH/2;
+        float random = (float) Math.random() * RANDOMNESSPOSITIONLENGTH - RANDOMNESSPOSITIONLENGTH / 2;
         float scale = (POSITION_LENGTH + random) / length;
         direction[0] *= scale;
         direction[1] *= scale;
         animationLoops += (int) (Math.random() * LINESCOUNT);
     }
+
     /**
-    Draw the qix on the canvas.
-    This incudes all the lines of the qix.
+     * Draw the qix on the canvas.
+     * This incudes all the lines of the qix.
      */
     @Override
     public void draw(Canvas canvas) {
@@ -152,6 +157,7 @@ public class Qix extends Unit {
 
     /**
      * Converts to a polygon.
+     *
      * @return some polygon
      */
     public Polygon toPolygon() {
@@ -185,7 +191,6 @@ public class Qix extends Unit {
     }
 
     /**
-     *
      * @return string representation of a Qix
      */
     public String toString() {
@@ -204,7 +209,7 @@ public class Qix extends Unit {
         return oldDirections;
     }
 
-	public void logCurrentMove(){
+    public void logCurrentMove() {
         LOGGER.log(Level.FINE, "Qix moved to (" + getX() + "," + getY() + ")", this.getClass());
-	}
+    }
 }

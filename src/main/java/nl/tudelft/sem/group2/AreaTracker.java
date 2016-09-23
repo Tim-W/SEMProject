@@ -14,9 +14,9 @@ import java.util.logging.Level;
  */
 public class AreaTracker {
 
-	private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = LaunchApp.getLogger();
 
-	private static LinkedList<Point> stix = new LinkedList<Point>();
+    private static LinkedList<Point> stix = new LinkedList<Point>();
 
     private static AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
     private Stack<Point> visiting = new Stack<Point>();
@@ -92,33 +92,31 @@ public class AreaTracker {
         }
     }
 
-	/**
-	 * Method that updates the grid when a stix is completed
-	 *
-	 * @param qixCoordinates
-	 *            current qix coordinates
-	 * @param fastArea
-	 *            tells if stix was created fast or slow (double points if slow)
-	 */
-	public void calculateNewArea(Point qixCoordinates, boolean fastArea) {
+    /**
+     * Method that updates the grid when a stix is completed
+     *
+     * @param qixCoordinates current qix coordinates
+     * @param fastArea       tells if stix was created fast or slow (double points if slow)
+     */
+    public void calculateNewArea(Point qixCoordinates, boolean fastArea) {
 
-		setOuterBorders();
+        setOuterBorders();
 
-		// Obtain first and second point from the stix to determine
-		// beginposition for the floodfill algorithm
-		Point start = stix.getFirst();
-		Point dir = stix.get(1);
+        // Obtain first and second point from the stix to determine
+        // beginposition for the floodfill algorithm
+        Point start = stix.getFirst();
+        Point dir = stix.get(1);
 
-		// Instantiate the two temporary area trackers, these linkedlists
-		// accumulate all the points on one side of the stix
-		// When the floodfill algorithm finds a qix however the linkedlist is
-		// set to null
+        // Instantiate the two temporary area trackers, these linkedlists
+        // accumulate all the points on one side of the stix
+        // When the floodfill algorithm finds a qix however the linkedlist is
+        // set to null
         resetAreas();
         resetBorders();
 
-		// Initialize the set which contains the visited points for the
-		// floodfill algorithm
-		visited = new HashSet<Point>();
+        // Initialize the set which contains the visited points for the
+        // floodfill algorithm
+        visited = new HashSet<Point>();
 
         checkDirections(qixCoordinates, start, dir);
 
@@ -126,11 +124,11 @@ public class AreaTracker {
         setBorders();
         updateScoreCounter(fastArea);
 
-		if (fastArea) {
-			LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
-		} else {
-			LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size(), this.getClass());
-		}
+        if (fastArea) {
+            LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
+        } else {
+            LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size(), this.getClass());
+        }
 
         //Update the grid with the newly created area
         for (Point current : newArea) {
@@ -226,11 +224,12 @@ public class AreaTracker {
         }
     }
 
-	public void floodFill(Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
-		visiting.push(pointToCheck);
-		while (!visiting.isEmpty())
-			floodFill(qixCoorinates, chosenState, addToArea1);
-	}
+    public void floodFill(Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
+        visiting.push(pointToCheck);
+        while (!visiting.isEmpty()) {
+            floodFill(qixCoorinates, chosenState, addToArea1);
+        }
+    }
 
     /**
      * Floodfill algorithm, this algorithm checks one point.
@@ -312,59 +311,58 @@ public class AreaTracker {
         foundQix = true;
     }
 
-	/**
-	 * Method that adds a point to the current stix
-	 *
-	 * @param coordinates
-	 *            point that gets added to the stix
-	 */
-	public void addToStix(Point coordinates) {
-		stix.add(coordinates);
-	}
+    /**
+     * Method that adds a point to the current stix
+     *
+     * @param coordinates point that gets added to the stix
+     */
+    public void addToStix(Point coordinates) {
+        stix.add(coordinates);
+    }
 
-	/**
-	 * Getter for the stix
-	 *
-	 * @return the current stix
-	 */
-	public LinkedList<Point> getStix() {
-		return stix;
-	}
+    /**
+     * Getter for the stix
+     *
+     * @return the current stix
+     */
+    public LinkedList<Point> getStix() {
+        return stix;
+    }
 
-	/**
-	 * Getter for the boardGrid
-	 *
-	 * @return the boardGrid
-	 */
-	public AreaState[][] getBoardGrid() {
-		return boardGrid;
-	}
+    /**
+     * Getter for the boardGrid
+     *
+     * @return the boardGrid
+     */
+    public AreaState[][] getBoardGrid() {
+        return boardGrid;
+    }
 
-	/**
-	 * Shows a log which visualise the current board grid state.
-	 */
-	public void printBoardGrid() {
-		for (AreaState[] column : boardGrid) {
-			for (AreaState state : column) {
-				switch (state) {
-				case OUTERBORDER:
-					System.out.print("[X]");
-					break;
-				case INNERBORDER:
-					System.out.print("[*]");
-					break;
-				case UNCOVERED:
-					System.out.print("[ ]");
-					break;
-				case FAST:
-					System.out.print("[F]");
-					break;
-				case SLOW:
-					System.out.print("[S]");
-					break;
-				}
-			}
-			System.out.println();
-		}
-	}
+    /**
+     * Shows a log which visualise the current board grid state.
+     */
+    public void printBoardGrid() {
+        for (AreaState[] column : boardGrid) {
+            for (AreaState state : column) {
+                switch (state) {
+                    case OUTERBORDER:
+                        System.out.print("[X]");
+                        break;
+                    case INNERBORDER:
+                        System.out.print("[*]");
+                        break;
+                    case UNCOVERED:
+                        System.out.print("[ ]");
+                        break;
+                    case FAST:
+                        System.out.print("[F]");
+                        break;
+                    case SLOW:
+                        System.out.print("[S]");
+                        break;
+                }
+            }
+            System.out.println();
+        }
+    }
 }
