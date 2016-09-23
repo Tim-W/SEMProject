@@ -12,6 +12,41 @@ public class AreaTrackerTest {
     private static final int TEST_MAP_HEIGHT = 5;
 
     /**
+     * Test method for the default constructor of AreaTracker.
+     *
+     * @throws Exception when the AreaTracker fails to do its job
+     */
+    @org.junit.Test
+    public void testConstructor() throws Exception {
+        AreaTracker areaTracker = new AreaTracker();
+
+        AreaState[][] expectedGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+
+        for (int x = 0; x < expectedGrid.length; x++) {
+            for (int y = 0; y < expectedGrid[x].length; y++) {
+                if (x == 0) {
+                    expectedGrid[x][y] = AreaState.OUTERBORDER;
+                }
+                else if (x == expectedGrid.length - 1) {
+                    expectedGrid[x][y] = AreaState.OUTERBORDER;
+                }
+                else if (y == 0 || y == expectedGrid[x].length - 1) {
+                    expectedGrid[x][y] = AreaState.OUTERBORDER;
+                }
+                else {
+                    expectedGrid[x][y] = AreaState.UNCOVERED;
+                }
+            }
+        }
+        AreaState[][] currentGrid = areaTracker.getBoardGrid();
+        for (int i = 0; i < expectedGrid.length; i++) {
+            for (int j = 0; j < expectedGrid[i].length; j++) {
+                assertEquals(expectedGrid[i][j], currentGrid[j][i]);
+            }
+        }
+    }
+
+    /**
      * Test for the calculateNewArea method when fast area is created.
      *
      * @throws Exception when the AreaTracker fails to do its job
@@ -68,12 +103,10 @@ public class AreaTrackerTest {
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
 
-        areaTracker.printBoardGrid();
 
         AreaState[][] currentGrid = areaTracker.getBoardGrid();
         for (int i = 0; i < TEST_MAP_HEIGHT; i++) {
             for (int j = 0; j < TEST_MAP_WIDTH; j++) {
-                System.out.println("i: " + i + ", j: " + j);
                 assertEquals(expectedGrid[j][i], currentGrid[j][i]);
             }
         }
