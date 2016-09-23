@@ -8,7 +8,7 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -80,8 +80,8 @@ public class Cursor extends LineTraveller {
     private void moveLeft() {
         if (uncoveredOn(getX() - 1, getY()) && isDrawing) {
             if (!getAreaTracker().getStix().contains(new Point(getX() - 1, getY()))
-                    && !getAreaTracker().getStix().contains(new Point(getX() - 2, getY())) &&
-                    getAreaTracker().getBoardGrid()[getX() - 1][getY() - 1].equals(AreaState.UNCOVERED)
+                    && !getAreaTracker().getStix().contains(new Point(getX() - 2, getY()))
+                    && getAreaTracker().getBoardGrid()[getX() - 1][getY() - 1].equals(AreaState.UNCOVERED)
                     && getAreaTracker().getBoardGrid()[getX() - 1][getY() + 1].equals(AreaState.UNCOVERED)) {
 
                     if (outerBorderOn(getX(), getY())) {
@@ -101,8 +101,8 @@ public class Cursor extends LineTraveller {
     private void moveRight() {
         if (uncoveredOn(getX() + 1, getY()) && isDrawing) {
             if (!getAreaTracker().getStix().contains(new Point(getX() + 1, getY()))
-                    && !getAreaTracker().getStix().contains(new Point(getX() + 2, getY())) &&
-                    getAreaTracker().getBoardGrid()[getX() + 1][getY() - 1].equals(AreaState.UNCOVERED)
+                    && !getAreaTracker().getStix().contains(new Point(getX() + 2, getY()))
+                    && getAreaTracker().getBoardGrid()[getX() + 1][getY() - 1].equals(AreaState.UNCOVERED)
                     && getAreaTracker().getBoardGrid()[getX() + 1][getY() + 1].equals(AreaState.UNCOVERED)) {
 
                     if (outerBorderOn(getX(), getY())) {
@@ -122,8 +122,8 @@ public class Cursor extends LineTraveller {
     private void moveDown() {
         if (uncoveredOn(getX(), getY() + 1) && isDrawing) {
             if (!getAreaTracker().getStix().contains(new Point(getX(), getY() + 1))
-                    && !getAreaTracker().getStix().contains(new Point(getX(), getY() + 2)) &&
-                    getAreaTracker().getBoardGrid()[getX() + 1][getY() + 1].equals(AreaState.UNCOVERED)
+                    && !getAreaTracker().getStix().contains(new Point(getX(), getY() + 2))
+                    && getAreaTracker().getBoardGrid()[getX() + 1][getY() + 1].equals(AreaState.UNCOVERED)
                     && getAreaTracker().getBoardGrid()[getX() - 1][getY() + 1].equals(AreaState.UNCOVERED)) {
 
                     if (outerBorderOn(getX(), getY())) {
@@ -143,8 +143,8 @@ public class Cursor extends LineTraveller {
     private void moveUp() {
         if (uncoveredOn(getX(), getY() - 1) && isDrawing) {
             if (!getAreaTracker().getStix().contains(new Point(getX(), getY() - 1))
-                    && !getAreaTracker().getStix().contains(new Point(getX(), getY() - 2)) &&
-                    getAreaTracker().getBoardGrid()[getX() + 1][getY() - 1].equals(AreaState.UNCOVERED)
+                    && !getAreaTracker().getStix().contains(new Point(getX(), getY() - 2))
+                    && getAreaTracker().getBoardGrid()[getX() + 1][getY() - 1].equals(AreaState.UNCOVERED)
                     && getAreaTracker().getBoardGrid()[getX() - 1][getY() - 1].equals(AreaState.UNCOVERED)) {
 
                     if (outerBorderOn(getX(), getY())) {
@@ -273,7 +273,7 @@ public class Cursor extends LineTraveller {
      * Method which log the current movement of the cursor.
      * Only gets executed when log level is on detailledLogging.
      */
-    public void logCurrentMove() {
+    private void logCurrentMove() {
         LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
     }
 }
