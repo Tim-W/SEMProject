@@ -130,6 +130,10 @@ public class GameScene extends Scene {
         animationTimer.stop();
     }
 
+    public static AnimationTimer getAnimationTimer() {
+        return animationTimer;
+    }
+
     public static AreaTracker getAreaTracker() {
         return areaTracker;
     }
