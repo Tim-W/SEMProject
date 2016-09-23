@@ -40,6 +40,7 @@ public class Qix extends Unit {
     /**
      * Create a new Qix.
      * Is by default placed on 30,30.
+     * last parameters are for width and height but its just set to 1
      */
     public Qix() {
         super(QIX_START_X, QIX_START_Y,1,1);

@@ -22,6 +22,8 @@ public abstract class Unit {
      *
      * @param x x coord
      * @param y y coord
+     * @param width  width, used for collision
+     * @param height height, used for collision
      */
     Unit(int x, int y, int width, int height) {
         this.setX(x);
