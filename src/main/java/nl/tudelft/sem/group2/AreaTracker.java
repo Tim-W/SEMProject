@@ -1,11 +1,12 @@
 package nl.tudelft.sem.group2;
 
-import java.awt.Point;
+import nl.tudelft.sem.group2.scenes.GameScene;
+
+import java.awt.*;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
-import nl.tudelft.sem.group2.scenes.GameScene;
 import java.util.logging.Level;
 
 /**
@@ -224,8 +225,6 @@ public class AreaTracker {
             floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false);
         }
     }
-
-	}
 
 	public void floodFill(Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
 		visiting.push(pointToCheck);

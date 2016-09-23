@@ -1,12 +1,12 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Polygon;
-import java.awt.Rectangle;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.scenes.GameScene;
+
+import java.awt.*;
 import java.util.logging.Level;
 
 /**

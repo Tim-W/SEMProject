@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2;
 
+import java.util.logging.Level;
+
+import static nl.tudelft.sem.group2.global.Globals.*;
+
 public class ScoreCounter {
 
 	private static final Logger LOGGER = LaunchApp.getLogger();

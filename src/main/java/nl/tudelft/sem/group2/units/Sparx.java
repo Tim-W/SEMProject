@@ -128,6 +128,6 @@ public class Sparx extends LineTraveller {
     }
 
 	public void logCurrentMove(){
-        LOGGER.log(Level.FINE, "Sparx moved to (" + x + "," + y + ")", this.getClass());
+        LOGGER.log(Level.FINE, "Sparx moved to (" + getX() + "," + getY() + ")", this.getClass());
 	}
 }

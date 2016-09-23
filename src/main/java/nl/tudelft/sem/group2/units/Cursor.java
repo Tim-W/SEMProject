@@ -5,11 +5,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -269,6 +268,6 @@ public class Cursor extends LineTraveller {
 	}
 
 	public void logCurrentMove(){
-        LOGGER.log(Level.FINE, "Cursor moved to (" + x + "," + y + ")", this.getClass());
+        LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
 	}
 }

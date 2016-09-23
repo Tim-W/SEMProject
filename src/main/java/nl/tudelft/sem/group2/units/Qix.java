@@ -1,20 +1,16 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Polygon;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 
-import java.awt.Polygon;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import static nl.tudelft.sem.group2.AreaState.INNERBORDER;
 import static nl.tudelft.sem.group2.AreaState.OUTERBORDER;
@@ -198,6 +194,6 @@ public class Qix extends Unit {
     }
 
 	public void logCurrentMove(){
-        LOGGER.log(Level.FINE, "Qix moved to (" + x + "," + y + ")", this.getClass());
+        LOGGER.log(Level.FINE, "Qix moved to (" + getX() + "," + getY() + ")", this.getClass());
 	}
 }
