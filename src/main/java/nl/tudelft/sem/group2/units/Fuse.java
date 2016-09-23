@@ -29,9 +29,9 @@ public class Fuse extends LineTraveller {
      */
     public Fuse(int x, int y, int width, int height) {
         super(x, y, width, height);
-        Image[] sprite = new javafx.scene.image.Image[2];
-        sprite[0] = new javafx.scene.image.Image("/images/fuse-1.png");
-        sprite[1] = new javafx.scene.image.Image("/images/fuse-2.png");
+        Image[] sprite = new Image[2];
+        sprite[0] = new Image("/images/fuse-1.png");
+        sprite[1] = new Image("/images/fuse-2.png");
         setSprite(sprite);
     }
 
