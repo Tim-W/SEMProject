@@ -4,7 +4,9 @@ import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
-import java.awt.*;
+import java.awt.Polygon;
+import java.awt.Rectangle;
+
 
 /**
  * An object that can be moved an drawn on a 2D grid.

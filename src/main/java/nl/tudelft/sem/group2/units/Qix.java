@@ -4,7 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -136,7 +136,6 @@ public class Qix extends Unit {
 
     /**
      * Converts to a polygon.
-     * TODO what does this even do?
      * @return some polygon
      */
     public Polygon toPolygon() {

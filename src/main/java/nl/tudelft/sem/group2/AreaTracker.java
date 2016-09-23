@@ -2,7 +2,7 @@ package nl.tudelft.sem.group2;
 
 import nl.tudelft.sem.group2.scenes.GameScene;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
