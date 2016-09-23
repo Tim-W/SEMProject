@@ -4,7 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
