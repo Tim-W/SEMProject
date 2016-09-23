@@ -12,11 +12,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.AreaState.INNERBORDER;
-import static nl.tudelft.sem.group2.AreaState.OUTERBORDER;
+import nl.tudelft.sem.group2.AreaState;
 import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
-import static nl.tudelft.sem.group2.global.Globals.QIX_START_X;
-import static nl.tudelft.sem.group2.global.Globals.QIX_START_Y;
+import nl.tudelft.sem.group2.global.Globals;
 
 /**
  * A Qix is an enemy unit.
@@ -48,7 +46,7 @@ public class Qix extends Unit {
      * last parameters are for width and height but its just set to 1
      */
     public Qix() {
-        super(QIX_START_X, QIX_START_Y, 1, 1);
+        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
     }
 
     @Override
@@ -135,8 +133,8 @@ public class Qix extends Unit {
         //loop through the grid
         for (int i = 0; i < gridLength; i++) {
             for (int j = 0; j < gridLength; j++) {
-                if (getAreaTracker().getBoardGrid()[i][j] == INNERBORDER
-                        || getAreaTracker().getBoardGrid()[i][j] == OUTERBORDER) {
+                if (getAreaTracker().getBoardGrid()[i][j] == AreaState.INNERBORDER
+                        || getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER) {
                     float dx = coordinate[0] - i;
                     float dy = coordinate[1] - j;
                     float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);
