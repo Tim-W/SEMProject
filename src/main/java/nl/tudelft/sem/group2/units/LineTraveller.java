@@ -25,7 +25,7 @@ public abstract class LineTraveller extends Unit {
      * @param height height, used for collision
      */
     public LineTraveller(int x, int y, int width, int height) {
-        super(x, y,width,height);
+        super(x, y, width, height);
     }
 
     /**
