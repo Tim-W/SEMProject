@@ -8,7 +8,7 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -29,6 +29,7 @@ public class Cursor extends LineTraveller {
     //TODO set stix to false when implementation is done
     private boolean isDrawing = false;
     private boolean isFast = true;
+
 
     /**
      * Create a cursor.
