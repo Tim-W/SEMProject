@@ -209,10 +209,9 @@ public class Board {
                     if (collidee instanceof Cursor && collider.intersect(collidee)) {
                         GameScene.gameOver();
                     }
-                } else if (collider instanceof Fuse) {
-                    if (collidee instanceof Cursor && collider.intersect(collidee)) {
+                } else if (collider instanceof Fuse
+                            && collidee instanceof Cursor && collider.intersect(collidee)) {
                         GameScene.gameOver();
-                    }
                 }
             }
         }

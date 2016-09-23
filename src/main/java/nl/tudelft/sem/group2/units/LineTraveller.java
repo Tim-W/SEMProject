@@ -13,9 +13,6 @@ public abstract class LineTraveller extends Unit {
 
     private Image[] sprite;
     private int spriteIndex = 0;
-    private int width;
-    private int height;
-
     /**
      * Create a new LineTraveller.
      *
@@ -25,9 +22,7 @@ public abstract class LineTraveller extends Unit {
      * @param height height, used for collision
      */
     public LineTraveller(int x, int y, int width, int height) {
-        super(x, y);
-        this.width = width;
-        this.height = height;
+        super(x, y, width, height);
     }
 
     /**
@@ -62,20 +57,12 @@ public abstract class LineTraveller extends Unit {
     public void draw(Canvas canvas) {
         canvas.getGraphicsContext2D().drawImage(
                 sprite[spriteIndex],
-                gridToCanvas(getX()) - width / 2,
-                gridToCanvas(getY()) - height / 2,
-                width,
-                height
+                gridToCanvas(getX()) - getWidth() / 2,
+                gridToCanvas(getY()) - getHeight() / 2,
+                getWidth(),
+                getHeight()
         );
         spriteIndex = (spriteIndex + 1) % sprite.length;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
-    public int getWidth() {
-        return this.width;
     }
 
     public Image[] getSprite() {

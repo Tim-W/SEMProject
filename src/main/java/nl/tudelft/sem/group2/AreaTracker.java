@@ -1,20 +1,24 @@
 package nl.tudelft.sem.group2;
 
+import nl.tudelft.sem.group2.scenes.GameScene;
+
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
-import nl.tudelft.sem.group2.scenes.GameScene;
+import java.util.logging.Level;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
  */
 public class AreaTracker {
 
+    private static final Logger LOGGER = LaunchApp.getLogger();
+
     private static LinkedList<Point> stix = new LinkedList<Point>();
 
-    private static AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
     private Stack<Point> visiting = new Stack<Point>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
@@ -96,26 +100,28 @@ public class AreaTracker {
      */
     public void calculateNewArea(Point qixCoordinates, boolean fastArea) {
         setOuterBorders();
-
-        //Obtain first and second point from the stix to determine beginposition for the floodfill algorithm
+        // Obtain first and second point from the stix to determine
+        // beginposition for the floodfill algorithm
         Point start = stix.getFirst();
         Point dir = stix.get(1);
-
-        //Instantiate the two temporary area trackers,
-        // these linkedlists accumulate all the points on one side of the stix.
-        //When the floodfill algorithm finds a qix however the linkedlist is set to null
+        // Instantiate the two temporary area trackers, these linkedlists
+        // accumulate all the points on one side of the stix
+        // When the floodfill algorithm finds a qix however the linkedlist is
+        // set to null
         resetAreas();
         resetBorders();
-
-        //Initialize the set which contains the visited points for the floodfill algorithm
+        // Initialize the set which contains the visited points for the
+        // floodfill algorithm
         visited = new HashSet<Point>();
-
         checkDirections(qixCoordinates, start, dir);
-
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
         updateScoreCounter(fastArea);
-
+        if (fastArea) {
+            LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
+        } else {
+            LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size(), this.getClass());
+        }
         //Update the grid with the newly created area
         for (Point current : newArea) {
             if (fastArea) {
@@ -124,14 +130,11 @@ public class AreaTracker {
                 boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW;
             }
         }
-
         //Update the grid with the new inner borders
         for (Point current : newBorder) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
         }
-
         resetAreaTracker();
-
         emptyStix();
     }
 
@@ -183,7 +186,7 @@ public class AreaTracker {
         if (area1 == null) {
             newArea = area2;
             newBorder = border2;
-        } else if (area2 == null) {
+        } else {
             newArea = area1;
             newBorder = border1;
         }
@@ -210,19 +213,21 @@ public class AreaTracker {
         }
     }
 
-
     /**
-     * Start the floodFill algorithm.
+     * The method which starts the recursive floodfill method
+     * Floodfill algorithm accomodated to work for qix for more info on how floodfill algorithm works
+     * please visit: https://en.wikipedia.org/wiki/Flood_fill.
      *
-     * @param pointToCheck  point to check
-     * @param qixCoorinates qix coordinates
-     * @param chosenState   current areaState
-     * @param addToArea1    whether to add to area1
+     * @param pointToCheck   The first point to begin checking if it has to be added to area/border
+     *                       or if the qix is on that pint.
+     * @param qixCoordinates The coordinates of the qix.
+     * @param chosenState    The state of points which get added to the new area.
+     * @param addToArea1     Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
      */
-    public void floodFill(Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
+    public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState, boolean addToArea1) {
         visiting.push(pointToCheck);
         while (!visiting.isEmpty()) {
-            floodFill(qixCoorinates, chosenState, addToArea1);
+            floodFill(qixCoordinates, chosenState, addToArea1);
         }
     }
 
@@ -246,30 +251,25 @@ public class AreaTracker {
             return;
         }
         // Check if the current point on the grid is the chosen beginstate
-        try {
-            if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == chosenState) {
-                // Check if that point is the coordinate of the qix
-                if (pointToCheck.equals(qixCoorinates)) {
-                    hitQix(addToArea1);
-                } else {
-                    // If that point was not the coordinate of the qix,
-                    // add that point to the right temporary area tracker
-                    addPointToAreaTracker(addToArea1, pointToCheck);
-                }
-            } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.OUTERBORDER
-                    && !stix.contains(pointToCheck)) {
-                if (addToArea1) {
-                    border1.add(pointToCheck);
-                } else {
-                    border2.add(pointToCheck);
-                }
-                visited.add(pointToCheck);
-            } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.INNERBORDER) {
-                visited.add(pointToCheck);
+        if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == chosenState) {
+            // Check if that point is the coordinate of the qix
+            if (pointToCheck.equals(qixCoorinates)) {
+                hitQix(addToArea1);
+            } else {
+                // If that point was not the coordinate of the qix,
+                // add that point to the right temporary area tracker
+                addPointToAreaTracker(addToArea1, pointToCheck);
             }
-        } catch (ArrayIndexOutOfBoundsException exception) {
-            System.out.println("Floodfill {X: " + pointToCheck.getX() + " Y: " + pointToCheck.getY() + "}");
-            printBoardGrid();
+        } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.OUTERBORDER
+                && !stix.contains(pointToCheck)) {
+            if (addToArea1) {
+                border1.add(pointToCheck);
+            } else {
+                border2.add(pointToCheck);
+            }
+            visited.add(pointToCheck);
+        } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.INNERBORDER) {
+            visited.add(pointToCheck);
         }
 
     }

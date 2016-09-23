@@ -1,8 +1,5 @@
 package nl.tudelft.sem.group2.scenes;
 
-import java.awt.Point;
-import java.awt.Polygon;
-import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -16,6 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -25,27 +24,13 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Unit;
 
+import java.awt.Point;
+import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
-import static nl.tudelft.sem.group2.global.Globals.BORDER_BOTTOM_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BORDER_BOTTOM_POSITION_Y;
-import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_X;
-import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_Y;
-import static nl.tudelft.sem.group2.global.Globals.FUSE_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.FUSE_WIDTH;
-import static nl.tudelft.sem.group2.global.Globals.GAMEOVER_POSITION_X;
-import static nl.tudelft.sem.group2.global.Globals.GAMEWON_POSITION_X;
-import static nl.tudelft.sem.group2.global.Globals.GAME_OFFSET_X;
-import static nl.tudelft.sem.group2.global.Globals.GAME_OFFSET_Y;
-import static nl.tudelft.sem.group2.global.Globals.GAME_OVER_SOUND_VOLUME;
-import static nl.tudelft.sem.group2.global.Globals.GAME_START_SOUND_VOLUME;
-import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
-import static nl.tudelft.sem.group2.global.Globals.MESSAGEBOX_POSITION_X;
-import static nl.tudelft.sem.group2.global.Globals.MESSAGEBOX_POSITION_Y;
-import static nl.tudelft.sem.group2.global.Globals.SCORESCENE_POSITION_Y;
-import static nl.tudelft.sem.group2.global.Globals.SUCCESS_SOUND_VOLUME;
+import nl.tudelft.sem.group2.global.Globals;
 
 /**
  * GameScene contains all the information about the current game.
@@ -64,6 +49,7 @@ public class GameScene extends Scene {
     private boolean isRunning = false;
     private Qix qix;
     private ScoreScene scoreScene;
+    private static final Logger LOGGER = LaunchApp.getLogger();
 
     // TODO implement life system
     // private int lifes;
@@ -77,11 +63,11 @@ public class GameScene extends Scene {
      */
     public GameScene(final Group root, Color color) {
         super(root, color);
-        Canvas canvas = new Canvas(BOARD_WIDTH + 2 * BOARD_MARGIN, BOARD_HEIGHT + 2 * BOARD_MARGIN);
-        canvas.setLayoutX(GAME_OFFSET_X);
-        canvas.setLayoutY(GAME_OFFSET_Y);
+        Canvas canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN, Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
+        canvas.setLayoutX(Globals.GAME_OFFSET_X);
+        canvas.setLayoutY(Globals.GAME_OFFSET_Y);
         areaTracker = new AreaTracker();
-        cursor = new Cursor(CURSOR_START_X, CURSOR_START_Y, BOARD_MARGIN * 2, BOARD_MARGIN * 2);
+        cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2);
         board = new Board(canvas);
 
         scoreCounter = new ScoreCounter();
@@ -93,8 +79,8 @@ public class GameScene extends Scene {
 
         qix = new Qix();
         // Hacky way to create black bottom border
-        Canvas bottomBorder = new Canvas(BOARD_WIDTH, BORDER_BOTTOM_HEIGHT);
-        bottomBorder.setLayoutY(BORDER_BOTTOM_POSITION_Y);
+        Canvas bottomBorder = new Canvas(Globals.BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
+        bottomBorder.setLayoutY(Globals.BORDER_BOTTOM_POSITION_Y);
         board.addUnit(cursor);
         board.addUnit(qix);
         areaTracker = new AreaTracker();
@@ -114,13 +100,6 @@ public class GameScene extends Scene {
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
         createAnimationTimer();
-    }
-
-    /**
-     * Start animations.
-     */
-    public static void animationTimerStart() {
-        animationTimer.start();
     }
 
     /**
@@ -146,35 +125,10 @@ public class GameScene extends Scene {
         return cursor;
     }
 
-    /**
-     * Play a game over sound.
-     * show game over text,
-     * stop the animations.
-     */
-    public static void gameOver() {
-        // TODO add code for gameover
-        animationTimerStop();
-        messageBox.setLayoutX(GAMEOVER_POSITION_X);
-        messageLabel.setText(" Game Over! ");
-
-        //Plays game over sound
-        playSound("/sounds/Qix_Death.mp3", GAME_OVER_SOUND_VOLUME);
-    }
-
-    /**
-     * TODO Play the game won sound.
-     * stop the animations,
-     * show that the player has won
-     */
-    public static void gameWon() {
-        animationTimerStop();
-        messageBox.setLayoutX(GAMEWON_POSITION_X);
-        messageLabel.setText(" You Won! ");
-    }
 
     private void createScoreScene() {
         Group group = new Group();
-        scoreScene = new ScoreScene(group, GAME_WIDTH, SCORESCENE_POSITION_Y);
+        scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
 
         // TODO shift this to a game class and save/load score
         scoreScene.setScore(0);
@@ -182,8 +136,8 @@ public class GameScene extends Scene {
     }
 
     private void addSparx() {
-        Sparx sparxRight = new Sparx(CURSOR_START_X, 0, BOARD_MARGIN * 2, BOARD_MARGIN * 2, SparxDirection.RIGHT);
-        Sparx sparxLeft = new Sparx(CURSOR_START_X, 0, BOARD_MARGIN * 2, BOARD_MARGIN * 2, SparxDirection.LEFT);
+        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
+        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, SparxDirection.LEFT);
         board.addUnit(sparxRight);
         board.addUnit(sparxLeft);
     }
@@ -193,8 +147,8 @@ public class GameScene extends Scene {
         messageBox.setAlignment(Pos.CENTER);
         messageBox.getChildren().add(messageLabel);
         messageBox.setStyle("-fx-background-color: #000000;");
-        messageBox.setLayoutX(MESSAGEBOX_POSITION_X);
-        messageBox.setLayoutY(MESSAGEBOX_POSITION_Y);
+        messageBox.setLayoutX(Globals.MESSAGEBOX_POSITION_X);
+        messageBox.setLayoutY(Globals.MESSAGEBOX_POSITION_Y);
         messageLabel.setStyle("-fx-font-size: 24px;");
         messageLabel.setTextFill(Color.YELLOW);
     }
@@ -210,8 +164,9 @@ public class GameScene extends Scene {
             public void handle(KeyEvent e) {
                 if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
                     // TODO remove this start and start using game
-                    playSound("/sounds/Qix_NewLife.mp3", GAME_START_SOUND_VOLUME);
+                    playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
                     animationTimer.start();
+                    LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
                     isRunning = true;
                     messageLabel.setText("");
                 } else if (arrowKeys.contains(e.getCode())) {
@@ -251,8 +206,8 @@ public class GameScene extends Scene {
                             board.addUnit(
                                     new Fuse((int) areaTracker.getStix().getFirst().getX(),
                                             (int) areaTracker.getStix().getFirst().getY(),
-                                            FUSE_WIDTH,
-                                            FUSE_HEIGHT));
+                                            Globals.FUSE_WIDTH,
+                                            Globals.FUSE_HEIGHT));
                         }
                     }
                     cursor.setCurrentMove(null);
@@ -300,9 +255,40 @@ public class GameScene extends Scene {
         Polygon qixP = qix.toPolygon();
         for (Point point : areaTracker.getStix()) {
             if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
+                LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
+                        + "," + point.getY() + ")", this.getClass());
                 gameOver();
             }
         }
+    }
+
+    /**
+     * Play a game over sound.
+     * show game over text,
+     * stop the animations.
+     */
+    public static void gameOver() {
+        // TODO add code for gameover
+        animationTimerStop();
+        messageBox.setLayoutX(Globals.GAMEOVER_POSITION_X);
+        messageLabel.setText(" Game Over! ");
+
+        //Plays game over sound
+        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+                + scoreCounter.getTotalScore(), GameScene.class);
+    }
+
+    /**
+     * TODO Play the game won sound.
+     * stop the animations,
+     * show that the player has won
+     */
+    public static void gameWon() {
+        animationTimerStop();
+        messageBox.setLayoutX(Globals.GAMEWON_POSITION_X);
+        messageLabel.setText(" You Won! ");
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
     /**
@@ -314,7 +300,7 @@ public class GameScene extends Scene {
 
         if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
                 && !areaTracker.getStix().isEmpty()) {
-            playSound("/sounds/Qix_Success.mp3", SUCCESS_SOUND_VOLUME);
+            playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());
             //Remove the Fuse from the board when completing an area

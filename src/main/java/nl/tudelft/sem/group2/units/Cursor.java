@@ -1,12 +1,16 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.LinkedList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
+
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
@@ -16,15 +20,16 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  * A cursor which can travel over lines and is controlled by user input (arrow keys).
  */
 public class Cursor extends LineTraveller {
-    private final int animationSpeed = 30;
+    private static final Logger LOGGER = LaunchApp.getLogger();
     private KeyCode currentMove = null;
+    private final int animationSpeed = 30;
     private int loops = 0;
     private int speed = 2;
     private LinkedList<double[][]> oldLines = new LinkedList<double[][]>();
-    //todo set stix to false when implementation is done
-    private boolean stix = true;
+    //TODO set stix to false when implementation is done
     private boolean isDrawing = false;
     private boolean isFast = true;
+
 
     /**
      * Create a cursor.
@@ -76,73 +81,84 @@ public class Cursor extends LineTraveller {
     private void moveLeft() {
         if (uncoveredOn(getX() - 1, getY()) && isDrawing) {
             if (!getAreaTracker().getStix().contains(new Point(getX() - 1, getY()))
-                    && !getAreaTracker().getStix().contains(new Point(getX() - 2, getY()))) {
-                if (getAreaTracker().getBoardGrid()[getX() - 1][getY() - 1].equals(AreaState.UNCOVERED)
-                        && getAreaTracker().getBoardGrid()[getX() - 1][getY() + 1].equals(AreaState.UNCOVERED)) {
+                    && !getAreaTracker().getStix().contains(new Point(getX() - 2, getY()))
+                    && getAreaTracker().getBoardGrid()[getX() - 1][getY() - 1].equals(AreaState.UNCOVERED)
+                    && getAreaTracker().getBoardGrid()[getX() - 1][getY() + 1].equals(AreaState.UNCOVERED)) {
 
                     if (outerBorderOn(getX(), getY())) {
                         getAreaTracker().addToStix(new Point(getX(), getY()));
                     }
                     setX(getX() - 1);
+                    logCurrentMove();
                     getAreaTracker().addToStix(new Point(getX(), getY()));
-                }
+
             }
         } else if (outerBorderOn(getX() - 1, getY())) {
             setX(getX() - 1);
+            logCurrentMove();
         }
     }
 
     private void moveRight() {
         if (uncoveredOn(getX() + 1, getY()) && isDrawing) {
             if (!getAreaTracker().getStix().contains(new Point(getX() + 1, getY()))
-                    && !getAreaTracker().getStix().contains(new Point(getX() + 2, getY()))) {
-                if (getAreaTracker().getBoardGrid()[getX() + 1][getY() - 1].equals(AreaState.UNCOVERED)
-                        && getAreaTracker().getBoardGrid()[getX() + 1][getY() + 1].equals(AreaState.UNCOVERED)) {
+                    && !getAreaTracker().getStix().contains(new Point(getX() + 2, getY()))
+                    && getAreaTracker().getBoardGrid()[getX() + 1][getY() - 1].equals(AreaState.UNCOVERED)
+                    && getAreaTracker().getBoardGrid()[getX() + 1][getY() + 1].equals(AreaState.UNCOVERED)) {
+
                     if (outerBorderOn(getX(), getY())) {
                         getAreaTracker().addToStix(new Point(getX(), getY()));
                     }
                     setX(getX() + 1);
+                    logCurrentMove();
                     getAreaTracker().addToStix(new Point(getX(), getY()));
-                }
+
             }
         } else if (outerBorderOn(getX() + 1, getY())) {
             setX(getX() + 1);
+            logCurrentMove();
         }
     }
 
     private void moveDown() {
         if (uncoveredOn(getX(), getY() + 1) && isDrawing) {
             if (!getAreaTracker().getStix().contains(new Point(getX(), getY() + 1))
-                    && !getAreaTracker().getStix().contains(new Point(getX(), getY() + 2))) {
-                if (getAreaTracker().getBoardGrid()[getX() + 1][getY() + 1].equals(AreaState.UNCOVERED)
-                        && getAreaTracker().getBoardGrid()[getX() - 1][getY() + 1].equals(AreaState.UNCOVERED)) {
+                    && !getAreaTracker().getStix().contains(new Point(getX(), getY() + 2))
+                    && getAreaTracker().getBoardGrid()[getX() + 1][getY() + 1].equals(AreaState.UNCOVERED)
+                    && getAreaTracker().getBoardGrid()[getX() - 1][getY() + 1].equals(AreaState.UNCOVERED)) {
+
                     if (outerBorderOn(getX(), getY())) {
                         getAreaTracker().addToStix(new Point(getX(), getY()));
                     }
                     setY(getY() + 1);
+                    logCurrentMove();
                     getAreaTracker().addToStix(new Point(getX(), getY()));
-                }
+
             }
         } else if (outerBorderOn(getX(), getY() + 1)) {
             setY(getY() + 1);
+            logCurrentMove();
         }
     }
 
     private void moveUp() {
         if (uncoveredOn(getX(), getY() - 1) && isDrawing) {
             if (!getAreaTracker().getStix().contains(new Point(getX(), getY() - 1))
-                    && !getAreaTracker().getStix().contains(new Point(getX(), getY() - 2))) {
-                if (getAreaTracker().getBoardGrid()[getX() + 1][getY() - 1].equals(AreaState.UNCOVERED)
-                        && getAreaTracker().getBoardGrid()[getX() - 1][getY() - 1].equals(AreaState.UNCOVERED)) {
+                    && !getAreaTracker().getStix().contains(new Point(getX(), getY() - 2))
+                    && getAreaTracker().getBoardGrid()[getX() + 1][getY() - 1].equals(AreaState.UNCOVERED)
+                    && getAreaTracker().getBoardGrid()[getX() - 1][getY() - 1].equals(AreaState.UNCOVERED)) {
+
                     if (outerBorderOn(getX(), getY())) {
                         getAreaTracker().addToStix(new Point(getX(), getY()));
                     }
                     setY(getY() - 1);
+                    logCurrentMove();
                     getAreaTracker().addToStix(new Point(getX(), getY()));
-                }
+
             }
         } else if (outerBorderOn(getX(), getY() - 1)) {
             setY(getY() - 1);
+            logCurrentMove();
         }
     }
 
@@ -252,5 +268,13 @@ public class Cursor extends LineTraveller {
      */
     public void setFast(boolean isFast) {
         this.isFast = isFast;
+    }
+
+    /**
+     * Method which log the current movement of the cursor.
+     * Only gets executed when log level is on detailledLogging.
+     */
+    private void logCurrentMove() {
+        LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
     }
 }
