@@ -95,36 +95,36 @@ public abstract class Unit {
             Qix qix = (Qix) this;
             Polygon colliderP = qix.toPolygon();
 
-			// subtract one from width&height to make collisions look more real
-			Rectangle collideeR = new Rectangle(collidee.getX(),
-					collidee.getY(), collidee.getWidth() / 2 - 1,
-					collidee.getHeight() / 2 - 1);
-			if (colliderP.intersects(collideeR)) {
-				LOGGER.log(Level.INFO, this.toString() + " collided with "
-						+ collidee.toString() + " at (" + this.getX()
-						+ "," + this.getY() + ")", this.getClass());
-				return true;
-			} else {
-				return false;
-			}
-		}
+            // subtract one from width&height to make collisions look more real
+            Rectangle collideeR = new Rectangle(collidee.getX(),
+                    collidee.getY(), collidee.getWidth() / 2 - 1,
+                    collidee.getHeight() / 2 - 1);
+            if (colliderP.intersects(collideeR)) {
+                LOGGER.log(Level.INFO, this.toString() + " collided with "
+                        + collidee.toString() + " at (" + this.getX()
+                        + "," + this.getY() + ")", this.getClass());
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         if (collidee instanceof Qix) {
             Qix qix = (Qix) collidee;
             Polygon collideeP = qix.toPolygon();
 
-			// subtract one from width&height to make collisions look more real
-			Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
-					this.getWidth() / 2 - 1, this.getHeight() / 2 - 1);
-			if (collideeP.intersects(colliderR)) {
-				LOGGER.log(Level.INFO, this.toString() + " collided with "
-						+ collidee.toString() + " at (" + this.getX()
-						+ "," + this.getY() + ")", this.getClass());
-				return true;
-			} else {
-				return false;
-			}
-		}
+            // subtract one from width&height to make collisions look more real
+            Rectangle colliderR = new Rectangle(this.getX(), this.getY(),
+                    this.getWidth() / 2 - 1, this.getHeight() / 2 - 1);
+            if (collideeP.intersects(colliderR)) {
+                LOGGER.log(Level.INFO, this.toString() + " collided with "
+                        + collidee.toString() + " at (" + this.getX()
+                        + "," + this.getY() + ")", this.getClass());
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         Rectangle colliderR = new Rectangle(this.getX(), this.getY(), 2, 2);
         // subtract one from width&height to make collisions look more real

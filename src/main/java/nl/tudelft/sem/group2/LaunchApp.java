@@ -26,11 +26,10 @@ public class LaunchApp extends Application {
     private static MediaView mediaView;
 
 
-
     private static final Logger LOGGER = new Logger();
 
-    public static Logger getLogger(){
-    	return LOGGER;
+    public static Logger getLogger() {
+        return LOGGER;
     }
 
     /**
@@ -121,14 +120,15 @@ public class LaunchApp extends Application {
 
     /**
      * Launches the application.
+     *
      * @param args - not used
      */
     public static void main(String[] args) {
-    	if(args.length > 0 && args[0].equals("detailedLogging")){
-    		LOGGER.setLevel(Level.ALL);
-    	} else if (args.length > 0 && args[0].equals("loggingOff")){
-    		LOGGER.setLevel(Level.OFF);
-    	}
+        if (args.length > 0 && args[0].equals("detailedLogging")) {
+            LOGGER.setLevel(Level.ALL);
+        } else if (args.length > 0 && args[0].equals("loggingOff")) {
+            LOGGER.setLevel(Level.OFF);
+        }
         launch(args);
     }
 }

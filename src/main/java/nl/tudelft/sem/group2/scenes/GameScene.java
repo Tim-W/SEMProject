@@ -11,17 +11,45 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.*;
+import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.*;
+import nl.tudelft.sem.group2.units.Fuse;
+import nl.tudelft.sem.group2.units.Qix;
+import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.SparxDirection;
+import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
-import static nl.tudelft.sem.group2.global.Globals.*;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.BORDER_BOTTOM_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BORDER_BOTTOM_POSITION_Y;
+import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_X;
+import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_Y;
+import static nl.tudelft.sem.group2.global.Globals.FUSE_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.FUSE_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GAMEOVER_POSITION_X;
+import static nl.tudelft.sem.group2.global.Globals.GAMEWON_POSITION_X;
+import static nl.tudelft.sem.group2.global.Globals.GAME_OFFSET_X;
+import static nl.tudelft.sem.group2.global.Globals.GAME_OFFSET_Y;
+import static nl.tudelft.sem.group2.global.Globals.GAME_OVER_SOUND_VOLUME;
+import static nl.tudelft.sem.group2.global.Globals.GAME_START_SOUND_VOLUME;
+import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.MESSAGEBOX_POSITION_X;
+import static nl.tudelft.sem.group2.global.Globals.MESSAGEBOX_POSITION_Y;
+import static nl.tudelft.sem.group2.global.Globals.SCORESCENE_POSITION_Y;
+import static nl.tudelft.sem.group2.global.Globals.SUCCESS_SOUND_VOLUME;
 
 /**
  * GameScene contains all the information about the current game.
@@ -40,7 +68,7 @@ public class GameScene extends Scene {
     private boolean isRunning = false;
     private Qix qix;
     private ScoreScene scoreScene;
-	private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = LaunchApp.getLogger();
 
     // TODO implement life system
     // private int lifes;
@@ -153,7 +181,7 @@ public class GameScene extends Scene {
                     // TODO remove this start and start using game
                     playSound("/sounds/Qix_NewLife.mp3", GAME_START_SOUND_VOLUME);
                     animationTimer.start();
-					LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
+                    LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
                     isRunning = true;
                     messageLabel.setText("");
                 } else if (arrowKeys.contains(e.getCode())) {
@@ -254,28 +282,28 @@ public class GameScene extends Scene {
      * show game over text,
      * stop the animations.
      */
-	public static void gameOver() {
-		// TODO add code for gameover
-		animationTimerStop();
-		messageBox.setLayoutX(GAMEOVER_POSITION_X);
-		messageLabel.setText(" Game Over! ");
+    public static void gameOver() {
+        // TODO add code for gameover
+        animationTimerStop();
+        messageBox.setLayoutX(GAMEOVER_POSITION_X);
+        messageLabel.setText(" Game Over! ");
 
-		//Plays game over sound
-		playSound("/sounds/Qix_Death.mp3", GAME_OVER_SOUND_VOLUME);
-		LOGGER.log(Level.INFO, "Game Over, player died with a score of " + scoreCounter.getTotalScore(), GameScene.class);
-	}
+        //Plays game over sound
+        playSound("/sounds/Qix_Death.mp3", GAME_OVER_SOUND_VOLUME);
+        LOGGER.log(Level.INFO, "Game Over, player died with a score of " + scoreCounter.getTotalScore(), GameScene.class);
+    }
 
     /**
      * TODO Play the game won sound.
      * stop the animations,
      * show that the player has won
      */
-	public static void gameWon() {
-		animationTimerStop();
-		messageBox.setLayoutX(GAMEWON_POSITION_X);
-		messageLabel.setText(" You Won! ");
-		LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
-	}
+    public static void gameWon() {
+        animationTimerStop();
+        messageBox.setLayoutX(GAMEWON_POSITION_X);
+        messageLabel.setText(" You Won! ");
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
+    }
 
     /**
      * When a new area is completed, calculate the new score.

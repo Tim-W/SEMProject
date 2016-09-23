@@ -14,8 +14,8 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  * When a Sparx collides with a cursor, the game ends.
  */
 public class Sparx extends LineTraveller {
-	private static final Logger LOGGER = LaunchApp.getLogger();
-	private final SparxDirection sparxDirection;
+    private static final Logger LOGGER = LaunchApp.getLogger();
+    private final SparxDirection sparxDirection;
     private int speed = 2;
     private int lastX = 0;
     private int lastY = 0;
@@ -127,7 +127,7 @@ public class Sparx extends LineTraveller {
         return "Sparx";
     }
 
-	public void logCurrentMove(){
+    public void logCurrentMove() {
         LOGGER.log(Level.FINE, "Sparx moved to (" + getX() + "," + getY() + ")", this.getClass());
-	}
+    }
 }
