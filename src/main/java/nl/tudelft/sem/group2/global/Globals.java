@@ -32,8 +32,6 @@ public final class Globals {
     public static final int FAST_AREA_MULTIPLIER = 10000;
     public static final int SLOW_AREA_MULTIPLIER = 20000;
 
-
     private Globals() {
-
     }
 }
