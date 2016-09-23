@@ -83,7 +83,7 @@ public class Qix extends Unit {
     }
 
     /**
-     * create random direction for the qix
+     * create random direction for the qix.
      */
     private void changeDirection() {
         float length;
@@ -207,6 +207,10 @@ public class Qix extends Unit {
         return oldDirections;
     }
 
+    /**
+     * Method which logs the current movement of the qix.
+     * Only gets executed when log level is on detailledLogging.
+     */
     public void logCurrentMove() {
         LOGGER.log(Level.FINE, "Qix moved to (" + getX() + "," + getY() + ")", this.getClass());
     }

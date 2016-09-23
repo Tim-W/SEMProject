@@ -93,43 +93,35 @@ public class AreaTracker {
     }
 
     /**
-     * Method that updates the grid when a stix is completed
+     * Method that updates the grid when a stix is completed.
      *
      * @param qixCoordinates current qix coordinates
      * @param fastArea       tells if stix was created fast or slow (double points if slow)
      */
     public void calculateNewArea(Point qixCoordinates, boolean fastArea) {
-
         setOuterBorders();
-
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm
         Point start = stix.getFirst();
         Point dir = stix.get(1);
-
         // Instantiate the two temporary area trackers, these linkedlists
         // accumulate all the points on one side of the stix
         // When the floodfill algorithm finds a qix however the linkedlist is
         // set to null
         resetAreas();
         resetBorders();
-
         // Initialize the set which contains the visited points for the
         // floodfill algorithm
         visited = new HashSet<Point>();
-
         checkDirections(qixCoordinates, start, dir);
-
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
         updateScoreCounter(fastArea);
-
         if (fastArea) {
             LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {
             LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size(), this.getClass());
         }
-
         //Update the grid with the newly created area
         for (Point current : newArea) {
             if (fastArea) {
@@ -138,14 +130,11 @@ public class AreaTracker {
                 boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW;
             }
         }
-
         //Update the grid with the new inner borders
         for (Point current : newBorder) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
         }
-
         resetAreaTracker();
-
         emptyStix();
     }
 
@@ -224,10 +213,20 @@ public class AreaTracker {
         }
     }
 
-    public void floodFill(Point pointToCheck, Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
+    /**
+     * The method which starts the recursive floodfill method
+     * Floodfill algorithm accomodated to work for qix for more info on how floodfill algorithm works
+     *      please visit: https://en.wikipedia.org/wiki/Flood_fill.
+     * @param pointToCheck The first point to begin checking if it has to be added to area/border
+     *                     or if the qix is on that pint.
+     * @param qixCoordinates The coordinates of the qix.
+     * @param chosenState The state of points which get added to the new area.
+     * @param addToArea1 Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
+     */
+    public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState, boolean addToArea1) {
         visiting.push(pointToCheck);
         while (!visiting.isEmpty()) {
-            floodFill(qixCoorinates, chosenState, addToArea1);
+            floodFill(qixCoordinates, chosenState, addToArea1);
         }
     }
 
@@ -312,7 +311,7 @@ public class AreaTracker {
     }
 
     /**
-     * Method that adds a point to the current stix
+     * Method that adds a point to the current stix.
      *
      * @param coordinates point that gets added to the stix
      */
@@ -321,7 +320,7 @@ public class AreaTracker {
     }
 
     /**
-     * Getter for the stix
+     * Getter for the stix.
      *
      * @return the current stix
      */
@@ -330,7 +329,7 @@ public class AreaTracker {
     }
 
     /**
-     * Getter for the boardGrid
+     * Getter for the boardGrid.
      *
      * @return the boardGrid
      */
@@ -359,6 +358,8 @@ public class AreaTracker {
                         break;
                     case SLOW:
                         System.out.print("[S]");
+                        break;
+                    default:
                         break;
                 }
             }

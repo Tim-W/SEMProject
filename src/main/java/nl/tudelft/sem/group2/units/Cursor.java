@@ -269,6 +269,10 @@ public class Cursor extends LineTraveller {
         this.isFast = isFast;
     }
 
+    /**
+     * Method which log the current movement of the cursor.
+     * Only gets executed when log level is on detailledLogging.
+     */
     public void logCurrentMove() {
         LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
     }

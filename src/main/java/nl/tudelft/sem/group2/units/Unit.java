@@ -100,15 +100,11 @@ public abstract class Unit {
                     collidee.getY(), collidee.getWidth() / 2 - 1,
                     collidee.getHeight() / 2 - 1);
             if (colliderP.intersects(collideeR)) {
-                LOGGER.log(Level.INFO, this.toString() + " collided with "
-                        + collidee.toString() + " at (" + this.getX()
-                        + "," + this.getY() + ")", this.getClass());
-                return true;
-            } else {
-                return false;
+                LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
+                        + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
             }
+            return colliderP.intersects(collideeR);
         }
-
         if (collidee instanceof Qix) {
             Qix qix = (Qix) collidee;
             Polygon collideeP = qix.toPolygon();
@@ -120,19 +116,15 @@ public abstract class Unit {
                 LOGGER.log(Level.INFO, this.toString() + " collided with "
                         + collidee.toString() + " at (" + this.getX()
                         + "," + this.getY() + ")", this.getClass());
-                return true;
-            } else {
-                return false;
             }
+            return collideeP.intersects(colliderR);
         }
-
         Rectangle colliderR = new Rectangle(this.getX(), this.getY(), 2, 2);
         // subtract one from width&height to make collisions look more real
         Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(),
                 2, 2);
         if (colliderR.intersects(collideeR)) {
-            LOGGER.log(Level.INFO, this.toString() + " collided with "
-                    + collidee.toString() + " at (" + this.getX()
+            LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
                     + "," + this.getY() + ")", this.getClass());
         }
         return colliderR.intersects(collideeR);
