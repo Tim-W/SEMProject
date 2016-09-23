@@ -1,41 +1,53 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.scenes.GameScene;
-
-import java.awt.*;
 import java.util.logging.Level;
 
+/**
+ * An object that can be moved an drawn on a 2D grid.
+ * Supports intersection checking between two units.
+ */
 public abstract class Unit {
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
-    protected AreaTracker areaTracker;
-	private static final Logger LOGGER = LaunchApp.getLogger();
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+    private AreaTracker areaTracker;
+    private static final Logger LOGGER = LaunchApp.getLogger();
 
+    /**
+     * Create a Unit at (x,y) position.
+     *
+     * @param x x coord
+     * @param y y coord
+     */
     Unit(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.width = 1;
-        this.height = 1;
-        this.areaTracker = GameScene.getAreaTracker();
-		LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
+        this.setX(x);
+        this.setY(y);
+        this.setWidth(1);
+        this.setHeight(1);
+        this.setAreaTracker(GameScene.getAreaTracker());
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 
-    Unit(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.areaTracker = GameScene.getAreaTracker();
-    }
-
+    /**
+     * Every frame, this method should be called.
+     * The x and y coordinates may be changed using setX, setY,
+     * after which the unit can take another position on the screen.
+     */
     public abstract void move();
 
+    /**
+     * Every frame, this method should be called.
+     * It should draw a sprite or a list of sprites on a canvas.
+     * @param canvas the canvas to draw on
+     */
     public abstract void draw(Canvas canvas);
 
     public int getX() {
@@ -70,6 +82,11 @@ public abstract class Unit {
         this.height = height;
     }
 
+    /**
+     * Check for intersection between current unit and another unit.
+     * @param collidee the other unit
+     * @return true if the collidee is on the same (x,y) coordinate as the current unit
+     */
     public boolean intersect(Unit collidee) {
         if (this instanceof Qix) {
             Qix qix = (Qix) this;
@@ -106,17 +123,23 @@ public abstract class Unit {
 			}
 		}
 
-		Rectangle colliderR = new Rectangle(this.getX(), this.getY(), 2, 2);
-		// subtract one from width&height to make collisions look more real
-		Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(),
-				2, 2);
-		if (colliderR.intersects(collideeR)) {
-			LOGGER.log(Level.INFO, this.toString() + " collided with "
-					+ collidee.toString() + " at (" + this.getX()
-					+ "," + this.getY() + ")", this.getClass());
-			return true;
-		} else {
-			return false;
-		}
-	}
+        Rectangle colliderR = new Rectangle(this.getX(), this.getY(), 2, 2);
+        // subtract one from width&height to make collisions look more real
+        Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(),
+                2, 2);
+        if (colliderR.intersects(collideeR)) {
+            LOGGER.log(Level.INFO, this.toString() + " collided with "
+                    + collidee.toString() + " at (" + this.getX()
+                    + "," + this.getY() + ")", this.getClass());
+        }
+        return colliderR.intersects(collideeR);
+    }
+
+    public AreaTracker getAreaTracker() {
+        return areaTracker;
+    }
+
+    public void setAreaTracker(AreaTracker areaTracker) {
+        this.areaTracker = areaTracker;
+    }
 }

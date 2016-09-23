@@ -12,14 +12,20 @@ import nl.tudelft.sem.group2.scenes.GameScene;
 
 import java.util.logging.Level;
 
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GAME_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
+
+/**
+ * Starts the application.
+ */
 public class LaunchApp extends Application {
 
-    public static Stage stage;
-    public static MediaView mediaView;
-    private static int boardWidth = 300;
-    private static int boardHeight = 300;
+    private static Stage stage;
+    private static MediaView mediaView;
 
-    //private static final Logger LOGGER = Logger.getLogger(LaunchApp.class.getName());
+
 
     private static final Logger LOGGER = new Logger();
 
@@ -27,23 +33,43 @@ public class LaunchApp extends Application {
     	return LOGGER;
     }
 
+    /**
+     * @return board width
+     */
     public static int getBoardWidth() {
-        return boardWidth;
+        return BOARD_WIDTH;
     }
 
+    /**
+     * @return board height
+     */
     public static int getBoardHeight() {
-        return boardHeight;
+        return BOARD_HEIGHT;
     }
 
-    // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
+    /**
+     * @return grid height - a point on the boardgrid is 2x2 pixels,
+     * so a boardgrid contains 150x150
+     */
     public static int getGridHeight() {
-        return boardHeight / 2;
+        // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
+        return BOARD_HEIGHT / 2;
     }
 
+    /**
+     * @return grid width - a point on the boardgrid is 2x2 pixels,
+     * so a boardgrid contains 150x150
+     */
     public static int getGridWidth() {
-        return boardWidth / 2;
+        return BOARD_WIDTH / 2;
     }
 
+    /**
+     * Plays a sound file.
+     *
+     * @param string - the path to the sound file
+     * @param volume - the volume in decibels
+     */
     public static synchronized void playSound(final String string, final double volume) {
         new Thread(new Runnable() {
             // The wrapper thread is unnecessary, unless it blocks on the
@@ -70,8 +96,8 @@ public class LaunchApp extends Application {
 
         // Start stage
         stage.setTitle("Qix");
-        stage.setWidth(340);
-        stage.setHeight(420);
+        stage.setWidth(GAME_WIDTH);
+        stage.setHeight(GAME_HEIGHT);
         stage.getIcons().add(new Image("/images/stageIcon.png"));
         LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
@@ -93,6 +119,10 @@ public class LaunchApp extends Application {
 
     }
 
+    /**
+     * Launches the application.
+     * @param args - not used
+     */
     public static void main(String[] args) {
     	if(args.length > 0 && args[0].equals("detailedLogging")){
     		LOGGER.setLevel(Level.ALL);

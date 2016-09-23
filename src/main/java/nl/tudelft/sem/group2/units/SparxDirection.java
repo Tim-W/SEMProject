@@ -1,7 +1,8 @@
 package nl.tudelft.sem.group2.units;
 
 /**
- * Created by timwissel on 14-09-16.
+ * A Sparx starts on a line, moving either east (right) or west (left)
+ * after which it keeps on moving.
  */
 public enum SparxDirection {
     LEFT,
