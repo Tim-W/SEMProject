@@ -10,6 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
+import java.util.logging.Level;
+
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.GAME_HEIGHT;
@@ -22,6 +24,14 @@ public class LaunchApp extends Application {
 
     private static Stage stage;
     private static MediaView mediaView;
+
+
+
+    private static final Logger LOGGER = new Logger();
+
+    public static Logger getLogger(){
+    	return LOGGER;
+    }
 
     /**
      * @return board width
@@ -78,17 +88,8 @@ public class LaunchApp extends Application {
         }).start();
     }
 
-    /**
-     * Launches the application.
-     * @param args - not used
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-
 
         // Init variables
         stage = primaryStage;
@@ -98,12 +99,13 @@ public class LaunchApp extends Application {
         stage.setWidth(GAME_WIDTH);
         stage.setHeight(GAME_HEIGHT);
         stage.getIcons().add(new Image("/images/stageIcon.png"));
+        LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
         GameScene scene;
         Group root = new Group();
 
         scene = new GameScene(root, Color.BLACK);
-
+        LOGGER.log(Level.INFO, "GameScene created succesfully", this.getClass());
         stage.setScene(scene);
         stage.setResizable(false);
         stage.sizeToScene();
@@ -113,6 +115,20 @@ public class LaunchApp extends Application {
         playSound("/sounds/qix.mp3", 1);
         mediaView = new MediaView();
         ((Group) scene.getRoot()).getChildren().add(mediaView);
+        LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 
+    }
+
+    /**
+     * Launches the application.
+     * @param args - not used
+     */
+    public static void main(String[] args) {
+    	if(args.length > 0 && args[0].equals("detailedLogging")){
+    		LOGGER.setLevel(Level.ALL);
+    	} else if (args.length > 0 && args[0].equals("loggingOff")){
+    		LOGGER.setLevel(Level.OFF);
+    	}
+        launch(args);
     }
 }

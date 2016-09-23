@@ -1,6 +1,10 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
+import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.Logger;
+
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -10,7 +14,8 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  * When a Sparx collides with a cursor, the game ends.
  */
 public class Sparx extends LineTraveller {
-    private final SparxDirection sparxDirection;
+	private static final Logger LOGGER = LaunchApp.getLogger();
+	private final SparxDirection sparxDirection;
     private int speed = 2;
     private int lastX = 0;
     private int lastY = 0;
@@ -121,4 +126,8 @@ public class Sparx extends LineTraveller {
     public String toString() {
         return "Sparx";
     }
+
+	public void logCurrentMove(){
+        LOGGER.log(Level.FINE, "Sparx moved to (" + getX() + "," + getY() + ")", this.getClass());
+	}
 }

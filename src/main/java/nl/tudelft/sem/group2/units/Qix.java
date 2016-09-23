@@ -31,6 +31,7 @@ public class Qix extends Unit {
     private static final int RANDOMNESSPOSITIONLENGTH = 4;
     private static final int RANDOMNESSLINELENGTH = 2;
     private static final int COLLISIONSIZE = 10;
+    private static final Logger LOGGER = LaunchApp.getLogger();
     private int animationLoops = 0;
     private float[] direction = new float[2];
     private LinkedList<float[]> oldDirections = new LinkedList<float[]>();
@@ -41,9 +42,10 @@ public class Qix extends Unit {
     /**
      * Create a new Qix.
      * Is by default placed on 30,30.
+     * last parameters are for width and height but its just set to 1
      */
     public Qix() {
-        super(QIX_START_X, QIX_START_Y);
+        super(QIX_START_X, QIX_START_Y,1,1);
     }
 
     @Override
@@ -76,6 +78,7 @@ public class Qix extends Unit {
             colorArray.removeLast();
         }
         animationLoops--;
+        logCurrentMove();
     }
     /**
         create random direction for the qix
@@ -200,4 +203,8 @@ public class Qix extends Unit {
     public LinkedList<float[]> getOldDirections() {
         return oldDirections;
     }
+
+	public void logCurrentMove(){
+        LOGGER.log(Level.FINE, "Qix moved to (" + getX() + "," + getY() + ")", this.getClass());
+	}
 }
