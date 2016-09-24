@@ -17,8 +17,8 @@ public class Sparx extends LineTraveller {
     private static final Logger LOGGER = LaunchApp.getLogger();
     private final SparxDirection sparxDirection;
     private int speed = 2;
-    private int lastX = 0;
-    private int lastY = 0;
+    private int lastX;
+    private int lastY;
 
     /**
      * Create a new Sparx with its default sprites.
@@ -32,6 +32,8 @@ public class Sparx extends LineTraveller {
      */
     public Sparx(int x, int y, int width, int height, SparxDirection sparxDirection) {
         super(x, y, width, height);
+        lastX = x;
+        lastY = y;
         Image[] sprite = new Image[2];
         sprite[0] = new Image("/images/sparx-1.png");
         sprite[1] = new Image("/images/sparx-2.png");
