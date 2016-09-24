@@ -1,6 +1,6 @@
 package nl.tudelft.sem.group2.game;
 
-import java.util.HashSet;
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.util.HashSet;
 
 /**
  * Tests the Board class.
@@ -25,6 +27,7 @@ public class BoardTest {
      */
     @Before
     public void setUp() throws Exception {
+        new JFXPanel();
         Canvas canvas = new Canvas();
         board = new Board(canvas);
     }
