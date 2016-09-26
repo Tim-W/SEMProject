@@ -200,7 +200,7 @@ public class Qix extends Unit {
     }
 
     public float[] getCoordinate() {
-        return coordinate;
+        return coordinate.clone();
     }
 
     public LinkedList<float[]> getOldDirections() {

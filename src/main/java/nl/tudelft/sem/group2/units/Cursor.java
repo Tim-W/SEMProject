@@ -22,7 +22,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 public class Cursor extends LineTraveller {
     private static final Logger LOGGER = LaunchApp.getLogger();
     private KeyCode currentMove = null;
-    private final int animationSpeed = 30;
+    private static final int ANIMATIONSPEED = 30;
     private int loops = 0;
     private int speed = 2;
     private LinkedList<double[][]> oldLines = new LinkedList<double[][]>();
@@ -182,9 +182,9 @@ public class Cursor extends LineTraveller {
         int drawX = gridToCanvas(getX());
         int drawY = gridToCanvas(getY());
         final int lineCount = 10;
-        if (loops < animationSpeed + lineCount) {
+        if (loops < ANIMATIONSPEED + lineCount) {
             calculateLineCoordinates(drawX, drawY, canvas);
-            if (oldLines.size() > lineCount || oldLines.size() > animationSpeed - loops) {
+            if (oldLines.size() > lineCount || oldLines.size() > ANIMATIONSPEED - loops) {
                 oldLines.removeLast();
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
@@ -211,13 +211,13 @@ public class Cursor extends LineTraveller {
     }
 
     private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
-        if (loops < animationSpeed) {
+        if (loops < ANIMATIONSPEED) {
             double height = canvas.getHeight();
-            double heightVar = height / animationSpeed * loops;
+            double heightVar = height / ANIMATIONSPEED * loops;
             double width = canvas.getWidth();
-            double widthVar = width / animationSpeed * loops;
+            double widthVar = width / ANIMATIONSPEED * loops;
             final double lineSize = 80.0;
-            double lineSizeVar = (lineSize / animationSpeed) * loops;
+            double lineSizeVar = (lineSize / ANIMATIONSPEED) * loops;
             double[][] line = new double[4][4];
             line[0][0] = width - widthVar + drawX - (lineSize - lineSizeVar);
             line[0][1] = -(height - heightVar) + drawY;
