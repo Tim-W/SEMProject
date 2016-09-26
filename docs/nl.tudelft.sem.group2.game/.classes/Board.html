@@ -1,0 +1,317 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Board</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">nl.tudelft.sem.group2.game</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Board (nl.tudelft.sem.group2.game)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Board</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    45,5%
+  </span>
+  <span class="absValue">
+    (5/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    24,8%
+  </span>
+  <span class="absValue">
+    (26/ 105)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package nl.tudelft.sem.group2.game;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.awt.Point;
+<i>4</i>&nbsp;import java.util.ArrayList;
+<i>5</i>&nbsp;import java.util.HashSet;
+<i>6</i>&nbsp;import java.util.Set;
+<i>7</i>&nbsp;import javafx.scene.canvas.Canvas;
+<i>8</i>&nbsp;import javafx.scene.canvas.GraphicsContext;
+<i>9</i>&nbsp;import javafx.scene.paint.Color;
+<i>10</i>&nbsp;import nl.tudelft.sem.group2.AreaState;
+<i>11</i>&nbsp;import nl.tudelft.sem.group2.AreaTracker;
+<i>12</i>&nbsp;import nl.tudelft.sem.group2.scenes.GameScene;
+<i>13</i>&nbsp;import nl.tudelft.sem.group2.units.Cursor;
+<i>14</i>&nbsp;import nl.tudelft.sem.group2.units.Fuse;
+<i>15</i>&nbsp;import nl.tudelft.sem.group2.units.Qix;
+<i>16</i>&nbsp;import nl.tudelft.sem.group2.units.Sparx;
+<i>17</i>&nbsp;import nl.tudelft.sem.group2.units.Unit;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+<i>20</i>&nbsp;import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Contains a set of all units in the current game.
+<i>24</i>&nbsp; */
+<i>25</i>&nbsp;public class Board {
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    private static final int MARGIN = 8;
+<i>28</i>&nbsp;    private Canvas canvas;
+<i>29</i>&nbsp;    private Set&lt;Unit&gt; units;
+<i>30</i>&nbsp;    private GraphicsContext gc;
+<i>31</i>&nbsp;    private AreaTracker areaTracker;
+<i>32</i>&nbsp;    private Cursor cursor;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * Draws a new board on a canvas.
+<i>36</i>&nbsp;     *
+<i>37</i>&nbsp;     * @param canvas - the canvas to draw
+<i>38</i>&nbsp;     */
+<b class="fc"><i>39</i>&nbsp;    public Board(Canvas canvas) {</b>
+<b class="fc"><i>40</i>&nbsp;        this.units = new HashSet&lt;Unit&gt;();</b>
+<b class="fc"><i>41</i>&nbsp;        this.canvas = canvas;</b>
+<b class="fc"><i>42</i>&nbsp;        gc = canvas.getGraphicsContext2D();</b>
+<i>43</i>&nbsp;        // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
+<b class="fc"><i>44</i>&nbsp;        gc.setFill(Color.BLUE);</b>
+<b class="fc"><i>45</i>&nbsp;        gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);</b>
+<b class="fc"><i>46</i>&nbsp;        this.areaTracker = GameScene.getAreaTracker();</b>
+<b class="fc"><i>47</i>&nbsp;        this.cursor = GameScene.getQixCursor();</b>
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Transforms grid to canvas coordinates.
+<i>53</i>&nbsp;     *
+<i>54</i>&nbsp;     * @param b an x or y coordinate
+<i>55</i>&nbsp;     * @return the coordinate to draw an image on
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    public static int gridToCanvas(int b) {
+<b class="fc"><i>58</i>&nbsp;        return b * 2 + MARGIN - 1;</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * @return units of the board
+<i>63</i>&nbsp;     */
+<i>64</i>&nbsp;    public Set&lt;Unit&gt; getUnits() {
+<b class="fc"><i>65</i>&nbsp;        return units;</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Add a unit.
+<i>70</i>&nbsp;     * @param unit unit to add
+<i>71</i>&nbsp;     */
+<i>72</i>&nbsp;    public void addUnit(Unit unit) {
+<b class="fc"><i>73</i>&nbsp;        if (unit instanceof Fuse) {</b>
+<b class="fc"><i>74</i>&nbsp;            for (Unit unit1 : this.units) {</b>
+<b class="fc"><i>75</i>&nbsp;                if (unit1 instanceof Fuse) {</b>
+<b class="fc"><i>76</i>&nbsp;                    return;</b>
+<i>77</i>&nbsp;                }
+<b class="fc"><i>78</i>&nbsp;            }</b>
+<i>79</i>&nbsp;        }
+<b class="fc"><i>80</i>&nbsp;        this.units.add(unit);</b>
+<b class="fc"><i>81</i>&nbsp;    }</b>
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Draw all the units on the screen.
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    public void draw() {
+<i>87</i>&nbsp;        // gc.setFill(Color.BLACK);
+<b class="nc"><i>88</i>&nbsp;        gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);</b>
+<b class="nc"><i>89</i>&nbsp;        gc.setFill(Color.WHITE);</b>
+<b class="nc"><i>90</i>&nbsp;        drawAreas();</b>
+<b class="nc"><i>91</i>&nbsp;        drawStixAndFuse();</b>
+<b class="nc"><i>92</i>&nbsp;        for (Unit unit : units) {</b>
+<b class="nc"><i>93</i>&nbsp;            unit.move();</b>
+<b class="nc"><i>94</i>&nbsp;            unit.draw(canvas);</b>
+<b class="nc"><i>95</i>&nbsp;        }</b>
+<b class="nc"><i>96</i>&nbsp;        drawFastAreas();</b>
+<b class="nc"><i>97</i>&nbsp;        drawSlowAreas();</b>
+<b class="nc"><i>98</i>&nbsp;    }</b>
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Draw the areaTracker boardGrid on the screen.
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    private void drawAreas() {
+<b class="nc"><i>104</i>&nbsp;        for (int i = 0; i &lt; areaTracker.getBoardGrid().length; i++) {</b>
+<b class="nc"><i>105</i>&nbsp;            for (int j = 0; j &lt; areaTracker.getBoardGrid()[i].length; j++) {</b>
+<b class="nc"><i>106</i>&nbsp;                if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER</b>
+<b class="nc"><i>107</i>&nbsp;                        || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {</b>
+<b class="nc"><i>108</i>&nbsp;                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);</b>
+<i>109</i>&nbsp;                }
+<i>110</i>&nbsp;            }
+<i>111</i>&nbsp;        }
+<b class="nc"><i>112</i>&nbsp;    }</b>
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    /**
+<i>115</i>&nbsp;     * Draw all fast areas on the screen.
+<i>116</i>&nbsp;     */
+<i>117</i>&nbsp;    private void drawFastAreas() {
+<b class="nc"><i>118</i>&nbsp;        gc.setFill(Color.DARKBLUE);</b>
+<b class="nc"><i>119</i>&nbsp;        for (int i = 0; i &lt; areaTracker.getBoardGrid().length; i++) {</b>
+<b class="nc"><i>120</i>&nbsp;            for (int j = 0; j &lt; areaTracker.getBoardGrid()[i].length; j++) {</b>
+<b class="nc"><i>121</i>&nbsp;                if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST) {</b>
+<b class="nc"><i>122</i>&nbsp;                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);</b>
+<i>123</i>&nbsp;                }
+<i>124</i>&nbsp;            }
+<i>125</i>&nbsp;        }
+<b class="nc"><i>126</i>&nbsp;    }</b>
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    /**
+<i>129</i>&nbsp;     * Draw all slow areas on the screen.
+<i>130</i>&nbsp;     */
+<i>131</i>&nbsp;    private void drawSlowAreas() {
+<b class="nc"><i>132</i>&nbsp;        gc.setFill(Color.DARKRED);</b>
+<b class="nc"><i>133</i>&nbsp;        for (int i = 0; i &lt; areaTracker.getBoardGrid().length; i++) {</b>
+<b class="nc"><i>134</i>&nbsp;            for (int j = 0; j &lt; areaTracker.getBoardGrid()[i].length; j++) {</b>
+<b class="nc"><i>135</i>&nbsp;                if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW) {</b>
+<b class="nc"><i>136</i>&nbsp;                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);</b>
+<i>137</i>&nbsp;                }
+<i>138</i>&nbsp;            }
+<i>139</i>&nbsp;        }
+<b class="nc"><i>140</i>&nbsp;    }</b>
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * Draw current Stix and Fuse on screen.
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    private void drawStixAndFuse() {
+<b class="nc"><i>146</i>&nbsp;        boolean foundFuse = true;</b>
+<b class="nc"><i>147</i>&nbsp;        Point fuse = new Point(-1, -1);</b>
+<b class="nc"><i>148</i>&nbsp;        for (Unit unit : units) {</b>
+<b class="nc"><i>149</i>&nbsp;            if (unit instanceof Fuse) {</b>
+<b class="nc"><i>150</i>&nbsp;                foundFuse = false;</b>
+<b class="nc"><i>151</i>&nbsp;                fuse = new Point(unit.getX(), unit.getY());</b>
+<i>152</i>&nbsp;            }
+<b class="nc"><i>153</i>&nbsp;        }</b>
+<b class="nc"><i>154</i>&nbsp;        for (Point p : areaTracker.getStix()) {</b>
+<b class="nc"><i>155</i>&nbsp;            if (!p.equals(areaTracker.getStix().getFirst())) {</b>
+<b class="nc"><i>156</i>&nbsp;                if (foundFuse) {</b>
+<b class="nc"><i>157</i>&nbsp;                    if (cursor.isFast()) {</b>
+<b class="nc"><i>158</i>&nbsp;                        gc.setFill(Color.MEDIUMBLUE);</b>
+<i>159</i>&nbsp;                    } else {
+<b class="nc"><i>160</i>&nbsp;                        gc.setFill(Color.DARKRED);</b>
+<i>161</i>&nbsp;                    }
+<i>162</i>&nbsp;                } else {
+<b class="nc"><i>163</i>&nbsp;                    if (p.equals(fuse)) {</b>
+<b class="nc"><i>164</i>&nbsp;                        foundFuse = true;</b>
+<b class="nc"><i>165</i>&nbsp;                        if (cursor.isFast()) {</b>
+<b class="nc"><i>166</i>&nbsp;                            gc.setFill(Color.MEDIUMBLUE);</b>
+<i>167</i>&nbsp;                        } else {
+<b class="nc"><i>168</i>&nbsp;                            gc.setFill(Color.DARKRED);</b>
+<i>169</i>&nbsp;                        }
+<i>170</i>&nbsp;                    } else {
+<b class="nc"><i>171</i>&nbsp;                        gc.setFill(Color.GRAY);</b>
+<i>172</i>&nbsp;                    }
+<i>173</i>&nbsp;                }
+<i>174</i>&nbsp;
+<b class="nc"><i>175</i>&nbsp;                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);</b>
+<i>176</i>&nbsp;            }
+<b class="nc"><i>177</i>&nbsp;        }</b>
+<b class="nc"><i>178</i>&nbsp;    }</b>
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;    /**
+<i>181</i>&nbsp;     * Check all collisions between Units.
+<i>182</i>&nbsp;     * Determines what to do when two units collide.
+<i>183</i>&nbsp;     * This method should be called every gameframe.
+<i>184</i>&nbsp;     */
+<i>185</i>&nbsp;    public void collisions() {
+<b class="nc"><i>186</i>&nbsp;        ArrayList&lt;Unit&gt; unitsList = new ArrayList&lt;Unit&gt;();</b>
+<b class="nc"><i>187</i>&nbsp;        unitsList.addAll(units);</b>
+<b class="nc"><i>188</i>&nbsp;        for (int i = 0; i &lt; unitsList.size(); i++) {</b>
+<b class="nc"><i>189</i>&nbsp;            Unit collider = unitsList.get(i);</b>
+<b class="nc"><i>190</i>&nbsp;            unitsList.remove(i);</b>
+<b class="nc"><i>191</i>&nbsp;            for (Unit collidee : unitsList) {</b>
+<b class="nc"><i>192</i>&nbsp;                if (collider instanceof Qix) {</b>
+<b class="nc"><i>193</i>&nbsp;                    if (collidee instanceof Cursor) {</b>
+<b class="nc"><i>194</i>&nbsp;                        Cursor temp = (Cursor) collidee;</b>
+<b class="nc"><i>195</i>&nbsp;                        if (collider.intersect(collidee) &amp;&amp; temp.uncoveredOn(temp.getX(), temp.getY())) {</b>
+<b class="nc"><i>196</i>&nbsp;                            GameScene.gameOver();</b>
+<i>197</i>&nbsp;                        }
+<b class="nc"><i>198</i>&nbsp;                    }</b>
+<b class="nc"><i>199</i>&nbsp;                } else if (collider instanceof Cursor) {</b>
+<b class="nc"><i>200</i>&nbsp;                    if ((collidee instanceof Sparx || collidee instanceof Fuse) &amp;&amp; collider.intersect(collidee)) {</b>
+<b class="nc"><i>201</i>&nbsp;                        GameScene.gameOver();</b>
+<b class="nc"><i>202</i>&nbsp;                    } else if (collidee instanceof Qix) {</b>
+<b class="nc"><i>203</i>&nbsp;                        Cursor temp = (Cursor) collider;</b>
+<b class="nc"><i>204</i>&nbsp;                        if (collider.intersect(collidee) &amp;&amp; temp.uncoveredOn(temp.getX(), temp.getY())) {</b>
+<b class="nc"><i>205</i>&nbsp;                            GameScene.gameOver();</b>
+<i>206</i>&nbsp;                        }
+<b class="nc"><i>207</i>&nbsp;                    }</b>
+<b class="nc"><i>208</i>&nbsp;                } else if (collider instanceof Sparx) {</b>
+<b class="nc"><i>209</i>&nbsp;                    if (collidee instanceof Cursor &amp;&amp; collider.intersect(collidee)) {</b>
+<b class="nc"><i>210</i>&nbsp;                        GameScene.gameOver();</b>
+<i>211</i>&nbsp;                    }
+<b class="nc"><i>212</i>&nbsp;                } else if (collider instanceof Fuse</b>
+<b class="nc"><i>213</i>&nbsp;                            &amp;&amp; collidee instanceof Cursor &amp;&amp; collider.intersect(collidee)) {</b>
+<b class="nc"><i>214</i>&nbsp;                        GameScene.gameOver();</b>
+<i>215</i>&nbsp;                }
+<b class="nc"><i>216</i>&nbsp;            }</b>
+<i>217</i>&nbsp;        }
+<b class="nc"><i>218</i>&nbsp;    }</b>
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * If there is a Fuse on the screen, remove it.
+<i>222</i>&nbsp;     */
+<i>223</i>&nbsp;    public void removeFuse() {
+<b class="fc"><i>224</i>&nbsp;        Unit removingItem = null;</b>
+<b class="fc"><i>225</i>&nbsp;        for (Unit unit : units) {</b>
+<b class="fc"><i>226</i>&nbsp;            if (unit instanceof Fuse) {</b>
+<b class="fc"><i>227</i>&nbsp;                removingItem = unit;</b>
+<i>228</i>&nbsp;            }
+<b class="fc"><i>229</i>&nbsp;        }</b>
+<b class="fc"><i>230</i>&nbsp;        if (removingItem != null) {</b>
+<b class="fc"><i>231</i>&nbsp;            units.remove(removingItem);</b>
+<i>232</i>&nbsp;        }
+<b class="fc"><i>233</i>&nbsp;    }</b>
+<i>234</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2016-09-24 13:58</div>
+</div>
+</body>
+</html>
