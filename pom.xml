@@ -111,6 +111,19 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
+                <configuration>
+                    <check>
+                        <branchRate>80</branchRate>
+                    </check>
+                    <instrumentation>
+                        <ignores>
+                            <ignore>nl.tudelft.sem.group2.global.*</ignore>
+                        </ignores>
+                        <excludes>
+                            <exclude>nl/tudelft/sem/group2/global/*.class</exclude>
+                        </excludes>
+                    </instrumentation>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
