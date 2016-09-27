@@ -6,7 +6,7 @@
 
     <groupId>nl.tudelft.sem.group2</groupId>
     <artifactId>SEMProject</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
