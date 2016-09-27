@@ -87,9 +87,7 @@ public class GameScene extends Scene {
         board.addUnit(qix);
         scoreCounter = new ScoreCounter();
         addMessageBox();
-
         createScoreScene();
-
         root.getChildren().add(scoreScene);
         root.getChildren().add(canvas);
         root.getChildren().add(bottomBorder);
