@@ -69,8 +69,8 @@ public class CursorTest {
         if (outerborder) {
             boardGrid[x][y] = AreaState.OUTERBORDER;
         } else {
-            boardGrid[x - vertical][y - horizontal] = AreaState.UNCOVERED;
-            boardGrid[x + vertical][y + horizontal] = AreaState.UNCOVERED;
+            boardGrid[x - horizontal][y - vertical] = AreaState.UNCOVERED;
+            boardGrid[x + horizontal][y + vertical] = AreaState.UNCOVERED;
             boardGrid[cursor.getX()][cursor.getY()] = AreaState.UNCOVERED;
         }
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
@@ -163,6 +163,30 @@ public class CursorTest {
         cursor.setDrawing(true);
         stix.add(new Point(x + 2, y));
         moveCursor(KeyCode.RIGHT, x + 1, y, false);
+        Assert.assertEquals(x, cursor.getX());
+    }
+
+    @Test
+    public void dontMoveR5() throws Exception {
+        cursor.setDrawing(true);
+        int horizontal = 1;
+        int vertical = 0;
+        boardGrid[x + horizontal + vertical][y + horizontal + vertical] = AreaState.OUTERBORDER;
+        when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
+        cursor.setCurrentMove(KeyCode.RIGHT);
+        cursor.move();
+        Assert.assertEquals(x, cursor.getX());
+    }
+
+    @Test
+    public void dontMoveR6() throws Exception {
+        cursor.setDrawing(true);
+        int horizontal = 1;
+        int vertical = 0;
+        boardGrid[x + horizontal - vertical][y - horizontal + vertical] = AreaState.OUTERBORDER;
+        when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
+        cursor.setCurrentMove(KeyCode.RIGHT);
+        cursor.move();
         Assert.assertEquals(x, cursor.getX());
     }
     @Test
