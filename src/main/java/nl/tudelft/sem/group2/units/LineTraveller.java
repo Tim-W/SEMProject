@@ -82,6 +82,6 @@ public abstract class LineTraveller extends Unit {
     }
 
     private void incrementSpriteIndex() {
-        setSpriteIndex(spriteIndex++);
+        setSpriteIndex((spriteIndex + 1) % sprite.length);
     }
 }
