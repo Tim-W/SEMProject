@@ -52,9 +52,6 @@ public class QixTest {
     @Test
     public void draw2() throws Exception {
         Qix spyQix = spy(qix);
-        LinkedList<float[]> linkedList = new LinkedList<float[]>();
-        linkedList.add(new float[0]);
-        linkedList.add(new float[0]);
         for (int i = 0; i < 2; i++) {
             double[] colors = new double[3];
             for (int j = 0; j < colors.length; j++) {
@@ -62,13 +59,14 @@ public class QixTest {
             }
             spyQix.getColorArray().addFirst(colors);
         }
-        LinkedList<float[]> linkedList2 = new LinkedList<float[]>();
+        LinkedList<float[]> linkedList2 = new LinkedList<>();
         linkedList2.add(new float[] {1, 1});
         linkedList2.add(new float[] {1, 1});
         spyQix.setOldCoordinates(linkedList2);
-        spyQix.setOldDirections(linkedList);
+        spyQix.setOldDirections(linkedList2);
         spyQix.draw(canvas);
-        verify(spyQix, times(8 * spyQix.getOldDirections().size())).getOldCoordinate(anyInt());
+        verify(spyQix, times(4 * spyQix.getOldDirections().size())).getOldCoordinate(anyInt());
+        verify(spyQix, times(4 * spyQix.getOldDirections().size())).getOldDirection(anyInt());
     }
 
     @Test

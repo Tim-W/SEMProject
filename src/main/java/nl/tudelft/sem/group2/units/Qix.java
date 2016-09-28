@@ -112,11 +112,11 @@ public class Qix extends Unit {
             gc.setStroke(Color.color(colorArray.get(i)[0], colorArray.get(i)[1], colorArray.get(i)[2]));
             gc.beginPath();
             //point 1 of the line
-            float x1 = gridToCanvas((int) (getOldCoordinate(i)[0] + getOldCoordinate(i)[1]));
-            float y1 = gridToCanvas((int) (getOldCoordinate(i)[1] - getOldCoordinate(i)[0]));
+            float x1 = gridToCanvas((int) (getOldCoordinate(i)[0] + getOldDirection(i)[1]));
+            float y1 = gridToCanvas((int) (getOldCoordinate(i)[1] - getOldDirection(i)[0]));
             //point 2 of the line
-            float x2 = gridToCanvas((int) (getOldCoordinate(i)[0] - getOldCoordinate(i)[1]));
-            float y2 = gridToCanvas((int) (getOldCoordinate(i)[1] + getOldCoordinate(i)[0]));
+            float x2 = gridToCanvas((int) (getOldCoordinate(i)[0] - getOldDirection(i)[1]));
+            float y2 = gridToCanvas((int) (getOldCoordinate(i)[1] + getOldDirection (i)[0]));
             //draw the line
             gc.moveTo(x1, y1);
             gc.lineTo(x2, y2);
@@ -218,6 +218,9 @@ public class Qix extends Unit {
 
     public LinkedList<float[]> getOldDirections() {
         return oldDirections;
+    }
+    public float[] getOldDirection(int i) {
+        return oldDirections.get(i);
     }
 
     public float getDirection(int i) {
