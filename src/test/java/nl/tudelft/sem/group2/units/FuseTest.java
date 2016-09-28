@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class FuseTest {
     private Fuse fuse;
     private LinkedList<Point> linkedList;
-    AreaTracker areaTracker;
+    private AreaTracker areaTracker;
 
     @Before
     public void setUp() throws Exception {
@@ -46,15 +46,11 @@ public class FuseTest {
         linkedList = new LinkedList<>();
         linkedList.add(new Point(fuse.getX() + x, fuse.getY() + y));
         when(areaTracker.getStix()).thenReturn(linkedList);
+        fuse.setAreaTracker(areaTracker);
         fuse.move();
     }
 
-    @Test
-    public void testMoveRight() {
-        int oldx = fuse.getX();
-        moveFuse(1, 0);
-        Assert.assertEquals(oldx + 1, fuse.getX());
-    }
+
 
     @Test
     public void testMoveRightLastX() {
@@ -62,14 +58,6 @@ public class FuseTest {
         int oldx = fuse.getX();
         moveFuse(1, 0);
         Assert.assertEquals(fuse.getX(), oldx);
-    }
-
-    @Test
-    public void testMoveLeft() {
-        createFuse(new Fuse(BOARD_WIDTH - 1, BOARD_HEIGHT - 1, 1, 1));
-        int oldx = fuse.getX();
-        moveFuse(-1, 0);
-        Assert.assertEquals(oldx - 1, fuse.getX());
     }
 
     @Test
@@ -89,14 +77,76 @@ public class FuseTest {
         Assert.assertEquals(oldx, fuse.getX());
     }
 
-    @org.junit.Test
-    public void testToString() {
-        Assert.assertEquals(fuse.toString(), "Fuse");
+    @Test
+    public void testMoveR() {
+        int oldx = fuse.getX();
+        moveFuse(1, 0);
+        Assert.assertEquals(oldx + 1, fuse.getX());
     }
 
     @Test
-    public void testSetMoving() throws Exception {
+    public void testmoveD() {
+        int oldy = fuse.getY();
+        fuse.setMoving(true);
+        moveFuse(0, 1);
+        Assert.assertEquals(oldy + 1, fuse.getY());
+    }
 
+    @Test
+    public void testmoveU() {
+        int oldy = fuse.getY();
+        fuse.setMoving(true);
+        moveFuse(0, -1);
+        Assert.assertEquals(oldy - 1, fuse.getY());
+    }
+
+    @Test
+    public void testmoveL() {
+        int oldx = fuse.getX();
+        fuse.setMoving(true);
+        moveFuse(-1, 0);
+        Assert.assertEquals(oldx - 1, fuse.getX());
+    }
+
+    @Test
+    public void testNotMoveL() {
+        fuse.setLastX(fuse.getX() - 1);
+        int oldx = fuse.getX();
+        fuse.setMoving(true);
+        moveFuse(-1, 0);
+        Assert.assertEquals(oldx, fuse.getX());
+    }
+
+    @Test
+    public void testNotMoveL2() {
+        createFuse(new Fuse(0, 0, 1, 1));
+        int oldx = fuse.getX();
+        fuse.setMoving(true);
+        moveFuse(-1, 0);
+        Assert.assertEquals(oldx, fuse.getX());
+    }
+
+    @Test
+    public void testNotMoveD() {
+        fuse.setLastY(fuse.getY() + 1);
+        int oldy = fuse.getY();
+        fuse.setMoving(true);
+        moveFuse(0, 1);
+        Assert.assertEquals(oldy, fuse.getY());
+    }
+
+    @Test
+    public void testNotMoveU() {
+        fuse.setLastY(fuse.getY() - 1);
+        int oldy = fuse.getY();
+        fuse.setMoving(true);
+        moveFuse(0, -1);
+        Assert.assertEquals(oldy, fuse.getY());
+    }
+
+    @org.junit.Test
+    public void testToString() {
+        Assert.assertEquals(fuse.toString(), "Fuse");
     }
 
 }
