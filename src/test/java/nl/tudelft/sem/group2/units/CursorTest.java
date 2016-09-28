@@ -17,6 +17,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -206,6 +207,13 @@ public class CursorTest {
         boolean oldValue = cursor.isFast();
         cursor.setFast(!oldValue);
         Assert.assertEquals(!oldValue, cursor.isFast());
+    }
+
+    @Test
+    public void draw() throws Exception {
+        Cursor spy = spy(new Cursor(1, 1, 1, 1));
+        spy.draw(new Canvas(1, 1));
+        verify(spy).getSpriteIndex();
     }
 
 

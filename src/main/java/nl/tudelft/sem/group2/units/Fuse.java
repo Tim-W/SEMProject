@@ -1,12 +1,11 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
 import javafx.scene.image.Image;
+
+import java.awt.Point;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
-import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_X;
-import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_Y;
 
 /**
  * Describes the Fuse.
@@ -15,8 +14,8 @@ import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_Y;
  */
 public class Fuse extends LineTraveller {
     private int speed = 1;
-    private int lastX = CURSOR_START_X;
-    private int lastY = CURSOR_START_Y;
+    private int lastX;
+    private int lastY;
     private boolean moving = true;
 
     /**
@@ -30,6 +29,8 @@ public class Fuse extends LineTraveller {
     public Fuse(int x, int y, int width, int height) {
         super(x, y, width, height);
         Image[] sprite = new Image[2];
+        lastX = x;
+        lastY = y;
         sprite[0] = new Image("/images/fuse-1.png");
         sprite[1] = new Image("/images/fuse-2.png");
         setSprite(sprite);
@@ -75,6 +76,14 @@ public class Fuse extends LineTraveller {
      */
     public String toString() {
         return "Fuse";
+    }
+
+    public void setLastX(int lastX) {
+        this.lastX = lastX;
+    }
+
+    public void setLastY(int lastY) {
+        this.lastY = lastY;
     }
 
     /**
