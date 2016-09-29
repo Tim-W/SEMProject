@@ -26,11 +26,8 @@ public class LaunchApp extends Application {
     private static MediaView mediaView;
 
 
-    private static final Logger LOGGER = new Logger();
+    private static final Logger LOGGER = Logger.getLogger();
 
-    public static Logger getLogger() {
-        return LOGGER;
-    }
 
     /**
      * @return board width

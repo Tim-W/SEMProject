@@ -14,12 +14,12 @@ import java.util.logging.Level;
  */
 public class AreaTracker {
 
-    private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = Logger.getLogger();
 
-    private static LinkedList<Point> stix = new LinkedList<Point>();
+    private static LinkedList<Point> stix = new LinkedList<>();
 
     private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
-    private Stack<Point> visiting = new Stack<Point>();
+    private Stack<Point> visiting = new Stack<>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
@@ -112,7 +112,7 @@ public class AreaTracker {
         resetBorders();
         // Initialize the set which contains the visited points for the
         // floodfill algorithm
-        visited = new HashSet<Point>();
+        visited = new HashSet<>();
         checkDirections(qixCoordinates, start, dir);
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
@@ -139,13 +139,13 @@ public class AreaTracker {
     }
 
     private void resetBorders() {
-        border1 = new LinkedList<Point>();
-        border2 = new LinkedList<Point>();
+        border1 = new LinkedList<>();
+        border2 = new LinkedList<>();
     }
 
     private void resetAreas() {
-        area1 = new LinkedList<Point>();
-        area2 = new LinkedList<Point>();
+        area1 = new LinkedList<>();
+        area2 = new LinkedList<>();
     }
 
     private void setOuterBorders() {
@@ -158,7 +158,7 @@ public class AreaTracker {
     private void emptyStix() {
         //Empty the current stix
         stix = null;
-        stix = new LinkedList<Point>();
+        stix = new LinkedList<>();
     }
 
     private void resetAreaTracker() {

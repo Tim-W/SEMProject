@@ -4,7 +4,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.global.Globals;
 
@@ -32,12 +31,12 @@ public class Qix extends Unit {
     private static final int RANDOMNESSPOSITIONLENGTH = 4;
     private static final int RANDOMNESSLINELENGTH = 2;
     private static final int COLLISIONSIZE = 10;
-    private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = Logger.getLogger();
     private int animationLoops = 0;
     private float[] direction = new float[2];
-    private LinkedList<float[]> oldDirections = new LinkedList<float[]>();
-    private LinkedList<float[]> oldCoordinates = new LinkedList<float[]>();
-    private LinkedList<double[]> colorArray = new LinkedList<double[]>();
+    private LinkedList<float[]> oldDirections = new LinkedList<>();
+    private LinkedList<float[]> oldCoordinates = new LinkedList<>();
+    private LinkedList<double[]> colorArray = new LinkedList<>();
     private float[] coordinate = new float[2];
 
     /**
@@ -116,7 +115,7 @@ public class Qix extends Unit {
             float y1 = gridToCanvas((int) (getOldCoordinate(i)[1] - getOldDirection(i)[0]));
             //point 2 of the line
             float x2 = gridToCanvas((int) (getOldCoordinate(i)[0] - getOldDirection(i)[1]));
-            float y2 = gridToCanvas((int) (getOldCoordinate(i)[1] + getOldDirection (i)[0]));
+            float y2 = gridToCanvas((int) (getOldCoordinate(i)[1] + getOldDirection(i)[0]));
             //draw the line
             gc.moveTo(x1, y1);
             gc.lineTo(x2, y2);
@@ -159,8 +158,8 @@ public class Qix extends Unit {
      * @return some polygon
      */
     public Polygon toPolygon() {
-        ArrayList<Integer> xCor = new ArrayList<Integer>();
-        ArrayList<Integer> yCor = new ArrayList<Integer>();
+        ArrayList<Integer> xCor = new ArrayList<>();
+        ArrayList<Integer> yCor = new ArrayList<>();
 
         for (int i = 0; i < this.getOldCoordinates().size(); i++) {
             xCor.add(Math.round(this.getOldCoordinates().get(i)[0]
@@ -199,10 +198,20 @@ public class Qix extends Unit {
         return oldCoordinates;
     }
 
+    /**
+     * Getter for an old coordinate.
+     * @param i describes if you want the x or the y.
+     * @return the x or y coordinate
+     */
     public float[] getOldCoordinate(int i) {
         return oldCoordinates.get(i);
     }
 
+    /**
+     * Getter for current coordinate.
+     * @param i describes if you want the x or the y.
+     * @return the x or y coordinate
+     */
     public float getCoordinate(int i) {
         return coordinate[i];
     }
@@ -219,14 +228,30 @@ public class Qix extends Unit {
     public LinkedList<float[]> getOldDirections() {
         return oldDirections;
     }
+
+    /**
+     * Getter for old direction.
+     * @param i describes if you want the x or the y.
+     * @return the x or y coordinate
+     */
     public float[] getOldDirection(int i) {
         return oldDirections.get(i);
     }
 
+    /**
+     * Getter for current direction.
+     * @param i describes if you want the x or the y.
+     * @return the x or y coordinate
+     */
     public float getDirection(int i) {
         return direction[i];
     }
 
+    /**
+     * Setter for a direction.
+     * @param direction the new direction
+     * @param i at which place
+     */
     public void setDirection(float direction, int i) {
         this.direction[i] = direction;
     }

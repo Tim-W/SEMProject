@@ -9,15 +9,35 @@ import java.util.logging.Level;
  *
  * @author Dennis
  */
-public class Logger {
+public final class Logger {
 
     private Level level;
+    private static volatile Logger logger;
 
     /**
      * Constructor for the logger.
+     * Since it is a singleton class constructor needs to be private.
      */
-    public Logger() {
+    private Logger() {
         level = Level.INFO;
+    }
+
+    /**
+     * Getter for the logger this is a singleton class so everywhere the logger is used it is the same instance
+     * This method allows getting of that instance and instantiates it when it is not instantiated yet.
+     * @return the only one instance of Logger.
+     */
+    public static Logger getLogger() {
+        if (logger == null) {
+            // Put lock on class since it we do not want to instantiate it twice
+            synchronized (Logger.class) {
+                // Check if logger is in the meanwhile not already instantiated.
+                if (logger == null) {
+                    logger = new Logger();
+                }
+            }
+        }
+        return logger;
     }
 
     /**
