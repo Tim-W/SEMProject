@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Point;
+import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -7,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -25,11 +30,6 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Point;
-import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.logging.Level;
-
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
 
 /**
@@ -38,6 +38,7 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
 public class GameScene extends Scene {
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
+    private static final Logger LOGGER = LaunchApp.getLogger();
     private static AnimationTimer animationTimer;
     private static Cursor cursor;
     private static AreaTracker areaTracker;
@@ -49,7 +50,6 @@ public class GameScene extends Scene {
     private boolean isRunning = false;
     private Qix qix;
     private ScoreScene scoreScene;
-    private static final Logger LOGGER = LaunchApp.getLogger();
 
     // TODO implement life system
     // private int lifes;
@@ -71,7 +71,7 @@ public class GameScene extends Scene {
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2);
         board = new Board(canvas);
-
+        board.setImage(new Image("/images/background.png", 300.0, 300.0, false, false));
         scoreCounter = new ScoreCounter();
 
         messageLabel = new Label("Press SPACE to begin!");
@@ -126,6 +126,34 @@ public class GameScene extends Scene {
         return cursor;
     }
 
+    /**
+     * Play a game over sound.
+     * show game over text,
+     * stop the animations.
+     */
+    public static void gameOver() {
+        // TODO add code for gameover
+        animationTimerStop();
+        messageBox.setLayoutX(Globals.GAMEOVER_POSITION_X);
+        messageLabel.setText(" Game Over! ");
+
+        //Plays game over sound
+        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+                + scoreCounter.getTotalScore(), GameScene.class);
+    }
+
+    /**
+     * TODO Play the game won sound.
+     * stop the animations,
+     * show that the player has won
+     */
+    public static void gameWon() {
+        animationTimerStop();
+        messageBox.setLayoutX(Globals.GAMEWON_POSITION_X);
+        messageLabel.setText(" You Won! ");
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
+    }
 
     private void createScoreScene() {
         Group group = new Group();
@@ -263,35 +291,6 @@ public class GameScene extends Scene {
                 gameOver();
             }
         }
-    }
-
-    /**
-     * Play a game over sound.
-     * show game over text,
-     * stop the animations.
-     */
-    public static void gameOver() {
-        // TODO add code for gameover
-        animationTimerStop();
-        messageBox.setLayoutX(Globals.GAMEOVER_POSITION_X);
-        messageLabel.setText(" Game Over! ");
-
-        //Plays game over sound
-        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
-        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
-                + scoreCounter.getTotalScore(), GameScene.class);
-    }
-
-    /**
-     * TODO Play the game won sound.
-     * stop the animations,
-     * show that the player has won
-     */
-    public static void gameWon() {
-        animationTimerStop();
-        messageBox.setLayoutX(Globals.GAMEWON_POSITION_X);
-        messageLabel.setText(" You Won! ");
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
     /**

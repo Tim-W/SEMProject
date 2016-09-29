@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
@@ -17,6 +20,7 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Unit;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**
@@ -25,6 +29,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 public class Board {
 
     private static final int MARGIN = 8;
+    private Image image;
     private Canvas canvas;
     private Set<Unit> units;
     private GraphicsContext gc;
@@ -45,7 +50,6 @@ public class Board {
         gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
         this.areaTracker = GameScene.getAreaTracker();
         this.cursor = GameScene.getQixCursor();
-
     }
 
     /**
@@ -56,6 +60,11 @@ public class Board {
      */
     public static int gridToCanvas(int b) {
         return b * 2 + MARGIN - 1;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+        gc.drawImage(image, 5, 5);
     }
 
     /**
@@ -86,8 +95,10 @@ public class Board {
     public void draw() {
         // gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+        gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
         gc.setFill(Color.WHITE);
-        drawAreas();
+        drawUncovered();
+        drawBorders();
         drawStixAndFuse();
         for (Unit unit : units) {
             unit.move();
@@ -97,10 +108,19 @@ public class Board {
         drawSlowAreas();
     }
 
-    /**
-     * Draw the areaTracker boardGrid on the screen.
-     */
-    private void drawAreas() {
+    private void drawUncovered() {
+        gc.setFill(Color.BLACK);
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.UNCOVERED) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
+        }
+    }
+
+    private void drawBorders() {
+        gc.setFill(Color.WHITE);
         for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
             for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
                 if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
@@ -112,6 +132,25 @@ public class Board {
     }
 
     /**
+     * Draw the areaTracker boardGrid on the screen.
+     */
+    private void drawAreas() {
+//        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+//            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+//                if (areaTracker.getBoardGrid()[i][j] == AreaState.UNCOVERED) {
+//                    gc.setFill(Color.BLACK);
+//                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+//                }
+//                if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
+//                        || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {
+//                    gc.setFill(Color.WHITE);
+//                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+//                }
+//            }
+//        }
+    }
+
+    /**
      * Draw all fast areas on the screen.
      */
     private void drawFastAreas() {
@@ -119,7 +158,7 @@ public class Board {
         for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
             for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
                 if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+//                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
         }
@@ -133,7 +172,10 @@ public class Board {
         for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
             for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
                 if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW) {
+                    gc.setEffect(new Blend(BlendMode.SCREEN));
+
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                    gc.setEffect(null);
                 }
             }
         }
