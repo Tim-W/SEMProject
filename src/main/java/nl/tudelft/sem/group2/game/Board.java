@@ -134,53 +134,6 @@ public class Board {
     }
 
     /**
-     * Draw the areaTracker boardGrid on the screen.
-     */
-    private void drawAreas() {
-//        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-//            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-//                if (areaTracker.getBoardGrid()[i][j] == AreaState.UNCOVERED) {
-//                    gc.setFill(Color.BLACK);
-//                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-//                }
-//                if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
-//                        || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {
-//                    gc.setFill(Color.WHITE);
-//                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-//                }
-//            }
-//        }
-    }
-
-    /**
-     * Draw all fast areas on the screen.
-     */
-    private void drawFastAreas() {
-        gc.setFill(Color.DARKBLUE);
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST) {
-//                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    /**
-     * Draw all slow areas on the screen.
-     */
-    private void drawSlowAreas() {
-        gc.setFill(Color.DARKRED);
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW) {
-
-                }
-            }
-        }
-    }
-
-    /**
      * Draw current Stix and Fuse on screen.
      */
     private void drawStixAndFuse() {
