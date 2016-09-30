@@ -123,6 +123,9 @@ public class GameScene extends Scene {
         return cursor;
     }
 
+    public Board getBoard() {
+        return board;
+    }
 
     private void createScoreScene() {
         Group group = new Group();
