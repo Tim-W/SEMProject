@@ -52,7 +52,7 @@ public class Sparx extends LineTraveller {
                     moveRight();
                     break;
                 default:
-                    System.out.println("Warning: unknown move direction");
+                    LOGGER.log(Level.WARNING,"Warning: unknown move direction");
                     break;
             }
         }
