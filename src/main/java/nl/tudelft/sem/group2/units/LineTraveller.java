@@ -56,13 +56,13 @@ public abstract class LineTraveller extends Unit {
     @Override
     public void draw(Canvas canvas) {
         canvas.getGraphicsContext2D().drawImage(
-                sprite[spriteIndex],
+                sprite[getSpriteIndex()],
                 gridToCanvas(getX()) - getWidth() / 2,
                 gridToCanvas(getY()) - getHeight() / 2,
                 getWidth(),
                 getHeight()
         );
-        spriteIndex = (spriteIndex + 1) % sprite.length;
+        incrementSpriteIndex();
     }
 
     public Image[] getSprite() {
@@ -79,5 +79,9 @@ public abstract class LineTraveller extends Unit {
 
     public void setSpriteIndex(int spriteIndex) {
         this.spriteIndex = spriteIndex;
+    }
+
+    private void incrementSpriteIndex() {
+        setSpriteIndex((spriteIndex + 1) % sprite.length);
     }
 }

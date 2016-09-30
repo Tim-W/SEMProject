@@ -2,7 +2,6 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
@@ -20,7 +19,7 @@ public abstract class Unit {
     private int width;
     private int height;
     private AreaTracker areaTracker;
-    private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = Logger.getLogger();
 
     /**
      * Create a Unit at (x,y) position.
