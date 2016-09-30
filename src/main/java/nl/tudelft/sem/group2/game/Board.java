@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
@@ -62,9 +60,14 @@ public class Board {
         return b * 2 + MARGIN - 1;
     }
 
+    /**
+     * Sets a background image to be drawn on all claimed areas.
+     *
+     * @param image the image to draw
+     */
     public void setImage(Image image) {
         this.image = image;
-        gc.drawImage(image, 5, 5);
+        gc.drawImage(image, MARGIN, MARGIN);
     }
 
     /**
@@ -93,7 +96,6 @@ public class Board {
      * Draw all the units on the screen.
      */
     public void draw() {
-        // gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
         gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
         gc.setFill(Color.WHITE);
@@ -104,8 +106,8 @@ public class Board {
             unit.move();
             unit.draw(canvas);
         }
-        drawFastAreas();
-        drawSlowAreas();
+//        drawFastAreas();
+//        drawSlowAreas();
     }
 
     private void drawUncovered() {
@@ -172,10 +174,7 @@ public class Board {
         for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
             for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
                 if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW) {
-                    gc.setEffect(new Blend(BlendMode.SCREEN));
 
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                    gc.setEffect(null);
                 }
             }
         }
