@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.CollisionHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
@@ -50,6 +51,7 @@ public class GameScene extends Scene {
     private boolean isRunning = false;
     private Qix qix;
     private ScoreScene scoreScene;
+    private CollisionHandler collisionHandler;
     private static final Logger LOGGER = Logger.getLogger();
 
     // TODO implement life system
@@ -87,6 +89,8 @@ public class GameScene extends Scene {
         bottomBorder.setLayoutY(Globals.BORDER_BOTTOM_POSITION_Y);
         board.addUnit(cursor);
         board.addUnit(qix);
+        collisionHandler = new CollisionHandler();
+
         scoreCounter = new ScoreCounter();
         addMessageBox();
         createScoreScene();
@@ -242,8 +246,10 @@ public class GameScene extends Scene {
                     previousTime = now;
                     // draw
                     board.draw();
-                    board.collisions();
-                    qixStixCollisions();
+                    if (collisionHandler.collisions(board.getUnits(), GameScene.getStix())) {
+                        GameScene.gameOver();
+                    }
+                    //qixStixCollisions();
                     scoreScene.setScore(scoreCounter.getTotalScore());
                     scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
                     // TODO turn this on for area calculation
