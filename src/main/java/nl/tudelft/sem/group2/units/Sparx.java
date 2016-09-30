@@ -42,70 +42,76 @@ public class Sparx extends LineTraveller {
 
     @Override
     public void move() {
-        setLastCoordinates(getX(), getY());
-        switch (sparxDirection) {
-            case LEFT:
-                moveLeft();
-                break;
-            case RIGHT:
-                moveRight();
-                break;
-            default:
-                System.out.println("Warning: unknown move direction");
-                break;
+
+        for (int i = 0; i < speed; i++) {
+            switch (sparxDirection) {
+                case LEFT:
+                    moveLeft();
+                    break;
+                case RIGHT:
+                    moveRight();
+                    break;
+                default:
+                    LOGGER.log(Level.WARNING, "Warning: unknown move direction", this.getClass());
+                    break;
+            }
         }
         logCurrentMove();
     }
 
     private void moveRight() {
-        for (int i = 0; i < speed; i++) {
             if (getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX) && outerBorderOn(getX() + 1, getY())) {
-                setX(getX() + 1);
+                setXAndLastX(getX() + 1);
             } else if (getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1) && outerBorderOn(getX(), getY() + 1)) {
-                setY(getY() + 1);
+                setYAndLastY(getY() + 1);
             } else if (getX() > 0 && !(lastX == getX() - 1) && outerBorderOn(getX() - 1, getY())) {
-                setX(getX() - 1);
+                setXAndLastX(getX() - 1);
             } else if (getY() > 0 && !(lastY == getY() - 1) && outerBorderOn(getX(), getY() - 1)) {
-                setY(getY() - 1);
+                setYAndLastY(getY() - 1);
             } else if (getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX) && innerBorderOn(getX() + 1, getY())) {
-                setX(getX() + 1);
+                setXAndLastX(getX() + 1);
             } else if (getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1) && innerBorderOn(getX(), getY() + 1)) {
-                setY(getY() + 1);
+                setYAndLastY(getY() + 1);
             } else if (getX() > 0 && !(lastX == getX() - 1) && innerBorderOn(getX() - 1, getY())) {
-                setX(getX() - 1);
+                setXAndLastX(getX() - 1);
             } else if (getY() > 0 && !(lastY == getY() - 1) && innerBorderOn(getX(), getY() - 1)) {
-                setY(getY() - 1);
+                setYAndLastY(getY() - 1);
             }
-        }
+
     }
 
     private void moveLeft() {
-        for (int i = 0; i < speed; i++) {
             if (getX() > 0 && !(lastX == getX() - 1) && outerBorderOn(getX() - 1, getY())) {
-                setX(getX() - 1);
+                setXAndLastX(getX() - 1);
             } else if (getY() > 0 && !(lastY == getY() - 1) && outerBorderOn(getX(), getY() - 1)) {
-                setY(getY() - 1);
+                setYAndLastY(getY() - 1);
             } else if (getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX) && outerBorderOn(getX() + 1, getY())) {
-                setX(getX() + 1);
+                setXAndLastX(getX() + 1);
             } else if (getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1) && outerBorderOn(getX(), getY() + 1)) {
-                setY(getY() + 1);
+                setYAndLastY(getY() + 1);
             } else if (getX() > 0 && !(lastX == getX() - 1) && innerBorderOn(getX() - 1, getY())) {
-                setX(getX() - 1);
+                setXAndLastX(getX() - 1);
             } else if (getY() > 0 && !(lastY == getY() - 1) && innerBorderOn(getX(), getY() - 1)) {
-                setY(getY() - 1);
+                setYAndLastY(getY() - 1);
             } else if (getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX) && innerBorderOn(getX() + 1, getY())) {
-                setX(getX() + 1);
+                setXAndLastX(getX() + 1);
             } else if (getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1) && innerBorderOn(getX(), getY() + 1)) {
-                setY(getY() + 1);
+                setYAndLastY(getY() + 1);
             }
-        }
     }
 
     private void setLastCoordinates(int x, int y) {
         this.lastX = x;
         this.lastY = y;
     }
-
+    public void setXAndLastX(int x){
+        setLastCoordinates(getX(), getY());
+        setX(x);
+    }
+    public void setYAndLastY(int y){
+        setLastCoordinates(getX(), getY());
+        setY(y);
+    }
     /**
      * @return string representation of a Sparx
      */
