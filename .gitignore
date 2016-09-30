@@ -3,6 +3,11 @@
 .project
 /.settings
 
+.classpath
+.project
+SEMProject.iml
+.settings/*
+
 target/
 
 # Mobile Tools for Java (J2ME)

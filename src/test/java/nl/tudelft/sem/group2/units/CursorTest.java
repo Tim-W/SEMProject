@@ -17,6 +17,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -68,8 +69,8 @@ public class CursorTest {
         if (outerborder) {
             boardGrid[x][y] = AreaState.OUTERBORDER;
         } else {
-            boardGrid[x - vertical][y - horizontal] = AreaState.UNCOVERED;
-            boardGrid[x + vertical][y + horizontal] = AreaState.UNCOVERED;
+            boardGrid[x - horizontal][y - vertical] = AreaState.UNCOVERED;
+            boardGrid[x + horizontal][y + vertical] = AreaState.UNCOVERED;
             boardGrid[cursor.getX()][cursor.getY()] = AreaState.UNCOVERED;
         }
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
@@ -164,6 +165,30 @@ public class CursorTest {
         moveCursor(KeyCode.RIGHT, x + 1, y, false);
         Assert.assertEquals(x, cursor.getX());
     }
+
+    @Test
+    public void dontMoveR5() throws Exception {
+        cursor.setDrawing(true);
+        int horizontal = 1;
+        int vertical = 0;
+        boardGrid[x + horizontal + vertical][y + horizontal + vertical] = AreaState.OUTERBORDER;
+        when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
+        cursor.setCurrentMove(KeyCode.RIGHT);
+        cursor.move();
+        Assert.assertEquals(x, cursor.getX());
+    }
+
+    @Test
+    public void dontMoveR6() throws Exception {
+        cursor.setDrawing(true);
+        int horizontal = 1;
+        int vertical = 0;
+        boardGrid[x + horizontal - vertical][y - horizontal + vertical] = AreaState.OUTERBORDER;
+        when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
+        cursor.setCurrentMove(KeyCode.RIGHT);
+        cursor.move();
+        Assert.assertEquals(x, cursor.getX());
+    }
     @Test
     public void testGetCurrentMove() throws Exception {
         cursor.setCurrentMove(KeyCode.RIGHT);
@@ -182,6 +207,13 @@ public class CursorTest {
         boolean oldValue = cursor.isFast();
         cursor.setFast(!oldValue);
         Assert.assertEquals(!oldValue, cursor.isFast());
+    }
+
+    @Test
+    public void draw() throws Exception {
+        Cursor spy = spy(new Cursor(1, 1, 1, 1));
+        spy.draw(new Canvas(1, 1));
+        verify(spy).getSpriteIndex();
     }
 
 

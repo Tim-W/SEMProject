@@ -18,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
@@ -50,6 +49,7 @@ public class GameScene extends Scene {
     private boolean isRunning = false;
     private Qix qix;
     private ScoreScene scoreScene;
+    private static final Logger LOGGER = Logger.getLogger();
 
     // TODO implement life system
     // private int lifes;
@@ -87,9 +87,7 @@ public class GameScene extends Scene {
         board.addUnit(qix);
         scoreCounter = new ScoreCounter();
         addMessageBox();
-
         createScoreScene();
-
         root.getChildren().add(scoreScene);
         root.getChildren().add(canvas);
         root.getChildren().add(bottomBorder);
@@ -221,8 +219,7 @@ public class GameScene extends Scene {
     }
 
     private void registerKeyReleasedHandler() {
-        setOnKeyReleased(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent e) {
+        setOnKeyReleased((KeyEvent e) -> {
                 KeyCode keyCode = e.getCode();
                 if (keyCode.equals(cursor.getCurrentMove())) {
                     if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
@@ -249,7 +246,6 @@ public class GameScene extends Scene {
                     cursor.setDrawing(false);
                     cursor.setSpeed(2);
                 }
-            }
         });
     }
 

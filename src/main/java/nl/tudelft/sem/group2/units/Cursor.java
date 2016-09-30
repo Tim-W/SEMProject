@@ -5,7 +5,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 
 import java.awt.Point;
@@ -19,12 +18,12 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  * A cursor which can travel over lines and is controlled by user input (arrow keys).
  */
 public class Cursor extends LineTraveller {
-    private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = Logger.getLogger();
     private KeyCode currentMove = null;
     private final int animationSpeed = 30;
     private int loops = 0;
     private int speed = 2;
-    private LinkedList<double[][]> oldLines = new LinkedList<double[][]>();
+    private LinkedList<double[][]> oldLines = new LinkedList<>();
     //TODO set stix to false when implementation is done
     private boolean isDrawing = false;
     private boolean isFast = true;
@@ -67,36 +66,43 @@ public class Cursor extends LineTraveller {
                     default:
                         break;
                 }
-                if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
-                        + transY <= BOARD_WIDTH / 2) {
-                    if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
-                        if (!getAreaTracker().getStix().contains(new Point(getX() + transX, getY() + transY))
-                                && !getAreaTracker().getStix().contains(new Point(getX() + transX * 2, getY() + transY * 2))
-                                && getAreaTracker().getBoardGrid()[getX() + transX + transY][getY() + transY + transX].equals(AreaState
-                                .UNCOVERED)
-                                && getAreaTracker().getBoardGrid()[getX() + transX - transY][getY() + transY - transX].equals(AreaState
-                                .UNCOVERED)) {
-
-                            if (outerBorderOn(getX(), getY())) {
-                                getAreaTracker().addToStix(new Point(getX(), getY()));
-                            }
-                            setX(getX() + transX);
-                            setY(getY() + transY);
-                            logCurrentMove();
-                            getAreaTracker().addToStix(new Point(getX(), getY()));
-                        }
-                    } else if (outerBorderOn(getX() + transX, getY() + transY)) {
-                        setX(getX() + transX);
-                        setY(getY() + transY);
-                        logCurrentMove();
-                    }
-                }
+                assertMove(transX, transY);
             }
         }
     }
 
 
-    /**
+    private void assertMove(int transX, int transY) {
+    	if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
+                + transY <= BOARD_WIDTH / 2) {
+            if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
+                if (!getAreaTracker().getStix().contains(new Point(getX() + transX, getY() + transY))
+                        && !getAreaTracker().getStix().contains(new Point(getX() + transX * 2, 
+                        		getY() + transY * 2))
+                        && getAreaTracker().getBoardGrid()[getX() + transX + transY]
+                        		[getY() + transY + transX].equals(AreaState
+                        .UNCOVERED)
+                        && getAreaTracker().getBoardGrid()[getX() + transX - transY]
+                        		[getY() + transY - transX].equals(AreaState
+                        .UNCOVERED)) {
+
+                    if (outerBorderOn(getX(), getY())) {
+                        getAreaTracker().addToStix(new Point(getX(), getY()));
+                    }
+                    setX(getX() + transX);
+                    setY(getY() + transY);
+                    logCurrentMove();
+                    getAreaTracker().addToStix(new Point(getX(), getY()));
+                }
+            } else if (outerBorderOn(getX() + transX, getY() + transY)) {
+                setX(getX() + transX);
+                setY(getY() + transY);
+                logCurrentMove();
+            }
+        }		
+	}
+
+	/**
      * @return the current move direction (up/down/left/right)
      */
     public KeyCode getCurrentMove() {
