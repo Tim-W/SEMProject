@@ -1,7 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
 /**
- * Created by Erik on 30-9-2016.
+ * Movable interface for moving.
  */
 public interface Movable {
 
