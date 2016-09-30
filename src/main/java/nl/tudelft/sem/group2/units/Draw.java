@@ -3,7 +3,7 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 
 /**
- * Created by Erik on 30-9-2016.
+ * Draw interface for drawing.
  */
 public interface Draw {
 

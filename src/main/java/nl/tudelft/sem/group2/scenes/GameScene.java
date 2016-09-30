@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -19,9 +20,11 @@ import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 
@@ -29,6 +32,9 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  * GameScene contains all the information about the current game.
  */
 public class GameScene extends Scene {
+
+    private static final int LAST_IMAGE = 5;
+    private static final int FIRST_IMAGE = 2;
 
     private static Label messageLabel;
     private static VBox messageBox;
@@ -41,6 +47,7 @@ public class GameScene extends Scene {
     private static Set<Unit> units;
     private static GraphicsContext gc;
     private static AreaTracker areaTracker;
+    private static Image image;
 
     // TODO implement life system
     // private int lifes;
@@ -58,32 +65,29 @@ public class GameScene extends Scene {
         // Temporary until CollisionHandler is merged into this
         units = new HashSet<>();
         gameController = new GameController();
-
         initializeCanvas();
-
         // Get area tracker for area draw methods
         areaTracker = GameController.getAreaTracker();
-
         // Initialize label in middle of screen to display start message
         messageLabel = new Label("Press SPACE to begin!");
         final int messageBoxSpacing = 10;
         messageBox = new VBox(messageBoxSpacing);
         addMessageBox();
-
         // Hacky way to create black bottom border
         Canvas bottomBorder = new Canvas(Globals.BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
         bottomBorder.setLayoutY(Globals.BORDER_BOTTOM_POSITION_Y);
-
         // Add scene elements to root group
         createScoreScene();
         root.getChildren().add(scoreScene);
         root.getChildren().add(canvas);
         root.getChildren().add(bottomBorder);
         root.getChildren().add(messageBox);
-
+        Random random = new Random();
+        //Choose random image
+        int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
+        setImage(new Image("/images/" + image + ".png", BOARD_WIDTH, BOARD_HEIGHT, false, false));
         // Draw the board
         draw();
-
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
@@ -104,6 +108,16 @@ public class GameScene extends Scene {
         // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+    }
+
+    /**
+     * Sets a background image to be drawn on all claimed areas.
+     *
+     * @param img the image to draw
+     */
+    public void setImage(Image img) {
+        image = img;
+        gc.drawImage(image, MARGIN, MARGIN);
     }
 
     /**
@@ -181,54 +195,34 @@ public class GameScene extends Scene {
     public static void draw() {
         // gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+        gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
         gc.setFill(Color.WHITE);
-        drawAreas();
+        drawUncovered();
+        drawBorders();
         drawStixAndFuse();
-        drawFastAreas();
-        drawSlowAreas();
         for (Unit unit : units) {
             unit.move();
             unit.draw(canvas);
         }
     }
 
-    /**
-     * Draw the areaTracker boardGrid on the screen.
-     */
-    private static void drawAreas() {
+    private static void drawUncovered() {
+        gc.setFill(Color.BLACK);
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.UNCOVERED) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
+        }
+    }
 
+    private static void drawBorders() {
+        gc.setFill(Color.WHITE);
         for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
             for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
                 if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
                         || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    /**
-     * Draw all fast areas on the screen.
-     */
-    private static void drawFastAreas() {
-        gc.setFill(Color.DARKBLUE);
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    /**
-     * Draw all slow areas on the screen.
-     */
-    private static void drawSlowAreas() {
-        gc.setFill(Color.DARKRED);
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }

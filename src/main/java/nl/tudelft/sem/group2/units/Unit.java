@@ -1,18 +1,18 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.util.logging.Level;
-import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.controllers.GameController;
+
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.util.logging.Level;
 
 /**
  * An object that can be moved an drawn on a 2D grid.
  * Supports intersection checking between two units.
  */
-public abstract class Unit implements Draw, Movable{
+public abstract class Unit implements Draw, Movable {
     private int x;
     private int y;
     private int width;

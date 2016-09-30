@@ -3,8 +3,6 @@
 .project
 /.settings
 
-.classpath
-.project
 SEMProject.iml
 .settings/*
 
