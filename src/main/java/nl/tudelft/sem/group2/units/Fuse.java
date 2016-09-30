@@ -1,8 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.scene.image.Image;
-
 import java.awt.Point;
+import javafx.scene.image.Image;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;

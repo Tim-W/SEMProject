@@ -1,8 +1,7 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.units.Stix;
-
 import java.awt.Point;
+import nl.tudelft.sem.group2.units.Stix;
 
 import static org.junit.Assert.assertEquals;
 

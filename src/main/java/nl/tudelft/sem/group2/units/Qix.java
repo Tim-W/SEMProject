@@ -1,18 +1,17 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.global.Globals;
-
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.global.Globals;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -47,6 +46,10 @@ public class Qix extends Unit {
      */
     public Qix() {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+    }
+
+    public static int getLINESCOUNT() {
+        return LINESCOUNT;
     }
 
     @Override
@@ -217,6 +220,10 @@ public class Qix extends Unit {
         return oldCoordinates;
     }
 
+    public void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
+        this.oldCoordinates = oldCoordinates;
+    }
+
     /**
      * Getter for an old coordinate.
      * @param i describes if you want the x or the y.
@@ -239,13 +246,12 @@ public class Qix extends Unit {
         this.animationLoops = animationLoops;
     }
 
-    public static int getLINESCOUNT() {
-        return LINESCOUNT;
-    }
-
-
     public LinkedList<float[]> getOldDirections() {
         return oldDirections;
+    }
+
+    public void setOldDirections(LinkedList<float[]> oldDirections) {
+        this.oldDirections = oldDirections;
     }
 
     /**
@@ -273,14 +279,6 @@ public class Qix extends Unit {
      */
     public void setDirection(float direction, int i) {
         this.direction[i] = direction;
-    }
-
-    public void setOldDirections(LinkedList<float[]> oldDirections) {
-        this.oldDirections = oldDirections;
-    }
-
-    public void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
-        this.oldCoordinates = oldCoordinates;
     }
 
     public LinkedList<double[]> getColorArray() {
