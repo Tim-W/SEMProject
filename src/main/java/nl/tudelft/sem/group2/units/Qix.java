@@ -13,13 +13,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A Qix is an enemy unit.
  * It moves randomly on the GameScene.
  * When the player touches the Qix while drawing,
- * or when the Qix touches the stix, it is game over.
+ * or when the Qix touches the stix, it is views over.
  */
 public class Qix extends Unit {
 

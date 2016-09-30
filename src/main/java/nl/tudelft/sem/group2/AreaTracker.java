@@ -1,6 +1,6 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.controllers.GameController;
 
 import java.awt.Point;
 import java.util.HashSet;
@@ -170,7 +170,7 @@ public class AreaTracker {
     }
 
     private void updateScoreCounter(boolean fastArea) {
-        ScoreCounter scoreCounter = GameScene.getScoreCounter();
+        ScoreCounter scoreCounter = GameController.getScoreCounter();
 
         //When testing create own scoreCounter
         if (scoreCounter == null) {

@@ -11,7 +11,7 @@ import java.awt.Point;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**

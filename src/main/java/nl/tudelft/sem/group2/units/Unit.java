@@ -3,7 +3,7 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.controllers.GameController;
 
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -34,7 +34,7 @@ public abstract class Unit {
         this.setY(y);
         this.setWidth(width);
         this.setHeight(height);
-        this.setAreaTracker(GameScene.getAreaTracker());
+        this.setAreaTracker(GameController.getAreaTracker());
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 

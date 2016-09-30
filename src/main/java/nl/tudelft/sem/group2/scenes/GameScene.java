@@ -1,54 +1,50 @@
 package nl.tudelft.sem.group2.scenes;
 
-import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.game.Board;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
-import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
-import java.awt.Polygon;
 import java.util.ArrayList;
-import java.util.logging.Level;
+import java.util.HashSet;
+import java.util.Set;
 
-import static nl.tudelft.sem.group2.LaunchApp.playSound;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+
 
 /**
  * GameScene contains all the information about the current game.
  */
 public class GameScene extends Scene {
 
-    private static final int NANO_SECONDS_PER_SECOND = 100000000;
-    private static AnimationTimer animationTimer;
-    private static Cursor cursor;
-    private static AreaTracker areaTracker;
-    private static ScoreCounter scoreCounter;
     private static Label messageLabel;
     private static VBox messageBox;
-    private long previousTime;
-    private Board board;
-    private boolean isRunning = false;
-    private Qix qix;
-    private ScoreScene scoreScene;
-    private static final Logger LOGGER = Logger.getLogger();
+    private GameController gameController;
+
+    private static ScoreScene scoreScene;
+
+    private static final int MARGIN = 8;
+    private static Canvas canvas;
+    private static Set<Unit> units;
+    private static GraphicsContext gc;
+    private static AreaTracker areaTracker;
 
     // TODO implement life system
     // private int lifes;
@@ -62,65 +58,70 @@ public class GameScene extends Scene {
      */
     public GameScene(final Group root, Color color) {
         super(root, color);
-        Canvas canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
-                Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
-        canvas.setLayoutX(Globals.GAME_OFFSET_X);
-        canvas.setLayoutY(Globals.GAME_OFFSET_Y);
-        areaTracker = new AreaTracker();
-        cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2);
-        board = new Board(canvas);
+        // Initialize units set because it's necessary in GameController
+        // Temporary until CollisionHandler is merged into this
+        units = new HashSet<>();
+        gameController = new GameController();
 
-        scoreCounter = new ScoreCounter();
+        initializeCanvas();
 
+        // Get area tracker for area draw methods
+        areaTracker = GameController.getAreaTracker();
+
+        // Initialize label in middle of screen to display start message
         messageLabel = new Label("Press SPACE to begin!");
         final int messageBoxSpacing = 10;
         messageBox = new VBox(messageBoxSpacing);
-        addSparx();
+        addMessageBox();
 
-        qix = new Qix();
         // Hacky way to create black bottom border
         Canvas bottomBorder = new Canvas(Globals.BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
         bottomBorder.setLayoutY(Globals.BORDER_BOTTOM_POSITION_Y);
-        board.addUnit(cursor);
-        board.addUnit(qix);
-        scoreCounter = new ScoreCounter();
-        addMessageBox();
+
+        // Add scene elements to root group
         createScoreScene();
         root.getChildren().add(scoreScene);
         root.getChildren().add(canvas);
         root.getChildren().add(bottomBorder);
         root.getChildren().add(messageBox);
 
-        previousTime = System.nanoTime();
-        board.draw();
+        // Draw the board
+        draw();
 
+        // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
-        createAnimationTimer();
     }
 
     /**
-     * Stop animations.
+     * Initializes canvas and gc.
      */
-    public static void animationTimerStop() {
-        animationTimer.stop();
+    public void initializeCanvas() {
+        // Initialize canvas
+        canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
+                Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
+        canvas.setLayoutX(Globals.GAME_OFFSET_X);
+        canvas.setLayoutY(Globals.GAME_OFFSET_Y);
+
+        // Obtain GraphicsContext2d from canvas
+        gc = canvas.getGraphicsContext2D();
+        // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
+        gc.setFill(Color.BLUE);
+        gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
     }
 
-    public static AnimationTimer getAnimationTimer() {
-        return animationTimer;
+    /**
+     * When a key is released send event to GameController.
+     */
+    private void registerKeyReleasedHandler() {
+        setOnKeyReleased((KeyEvent e) -> gameController.keyReleased(e));
     }
 
-    public static AreaTracker getAreaTracker() {
-        return areaTracker;
-    }
-
-    public static ScoreCounter getScoreCounter() {
-        return scoreCounter;
-    }
-
-    public static Cursor getQixCursor() {
-        return cursor;
+    /**
+     * When a key is pressed send event to GameController.
+     */
+    private void registerKeyPressedHandler() {
+        setOnKeyPressed((KeyEvent e) -> gameController.keyPressed(e));
     }
 
 
@@ -133,14 +134,7 @@ public class GameScene extends Scene {
         scoreScene.setClaimedPercentage(0);
     }
 
-    private void addSparx() {
-        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
-        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, SparxDirection.LEFT);
-        board.addUnit(sparxRight);
-        board.addUnit(sparxLeft);
-    }
+
 
     private void addMessageBox() {
         // Messagebox&label for displaying start and end messages
@@ -153,161 +147,214 @@ public class GameScene extends Scene {
         messageLabel.setTextFill(Color.YELLOW);
     }
 
-    private void registerKeyPressedHandler() {
-        final ArrayList<KeyCode> arrowKeys = new ArrayList<>();
-        arrowKeys.add(KeyCode.UP);
-        arrowKeys.add(KeyCode.DOWN);
-        arrowKeys.add(KeyCode.LEFT);
-        arrowKeys.add(KeyCode.RIGHT);
-
-        setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent e) {
-                if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
-                    // TODO remove this start and start using game
-                    playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
-                    animationTimer.start();
-                    LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
-                    isRunning = true;
-                    messageLabel.setText("");
-                } else if (arrowKeys.contains(e.getCode())) {
-                    for (Unit unit : board.getUnits()) {
-                        if (unit instanceof Fuse) {
-                            ((Fuse) unit).setMoving(false);
-                        }
-                    }
-                    cursor.setCurrentMove(e.getCode());
-                } else if (e.getCode().equals(KeyCode.X)) {
-                    cursor.setSpeed(1);
-                    cursor.setDrawing(true);
-                    cursor.setFast(false);
-                } else if (e.getCode().equals(KeyCode.Z)) {
-                    cursor.setSpeed(2);
-                    cursor.setDrawing(true);
-                    cursor.setFast(true);
-                }
-            }
-        });
-    }
-
-    private void registerKeyReleasedHandler() {
-        setOnKeyReleased((KeyEvent e) -> {
-                KeyCode keyCode = e.getCode();
-                if (keyCode.equals(cursor.getCurrentMove())) {
-                    if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
-                        boolean fuseExists = false;
-                        for (Unit unit : board.getUnits()) {
-                            if (unit instanceof Fuse) {
-                                fuseExists = true;
-                                ((Fuse) unit).setMoving(true);
-                            }
-                        }
-                        if (!fuseExists) {
-                            board.addUnit(
-                                    new Fuse((int) areaTracker.getStix().getFirst().getX(),
-                                            (int) areaTracker.getStix().getFirst().getY(),
-                                            Globals.FUSE_WIDTH,
-                                            Globals.FUSE_HEIGHT));
-                        }
-                    }
-                    cursor.setCurrentMove(null);
-                } else if (keyCode.equals(KeyCode.X)) {
-                    cursor.setDrawing(false);
-                    cursor.setSpeed(2);
-                } else if (keyCode.equals(KeyCode.Z)) {
-                    cursor.setDrawing(false);
-                    cursor.setSpeed(2);
-                }
-        });
+    /**
+     * Transforms grid to canvas coordinates.
+     *
+     * @param b an x or y coordinate
+     * @return the coordinate to draw an image on
+     */
+    public static int gridToCanvas(int b) {
+        return b * 2 + MARGIN - 1;
     }
 
     /**
-     * Setup an animation timer that runs at 300FPS.
+     * @return units of the board
      */
-    public void createAnimationTimer() {
-        // animation timer for handling a loop
-        animationTimer = new AnimationTimer() {
-            public void handle(long now) {
-                if (now - previousTime > NANO_SECONDS_PER_SECOND / 3) {
-                    if (scoreCounter.getTotalPercentage() >= scoreCounter.getTargetPercentage()) {
-                        gameWon();
-                    }
-                    previousTime = now;
-                    // draw
-                    board.draw();
-                    board.collisions();
-                    qixStixCollisions();
-                    scoreScene.setScore(scoreCounter.getTotalScore());
-                    scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
-                    // TODO turn this on for area calculation
-                    calculateArea();
-                }
-            }
-
-        };
+    public static Set<Unit> getUnits() {
+        return units;
     }
 
     /**
-     * Calculates collisions between Stix and Qix.
+     * Add a unit.
+     * @param unit unit to add
      */
-    private void qixStixCollisions() {
-        Polygon qixP = qix.toPolygon();
-        for (Point point : areaTracker.getStix()) {
-            if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
-                LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
-                        + "," + point.getY() + ")", this.getClass());
-                gameOver();
+    public static void addUnit(Unit unit) {
+        if (unit instanceof Fuse) {
+            for (Unit unit1 : units) {
+                if (unit1 instanceof Fuse) {
+                    return;
+                }
+            }
+        }
+        units.add(unit);
+    }
+
+    /**
+     * Draw all the units on the screen.
+     */
+    public static void draw() {
+        // gc.setFill(Color.BLACK);
+        gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+        gc.setFill(Color.WHITE);
+        drawAreas();
+        drawStixAndFuse();
+        drawFastAreas();
+        drawSlowAreas();
+        for (Unit unit : units) {
+            unit.move();
+            unit.draw(canvas);
+        }
+    }
+
+    /**
+     * Draw the areaTracker boardGrid on the screen.
+     */
+    private static void drawAreas() {
+
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
+                        || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
             }
         }
     }
 
     /**
-     * Play a game over sound.
-     * show game over text,
-     * stop the animations.
+     * Draw all fast areas on the screen.
      */
-    public static void gameOver() {
-        // TODO add code for gameover
-        animationTimerStop();
-        messageBox.setLayoutX(Globals.GAMEOVER_POSITION_X);
-        messageLabel.setText(" Game Over! ");
-
-        //Plays game over sound
-        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
-        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
-                + scoreCounter.getTotalScore(), GameScene.class);
-    }
-
-    /**
-     * TODO Play the game won sound.
-     * stop the animations,
-     * show that the player has won
-     */
-    public static void gameWon() {
-        animationTimerStop();
-        messageBox.setLayoutX(Globals.GAMEWON_POSITION_X);
-        messageLabel.setText(" You Won! ");
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
-    }
-
-    /**
-     * When a new area is completed, calculate the new score.
-     */
-    private void calculateArea() {
-        // TODO turn on if isdrawing is implemented
-        // if (cursor.isDrawing()) {
-
-        if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
-                && !areaTracker.getStix().isEmpty()) {
-            playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
-            areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
-                    cursor.isFast());
-            //Remove the Fuse from the board when completing an area
-            board.removeFuse();
+    private static void drawFastAreas() {
+        gc.setFill(Color.DARKBLUE);
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
         }
     }
 
-    public boolean isRunning() {
-        return isRunning;
+    /**
+     * Draw all slow areas on the screen.
+     */
+    private static void drawSlowAreas() {
+        gc.setFill(Color.DARKRED);
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
+        }
     }
 
+    /**
+     * Draw current Stix and Fuse on screen.
+     */
+    private static void drawStixAndFuse() {
+        boolean foundFuse = true;
+        Point fuse = new Point(-1, -1);
+        for (Unit unit : units) {
+            if (unit instanceof Fuse) {
+                foundFuse = false;
+                fuse = new Point(unit.getX(), unit.getY());
+            }
+        }
+        for (Point p : areaTracker.getStix()) {
+            if (!p.equals(areaTracker.getStix().getFirst())) {
+                if (foundFuse) {
+                    if (GameController.getCursor().isFast()) {
+                        gc.setFill(Color.MEDIUMBLUE);
+                    } else {
+                        gc.setFill(Color.DARKRED);
+                    }
+                } else {
+                    if (p.equals(fuse)) {
+                        foundFuse = true;
+                        if (GameController.getCursor().isFast()) {
+                            gc.setFill(Color.MEDIUMBLUE);
+                        } else {
+                            gc.setFill(Color.DARKRED);
+                        }
+                    } else {
+                        gc.setFill(Color.GRAY);
+                    }
+                }
+
+                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+            }
+        }
+    }
+
+    /**
+     * Check all collisions between Units.
+     * Determines what to do when two units collide.
+     * This method should be called every gameframe.
+     */
+    public static void collisions() {
+        ArrayList<Unit> unitsList = new ArrayList<>();
+        unitsList.addAll(units);
+        for (int i = 0; i < unitsList.size(); i++) {
+            Unit collider = unitsList.get(i);
+            unitsList.remove(i);
+            for (Unit collidee : unitsList) {
+                if (collider instanceof Qix) {
+                    if (collidee instanceof Cursor) {
+                        Cursor temp = (Cursor) collidee;
+                        if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(), temp.getY())) {
+                            GameController.gameOver();
+                        }
+                    }
+                } else if (collider instanceof Cursor) {
+                    if ((collidee instanceof Sparx || collidee instanceof Fuse) && collider.intersect(collidee)) {
+                        GameController.gameOver();
+                    } else if (collidee instanceof Qix) {
+                        Cursor temp = (Cursor) collider;
+                        if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(), temp.getY())) {
+                            GameController.gameOver();
+                        }
+                    }
+                } else if (collider instanceof Sparx) {
+                    if (collidee instanceof Cursor && collider.intersect(collidee)) {
+                        GameController.gameOver();
+                    }
+                } else if (collider instanceof Fuse
+                        && collidee instanceof Cursor && collider.intersect(collidee)) {
+                    GameController.gameOver();
+                }
+            }
+        }
+    }
+
+    /**
+     * If there is a Fuse on the screen, remove it.
+     */
+    public static void removeFuse() {
+        Unit removingItem = null;
+        for (Unit unit : units) {
+            if (unit instanceof Fuse) {
+                removingItem = unit;
+            }
+        }
+        if (removingItem != null) {
+            units.remove(removingItem);
+        }
+    }
+
+
+    /**
+     * Set the label for the message in the middle of the screen.
+     * @param string string which the label should be
+     */
+    public static void setMessageLabel(String string) {
+        GameScene.messageLabel.setText(string);
+    }
+
+    /**
+     * Alters x-position of message on screen.
+     * @param position new x-position
+     */
+    public static void setMessageBoxLayoutX(int position) {
+        GameScene.messageBox.setLayoutX(position);
+    }
+
+    /**
+     * Update the info on the scorescene with actual info from scorecounter.
+     * @param scoreCounter scorecounter from GameController.
+     */
+    public static void updateScorescene(ScoreCounter scoreCounter) {
+        scoreScene.setScore(scoreCounter.getTotalScore());
+        scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
+    }
 }
