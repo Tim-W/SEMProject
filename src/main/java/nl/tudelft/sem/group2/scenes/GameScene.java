@@ -163,6 +163,7 @@ public class GameScene extends Scene {
         messageLabel.setText(" You Won! ");
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
+
     public static Stix getStix() {
         return stix;
     }

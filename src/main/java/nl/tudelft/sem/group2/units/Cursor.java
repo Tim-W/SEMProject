@@ -1,15 +1,14 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.Logger;
-
-import java.awt.Point;
-import java.util.LinkedList;
-import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -19,8 +18,8 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  */
 public class Cursor extends LineTraveller {
     private static final Logger LOGGER = Logger.getLogger();
-    private KeyCode currentMove = null;
     private final int animationSpeed = 30;
+    private KeyCode currentMove = null;
     private int loops = 0;
     private int speed = 2;
     private LinkedList<double[][]> oldLines = new LinkedList<>();
@@ -81,7 +80,7 @@ public class Cursor extends LineTraveller {
             if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
                 if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
                         && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
-                        		getY() + transY * 2))
+                        getY() + transY * 2))
                         && getAreaTracker().getBoardGrid()[getX() + transX + transY]
                         		[getY() + transY + transX].equals(AreaState
                         .UNCOVERED)

@@ -1,5 +1,8 @@
 package nl.tudelft.sem.group2.game;
 
+import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -10,10 +13,6 @@ import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
-
-import java.awt.Point;
-import java.util.HashSet;
-import java.util.Set;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;

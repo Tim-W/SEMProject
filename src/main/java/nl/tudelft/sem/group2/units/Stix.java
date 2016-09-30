@@ -1,19 +1,18 @@
 package nl.tudelft.sem.group2.units;
 
-import nl.tudelft.sem.group2.Logger;
-
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.LinkedList;
 import java.util.logging.Level;
+import nl.tudelft.sem.group2.Logger;
 
 /**
  * Class which keeps track of the current stix.
  */
 public class Stix {
 
-    private LinkedList<Point> stixCoordinates;
     private static final Logger LOGGER = Logger.getLogger();
+    private LinkedList<Point> stixCoordinates;
 
     /**
      * Constructor for stix class.

@@ -1,12 +1,11 @@
 package nl.tudelft.sem.group2;
 
+import java.util.ArrayList;
+import java.util.Set;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Created by Erik on 30-9-2016.

@@ -1,25 +1,24 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.scenes.GameScene;
-
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.util.logging.Level;
 
 /**
  * An object that can be moved an drawn on a 2D grid.
  * Supports intersection checking between two units.
  */
 public abstract class Unit {
+    private static final Logger LOGGER = Logger.getLogger();
     private int x;
     private int y;
     private int width;
     private int height;
     private AreaTracker areaTracker;
-    private static final Logger LOGGER = Logger.getLogger();
 
     /**
      * Create a Unit at (x,y) position.
