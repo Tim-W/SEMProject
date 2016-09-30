@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.controllers.GameController;
 
 /**
  * An object that can be moved an drawn on a 2D grid.
@@ -33,7 +33,7 @@ public abstract class Unit implements Draw, Movable{
         this.setY(y);
         this.setWidth(width);
         this.setHeight(height);
-        this.setAreaTracker(GameScene.getAreaTracker());
+        this.setAreaTracker(GameController.getAreaTracker());
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 

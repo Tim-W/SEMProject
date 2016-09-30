@@ -10,7 +10,11 @@ import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.Logger;
 
-import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.logging.Level;
+
+import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**

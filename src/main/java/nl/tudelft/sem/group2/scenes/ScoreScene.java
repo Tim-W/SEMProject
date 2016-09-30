@@ -32,7 +32,7 @@ public class ScoreScene extends SubScene {
     /**
      * Create a new ScoreScene.
      * Shows current score percentage,
-     * title of the game,
+     * title of the views,
      * and score count.
      *
      * @param root   the root this scene is placed on top of
