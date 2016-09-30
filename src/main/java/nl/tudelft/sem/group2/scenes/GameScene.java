@@ -37,7 +37,7 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
 public class GameScene extends Scene {
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
-    private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = Logger.getLogger();
     private static AnimationTimer animationTimer;
     private static Cursor cursor;
     private static AreaTracker areaTracker;
@@ -49,7 +49,6 @@ public class GameScene extends Scene {
     private boolean isRunning = false;
     private Qix qix;
     private ScoreScene scoreScene;
-    private static final Logger LOGGER = Logger.getLogger();
 
     // TODO implement life system
     // private int lifes;
