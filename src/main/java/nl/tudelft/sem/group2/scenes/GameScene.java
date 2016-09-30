@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.scenes;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -30,12 +31,16 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Unit;
 
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**
  * GameScene contains all the information about the current game.
  */
 public class GameScene extends Scene {
 
+    private static final int LAST_IMAGE = 5;
+    private static final int FIRST_IMAGE = 2;
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     private static final Logger LOGGER = Logger.getLogger();
     private static AnimationTimer animationTimer;
@@ -62,7 +67,7 @@ public class GameScene extends Scene {
      */
     public GameScene(final Group root, Color color) {
         super(root, color);
-        Canvas canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
+        Canvas canvas = new Canvas(BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
                 Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         canvas.setLayoutX(Globals.GAME_OFFSET_X);
         canvas.setLayoutY(Globals.GAME_OFFSET_Y);
@@ -70,17 +75,18 @@ public class GameScene extends Scene {
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2);
         board = new Board(canvas);
-        board.setImage(new Image("/images/background.png", 300.0, 300.0, false, false));
+        Random random = new Random();
+        //Choose random image
+        int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
+        board.setImage(new Image("/images/" + image + ".png", BOARD_WIDTH, BOARD_HEIGHT, false, false));
         scoreCounter = new ScoreCounter();
-
         messageLabel = new Label("Press SPACE to begin!");
         final int messageBoxSpacing = 10;
         messageBox = new VBox(messageBoxSpacing);
         addSparx();
-
         qix = new Qix();
         // Hacky way to create black bottom border
-        Canvas bottomBorder = new Canvas(Globals.BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
+        Canvas bottomBorder = new Canvas(BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
         bottomBorder.setLayoutY(Globals.BORDER_BOTTOM_POSITION_Y);
         board.addUnit(cursor);
         board.addUnit(qix);
@@ -94,7 +100,6 @@ public class GameScene extends Scene {
 
         previousTime = System.nanoTime();
         board.draw();
-
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
         createAnimationTimer();
