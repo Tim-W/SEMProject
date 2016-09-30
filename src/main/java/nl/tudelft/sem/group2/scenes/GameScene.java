@@ -1,5 +1,10 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Point;
+import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -7,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -26,19 +32,19 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Point;
-import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.logging.Level;
-
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**
  * GameScene contains all the information about the current game.
  */
 public class GameScene extends Scene {
 
+    private static final int LAST_IMAGE = 5;
+    private static final int FIRST_IMAGE = 2;
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
+    private static final Logger LOGGER = Logger.getLogger();
     private static AnimationTimer animationTimer;
     private static Cursor cursor;
     private static Stix stix;
@@ -52,7 +58,6 @@ public class GameScene extends Scene {
     private Qix qix;
     private ScoreScene scoreScene;
     private CollisionHandler collisionHandler;
-    private static final Logger LOGGER = Logger.getLogger();
 
     // TODO implement life system
     // private int lifes;
@@ -66,7 +71,7 @@ public class GameScene extends Scene {
      */
     public GameScene(final Group root, Color color) {
         super(root, color);
-        Canvas canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
+        Canvas canvas = new Canvas(BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
                 Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         canvas.setLayoutX(Globals.GAME_OFFSET_X);
         canvas.setLayoutY(Globals.GAME_OFFSET_Y);
@@ -75,17 +80,18 @@ public class GameScene extends Scene {
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, stix);
         board = new Board(canvas);
-
+        Random random = new Random();
+        //Choose random image
+        int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
+        board.setImage(new Image("/images/" + image + ".png", BOARD_WIDTH, BOARD_HEIGHT, false, false));
         scoreCounter = new ScoreCounter();
-
         messageLabel = new Label("Press SPACE to begin!");
         final int messageBoxSpacing = 10;
         messageBox = new VBox(messageBoxSpacing);
         addSparx();
-
         qix = new Qix();
         // Hacky way to create black bottom border
-        Canvas bottomBorder = new Canvas(Globals.BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
+        Canvas bottomBorder = new Canvas(BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
         bottomBorder.setLayoutY(Globals.BORDER_BOTTOM_POSITION_Y);
         board.addUnit(cursor);
         board.addUnit(qix);
@@ -101,7 +107,6 @@ public class GameScene extends Scene {
 
         previousTime = System.nanoTime();
         board.draw();
-
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
         createAnimationTimer();
@@ -128,6 +133,35 @@ public class GameScene extends Scene {
 
     public static Cursor getQixCursor() {
         return cursor;
+    }
+
+    /**
+     * Play a game over sound.
+     * show game over text,
+     * stop the animations.
+     */
+    public static void gameOver() {
+        // TODO add code for gameover
+        animationTimerStop();
+        messageBox.setLayoutX(Globals.GAMEOVER_POSITION_X);
+        messageLabel.setText(" Game Over! ");
+
+        //Plays game over sound
+        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+                + scoreCounter.getTotalScore(), GameScene.class);
+    }
+
+    /**
+     * TODO Play the game won sound.
+     * stop the animations,
+     * show that the player has won
+     */
+    public static void gameWon() {
+        animationTimerStop();
+        messageBox.setLayoutX(Globals.GAMEWON_POSITION_X);
+        messageLabel.setText(" You Won! ");
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
     public static Stix getStix() {
@@ -272,35 +306,6 @@ public class GameScene extends Scene {
                 gameOver();
             }
         }
-    }
-
-    /**
-     * Play a game over sound.
-     * show game over text,
-     * stop the animations.
-     */
-    public static void gameOver() {
-        // TODO add code for gameover
-        animationTimerStop();
-        messageBox.setLayoutX(Globals.GAMEOVER_POSITION_X);
-        messageLabel.setText(" Game Over! ");
-
-        //Plays game over sound
-        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
-        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
-                + scoreCounter.getTotalScore(), GameScene.class);
-    }
-
-    /**
-     * TODO Play the game won sound.
-     * stop the animations,
-     * show that the player has won
-     */
-    public static void gameWon() {
-        animationTimerStop();
-        messageBox.setLayoutX(Globals.GAMEWON_POSITION_X);
-        messageLabel.setText(" You Won! ");
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
     /**

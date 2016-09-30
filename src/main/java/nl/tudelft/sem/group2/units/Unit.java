@@ -1,12 +1,12 @@
 package nl.tudelft.sem.group2.units;
 
-import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.scenes.GameScene;
-
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.logging.Level;
+import javafx.scene.canvas.Canvas;
+import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.scenes.GameScene;
 
 /**
  * An object that can be moved an drawn on a 2D grid.

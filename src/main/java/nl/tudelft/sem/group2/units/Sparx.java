@@ -1,9 +1,8 @@
 package nl.tudelft.sem.group2.units;
 
+import java.util.logging.Level;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.Logger;
-
-import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -104,11 +103,13 @@ public class Sparx extends LineTraveller {
         this.lastX = x;
         this.lastY = y;
     }
-    public void setXAndLastX(int x){
+
+    public void setXAndLastX(int x) {
         setLastCoordinates(getX(), getY());
         setX(x);
     }
-    public void setYAndLastY(int y){
+
+    public void setYAndLastY(int y) {
         setLastCoordinates(getX(), getY());
         setY(y);
     }

@@ -1,7 +1,11 @@
 package nl.tudelft.sem.group2.game;
 
+import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
@@ -10,11 +14,8 @@ import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Point;
-import java.util.HashSet;
-import java.util.Set;
-
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**
@@ -23,6 +24,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 public class Board {
 
     private static final int MARGIN = 8;
+    private Image image;
     private Canvas canvas;
     private Set<Unit> units;
     private GraphicsContext gc;
@@ -43,7 +45,6 @@ public class Board {
         gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
         this.areaTracker = GameScene.getAreaTracker();
         this.cursor = GameScene.getQixCursor();
-
     }
 
     /**
@@ -54,6 +55,16 @@ public class Board {
      */
     public static int gridToCanvas(int b) {
         return b * 2 + MARGIN - 1;
+    }
+
+    /**
+     * Sets a background image to be drawn on all claimed areas.
+     *
+     * @param image the image to draw
+     */
+    public void setImage(Image image) {
+        this.image = image;
+        gc.drawImage(image, MARGIN, MARGIN);
     }
 
     /**
@@ -82,55 +93,37 @@ public class Board {
      * Draw all the units on the screen.
      */
     public void draw() {
-        // gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+        gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
         gc.setFill(Color.WHITE);
-        drawAreas();
+        drawUncovered();
+        drawBorders();
         drawStixAndFuse();
         for (Unit unit : units) {
             unit.move();
             unit.draw(canvas);
         }
-        drawFastAreas();
-        drawSlowAreas();
+//        drawFastAreas();
+//        drawSlowAreas();
     }
 
-    /**
-     * Draw the areaTracker boardGrid on the screen.
-     */
-    private void drawAreas() {
+    private void drawUncovered() {
+        gc.setFill(Color.BLACK);
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.UNCOVERED) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
+        }
+    }
+
+    private void drawBorders() {
+        gc.setFill(Color.WHITE);
         for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
             for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
                 if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
                         || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    /**
-     * Draw all fast areas on the screen.
-     */
-    private void drawFastAreas() {
-        gc.setFill(Color.DARKBLUE);
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.FAST) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    /**
-     * Draw all slow areas on the screen.
-     */
-    private void drawSlowAreas() {
-        gc.setFill(Color.DARKRED);
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.SLOW) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
