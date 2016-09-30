@@ -5,7 +5,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 
 import java.awt.Point;
@@ -19,12 +18,12 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  * A cursor which can travel over lines and is controlled by user input (arrow keys).
  */
 public class Cursor extends LineTraveller {
-    private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = Logger.getLogger();
     private KeyCode currentMove = null;
     private final int animationSpeed = 30;
     private int loops = 0;
     private int speed = 2;
-    private LinkedList<double[][]> oldLines = new LinkedList<double[][]>();
+    private LinkedList<double[][]> oldLines = new LinkedList<>();
     //TODO set stix to false when implementation is done
     private boolean isDrawing = false;
     private boolean isFast = true;
