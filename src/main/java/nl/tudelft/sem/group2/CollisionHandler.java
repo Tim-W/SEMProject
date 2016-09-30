@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Created by Erik on 30-9-2016.
+ * Class which handles all the collisions.
  */
 public class CollisionHandler {
 
-    public void CollisionHandler() {
+    /**
+     * Basic cosntructor for collision handler class.
+     */
+    public CollisionHandler() {
 
     }
 
@@ -21,6 +24,9 @@ public class CollisionHandler {
      * Check all collisions between Units.
      * Determines what to do when two units collide.
      * This method should be called every gameframe.
+     * @param units set of units in the game atm
+     * @param stix current stix
+     * @return if there is a collision
      */
     public boolean collisions(Set<Unit> units, Stix stix) {
         ArrayList<Unit> unitsList = new ArrayList<>();

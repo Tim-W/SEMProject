@@ -189,9 +189,8 @@ public class Qix extends Unit {
     }
 
     @Override
-    public boolean intersect(Unit obj) {
+    public boolean intersect(Unit collidee) {
         //if (!(obj instanceof Qix) ) {
-        Unit collidee = (Unit) obj;
         Polygon colliderP = this.toPolygon();
 
         // subtract one from width&height to make collisions look more real

@@ -14,16 +14,10 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
-import nl.tudelft.sem.group2.units.Qix;
-import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Unit;
-import nl.tudelft.sem.group2.units.Stix;
-import nl.tudelft.sem.group2.CollisionHandler;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -93,10 +87,6 @@ public class GameScene extends Scene {
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
-
-        collisionHandler = new CollisionHandler();
-
-        scoreCounter = new ScoreCounter();
     }
 
     /**
@@ -128,10 +118,6 @@ public class GameScene extends Scene {
      */
     private void registerKeyPressedHandler() {
         setOnKeyPressed((KeyEvent e) -> gameController.keyPressed(e));
-    }
-
-    public static Stix getStix() {
-        return stix;
     }
 
 
@@ -261,8 +247,8 @@ public class GameScene extends Scene {
                 fuse = new Point(unit.getX(), unit.getY());
             }
         }
-        for (Point p : areaTracker.getStix()) {
-            if (!p.equals(areaTracker.getStix().getFirst())) {
+        for (Point p : GameController.getStix().getStixCoordinates()) {
+            if (!p.equals(GameController.getStix().getStixCoordinates().getFirst())) {
                 if (foundFuse) {
                     if (GameController.getCursor().isFast()) {
                         gc.setFill(Color.MEDIUMBLUE);
@@ -283,46 +269,6 @@ public class GameScene extends Scene {
                 }
 
                 gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
-            }
-        }
-    }
-
-    /**
-     * Check all collisions between Units.
-     * Determines what to do when two units collide.
-     * This method should be called every gameframe.
-     */
-    public static void collisions() {
-        ArrayList<Unit> unitsList = new ArrayList<>();
-        unitsList.addAll(units);
-        for (int i = 0; i < unitsList.size(); i++) {
-            Unit collider = unitsList.get(i);
-            unitsList.remove(i);
-            for (Unit collidee : unitsList) {
-                if (collider instanceof Qix) {
-                    if (collidee instanceof Cursor) {
-                        Cursor temp = (Cursor) collidee;
-                        if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(), temp.getY())) {
-                            GameController.gameOver();
-                        }
-                    }
-                } else if (collider instanceof Cursor) {
-                    if ((collidee instanceof Sparx || collidee instanceof Fuse) && collider.intersect(collidee)) {
-                        GameController.gameOver();
-                    } else if (collidee instanceof Qix) {
-                        Cursor temp = (Cursor) collider;
-                        if (collider.intersect(collidee) && temp.uncoveredOn(temp.getX(), temp.getY())) {
-                            GameController.gameOver();
-                        }
-                    }
-                } else if (collider instanceof Sparx) {
-                    if (collidee instanceof Cursor && collider.intersect(collidee)) {
-                        GameController.gameOver();
-                    }
-                } else if (collider instanceof Fuse
-                        && collidee instanceof Cursor && collider.intersect(collidee)) {
-                    GameController.gameOver();
-                }
             }
         }
     }

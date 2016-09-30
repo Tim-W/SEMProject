@@ -104,11 +104,20 @@ public class Sparx extends LineTraveller {
         this.lastX = x;
         this.lastY = y;
     }
-    public void setXAndLastX(int x){
+
+    /**
+     * Setter for x coordinates.
+     * @param x new x value
+     */
+    public void setXAndLastX(int x) {
         setLastCoordinates(getX(), getY());
         setX(x);
     }
-    public void setYAndLastY(int y){
+    /**
+     * Setter for y coordinates.
+     * @param y new y value
+     */
+    public void setYAndLastY(int y) {
         setLastCoordinates(getX(), getY());
         setY(y);
     }

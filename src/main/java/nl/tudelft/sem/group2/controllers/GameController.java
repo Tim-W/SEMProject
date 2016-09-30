@@ -5,6 +5,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.CollisionHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.global.Globals;
@@ -14,6 +15,7 @@ import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
+import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
@@ -36,6 +38,7 @@ public class GameController {
     // Units
     private static Cursor cursor;
     private static Qix qix;
+    private static Stix stix;
 
     // Boolean that states if the game is running
     private boolean isRunning = false;
@@ -43,6 +46,7 @@ public class GameController {
     // Models for score tracking
     private static AreaTracker areaTracker;
     private static ScoreCounter scoreCounter;
+    private CollisionHandler collisionHandler;
 
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
@@ -52,13 +56,16 @@ public class GameController {
      */
     public GameController() {
         // Initialize models for scoretracking.
-        areaTracker = new AreaTracker();
+
+        stix = new Stix();
+
+        areaTracker = new AreaTracker(stix);
         scoreCounter = new ScoreCounter();
 
         // Initialize and add units to units set in Gamescene
         qix = new Qix();
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2);
+                Globals.BOARD_MARGIN * 2, stix);
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
@@ -67,6 +74,8 @@ public class GameController {
         GameScene.addUnit(qix);
         GameScene.addUnit(sparxRight);
         GameScene.addUnit(sparxLeft);
+
+        collisionHandler = new CollisionHandler();
 
         //Animation timer initialization
         previousTime = System.nanoTime();
@@ -86,8 +95,9 @@ public class GameController {
                     previousTime = now;
                     // draw
                     GameScene.draw();
-                    GameScene.collisions();
-                    qixStixCollisions();
+                    if (collisionHandler.collisions(GameScene.getUnits(), stix)) {
+                        gameOver();
+                    }
                     GameScene.updateScorescene(scoreCounter);
                     calculateArea();
                 }
@@ -105,7 +115,7 @@ public class GameController {
         // if (cursor.isDrawing()) {
 
         if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
-                && !areaTracker.getStix().isEmpty()) {
+                && !stix.getStixCoordinates().isEmpty()) {
             playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());
@@ -135,7 +145,7 @@ public class GameController {
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
         if (keyCode.equals(cursor.getCurrentMove())) {
-            if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
+            if (stix.getStixCoordinates().contains(new Point(cursor.getX(), cursor.getY()))) {
                 boolean fuseExists = false;
                 for (Unit unit : GameScene.getUnits()) {
                     if (unit instanceof Fuse) {
@@ -145,10 +155,10 @@ public class GameController {
                 }
                 if (!fuseExists) {
                     GameScene.addUnit(
-                            new Fuse((int) areaTracker.getStix().getFirst().getX(),
-                                    (int) areaTracker.getStix().getFirst().getY(),
+                            new Fuse((int) stix.getStixCoordinates().getFirst().getX(),
+                                    (int) stix.getStixCoordinates().getFirst().getY(),
                                     Globals.FUSE_WIDTH,
-                                    Globals.FUSE_HEIGHT));
+                                    Globals.FUSE_HEIGHT, stix));
                 }
             }
             cursor.setCurrentMove(null);
@@ -231,7 +241,7 @@ public class GameController {
      */
     private void qixStixCollisions() {
         Polygon qixP = qix.toPolygon();
-        for (Point point : areaTracker.getStix()) {
+        for (Point point : stix.getStixCoordinates()) {
             if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
                 LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
                         + "," + point.getY() + ")", this.getClass());
@@ -253,5 +263,9 @@ public class GameController {
 
     public static ScoreCounter getScoreCounter() {
         return scoreCounter;
+    }
+
+    public static Stix getStix() {
+        return stix;
     }
 }

@@ -12,7 +12,7 @@ import java.util.logging.Level;
  */
 public class Stix {
 
-    private LinkedList<Point> stixCoordinates;
+    private static LinkedList<Point> stixCoordinates;
     private static final Logger LOGGER = Logger.getLogger();
 
     /**
@@ -32,15 +32,17 @@ public class Stix {
     }
 
     /**
-     * @return
+     * Checks if stix stix is empty.
+     * @return boolean isempty()
      */
     public boolean isStixEmpty() {
         return !(stixCoordinates != null && !stixCoordinates.isEmpty());
     }
 
     /**
-     * @param qix
-     * @return
+     * Check if stix intersects with qix.
+     * @param qix the current qix
+     * @return if they intersect
      */
     public boolean intersect(Qix qix) {
         if (!this.isStixEmpty()) {
