@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.scenes.GameScene;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,15 +31,18 @@ public class CursorTest {
 
     private Cursor cursor;
     private AreaTracker areaTracker;
+    private GameScene gameScene;
+    private Stix stix;
     private Canvas canvas;
     private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
-    private LinkedList<Point> stix;
+    private LinkedList<Point> stixCoordinates;
     private int x;
     private int y;
     @Before
     public void setUp() throws Exception {
         new JFXPanel();
-        createCursor(new Cursor(2, 2, 2, 2));
+        stix = mock(Stix.class);
+        createCursor(new Cursor(2, 2, 2, 2, stix));
         cursor.setSpeed(1);
         canvas = new Canvas(50, 50);
         for (int i = 0; i < boardGrid.length; i++) {
@@ -53,8 +57,9 @@ public class CursorTest {
     public void createCursor(Cursor c) {
         cursor = c;
         areaTracker = mock(AreaTracker.class);
-        stix = new LinkedList<>();
-        when(areaTracker.getStix()).thenReturn(stix);
+        gameScene = mock(GameScene.class);
+        stixCoordinates = new LinkedList<>();
+        when(stix.getStixCoordinates()).thenReturn(stixCoordinates);
         cursor.setAreaTracker(areaTracker);
     }
 
@@ -87,7 +92,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveL() throws Exception {
-        createCursor(new Cursor(0, 2, 2, 2));
+        createCursor(new Cursor(0, 2, 2, 2, stix));
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.LEFT);
         cursor.move();
@@ -96,7 +101,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveR() throws Exception {
-        createCursor(new Cursor(BOARD_WIDTH / 2, 2, 2, 2));
+        createCursor(new Cursor(BOARD_WIDTH / 2, 2, 2, 2, stix));
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.RIGHT);
         cursor.move();
@@ -105,7 +110,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveU() throws Exception {
-        createCursor(new Cursor(2, 0, 2, 2));
+        createCursor(new Cursor(2, 0, 2, 2, stix));
         int dim = cursor.getY();
         cursor.setCurrentMove(KeyCode.UP);
         cursor.move();
@@ -114,7 +119,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveD() throws Exception {
-        createCursor(new Cursor(2, BOARD_HEIGHT / 2, 2, 2));
+        createCursor(new Cursor(2, BOARD_HEIGHT / 2, 2, 2, stix));
         int dim = cursor.getY();
         cursor.setCurrentMove(KeyCode.DOWN);
         cursor.move();
@@ -138,7 +143,7 @@ public class CursorTest {
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         cursor.setCurrentMove(KeyCode.RIGHT);
         cursor.move();
-        verify(areaTracker, times(2)).addToStix(any());
+        verify(stix, times(2)).addToStix(any());
     }
     @Test
     public void moveRightOuterBorder() throws Exception {
@@ -153,7 +158,7 @@ public class CursorTest {
     @Test
     public void dontMoveR3() throws Exception {
         cursor.setDrawing(true);
-        stix.add(new Point(x + 1, y));
+        stixCoordinates.add(new Point(x + 1, y));
         moveCursor(KeyCode.RIGHT, x + 1, y, false);
         Assert.assertEquals(x, cursor.getX());
     }
@@ -161,7 +166,7 @@ public class CursorTest {
     @Test
     public void dontMoveR4() throws Exception {
         cursor.setDrawing(true);
-        stix.add(new Point(x + 2, y));
+        stixCoordinates.add(new Point(x + 2, y));
         moveCursor(KeyCode.RIGHT, x + 1, y, false);
         Assert.assertEquals(x, cursor.getX());
     }
@@ -211,7 +216,7 @@ public class CursorTest {
 
     @Test
     public void draw() throws Exception {
-        Cursor spy = spy(new Cursor(1, 1, 1, 1));
+        Cursor spy = spy(new Cursor(1, 1, 1, 1, stix));
         spy.draw(new Canvas(1, 1));
         verify(spy).getSpriteIndex();
     }

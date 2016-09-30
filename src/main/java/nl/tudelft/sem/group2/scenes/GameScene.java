@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.CollisionHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.game.Board;
@@ -28,6 +29,7 @@ import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
+import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
@@ -45,6 +47,7 @@ public class GameScene extends Scene {
     private static final Logger LOGGER = Logger.getLogger();
     private static AnimationTimer animationTimer;
     private static Cursor cursor;
+    private static Stix stix;
     private static AreaTracker areaTracker;
     private static ScoreCounter scoreCounter;
     private static Label messageLabel;
@@ -54,6 +57,7 @@ public class GameScene extends Scene {
     private boolean isRunning = false;
     private Qix qix;
     private ScoreScene scoreScene;
+    private CollisionHandler collisionHandler;
 
     // TODO implement life system
     // private int lifes;
@@ -71,9 +75,10 @@ public class GameScene extends Scene {
                 Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         canvas.setLayoutX(Globals.GAME_OFFSET_X);
         canvas.setLayoutY(Globals.GAME_OFFSET_Y);
-        areaTracker = new AreaTracker();
+        stix = new Stix();
+        areaTracker = new AreaTracker(stix);
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2);
+                Globals.BOARD_MARGIN * 2, stix);
         board = new Board(canvas);
         Random random = new Random();
         //Choose random image
@@ -90,6 +95,8 @@ public class GameScene extends Scene {
         bottomBorder.setLayoutY(Globals.BORDER_BOTTOM_POSITION_Y);
         board.addUnit(cursor);
         board.addUnit(qix);
+        collisionHandler = new CollisionHandler();
+
         scoreCounter = new ScoreCounter();
         addMessageBox();
         createScoreScene();
@@ -156,6 +163,10 @@ public class GameScene extends Scene {
         messageLabel.setText(" You Won! ");
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
+    public static Stix getStix() {
+        return stix;
+    }
+
 
     private void createScoreScene() {
         Group group = new Group();
@@ -175,6 +186,7 @@ public class GameScene extends Scene {
         board.addUnit(sparxLeft);
     }
 
+    // TODO move to board
     private void addMessageBox() {
         // Messagebox&label for displaying start and end messages
         messageBox.setAlignment(Pos.CENTER);
@@ -226,7 +238,7 @@ public class GameScene extends Scene {
         setOnKeyReleased((KeyEvent e) -> {
                 KeyCode keyCode = e.getCode();
                 if (keyCode.equals(cursor.getCurrentMove())) {
-                    if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
+                    if (stix.getStixCoordinates().contains(new Point(cursor.getX(), cursor.getY()))) {
                         boolean fuseExists = false;
                         for (Unit unit : board.getUnits()) {
                             if (unit instanceof Fuse) {
@@ -236,10 +248,10 @@ public class GameScene extends Scene {
                         }
                         if (!fuseExists) {
                             board.addUnit(
-                                    new Fuse((int) areaTracker.getStix().getFirst().getX(),
-                                            (int) areaTracker.getStix().getFirst().getY(),
+                                    new Fuse((int) stix.getStixCoordinates().getFirst().getX(),
+                                            (int) stix.getStixCoordinates().getFirst().getY(),
                                             Globals.FUSE_WIDTH,
-                                            Globals.FUSE_HEIGHT));
+                                            Globals.FUSE_HEIGHT, stix));
                         }
                     }
                     cursor.setCurrentMove(null);
@@ -267,8 +279,10 @@ public class GameScene extends Scene {
                     previousTime = now;
                     // draw
                     board.draw();
-                    board.collisions();
-                    qixStixCollisions();
+                    if (collisionHandler.collisions(board.getUnits(), GameScene.getStix())) {
+                        GameScene.gameOver();
+                    }
+                    //qixStixCollisions();
                     scoreScene.setScore(scoreCounter.getTotalScore());
                     scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
                     // TODO turn this on for area calculation
@@ -284,7 +298,7 @@ public class GameScene extends Scene {
      */
     private void qixStixCollisions() {
         Polygon qixP = qix.toPolygon();
-        for (Point point : areaTracker.getStix()) {
+        for (Point point : stix.getStixCoordinates()) {
             if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
                 LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
                         + "," + point.getY() + ")", this.getClass());
@@ -301,7 +315,7 @@ public class GameScene extends Scene {
         // if (cursor.isDrawing()) {
 
         if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
-                && !areaTracker.getStix().isEmpty()) {
+                && !stix.getStixCoordinates().isEmpty()) {
             playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());

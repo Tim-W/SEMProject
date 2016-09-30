@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2;
 
+import nl.tudelft.sem.group2.units.Stix;
+
 import java.awt.Point;
 
 import static org.junit.Assert.assertEquals;
@@ -18,7 +20,8 @@ public class AreaTrackerTest {
      */
     @org.junit.Test
     public void testConstructor() throws Exception {
-        AreaTracker areaTracker = new AreaTracker();
+        Stix stix = new Stix();
+        AreaTracker areaTracker = new AreaTracker(stix);
 
         AreaState[][] expectedGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
 
@@ -183,12 +186,13 @@ public class AreaTrackerTest {
     }
 
     private AreaTracker instantiateAreaTracker() {
-        AreaTracker areaTracker = new AreaTracker(TEST_MAP_WIDTH, TEST_MAP_HEIGHT);
-        areaTracker.addToStix(new Point(2, 0));
-        areaTracker.addToStix(new Point(2, 1));
-        areaTracker.addToStix(new Point(2, 2));
-        areaTracker.addToStix(new Point(2, 3));
-        areaTracker.addToStix(new Point(2, 4));
-        return areaTracker;
+        Stix stix = new Stix();
+        stix.addToStix(new Point(2, 0));
+        stix.addToStix(new Point(2, 1));
+        stix.addToStix(new Point(2, 2));
+        stix.addToStix(new Point(2, 3));
+        stix.addToStix(new Point(2, 4));
+        return new AreaTracker(TEST_MAP_WIDTH, TEST_MAP_HEIGHT, stix);
+
     }
 }
