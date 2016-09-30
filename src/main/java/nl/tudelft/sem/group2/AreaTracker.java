@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2;
 
 import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
 import java.util.HashSet;
@@ -16,19 +17,20 @@ public class AreaTracker {
 
     private static final Logger LOGGER = Logger.getLogger();
 
-    private static LinkedList<Point> stix = new LinkedList<>();
-
     private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
     private Stack<Point> visiting = new Stack<>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
+    private Stix stix;
 
     /**
      * Constructor for the AreaTracker class.
      * The constructor sets all the grid points to border and the rest to uncovered
+     * @param stix   current stix to use
      */
-    public AreaTracker() {
+    public AreaTracker(Stix stix) {
+        this.stix = stix;
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
                 //If the current row is the first row set all grid points border on that row
@@ -60,8 +62,10 @@ public class AreaTracker {
      *
      * @param width  width of the boardGrid
      * @param height height of the boardGrid
+     * @param stix   current stix to use
      */
-    public AreaTracker(int width, int height) {
+    public AreaTracker(int width, int height, Stix stix) {
+        this.stix = stix;
         boardGrid = new AreaState[width][height];
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
@@ -102,8 +106,8 @@ public class AreaTracker {
         setOuterBorders();
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm
-        Point start = stix.getFirst();
-        Point dir = stix.get(1);
+        Point start = stix.getStixCoordinates().getFirst();
+        Point dir = stix.getStixCoordinates().get(1);
         // Instantiate the two temporary area trackers, these linkedlists
         // accumulate all the points on one side of the stix
         // When the floodfill algorithm finds a qix however the linkedlist is
@@ -135,7 +139,7 @@ public class AreaTracker {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
         }
         resetAreaTracker();
-        emptyStix();
+        stix.emptyStix();
     }
 
     private void resetBorders() {
@@ -150,15 +154,9 @@ public class AreaTracker {
 
     private void setOuterBorders() {
         //Set all the points from the current stix to border points on the grid
-        for (Point current : stix) {
+        for (Point current : stix.getStixCoordinates()) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
         }
-    }
-
-    private void emptyStix() {
-        //Empty the current stix
-        stix = null;
-        stix = new LinkedList<>();
     }
 
     private void resetAreaTracker() {
@@ -179,7 +177,7 @@ public class AreaTracker {
 
         //Update score and percentage with newly created area,
         // therefore it's needed to know the stix was created fast or slow
-        scoreCounter.updateScore(newArea.size() + stix.size(), fastArea);
+        scoreCounter.updateScore(newArea.size() + stix.getStixCoordinates().size(), fastArea);
     }
 
     private void setBorders() {
@@ -261,7 +259,7 @@ public class AreaTracker {
                 addPointToAreaTracker(addToArea1, pointToCheck);
             }
         } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.OUTERBORDER
-                && !stix.contains(pointToCheck)) {
+                && !stix.getStixCoordinates().contains(pointToCheck)) {
             if (addToArea1) {
                 border1.add(pointToCheck);
             } else {
@@ -304,24 +302,6 @@ public class AreaTracker {
             border2 = null;
         }
         foundQix = true;
-    }
-
-    /**
-     * Method that adds a point to the current stix.
-     *
-     * @param coordinates point that gets added to the stix
-     */
-    public void addToStix(Point coordinates) {
-        stix.add(coordinates);
-    }
-
-    /**
-     * Getter for the stix.
-     *
-     * @return the current stix
-     */
-    public LinkedList<Point> getStix() {
-        return stix;
     }
 
     /**

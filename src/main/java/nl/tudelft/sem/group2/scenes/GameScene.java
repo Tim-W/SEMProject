@@ -22,6 +22,7 @@ import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
+import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
@@ -39,6 +40,7 @@ public class GameScene extends Scene {
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     private static AnimationTimer animationTimer;
     private static Cursor cursor;
+    private static Stix stix;
     private static AreaTracker areaTracker;
     private static ScoreCounter scoreCounter;
     private static Label messageLabel;
@@ -66,9 +68,10 @@ public class GameScene extends Scene {
                 Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         canvas.setLayoutX(Globals.GAME_OFFSET_X);
         canvas.setLayoutY(Globals.GAME_OFFSET_Y);
-        areaTracker = new AreaTracker();
+        stix = new Stix();
+        areaTracker = new AreaTracker(stix);
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2);
+                Globals.BOARD_MARGIN * 2, stix);
         board = new Board(canvas);
 
         scoreCounter = new ScoreCounter();
@@ -123,6 +126,10 @@ public class GameScene extends Scene {
         return cursor;
     }
 
+    public static Stix getStix() {
+        return stix;
+    }
+
 
     private void createScoreScene() {
         Group group = new Group();
@@ -142,6 +149,7 @@ public class GameScene extends Scene {
         board.addUnit(sparxLeft);
     }
 
+    // TODO move to board
     private void addMessageBox() {
         // Messagebox&label for displaying start and end messages
         messageBox.setAlignment(Pos.CENTER);
@@ -193,7 +201,7 @@ public class GameScene extends Scene {
         setOnKeyReleased((KeyEvent e) -> {
                 KeyCode keyCode = e.getCode();
                 if (keyCode.equals(cursor.getCurrentMove())) {
-                    if (areaTracker.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
+                    if (stix.getStixCoordinates().contains(new Point(cursor.getX(), cursor.getY()))) {
                         boolean fuseExists = false;
                         for (Unit unit : board.getUnits()) {
                             if (unit instanceof Fuse) {
@@ -203,10 +211,10 @@ public class GameScene extends Scene {
                         }
                         if (!fuseExists) {
                             board.addUnit(
-                                    new Fuse((int) areaTracker.getStix().getFirst().getX(),
-                                            (int) areaTracker.getStix().getFirst().getY(),
+                                    new Fuse((int) stix.getStixCoordinates().getFirst().getX(),
+                                            (int) stix.getStixCoordinates().getFirst().getY(),
                                             Globals.FUSE_WIDTH,
-                                            Globals.FUSE_HEIGHT));
+                                            Globals.FUSE_HEIGHT, stix));
                         }
                     }
                     cursor.setCurrentMove(null);
@@ -251,7 +259,7 @@ public class GameScene extends Scene {
      */
     private void qixStixCollisions() {
         Polygon qixP = qix.toPolygon();
-        for (Point point : areaTracker.getStix()) {
+        for (Point point : stix.getStixCoordinates()) {
             if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
                 LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
                         + "," + point.getY() + ")", this.getClass());
@@ -297,7 +305,7 @@ public class GameScene extends Scene {
         // if (cursor.isDrawing()) {
 
         if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
-                && !areaTracker.getStix().isEmpty()) {
+                && !stix.getStixCoordinates().isEmpty()) {
             playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());

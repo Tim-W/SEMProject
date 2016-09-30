@@ -20,11 +20,13 @@ import static org.mockito.Mockito.when;
  */
 public class LineTravellerTest {
     private Cursor cursor;
+    private Stix stix;
 
     @Before
     public void setUp() throws Exception {
         new JFXPanel();
-        createCursor(new Cursor(2, 2, 2, 2));
+        stix = new Stix();
+        createCursor(new Cursor(2, 2, 2, 2, stix));
     }
 
     public void createCursor(Cursor c) {
@@ -55,14 +57,14 @@ public class LineTravellerTest {
      */
     @Test
     public void incrementSpriteIndex() throws Exception {
-        Fuse spyFuse = spy(new Fuse(2, 2, 2, 2));
+        Fuse spyFuse = spy(new Fuse(2, 2, 2, 2, stix));
         spyFuse.draw(new Canvas(1, 1));
         verify(spyFuse).setSpriteIndex(anyInt());
     }
 
     @Test
     public void getSpriteImage() throws Exception {
-        Fuse fuse = new Fuse(2, 2, 2, 2);
+        Fuse fuse = new Fuse(2, 2, 2, 2, stix);
         Image[] sprite = new Image[1];
         sprite[0] = new Image("/images/fuse-1.png");
         fuse.setSprite(sprite);
