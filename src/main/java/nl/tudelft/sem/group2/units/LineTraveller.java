@@ -4,7 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaState;
 
-import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A unit which can travel over outerborders and innerborders.

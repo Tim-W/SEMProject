@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2;
 
+import nl.tudelft.sem.group2.controllers.GameController;
+
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.FAST_AREA_MULTIPLIER;
@@ -60,6 +62,9 @@ public class ScoreCounter {
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
 
+        if (totalPercentage >= targetPercentage) {
+            GameController.gameWon();
+        }
 
     }
 

@@ -1,5 +1,11 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -7,19 +13,13 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.global.Globals;
 
-import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.logging.Level;
-
-import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A Qix is an enemy unit.
  * It moves randomly on the GameScene.
  * When the player touches the Qix while drawing,
- * or when the Qix touches the stix, it is game over.
+ * or when the Qix touches the stix, it is views over.
  */
 public class Qix extends Unit {
 
@@ -46,6 +46,10 @@ public class Qix extends Unit {
      */
     public Qix() {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+    }
+
+    public static int getLINESCOUNT() {
+        return LINESCOUNT;
     }
 
     @Override
@@ -187,6 +191,24 @@ public class Qix extends Unit {
         return new Polygon(xArr, yArr, xArr.length);
     }
 
+    @Override
+    public boolean intersect(Unit collidee) {
+        //if (!(obj instanceof Qix) ) {
+        Polygon colliderP = this.toPolygon();
+
+        // subtract one from width&height to make collisions look more real
+        Rectangle collideeR = new Rectangle(collidee.getX(),
+                collidee.getY(), collidee.getWidth() / 2 - 1,
+                collidee.getHeight() / 2 - 1);
+        if (colliderP.intersects(collideeR)) {
+            LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
+                    + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
+        }
+        return colliderP.intersects(collideeR);
+        //}
+        // return false;
+    }
+
     /**
      * @return string representation of a Qix
      */
@@ -196,6 +218,10 @@ public class Qix extends Unit {
 
     public LinkedList<float[]> getOldCoordinates() {
         return oldCoordinates;
+    }
+
+    public void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
+        this.oldCoordinates = oldCoordinates;
     }
 
     /**
@@ -220,13 +246,12 @@ public class Qix extends Unit {
         this.animationLoops = animationLoops;
     }
 
-    public static int getLINESCOUNT() {
-        return LINESCOUNT;
-    }
-
-
     public LinkedList<float[]> getOldDirections() {
         return oldDirections;
+    }
+
+    public void setOldDirections(LinkedList<float[]> oldDirections) {
+        this.oldDirections = oldDirections;
     }
 
     /**
@@ -254,14 +279,6 @@ public class Qix extends Unit {
      */
     public void setDirection(float direction, int i) {
         this.direction[i] = direction;
-    }
-
-    public void setOldDirections(LinkedList<float[]> oldDirections) {
-        this.oldDirections = oldDirections;
-    }
-
-    public void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
-        this.oldCoordinates = oldCoordinates;
     }
 
     public LinkedList<double[]> getColorArray() {
