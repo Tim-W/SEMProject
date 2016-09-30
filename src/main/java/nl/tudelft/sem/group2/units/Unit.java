@@ -12,13 +12,13 @@ import nl.tudelft.sem.group2.scenes.GameScene;
  * An object that can be moved an drawn on a 2D grid.
  * Supports intersection checking between two units.
  */
-public abstract class Unit {
-    private static final Logger LOGGER = Logger.getLogger();
+public abstract class Unit implements Draw, Movable{
     private int x;
     private int y;
     private int width;
     private int height;
     private AreaTracker areaTracker;
+    private static final Logger LOGGER = Logger.getLogger();
 
     /**
      * Create a Unit at (x,y) position.
@@ -36,20 +36,6 @@ public abstract class Unit {
         this.setAreaTracker(GameScene.getAreaTracker());
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
-
-    /**
-     * Every frame, this method should be called.
-     * The x and y coordinates may be changed using setX, setY,
-     * after which the unit can take another position on the screen.
-     */
-    public abstract void move();
-
-    /**
-     * Every frame, this method should be called.
-     * It should draw a sprite or a list of sprites on a canvas.
-     * @param canvas the canvas to draw on
-     */
-    public abstract void draw(Canvas canvas);
 
     public int getX() {
         return this.x;
@@ -100,7 +86,7 @@ public abstract class Unit {
         Rectangle collideeR = new Rectangle(collidee.getX(), collidee.getY(),
                 2, 2);
         if (colliderR.intersects(collideeR)) {
-            LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
+            LOGGER.log(Level.WARNING, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
                     + "," + this.getY() + ")", this.getClass());
         }
         return colliderR.intersects(collideeR);
