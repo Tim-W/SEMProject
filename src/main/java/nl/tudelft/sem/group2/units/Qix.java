@@ -8,6 +8,7 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.global.Globals;
 
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -185,6 +186,25 @@ public class Qix extends Unit {
         }
 
         return new Polygon(xArr, yArr, xArr.length);
+    }
+
+    @Override
+    public boolean intersect(Unit obj) {
+        //if (!(obj instanceof Qix) ) {
+        Unit collidee = (Unit) obj;
+        Polygon colliderP = this.toPolygon();
+
+        // subtract one from width&height to make collisions look more real
+        Rectangle collideeR = new Rectangle(collidee.getX(),
+                collidee.getY(), collidee.getWidth() / 2 - 1,
+                collidee.getHeight() / 2 - 1);
+        if (colliderP.intersects(collideeR)) {
+            LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
+                    + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
+        }
+        return colliderP.intersects(collideeR);
+        //}
+        // return false;
     }
 
     /**

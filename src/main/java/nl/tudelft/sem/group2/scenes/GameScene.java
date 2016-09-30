@@ -19,6 +19,8 @@ import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Unit;
+import nl.tudelft.sem.group2.units.Stix;
+import nl.tudelft.sem.group2.CollisionHandler;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -91,6 +93,10 @@ public class GameScene extends Scene {
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
+
+        collisionHandler = new CollisionHandler();
+
+        scoreCounter = new ScoreCounter();
     }
 
     /**
@@ -122,6 +128,10 @@ public class GameScene extends Scene {
      */
     private void registerKeyPressedHandler() {
         setOnKeyPressed((KeyEvent e) -> gameController.keyPressed(e));
+    }
+
+    public static Stix getStix() {
+        return stix;
     }
 
 

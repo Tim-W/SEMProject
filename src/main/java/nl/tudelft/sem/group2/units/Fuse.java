@@ -17,6 +17,7 @@ public class Fuse extends LineTraveller {
     private int lastX;
     private int lastY;
     private boolean moving = true;
+    private Stix stix;
 
     /**
      * Create a new Fuse.
@@ -25,8 +26,9 @@ public class Fuse extends LineTraveller {
      * @param y      the start y coord
      * @param width  width of the fuse (used for collision detection)
      * @param height height of the fuse (used for collision detection)
+     * @param stix   current stix to use
      */
-    public Fuse(int x, int y, int width, int height) {
+    public Fuse(int x, int y, int width, int height, Stix stix) {
         super(x, y, width, height);
         Image[] sprite = new Image[2];
         lastX = x;
@@ -34,6 +36,7 @@ public class Fuse extends LineTraveller {
         sprite[0] = new Image("/images/fuse-1.png");
         sprite[1] = new Image("/images/fuse-2.png");
         setSprite(sprite);
+        this.stix = stix;
     }
 
     @Override
@@ -42,22 +45,22 @@ public class Fuse extends LineTraveller {
             for (int i = 0; i < speed; i++) {
                 if (getX() < BOARD_WIDTH / 2
                         && !(getX() + 1 == lastX)
-                        && getAreaTracker().getStix().contains(new Point(getX() + 1, getY()))) {
+                        && stix.getStixCoordinates().contains(new Point(getX() + 1, getY()))) {
                     setLastCoordinates(getX(), getY());
                     setX(getX() + 1);
                 } else if (getY() < BOARD_HEIGHT / 2
                         && !(lastY == getY() + 1)
-                        && getAreaTracker().getStix().contains(new Point(getX(), getY() + 1))) {
+                        && stix.getStixCoordinates().contains(new Point(getX(), getY() + 1))) {
                     setLastCoordinates(getX(), getY());
                     setY(getY() + 1);
                 } else if (getX() > 0
                         && !(lastX == getX() - 1)
-                        && getAreaTracker().getStix().contains(new Point(getX() - 1, getY()))) {
+                        && stix.getStixCoordinates().contains(new Point(getX() - 1, getY()))) {
                     setLastCoordinates(getX(), getY());
                     setX(getX() - 1);
                 } else if (getY() > 0
                         && !(lastY == getY() - 1)
-                        && getAreaTracker().getStix().contains(new Point(getX(), getY() - 1))) {
+                        && stix.getStixCoordinates().contains(new Point(getX(), getY() - 1))) {
                     setLastCoordinates(getX(), getY());
                     setY(getY() - 1);
                 }
