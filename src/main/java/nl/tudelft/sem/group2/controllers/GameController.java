@@ -152,7 +152,7 @@ public class GameController {
                     GameScene.draw();
 
                     if (getScoreCounter().getTotalPercentage() >= getScoreCounter().getTargetPercentage()) {
-                        GameController.gameWon();
+                        gameWon();
                     }
 
                     if (collisionHandler.collisions(GameScene.getUnits(), stix)) {
@@ -243,13 +243,29 @@ public class GameController {
             }
             cursor.setCurrentMove(e.getCode());
         } else if (e.getCode().equals(KeyCode.X)) {
-            cursor.setSpeed(1);
-            cursor.setDrawing(true);
-            cursor.setFast(false);
+            if(stix.getStixCoordinates()!=null && !stix.getStixCoordinates().isEmpty()) {
+                if(!cursor.isFast()){
+                    cursor.setSpeed(1);
+                    cursor.setDrawing(true);
+                    cursor.setFast(false);
+                }
+            }else{
+                cursor.setSpeed(1);
+                cursor.setDrawing(true);
+                cursor.setFast(false);
+            }
         } else if (e.getCode().equals(KeyCode.Z)) {
-            cursor.setSpeed(2);
-            cursor.setDrawing(true);
-            cursor.setFast(true);
+            if(stix.getStixCoordinates()!=null && !stix.getStixCoordinates().isEmpty()) {
+                if(cursor.isFast()){
+                    cursor.setSpeed(2);
+                    cursor.setDrawing(true);
+                    cursor.setFast(true);
+                }
+            }else{
+                cursor.setSpeed(2);
+                cursor.setDrawing(true);
+                cursor.setFast(true);
+            }
         }
     }
 
