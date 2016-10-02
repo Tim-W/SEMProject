@@ -3,12 +3,25 @@ package nl.tudelft.sem.group2.scenes;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Fuse;
+import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static nl.tudelft.sem.group2.controllers.GameController.getAreaTracker;
-import static nl.tudelft.sem.group2.controllers.GameController.getScoreCounter;
+import java.awt.Point;
+
+import static nl.tudelft.sem.group2.controllers.GameController.getCursor;
+import static nl.tudelft.sem.group2.controllers.GameController.getStix;
+import static nl.tudelft.sem.group2.controllers.GameController.setCursor;
+import static nl.tudelft.sem.group2.scenes.GameScene.addUnit;
+import static nl.tudelft.sem.group2.scenes.GameScene.draw;
+import static nl.tudelft.sem.group2.scenes.GameScene.getUnits;
+import static nl.tudelft.sem.group2.scenes.GameScene.removeFuse;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 /**
@@ -22,57 +35,53 @@ public class GameSceneTest {
         Group root = new Group();
         scene = new GameScene(root, Color.BLACK);
     }
-    @Test
+    /*@Test
     public void constructorAreatracker() throws Exception {
         Assert.assertTrue(getAreaTracker()!=null);
     }
     @Test
     public void constructorScoreCounter() throws Exception {
         Assert.assertTrue(getScoreCounter()!=null);
-    }
-    /*@Test
-    public void handle() throws Exception {
-        KeyEvent key = new KeyEvent(scene, KeyEvent.KEY_PRESSED,"", "",  KeyEvent.KEY_PRESSED,'Z');
-        scene.getOnKeyPressed().handle(key);
     }*/
 
+    /**
+     * test addUnit not to add two fuses
+     * @throws Exception
+     */
     @Test
-    public void getAnimationTimer() throws Exception {
-
+    public void testAddUnit() throws Exception {
+        int oldLength = getUnits().size();
+        addUnit(new Fuse(1,1,1,1,new Stix()));
+        addUnit(new Fuse(1,1,1,1,new Stix()));
+        Assert.assertTrue(oldLength+1==getUnits().size());
     }
-
-    /*@Test
-    public void getAreaTracker() throws Exception {
-
-    }*/
-/*
     @Test
-    public void getScoreCounter() throws Exception {
-
-    }*/
-
-    @Test
-    public void getQixCursor() throws Exception {
-
+    public void testDrawStixAndFuseVerify() throws Exception {
+        Cursor spyCursor = spy(getCursor());
+        setCursor(spyCursor);
+        getStix().addToStix(new Point(1,1));
+        getStix().addToStix(new Point(1,2));
+        addUnit(new Fuse(1,2,1,1,getStix()));
+        draw();
+        verify(spyCursor,times(1)).isFast();
     }
-
     @Test
-    public void createAnimationTimer() throws Exception {
-
+    public void testDrawStixAndFuseVerifyNot() throws Exception {
+        Cursor spyCursor = spy(getCursor());
+        setCursor(spyCursor);
+        getStix().addToStix(new Point(1,1));
+        getStix().addToStix(new Point(1,3));
+        addUnit(new Fuse(1,2,1,1,getStix()));
+        draw();
+        verify(spyCursor,times(0)).isFast();
     }
-
     @Test
-    public void gameOver() throws Exception {
-
-    }
-
-    @Test
-    public void gameWon() throws Exception {
-
-    }
-
-    @Test
-    public void isRunning() throws Exception {
+    public void testRemoveFuse() throws Exception {
+        Fuse fuse = new Fuse(1,2,1,1,getStix());
+        int oldSize = getUnits().size();
+        addUnit(fuse);
+        removeFuse();
+        Assert.assertEquals(oldSize,getUnits().size());
 
     }
 

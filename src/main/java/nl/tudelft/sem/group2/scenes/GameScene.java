@@ -20,9 +20,11 @@ import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
 
+import static nl.tudelft.sem.group2.controllers.GameController.getStix;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -178,14 +180,9 @@ public class GameScene extends Scene {
      * @param unit unit to add
      */
     public static void addUnit(Unit unit) {
-        if (unit instanceof Fuse) {
-            for (Unit unit1 : units) {
-                if (unit1 instanceof Fuse) {
-                    return;
-                }
-            }
+        if (!(unit instanceof Fuse && units.contains(unit))) {
+            units.add(unit);
         }
-        units.add(unit);
     }
 
     /**
@@ -232,37 +229,29 @@ public class GameScene extends Scene {
      * Draw current Stix and Fuse on screen.
      */
     private static void drawStixAndFuse() {
-        boolean foundFuse = true;
+        boolean foundFuse = false;
         Point fuse = new Point(-1, -1);
         for (Unit unit : units) {
             if (unit instanceof Fuse) {
-                foundFuse = false;
+                foundFuse = true;
                 fuse = new Point(unit.getX(), unit.getY());
             }
         }
-        for (Point p : GameController.getStix().getStixCoordinates()) {
-            if (!p.equals(GameController.getStix().getStixCoordinates().getFirst())) {
-                if (foundFuse) {
-                    if (GameController.getCursor().isFast()) {
-                        gc.setFill(Color.MEDIUMBLUE);
-                    } else {
-                        gc.setFill(Color.DARKRED);
-                    }
-                } else {
-                    if (p.equals(fuse)) {
-                        foundFuse = true;
-                        if (GameController.getCursor().isFast()) {
-                            gc.setFill(Color.MEDIUMBLUE);
-                        } else {
-                            gc.setFill(Color.DARKRED);
-                        }
-                    } else {
-                        gc.setFill(Color.GRAY);
-                    }
-                }
-
-                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+        LinkedList<Point> stixCoordinates = getStix().getStixCoordinates();
+        for (int i = 1; i < stixCoordinates.size(); i++) {
+            if (stixCoordinates.get(i).equals(fuse)) {
+                foundFuse = false;
             }
+            if (!foundFuse) {
+                if (GameController.getCursor().isFast()) {
+                    gc.setFill(Color.MEDIUMBLUE);
+                } else {
+                    gc.setFill(Color.DARKRED);
+                }
+            } else {
+                gc.setFill(Color.GRAY);
+            }
+            gc.fillRect(gridToCanvas(stixCoordinates.get(i).x), gridToCanvas(stixCoordinates.get(i).y), 2, 2);
         }
     }
 
@@ -305,5 +294,13 @@ public class GameScene extends Scene {
     public static void updateScorescene(ScoreCounter scoreCounter) {
         scoreScene.setScore(scoreCounter.getTotalScore());
         scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
+    }
+
+    /**
+     * used only for testing
+     * @return
+     */
+    public static GraphicsContext getGc() {
+        return gc;
     }
 }

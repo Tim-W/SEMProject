@@ -261,11 +261,28 @@ public class GameController {
         return cursor;
     }
 
+    /**
+     * setter only for testing
+     * @param cursor
+     */
+    public static void setCursor(Cursor cursor) {
+        GameController.cursor = cursor;
+    }
+
     public static ScoreCounter getScoreCounter() {
         return scoreCounter;
     }
 
     public static Stix getStix() {
         return stix;
+    }
+    //SETTER
+
+    /**
+     * only for testing
+     * @param stix
+     */
+    public static void setStix(Stix stix) {
+        GameController.stix = stix;
     }
 }
