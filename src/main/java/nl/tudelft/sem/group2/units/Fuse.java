@@ -99,4 +99,11 @@ public class Fuse extends LineTraveller {
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
+
+    /**
+     * @param delay The value of the new delay
+     */
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
 }
