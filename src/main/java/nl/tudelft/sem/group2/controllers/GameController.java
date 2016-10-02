@@ -208,10 +208,7 @@ public class GameController {
                 }
             }
             cursor.setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.X)) {
-            cursor.setDrawing(false);
-            cursor.setSpeed(2);
-        } else if (keyCode.equals(KeyCode.Z)) {
+        } else if (keyCode.equals(KeyCode.X)||keyCode.equals(KeyCode.Z)) {
             cursor.setDrawing(false);
             cursor.setSpeed(2);
         }
@@ -265,5 +262,27 @@ public class GameController {
                 gameOver();
             }
         }
+    }
+
+    /**
+     * getter for testing
+     * @return
+     */
+    public boolean isRunning() {
+        return isRunning;
+    }
+    /**
+     * Setter for testing
+     */
+    public static void setCursor(Cursor cursor) {
+        GameController.cursor = cursor;
+    }
+
+    /**
+     * getter for testing
+     * @return
+     */
+    public static AnimationTimer getAnimationTimer() {
+        return animationTimer;
     }
 }
