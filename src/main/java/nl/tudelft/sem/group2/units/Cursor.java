@@ -181,6 +181,14 @@ public class Cursor extends LineTraveller {
     }
 
     /**
+     *
+     * @return
+     */
+    public boolean isDrawing() {
+        return isDrawing;
+    }
+
+    /**
      * @param drawing if cursor is moving while user has key X or Z down
      */
     public void setDrawing(boolean drawing) {
