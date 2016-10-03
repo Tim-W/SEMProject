@@ -25,6 +25,7 @@ public class FuseTest {
         new JFXPanel();
         stix = mock(Stix.class);
         createFuse(new Fuse(3, 3, 3, 4, stix));
+        fuse.setDelay(0);
     }
 
     public void createFuse(Fuse f) {
