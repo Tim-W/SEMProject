@@ -269,17 +269,9 @@ public class GameController {
                 cursor.setFast(false);
             }
         } else if (e.getCode().equals(KeyCode.Z)) {
-            if(stix.getStixCoordinates()!=null && !stix.getStixCoordinates().isEmpty()) {
-                if(cursor.isFast()){
                     cursor.setSpeed(2);
                     cursor.setDrawing(true);
                     cursor.setFast(true);
-                }
-            }else{
-                cursor.setSpeed(2);
-                cursor.setDrawing(true);
-                cursor.setFast(true);
-            }
         }
     }
 
