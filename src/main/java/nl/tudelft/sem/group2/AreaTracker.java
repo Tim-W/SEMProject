@@ -1,7 +1,7 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
 import java.util.HashSet;
@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
-import nl.tudelft.sem.group2.units.Stix;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
