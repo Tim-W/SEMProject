@@ -190,21 +190,39 @@ public class GameController {
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
         if (keyCode.equals(cursor.getCurrentMove())) {
-            if (stix.getStixCoordinates().contains(new Point(cursor.getX(), cursor.getY()))) {
-                boolean fuseExists = false;
-                for (Unit unit : GameScene.getUnits()) {
-                    if (unit instanceof Fuse) {
-                        fuseExists = true;
-                        ((Fuse) unit).setMoving(true);
-                    }
+
+            handleFuse();
+
+            cursor.setCurrentMove(null);
+        } else if (keyCode.equals(KeyCode.X)) {
+            cursor.setDrawing(false);
+            cursor.setSpeed(2);
+            handleFuse();
+        } else if (keyCode.equals(KeyCode.Z)) {
+            cursor.setDrawing(false);
+            cursor.setSpeed(2);
+            handleFuse();
+        }
+    }
+
+    /**
+     * handles making fuse and makes it start moving.
+     */
+    private void handleFuse() {
+        if (stix.getStixCoordinates().contains(new Point(cursor.getX(), cursor.getY()))) {
+            boolean fuseExists = false;
+            for (Unit unit : GameScene.getUnits()) {
+                if (unit instanceof Fuse) {
+                    fuseExists = true;
+                    ((Fuse) unit).setMoving(true);
                 }
-                if (!fuseExists) {
-                    GameScene.addUnit(
-                            new Fuse((int) stix.getStixCoordinates().getFirst().getX(),
-                                    (int) stix.getStixCoordinates().getFirst().getY(),
-                                    Globals.FUSE_WIDTH,
-                                    Globals.FUSE_HEIGHT, stix));
-                }
+            }
+            if (!fuseExists) {
+                GameScene.addUnit(
+                        new Fuse((int) stix.getStixCoordinates().getFirst().getX(),
+                                (int) stix.getStixCoordinates().getFirst().getY(),
+                                Globals.FUSE_WIDTH,
+                                Globals.FUSE_HEIGHT, stix));
             }
             cursor.setCurrentMove(null);
         } else if (keyCode.equals(KeyCode.X)||keyCode.equals(KeyCode.Z)) {
@@ -232,16 +250,27 @@ public class GameController {
             isRunning = true;
             GameScene.setMessageLabel("");
         } else if (arrowKeys.contains(e.getCode())) {
-            for (Unit unit : GameScene.getUnits()) {
-                if (unit instanceof Fuse) {
-                    ((Fuse) unit).setMoving(false);
+            if (cursor.isDrawing()) {
+                for (Unit unit : GameScene.getUnits()) {
+                    if (unit instanceof Fuse) {
+                        ((Fuse) unit).setMoving(false);
+                    }
                 }
             }
+
             cursor.setCurrentMove(e.getCode());
         } else if (e.getCode().equals(KeyCode.X)) {
-            cursor.setSpeed(1);
-            cursor.setDrawing(true);
-            cursor.setFast(false);
+            if(stix.getStixCoordinates()!=null && !stix.getStixCoordinates().isEmpty()) {
+                if(!cursor.isFast()){
+                    cursor.setSpeed(1);
+                    cursor.setDrawing(true);
+                    cursor.setFast(false);
+                }
+            }else{
+                cursor.setSpeed(1);
+                cursor.setDrawing(true);
+                cursor.setFast(false);
+            }
         } else if (e.getCode().equals(KeyCode.Z)) {
             cursor.setSpeed(2);
             cursor.setDrawing(true);
