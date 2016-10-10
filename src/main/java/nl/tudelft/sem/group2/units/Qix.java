@@ -13,13 +13,13 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.global.Globals;
 
-import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A Qix is an enemy unit.
  * It moves randomly on the GameScene.
  * When the player touches the Qix while drawing,
- * or when the Qix touches the stix, it is game over.
+ * or when the Qix touches the stix, it is views over.
  */
 public class Qix extends Unit {
 
@@ -192,9 +192,8 @@ public class Qix extends Unit {
     }
 
     @Override
-    public boolean intersect(Unit obj) {
+    public boolean intersect(Unit collidee) {
         //if (!(obj instanceof Qix) ) {
-        Unit collidee = (Unit) obj;
         Polygon colliderP = this.toPolygon();
 
         // subtract one from width&height to make collisions look more real

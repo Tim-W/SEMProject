@@ -9,7 +9,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**
  * An enemy unit which travels over the outerborders.
- * When a Sparx collides with a cursor, the game ends.
+ * When a Sparx collides with a cursor, the views ends.
  */
 public class Sparx extends LineTraveller {
     private static final Logger LOGGER = Logger.getLogger();
@@ -104,11 +104,18 @@ public class Sparx extends LineTraveller {
         this.lastY = y;
     }
 
+    /**
+     * Setter for x coordinates.
+     * @param x new x value
+     */
     public void setXAndLastX(int x) {
         setLastCoordinates(getX(), getY());
         setX(x);
     }
-
+    /**
+     * Setter for y coordinates.
+     * @param y new y value
+     */
     public void setYAndLastY(int y) {
         setLastCoordinates(getX(), getY());
         setY(y);

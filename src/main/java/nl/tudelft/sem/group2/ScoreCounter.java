@@ -60,7 +60,6 @@ public class ScoreCounter {
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
 
-
     }
 
     public double getTotalPercentage() {
