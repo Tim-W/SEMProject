@@ -1,10 +1,12 @@
 package nl.tudelft.sem.group2.units;
 
 import java.awt.Point;
+
 import javafx.scene.image.Image;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.FUSE_DELAY;
 
 /**
  * Describes the Fuse.
@@ -17,6 +19,7 @@ public class Fuse extends LineTraveller {
     private int lastY;
     private boolean moving = true;
     private Stix stix;
+    private int delay;
 
     /**
      * Create a new Fuse.
@@ -36,11 +39,14 @@ public class Fuse extends LineTraveller {
         sprite[1] = new Image("/images/fuse-2.png");
         setSprite(sprite);
         this.stix = stix;
+        delay = FUSE_DELAY;
     }
 
     @Override
     public void move() {
-        if (moving) {
+        if (delay > 0) {
+            delay--;
+        } else if (moving) {
             for (int i = 0; i < speed; i++) {
                 if (getX() < BOARD_WIDTH / 2
                         && !(getX() + 1 == lastX)
@@ -73,7 +79,6 @@ public class Fuse extends LineTraveller {
     }
 
     /**
-     *
      * @return string representation
      */
     public String toString() {
@@ -89,10 +94,16 @@ public class Fuse extends LineTraveller {
     }
 
     /**
-     *
      * @param moving if the fuse is moving
      */
     public void setMoving(boolean moving) {
         this.moving = moving;
+    }
+
+    /**
+     * @param delay The value of the new delay
+     */
+    public void setDelay(int delay) {
+        this.delay = delay;
     }
 }

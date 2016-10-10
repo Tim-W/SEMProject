@@ -30,26 +30,22 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
  */
 public class GameController {
 
+    private static final int NANO_SECONDS_PER_SECOND = 100000000;
+    // Logger
+    private static final Logger LOGGER = Logger.getLogger();
     // Animation timer properties
     private static AnimationTimer animationTimer;
-    private static final int NANO_SECONDS_PER_SECOND = 100000000;
-    private long previousTime;
-
     // Units
     private static Cursor cursor;
     private static Qix qix;
     private static Stix stix;
-
-    // Boolean that states if the game is running
-    private boolean isRunning = false;
-
     // Models for score tracking
     private static AreaTracker areaTracker;
     private static ScoreCounter scoreCounter;
+    private long previousTime;
+    // Boolean that states if the game is running
+    private boolean isRunning = false;
     private CollisionHandler collisionHandler;
-
-    // Logger
-    private static final Logger LOGGER = Logger.getLogger();
 
     /**
      * Constructor for the GameController class.
@@ -83,6 +79,65 @@ public class GameController {
 
     }
 
+    /**
+     * Stop animations.
+     */
+    public static void animationTimerStop() {
+        animationTimer.stop();
+    }
+
+    /**
+     * Start animations.
+     */
+    public static void animationTimerStart() {
+        animationTimer.start();
+    }
+
+    /**
+     * Play a game over sound.
+     * show game over text,
+     * stop the animations.
+     */
+    public static void gameOver() {
+        // TODO add code for gameover
+        animationTimerStop();
+        GameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
+        GameScene.setMessageLabel(" Game Over! ");
+
+        //Plays game over sound
+        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+                + scoreCounter.getTotalScore(), GameScene.class);
+    }
+
+    /**
+     * TODO Play the game won sound.
+     * stop the animations,
+     * show that the player has won
+     */
+    public static void gameWon() {
+        animationTimerStop();
+        GameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+        GameScene.setMessageLabel(" You Won! ");
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
+    }
+
+    //GETTERS
+    public static AreaTracker getAreaTracker() {
+        return areaTracker;
+    }
+
+    public static Cursor getCursor() {
+        return cursor;
+    }
+
+    public static ScoreCounter getScoreCounter() {
+        return scoreCounter;
+    }
+
+    public static Stix getStix() {
+        return stix;
+    }
 
     /**
      * Setup an animation timer that runs at 300FPS.
@@ -95,17 +150,22 @@ public class GameController {
                     previousTime = now;
                     // draw
                     GameScene.draw();
+
+                    if (getScoreCounter().getTotalPercentage() >= getScoreCounter().getTargetPercentage()) {
+                        GameController.gameWon();
+                    }
+
                     if (collisionHandler.collisions(GameScene.getUnits(), stix)) {
                         gameOver();
                     }
                     GameScene.updateScorescene(scoreCounter);
                     calculateArea();
+
                 }
             }
 
         };
     }
-
 
     /**
      * When a new area is completed, calculate the new score.
@@ -122,20 +182,6 @@ public class GameController {
             //Remove the Fuse from the gameView when completing an area
             GameScene.removeFuse();
         }
-    }
-
-    /**
-     * Stop animations.
-     */
-    public static void animationTimerStop() {
-        animationTimer.stop();
-    }
-
-    /**
-     * Start animations.
-     */
-    public static void animationTimerStart() {
-        animationTimer.start();
     }
 
     /**
@@ -205,35 +251,6 @@ public class GameController {
             cursor.setDrawing(true);
             cursor.setFast(true);
         }
-    }
-
-    /**
-     * Play a game over sound.
-     * show game over text,
-     * stop the animations.
-     */
-    public static void gameOver() {
-        // TODO add code for gameover
-        animationTimerStop();
-        GameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
-        GameScene.setMessageLabel(" Game Over! ");
-
-        //Plays game over sound
-        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
-        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
-                + scoreCounter.getTotalScore(), GameScene.class);
-    }
-
-    /**
-     * TODO Play the game won sound.
-     * stop the animations,
-     * show that the player has won
-     */
-    public static void gameWon() {
-        animationTimerStop();
-        GameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        GameScene.setMessageLabel(" You Won! ");
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
     /**
