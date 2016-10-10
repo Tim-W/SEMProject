@@ -180,9 +180,13 @@ public class GameScene extends Scene {
      * @param unit unit to add
      */
     public static void addUnit(Unit unit) {
-        if (!(unit instanceof Fuse && units.contains(unit))) {
-            units.add(unit);
+        for (Unit u :
+                getUnits()) {
+            if(unit.getClass().equals(u.getClass())){
+                return;
+            }
         }
+        units.add(unit);
     }
 
     /**

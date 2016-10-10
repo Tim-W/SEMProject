@@ -51,9 +51,11 @@ public class GameSceneTest {
     @Test
     public void testAddUnit() throws Exception {
         int oldLength = getUnits().size();
+        Fuse fuse = new Fuse(1,1,1,1,new Stix());
+        addUnit(fuse);
+        Assert.assertTrue(getUnits().contains(fuse));
         addUnit(new Fuse(1,1,1,1,new Stix()));
-        addUnit(new Fuse(1,1,1,1,new Stix()));
-        Assert.assertTrue(oldLength+1==getUnits().size());
+        Assert.assertEquals(oldLength+1,getUnits().size());
     }
     @Test
     public void testDrawStixAndFuseVerify() throws Exception {
