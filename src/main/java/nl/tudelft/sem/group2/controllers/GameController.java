@@ -194,11 +194,7 @@ public class GameController {
             handleFuse();
 
             cursor.setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.X)) {
-            cursor.setDrawing(false);
-            cursor.setSpeed(2);
-            handleFuse();
-        } else if (keyCode.equals(KeyCode.Z)) {
+        }  else if (keyCode.equals(KeyCode.X)||keyCode.equals(KeyCode.Z)) {
             cursor.setDrawing(false);
             cursor.setSpeed(2);
             handleFuse();
@@ -225,9 +221,6 @@ public class GameController {
                                 Globals.FUSE_HEIGHT, stix));
             }
             cursor.setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.X)||keyCode.equals(KeyCode.Z)) {
-            cursor.setDrawing(false);
-            cursor.setSpeed(2);
         }
     }
 
