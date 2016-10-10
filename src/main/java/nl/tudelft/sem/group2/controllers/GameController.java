@@ -269,14 +269,6 @@ public class GameController {
 
 
 
-    //GETTERS
-    public static AreaTracker getAreaTracker() {
-        return areaTracker;
-    }
-
-    public static Cursor getCursor() {
-        return cursor;
-    }
 
     /**
      * setter only for testing
@@ -286,13 +278,7 @@ public class GameController {
         GameController.cursor = cursor;
     }
 
-    public static ScoreCounter getScoreCounter() {
-        return scoreCounter;
-    }
 
-    public static Stix getStix() {
-        return stix;
-    }
     //SETTER
 
     /**
