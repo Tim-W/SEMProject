@@ -6,6 +6,7 @@ import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.CollisionHandler;
+import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.global.Globals;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
+import static nl.tudelft.sem.group2.scenes.GameScene.addUnit;
+import static nl.tudelft.sem.group2.scenes.GameScene.setAreaTracker;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -38,9 +41,8 @@ public class GameController {
     // Units
     private static Cursor cursor;
     private static Qix qix;
-    private static Stix stix;
-    // Models for score tracking
     private static AreaTracker areaTracker;
+    private Stix stix;
     private static ScoreCounter scoreCounter;
     private long previousTime;
     // Boolean that states if the game is running
@@ -52,24 +54,24 @@ public class GameController {
      */
     public GameController() {
         // Initialize models for scoretracking.
-
-        stix = new Stix();
-
+        stix  = new Stix();
         areaTracker = new AreaTracker(stix);
-        scoreCounter = new ScoreCounter();
-
-        // Initialize and add units to units set in Gamescene
-        qix = new Qix();
+        setAreaTracker(areaTracker);
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, stix);
+                Globals.BOARD_MARGIN * 2, getStix());
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, SparxDirection.LEFT);
-        GameScene.addUnit(cursor);
-        GameScene.addUnit(qix);
-        GameScene.addUnit(sparxRight);
-        GameScene.addUnit(sparxLeft);
+        // Initialize and add units to units set in Gamescene
+        qix = new Qix();
+        addUnit(cursor);
+        addUnit(qix);
+        addUnit(sparxRight);
+        addUnit(sparxLeft);
+        scoreCounter = new ScoreCounter();
+
+
 
         collisionHandler = new CollisionHandler();
 
@@ -100,8 +102,8 @@ public class GameController {
      */
     private void gameOver() {
         animationTimerStop();
-        GameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
-        GameScene.setMessageLabel(" Game Over! ");
+        LaunchApp.scene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
+        LaunchApp.scene.setMessageLabel(" Game Over! ");
 
         //Plays game over sound
         playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
@@ -116,15 +118,11 @@ public class GameController {
      */
     private void gameWon() {
         animationTimerStop();
-        GameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        GameScene.setMessageLabel(" You Won! ");
+        LaunchApp.scene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+        LaunchApp.scene.setMessageLabel(" You Won! ");
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
-    //GETTERS
-    public static AreaTracker getAreaTracker() {
-        return areaTracker;
-    }
 
     public static Cursor getCursor() {
         return cursor;
@@ -134,7 +132,7 @@ public class GameController {
         return scoreCounter;
     }
 
-    public static Stix getStix() {
+    public Stix getStix() {
         return stix;
     }
 
@@ -148,16 +146,16 @@ public class GameController {
                 if (now - previousTime > NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
                     // draw
-                    GameScene.draw();
+                    LaunchApp.scene.draw();
 
                     if (getScoreCounter().getTotalPercentage() >= getScoreCounter().getTargetPercentage()) {
                         gameWon();
                     }
 
-                    if (collisionHandler.collisions(GameScene.getUnits(), stix)) {
+                    if (collisionHandler.collisions(LaunchApp.scene.getUnits(), stix)) {
                         gameOver();
                     }
-                    GameScene.updateScorescene(scoreCounter);
+                    LaunchApp.scene.updateScorescene(scoreCounter);
                     calculateArea();
 
                 }
@@ -179,7 +177,7 @@ public class GameController {
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());
             //Remove the Fuse from the gameView when completing an area
-            GameScene.removeFuse();
+            LaunchApp.scene.removeFuse();
         }
     }
 
@@ -207,14 +205,14 @@ public class GameController {
     private void handleFuse() {
         if (stix.getStixCoordinates().contains(new Point(cursor.getX(), cursor.getY()))) {
             boolean fuseExists = false;
-            for (Unit unit : GameScene.getUnits()) {
+            for (Unit unit : LaunchApp.scene.getUnits()) {
                 if (unit instanceof Fuse) {
                     fuseExists = true;
                     ((Fuse) unit).setMoving(true);
                 }
             }
             if (!fuseExists) {
-                GameScene.addUnit(
+                addUnit(
                         new Fuse((int) stix.getStixCoordinates().getFirst().getX(),
                                 (int) stix.getStixCoordinates().getFirst().getY(),
                                 Globals.FUSE_WIDTH,
@@ -241,10 +239,10 @@ public class GameController {
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
-            GameScene.setMessageLabel("");
+            LaunchApp.scene.setMessageLabel("");
         } else if (arrowKeys.contains(e.getCode())) {
             if (cursor.isDrawing()) {
-                for (Unit unit : GameScene.getUnits()) {
+                for (Unit unit : LaunchApp.scene.getUnits()) {
                     if (unit instanceof Fuse) {
                         ((Fuse) unit).setMoving(false);
                     }
@@ -305,5 +303,13 @@ public class GameController {
      */
     public AnimationTimer getAnimationTimer() {
         return animationTimer;
+    }
+
+    public static AreaTracker getAreaTracker() {
+        return areaTracker;
+    }
+
+    public void setStix(Stix stix) {
+        this.stix = stix;
     }
 }
