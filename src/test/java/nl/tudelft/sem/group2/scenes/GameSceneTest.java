@@ -8,6 +8,7 @@ import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.awt.Point;
@@ -28,10 +29,14 @@ import static org.mockito.Mockito.verify;
  * Created by gijs on 30-9-2016.
  */
 public class GameSceneTest {
-    GameScene scene;
+    static GameScene scene;
+    @BeforeClass
+    public static void BeforeClass(){
+        new JFXPanel();
+    }
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
+
         Group root = new Group();
         scene = new GameScene(root, Color.BLACK);
     }
