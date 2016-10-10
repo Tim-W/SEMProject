@@ -34,7 +34,7 @@ public class GameController {
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
     // Animation timer properties
-    private static AnimationTimer animationTimer;
+    private AnimationTimer animationTimer;
     // Units
     private static Cursor cursor;
     private static Qix qix;
@@ -82,14 +82,14 @@ public class GameController {
     /**
      * Stop animations.
      */
-    public static void animationTimerStop() {
+    private void animationTimerStop() {
         animationTimer.stop();
     }
 
     /**
      * Start animations.
      */
-    public static void animationTimerStart() {
+    public void animationTimerStart() {
         animationTimer.start();
     }
 
@@ -98,8 +98,7 @@ public class GameController {
      * show game over text,
      * stop the animations.
      */
-    public static void gameOver() {
-        // TODO add code for gameover
+    private void gameOver() {
         animationTimerStop();
         GameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
         GameScene.setMessageLabel(" Game Over! ");
@@ -115,7 +114,7 @@ public class GameController {
      * stop the animations,
      * show that the player has won
      */
-    public static void gameWon() {
+    private void gameWon() {
         animationTimerStop();
         GameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
         GameScene.setMessageLabel(" You Won! ");
@@ -152,7 +151,7 @@ public class GameController {
                     GameScene.draw();
 
                     if (getScoreCounter().getTotalPercentage() >= getScoreCounter().getTargetPercentage()) {
-                        GameController.gameWon();
+                        gameWon();
                     }
 
                     if (collisionHandler.collisions(GameScene.getUnits(), stix)) {
@@ -282,7 +281,7 @@ public class GameController {
      * getter for testing
      * @return
      */
-    public static AnimationTimer getAnimationTimer() {
+    public AnimationTimer getAnimationTimer() {
         return animationTimer;
     }
 }
