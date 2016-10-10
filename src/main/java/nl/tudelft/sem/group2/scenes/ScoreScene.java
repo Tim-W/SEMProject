@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.global.Globals;
 
 /**
  * Displays info about the current score and gained percentage.
@@ -16,7 +17,6 @@ import javafx.scene.paint.Color;
 public class ScoreScene extends SubScene {
 
     //standard target percentage
-    private static final int TARGET_PERCENTAGE = 65;
     private static final int CENTER_SPACING = -5;
     private static final int TITLE_FIT_HEIGHT = 40;
     private static final int TITLE_FIT_WIDTH = 100;
@@ -32,7 +32,7 @@ public class ScoreScene extends SubScene {
     /**
      * Create a new ScoreScene.
      * Shows current score percentage,
-     * title of the game,
+     * title of the views,
      * and score count.
      *
      * @param root   the root this scene is placed on top of
@@ -120,7 +120,7 @@ public class ScoreScene extends SubScene {
      */
     public void setClaimedPercentage(int claimedPercentageInput) {
         claimedPercentage.setText(
-                String.valueOf(claimedPercentageInput) + "% of " + String.valueOf(TARGET_PERCENTAGE) + "%"
+                String.valueOf(claimedPercentageInput) + "% of " + String.valueOf(Globals.TARGET_PERCENTAGE * 100) + "%"
         );
     }
 

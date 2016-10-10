@@ -1,7 +1,8 @@
 *.class
-
 .classpath
 .project
+/.settings
+
 SEMProject.iml
 .settings/*
 

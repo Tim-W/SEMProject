@@ -1,12 +1,12 @@
 package nl.tudelft.sem.group2.units;
 
 import java.awt.Point;
+
 import javafx.scene.image.Image;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
-import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_X;
-import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_Y;
+import static nl.tudelft.sem.group2.global.Globals.FUSE_DELAY;
 
 /**
  * Describes the Fuse.
@@ -15,9 +15,11 @@ import static nl.tudelft.sem.group2.global.Globals.CURSOR_START_Y;
  */
 public class Fuse extends LineTraveller {
     private int speed = 1;
-    private int lastX = CURSOR_START_X;
-    private int lastY = CURSOR_START_Y;
+    private int lastX;
+    private int lastY;
     private boolean moving = true;
+    private Stix stix;
+    private int delay;
 
     /**
      * Create a new Fuse.
@@ -26,37 +28,44 @@ public class Fuse extends LineTraveller {
      * @param y      the start y coord
      * @param width  width of the fuse (used for collision detection)
      * @param height height of the fuse (used for collision detection)
+     * @param stix   current stix to use
      */
-    public Fuse(int x, int y, int width, int height) {
+    public Fuse(int x, int y, int width, int height, Stix stix) {
         super(x, y, width, height);
         Image[] sprite = new Image[2];
+        lastX = x;
+        lastY = y;
         sprite[0] = new Image("/images/fuse-1.png");
         sprite[1] = new Image("/images/fuse-2.png");
         setSprite(sprite);
+        this.stix = stix;
+        delay = FUSE_DELAY;
     }
 
     @Override
     public void move() {
-        if (moving) {
+        if (delay > 0) {
+            delay--;
+        } else if (moving) {
             for (int i = 0; i < speed; i++) {
                 if (getX() < BOARD_WIDTH / 2
                         && !(getX() + 1 == lastX)
-                        && getAreaTracker().getStix().contains(new Point(getX() + 1, getY()))) {
+                        && stix.getStixCoordinates().contains(new Point(getX() + 1, getY()))) {
                     setLastCoordinates(getX(), getY());
                     setX(getX() + 1);
                 } else if (getY() < BOARD_HEIGHT / 2
                         && !(lastY == getY() + 1)
-                        && getAreaTracker().getStix().contains(new Point(getX(), getY() + 1))) {
+                        && stix.getStixCoordinates().contains(new Point(getX(), getY() + 1))) {
                     setLastCoordinates(getX(), getY());
                     setY(getY() + 1);
                 } else if (getX() > 0
                         && !(lastX == getX() - 1)
-                        && getAreaTracker().getStix().contains(new Point(getX() - 1, getY()))) {
+                        && stix.getStixCoordinates().contains(new Point(getX() - 1, getY()))) {
                     setLastCoordinates(getX(), getY());
                     setX(getX() - 1);
                 } else if (getY() > 0
                         && !(lastY == getY() - 1)
-                        && getAreaTracker().getStix().contains(new Point(getX(), getY() - 1))) {
+                        && stix.getStixCoordinates().contains(new Point(getX(), getY() - 1))) {
                     setLastCoordinates(getX(), getY());
                     setY(getY() - 1);
                 }
@@ -70,18 +79,31 @@ public class Fuse extends LineTraveller {
     }
 
     /**
-     *
      * @return string representation
      */
     public String toString() {
         return "Fuse";
     }
 
+    public void setLastX(int lastX) {
+        this.lastX = lastX;
+    }
+
+    public void setLastY(int lastY) {
+        this.lastY = lastY;
+    }
+
     /**
-     *
      * @param moving if the fuse is moving
      */
     public void setMoving(boolean moving) {
         this.moving = moving;
+    }
+
+    /**
+     * @param delay The value of the new delay
+     */
+    public void setDelay(int delay) {
+        this.delay = delay;
     }
 }

@@ -26,25 +26,7 @@ public class LaunchApp extends Application {
     private static MediaView mediaView;
 
 
-    private static final Logger LOGGER = new Logger();
-
-    public static Logger getLogger() {
-        return LOGGER;
-    }
-
-    /**
-     * @return board width
-     */
-    public static int getBoardWidth() {
-        return BOARD_WIDTH;
-    }
-
-    /**
-     * @return board height
-     */
-    public static int getBoardHeight() {
-        return BOARD_HEIGHT;
-    }
+    private static final Logger LOGGER = Logger.getLogger();
 
     /**
      * @return grid height - a point on the boardgrid is 2x2 pixels,

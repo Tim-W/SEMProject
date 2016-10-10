@@ -1,17 +1,15 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Point;
+import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
-import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import java.awt.Point;
-import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -20,18 +18,18 @@ import static org.mockito.Mockito.when;
 public class FuseTest {
     private Fuse fuse;
     private LinkedList<Point> linkedList;
-    AreaTracker areaTracker;
+    private Stix stix;
 
     @Before
     public void setUp() throws Exception {
         new JFXPanel();
-        createFuse(new Fuse(3, 3, 3, 4));
+        stix = mock(Stix.class);
+        createFuse(new Fuse(3, 3, 3, 4, stix));
+        fuse.setDelay(0);
     }
 
     public void createFuse(Fuse f) {
         fuse = f;
-        areaTracker = Mockito.mock(AreaTracker.class);
-        fuse.setAreaTracker(areaTracker);
     }
 
     @Test
@@ -45,16 +43,11 @@ public class FuseTest {
     public void moveFuse(int x, int y) {
         linkedList = new LinkedList<>();
         linkedList.add(new Point(fuse.getX() + x, fuse.getY() + y));
-        when(areaTracker.getStix()).thenReturn(linkedList);
+        when(stix.getStixCoordinates()).thenReturn(linkedList);
         fuse.move();
     }
 
-    @Test
-    public void testMoveRight() {
-        int oldx = fuse.getX();
-        moveFuse(1, 0);
-        Assert.assertEquals(oldx + 1, fuse.getX());
-    }
+
 
     @Test
     public void testMoveRightLastX() {
@@ -65,16 +58,8 @@ public class FuseTest {
     }
 
     @Test
-    public void testMoveLeft() {
-        createFuse(new Fuse(BOARD_WIDTH - 1, BOARD_HEIGHT - 1, 1, 1));
-        int oldx = fuse.getX();
-        moveFuse(-1, 0);
-        Assert.assertEquals(oldx - 1, fuse.getX());
-    }
-
-    @Test
     public void testMoveLeftLastX() {
-        createFuse(new Fuse(BOARD_WIDTH - 2, BOARD_HEIGHT - 1, 1, 1));
+        createFuse(new Fuse(BOARD_WIDTH - 2, BOARD_HEIGHT - 1, 1, 1, stix));
         moveFuse(-1, 0);
         int oldx = fuse.getX();
         moveFuse(1, 0);
@@ -89,14 +74,76 @@ public class FuseTest {
         Assert.assertEquals(oldx, fuse.getX());
     }
 
-    @org.junit.Test
-    public void testToString() {
-        Assert.assertEquals(fuse.toString(), "Fuse");
+    @Test
+    public void testMoveR() {
+        int oldx = fuse.getX();
+        moveFuse(1, 0);
+        Assert.assertEquals(oldx + 1, fuse.getX());
     }
 
     @Test
-    public void testSetMoving() throws Exception {
+    public void testmoveD() {
+        int oldy = fuse.getY();
+        fuse.setMoving(true);
+        moveFuse(0, 1);
+        Assert.assertEquals(oldy + 1, fuse.getY());
+    }
 
+    @Test
+    public void testmoveU() {
+        int oldy = fuse.getY();
+        fuse.setMoving(true);
+        moveFuse(0, -1);
+        Assert.assertEquals(oldy - 1, fuse.getY());
+    }
+
+    @Test
+    public void testmoveL() {
+        int oldx = fuse.getX();
+        fuse.setMoving(true);
+        moveFuse(-1, 0);
+        Assert.assertEquals(oldx - 1, fuse.getX());
+    }
+
+    @Test
+    public void testNotMoveL() {
+        fuse.setLastX(fuse.getX() - 1);
+        int oldx = fuse.getX();
+        fuse.setMoving(true);
+        moveFuse(-1, 0);
+        Assert.assertEquals(oldx, fuse.getX());
+    }
+
+    @Test
+    public void testNotMoveL2() {
+        createFuse(new Fuse(0, 0, 1, 1, stix));
+        int oldx = fuse.getX();
+        fuse.setMoving(true);
+        moveFuse(-1, 0);
+        Assert.assertEquals(oldx, fuse.getX());
+    }
+
+    @Test
+    public void testNotMoveD() {
+        fuse.setLastY(fuse.getY() + 1);
+        int oldy = fuse.getY();
+        fuse.setMoving(true);
+        moveFuse(0, 1);
+        Assert.assertEquals(oldy, fuse.getY());
+    }
+
+    @Test
+    public void testNotMoveU() {
+        fuse.setLastY(fuse.getY() - 1);
+        int oldy = fuse.getY();
+        fuse.setMoving(true);
+        moveFuse(0, -1);
+        Assert.assertEquals(oldy, fuse.getY());
+    }
+
+    @org.junit.Test
+    public void testToString() {
+        Assert.assertEquals(fuse.toString(), "Fuse");
     }
 
 }

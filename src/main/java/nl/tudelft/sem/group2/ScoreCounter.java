@@ -13,7 +13,7 @@ import static nl.tudelft.sem.group2.global.Globals.TARGET_PERCENTAGE;
  */
 public class ScoreCounter {
 
-    private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = Logger.getLogger();
 
     // Total score accumulated by player.
     private int totalScore;
@@ -59,7 +59,6 @@ public class ScoreCounter {
             LOGGER.log(Level.INFO, "Score updated with "
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
-
 
     }
 

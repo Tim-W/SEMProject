@@ -1,26 +1,25 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.LaunchApp;
-import nl.tudelft.sem.group2.Logger;
-
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
-
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
-import static nl.tudelft.sem.group2.game.Board.gridToCanvas;
+import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.global.Globals;
+
+import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A Qix is an enemy unit.
  * It moves randomly on the GameScene.
  * When the player touches the Qix while drawing,
- * or when the Qix touches the stix, it is game over.
+ * or when the Qix touches the stix, it is views over.
  */
 public class Qix extends Unit {
 
@@ -32,12 +31,12 @@ public class Qix extends Unit {
     private static final int RANDOMNESSPOSITIONLENGTH = 4;
     private static final int RANDOMNESSLINELENGTH = 2;
     private static final int COLLISIONSIZE = 10;
-    private static final Logger LOGGER = LaunchApp.getLogger();
+    private static final Logger LOGGER = Logger.getLogger();
     private int animationLoops = 0;
     private float[] direction = new float[2];
-    private LinkedList<float[]> oldDirections = new LinkedList<float[]>();
-    private LinkedList<float[]> oldCoordinates = new LinkedList<float[]>();
-    private LinkedList<double[]> colorArray = new LinkedList<double[]>();
+    private LinkedList<float[]> oldDirections = new LinkedList<>();
+    private LinkedList<float[]> oldCoordinates = new LinkedList<>();
+    private LinkedList<double[]> colorArray = new LinkedList<>();
     private float[] coordinate = new float[2];
 
     /**
@@ -47,6 +46,10 @@ public class Qix extends Unit {
      */
     public Qix() {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+    }
+
+    public static int getLINESCOUNT() {
+        return LINESCOUNT;
     }
 
     @Override
@@ -70,9 +73,9 @@ public class Qix extends Unit {
         for (int i = 0; i < colors.length; i++) {
             colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
-        colorArray.addFirst(colors);
-        oldDirections.addFirst(new float[] {direction[0], direction[1]});
-        oldCoordinates.addFirst(new float[] {coordinate[0], coordinate[1]});
+        getColorArray().addFirst(colors);
+        getOldDirections().addFirst(new float[] {direction[0], direction[1]});
+        getOldCoordinates().addFirst(new float[] {coordinate[0], coordinate[1]});
         if (oldDirections.size() > LINESCOUNT) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();
@@ -88,9 +91,9 @@ public class Qix extends Unit {
     private void changeDirection() {
         float length;
         do {
-            direction[0] = Math.round(Math.random() * PRECISION) - PRECISION / 2;
-            direction[1] = Math.round(Math.random() * PRECISION) - PRECISION / 2;
-            length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
+            setDirection(Math.round(Math.random() * PRECISION) - PRECISION / 2, 0);
+            setDirection(Math.round(Math.random() * PRECISION) - PRECISION / 2, 1);
+            length = (float) Math.sqrt(getDirection(0) * getDirection(0) + getDirection(1) * getDirection(1));
         } while (length == 0);
         float random = (float) Math.random() * RANDOMNESSPOSITIONLENGTH - RANDOMNESSPOSITIONLENGTH / 2;
         float scale = (POSITION_LENGTH + random) / length;
@@ -107,16 +110,16 @@ public class Qix extends Unit {
     public void draw(Canvas canvas) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.RED);
-        for (int i = 0; i < oldDirections.size(); i++) {
+        for (int i = 0; i < getOldDirections().size(); i++) {
             //get the random colors for the line
             gc.setStroke(Color.color(colorArray.get(i)[0], colorArray.get(i)[1], colorArray.get(i)[2]));
             gc.beginPath();
             //point 1 of the line
-            float x1 = gridToCanvas((int) (oldCoordinates.get(i)[0] + oldDirections.get(i)[1]));
-            float y1 = gridToCanvas((int) (oldCoordinates.get(i)[1] - oldDirections.get(i)[0]));
+            float x1 = gridToCanvas((int) (getOldCoordinate(i)[0] + getOldDirection(i)[1]));
+            float y1 = gridToCanvas((int) (getOldCoordinate(i)[1] - getOldDirection(i)[0]));
             //point 2 of the line
-            float x2 = gridToCanvas((int) (oldCoordinates.get(i)[0] - oldDirections.get(i)[1]));
-            float y2 = gridToCanvas((int) (oldCoordinates.get(i)[1] + oldDirections.get(i)[0]));
+            float x2 = gridToCanvas((int) (getOldCoordinate(i)[0] - getOldDirection(i)[1]));
+            float y2 = gridToCanvas((int) (getOldCoordinate(i)[1] + getOldDirection(i)[0]));
             //draw the line
             gc.moveTo(x1, y1);
             gc.lineTo(x2, y2);
@@ -135,8 +138,8 @@ public class Qix extends Unit {
             for (int j = 0; j < gridLength; j++) {
                 if (getAreaTracker().getBoardGrid()[i][j] == AreaState.INNERBORDER
                         || getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER) {
-                    float dx = coordinate[0] - i;
-                    float dy = coordinate[1] - j;
+                    float dx = getCoordinate(0) - i;
+                    float dy = getCoordinate(1) - j;
                     float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);
                     //if gridpoint is closer to the qix than COLLISIONSIZE revert the qix
                     if (lengthNew < COLLISIONSIZE) {
@@ -144,8 +147,8 @@ public class Qix extends Unit {
                         dy /= lengthNew;
                         dx *= length;
                         dy *= length;
-                        direction[0] = dx;
-                        direction[1] = dy;
+                        setDirection(dx, 0);
+                        setDirection(dy, 1);
                         return;
                     }
                 }
@@ -159,8 +162,8 @@ public class Qix extends Unit {
      * @return some polygon
      */
     public Polygon toPolygon() {
-        ArrayList<Integer> xCor = new ArrayList<Integer>();
-        ArrayList<Integer> yCor = new ArrayList<Integer>();
+        ArrayList<Integer> xCor = new ArrayList<>();
+        ArrayList<Integer> yCor = new ArrayList<>();
 
         for (int i = 0; i < this.getOldCoordinates().size(); i++) {
             xCor.add(Math.round(this.getOldCoordinates().get(i)[0]
@@ -188,6 +191,24 @@ public class Qix extends Unit {
         return new Polygon(xArr, yArr, xArr.length);
     }
 
+    @Override
+    public boolean intersect(Unit collidee) {
+        //if (!(obj instanceof Qix) ) {
+        Polygon colliderP = this.toPolygon();
+
+        // subtract one from width&height to make collisions look more real
+        Rectangle collideeR = new Rectangle(collidee.getX(),
+                collidee.getY(), collidee.getWidth() / 2 - 1,
+                collidee.getHeight() / 2 - 1);
+        if (colliderP.intersects(collideeR)) {
+            LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
+                    + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
+        }
+        return colliderP.intersects(collideeR);
+        //}
+        // return false;
+    }
+
     /**
      * @return string representation of a Qix
      */
@@ -199,12 +220,69 @@ public class Qix extends Unit {
         return oldCoordinates;
     }
 
-    public float[] getCoordinate() {
-        return coordinate;
+    public void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
+        this.oldCoordinates = oldCoordinates;
+    }
+
+    /**
+     * Getter for an old coordinate.
+     * @param i describes if you want the x or the y.
+     * @return the x or y coordinate
+     */
+    public float[] getOldCoordinate(int i) {
+        return oldCoordinates.get(i);
+    }
+
+    /**
+     * Getter for current coordinate.
+     * @param i describes if you want the x or the y.
+     * @return the x or y coordinate
+     */
+    public float getCoordinate(int i) {
+        return coordinate[i];
+    }
+
+    public void setAnimationLoops(int animationLoops) {
+        this.animationLoops = animationLoops;
     }
 
     public LinkedList<float[]> getOldDirections() {
         return oldDirections;
+    }
+
+    public void setOldDirections(LinkedList<float[]> oldDirections) {
+        this.oldDirections = oldDirections;
+    }
+
+    /**
+     * Getter for old direction.
+     * @param i describes if you want the x or the y.
+     * @return the x or y coordinate
+     */
+    public float[] getOldDirection(int i) {
+        return oldDirections.get(i);
+    }
+
+    /**
+     * Getter for current direction.
+     * @param i describes if you want the x or the y.
+     * @return the x or y coordinate
+     */
+    public float getDirection(int i) {
+        return direction[i];
+    }
+
+    /**
+     * Setter for a direction.
+     * @param direction the new direction
+     * @param i at which place
+     */
+    public void setDirection(float direction, int i) {
+        this.direction[i] = direction;
+    }
+
+    public LinkedList<double[]> getColorArray() {
+        return colorArray;
     }
 
     /**
