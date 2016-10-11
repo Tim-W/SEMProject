@@ -5,7 +5,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.CollisionHandler;
+import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.global.Globals;
