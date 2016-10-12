@@ -25,7 +25,6 @@ import java.util.Random;
 import java.util.Set;
 
 
-
 /**
  * GameScene contains all the information about the current game.
  */
@@ -33,20 +32,17 @@ public class GameScene extends Scene {
 
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
-
+    private static final int MARGIN = 8;
     private static Label messageLabel;
     private static VBox messageBox;
-    private GameController gameController;
-
     private static ScoreScene scoreScene;
-
-    private static final int MARGIN = 8;
     private static Canvas canvas;
     private static Set<Unit> units;
     private static Stix stix;
     private static GraphicsContext gc;
     private static AreaTracker areaTracker;
     private static Image image;
+    private GameController gameController;
 
     /**
      * Create a new GameScene.
@@ -80,10 +76,51 @@ public class GameScene extends Scene {
         int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
         setImage(new Image("/images/" + image + ".png", Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, false, false));
         // Draw the board
-       draw();
+        draw();
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
+    }
+
+    /**
+     * Transforms grid to canvas coordinates.
+     *
+     * @param b an x or y coordinate
+     * @return the coordinate to draw an image on
+     */
+    public static int gridToCanvas(int b) {
+        return b * 2 + MARGIN - 1;
+    }
+
+    /**
+     * Add a unit.
+     *
+     * @param unit unit to add
+     */
+    public static void addUnit(Unit unit) {
+        if (units == null) {
+            units = new HashSet<>();
+        }
+        if (unit instanceof Fuse) {
+            for (Unit unit1 : units) {
+                if (unit1 instanceof Fuse) {
+                    return;
+                }
+            }
+        }
+        units.add(unit);
+    }
+
+    public static Stix getStix() {
+        return stix;
+    }
+
+    public static void setStix(Stix stix) {
+        GameScene.stix = stix;
+    }
+
+    public static void setAreaTracker(AreaTracker areaTracker) {
+        GameScene.areaTracker = areaTracker;
     }
 
     /**
@@ -127,7 +164,6 @@ public class GameScene extends Scene {
         setOnKeyPressed((KeyEvent e) -> gameController.keyPressed(e));
     }
 
-
     private void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
@@ -135,8 +171,6 @@ public class GameScene extends Scene {
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }
-
-
 
     private void addMessageBox() {
         // Messagebox&label for displaying start and end messages
@@ -150,38 +184,10 @@ public class GameScene extends Scene {
     }
 
     /**
-     * Transforms grid to canvas coordinates.
-     *
-     * @param b an x or y coordinate
-     * @return the coordinate to draw an image on
-     */
-    public static int gridToCanvas(int b) {
-        return b * 2 + MARGIN - 1;
-    }
-
-    /**
      * @return units of the board
      */
     public Set<Unit> getUnits() {
         return units;
-    }
-
-    /**
-     * Add a unit.
-     * @param unit unit to add
-     */
-    public static void addUnit(Unit unit) {
-        if(units==null){
-            units = new HashSet<>();
-        }
-        if (unit instanceof Fuse) {
-            for (Unit unit1 : units) {
-                if (unit1 instanceof Fuse) {
-                    return;
-                }
-            }
-        }
-        units.add(unit);
     }
 
     /**
@@ -277,9 +283,9 @@ public class GameScene extends Scene {
         }
     }
 
-
     /**
      * Set the label for the message in the middle of the screen.
+     *
      * @param string string which the label should be
      */
     public void setMessageLabel(String string) {
@@ -288,6 +294,7 @@ public class GameScene extends Scene {
 
     /**
      * Alters x-position of message on screen.
+     *
      * @param position new x-position
      */
     public void setMessageBoxLayoutX(int position) {
@@ -296,22 +303,11 @@ public class GameScene extends Scene {
 
     /**
      * Update the info on the scorescene with actual info from scorecounter.
+     *
      * @param scoreCounter scorecounter from GameController.
      */
     public void updateScorescene(ScoreCounter scoreCounter) {
         scoreScene.setScore(scoreCounter.getTotalScore());
         scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
-    }
-
-    public static void setStix(Stix stix) {
-        GameScene.stix = stix;
-    }
-
-    public static Stix getStix() {
-        return stix;
-    }
-
-    public static void setAreaTracker(AreaTracker areaTracker) {
-        GameScene.areaTracker = areaTracker;
     }
 }

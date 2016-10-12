@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
  */
 public class GameControllerTest {
     GameController gameController;
+
     @Before
     public void setUp() throws Exception {
         new JFXPanel();
@@ -42,117 +43,127 @@ public class GameControllerTest {
     @Test
     public void keyPressedSpace() throws Exception {
         boolean isRunning = gameController.isRunning();
-        gameController.keyPressed(new KeyEvent(null,null,KeyEvent.KEY_PRESSED," ","", KeyCode.SPACE,false,false,
-                false,false));
-        Assert.assertEquals(!isRunning,gameController.isRunning());
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.SPACE, false, false,
+                false, false));
+        Assert.assertEquals(!isRunning, gameController.isRunning());
     }
+
     @Test
     public void keyPressedArrow() throws Exception {
         LaunchApp.scene.removeFuse();
-        Fuse fuse = spy(new Fuse(1,1,1,1,new Stix()));
+        Fuse fuse = spy(new Fuse(1, 1, 1, 1, new Stix()));
         LaunchApp.scene.getUnits().add(fuse);
-        Cursor cursor = new Cursor(1,1,1,1,new Stix());
+        Cursor cursor = new Cursor(1, 1, 1, 1, new Stix());
         setCursor(cursor);
         cursor.setDrawing(true);
-        gameController.keyPressed(new KeyEvent(null,null,KeyEvent.KEY_PRESSED," ","", KeyCode.RIGHT,false,false,
-                false,false));
-        verify(fuse,times(1)).setMoving(false);
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.RIGHT, false, false,
+                false, false));
+        verify(fuse, times(1)).setMoving(false);
         //verify(fuse,times(2)).getUnits();
     }
+
     @Test
     public void keyPressedX() throws Exception {
 
-        Cursor cursor = spy(new Cursor(1,1,1,1,new Stix()));
+        Cursor cursor = spy(new Cursor(1, 1, 1, 1, new Stix()));
         setCursor(cursor);
-        gameController.keyPressed(new KeyEvent(null,null,KeyEvent.KEY_PRESSED," ","", KeyCode.X,false,false,
-                false,false));
-        verify(cursor,times(1)).setSpeed(1);
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.X, false, false,
+                false, false));
+        verify(cursor, times(1)).setSpeed(1);
     }
+
     @Test
     public void keyPressedZ() throws Exception {
 
-        Cursor cursor = spy(new Cursor(1,1,1,1,new Stix()));
+        Cursor cursor = spy(new Cursor(1, 1, 1, 1, new Stix()));
         setCursor(cursor);
-        gameController.keyPressed(new KeyEvent(null,null,KeyEvent.KEY_PRESSED," ","", KeyCode.Z,false,false,
-                false,false));
-        verify(cursor,times(1)).setSpeed(2);
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.Z, false, false,
+                false, false));
+        verify(cursor, times(1)).setSpeed(2);
     }
+
     @Test
     public void keyPressedY() throws Exception {
 
-        Cursor cursor = spy(new Cursor(1,1,1,1,new Stix()));
+        Cursor cursor = spy(new Cursor(1, 1, 1, 1, new Stix()));
         setCursor(cursor);
-        gameController.keyPressed(new KeyEvent(null,null,KeyEvent.KEY_PRESSED," ","", KeyCode.Y,false,false,
-                false,false));
-        verify(cursor,times(0)).setSpeed(2);
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.Y, false, false,
+                false, false));
+        verify(cursor, times(0)).setSpeed(2);
     }
+
     @Test
     public void keyReleasedCurrentMove() throws Exception {
         LaunchApp.scene.removeFuse();
-        Fuse fuse = spy(new Fuse(1,1,1,1,new Stix()));
+        Fuse fuse = spy(new Fuse(1, 1, 1, 1, new Stix()));
         LaunchApp.scene.getUnits().add(fuse);
         getCursor().setCurrentMove(KeyCode.RIGHT);
-        gameController.getStix().addToStix(new Point(getCursor().getX(),getCursor().getY()));
-        gameController.keyReleased(new KeyEvent(null,null,KeyEvent.KEY_RELEASED," ","", getCursor().getCurrentMove(),false,false,
-                false,false));
-        verify(fuse,times(1)).setMoving(true);
+        gameController.getStix().addToStix(new Point(getCursor().getX(), getCursor().getY()));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", getCursor().getCurrentMove(), false, false,
+                false, false));
+        verify(fuse, times(1)).setMoving(true);
     }
+
     @Test
     public void keyReleasedCurrentMoveCreateFuse() throws Exception {
         LaunchApp.scene.removeFuse();
         gameController.setStix(spy(gameController.getStix()));
         getCursor().setCurrentMove(KeyCode.RIGHT);
-        gameController.getStix().addToStix(new Point(getCursor().getX(),getCursor().getY()));
-        gameController.keyReleased(new KeyEvent(null,null,KeyEvent.KEY_RELEASED," ","", getCursor().getCurrentMove(),false,false,
-                false,false));
-        verify(gameController.getStix(),times(3)).getStixCoordinates();
+        gameController.getStix().addToStix(new Point(getCursor().getX(), getCursor().getY()));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", getCursor().getCurrentMove(), false, false,
+                false, false));
+        verify(gameController.getStix(), times(3)).getStixCoordinates();
     }
+
     @Test
     public void keyReleasedCurrentMoveNoCoordinates() throws Exception {
         LaunchApp.scene.removeFuse();
-        Fuse fuse = spy(new Fuse(1,1,1,1,new Stix()));
+        Fuse fuse = spy(new Fuse(1, 1, 1, 1, new Stix()));
         LaunchApp.scene.getUnits().add(fuse);
         getCursor().setCurrentMove(KeyCode.RIGHT);
-        gameController.getStix().addToStix(new Point(getCursor().getX()+1,getCursor().getY()));
-        gameController.keyReleased(new KeyEvent(null,null,KeyEvent.KEY_RELEASED," ","", getCursor().getCurrentMove(),false,false,
-                false,false));
-        verify(fuse,times(0)).setMoving(true);
+        gameController.getStix().addToStix(new Point(getCursor().getX() + 1, getCursor().getY()));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", getCursor().getCurrentMove(), false, false,
+                false, false));
+        verify(fuse, times(0)).setMoving(true);
     }
+
     @Test
     public void keyReleasedX() throws Exception {
         LaunchApp.scene.removeFuse();
-        Fuse fuse = spy(new Fuse(1,1,1,1,new Stix()));
+        Fuse fuse = spy(new Fuse(1, 1, 1, 1, new Stix()));
         LaunchApp.scene.getUnits().add(fuse);
-        Cursor cursor = spy(new Cursor(1,1,1,1,new Stix()));
+        Cursor cursor = spy(new Cursor(1, 1, 1, 1, new Stix()));
         setCursor(cursor);
         getCursor().setCurrentMove(KeyCode.RIGHT);
-        gameController.getStix().addToStix(new Point(getCursor().getX(),getCursor().getY()));
-        gameController.keyReleased(new KeyEvent(null,null,KeyEvent.KEY_RELEASED," ","", KeyCode.X,false,false,
-                false,false));
-        verify(cursor,times(1)).setDrawing(false);
+        gameController.getStix().addToStix(new Point(getCursor().getX(), getCursor().getY()));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", KeyCode.X, false, false,
+                false, false));
+        verify(cursor, times(1)).setDrawing(false);
     }
+
     @Test
     public void keyReleasedZ() throws Exception {
         LaunchApp.scene.removeFuse();
-        Fuse fuse = spy(new Fuse(1,1,1,1,new Stix()));
+        Fuse fuse = spy(new Fuse(1, 1, 1, 1, new Stix()));
         LaunchApp.scene.getUnits().add(fuse);
-        Cursor cursor = spy(new Cursor(1,1,1,1,new Stix()));
+        Cursor cursor = spy(new Cursor(1, 1, 1, 1, new Stix()));
         setCursor(cursor);
         getCursor().setCurrentMove(KeyCode.RIGHT);
-        gameController.getStix().addToStix(new Point(getCursor().getX(),getCursor().getY()));
-        gameController.keyReleased(new KeyEvent(null,null,KeyEvent.KEY_RELEASED," ","", KeyCode.Z,false,false,
-                false,false));
-        verify(cursor,times(1)).setDrawing(false);
+        gameController.getStix().addToStix(new Point(getCursor().getX(), getCursor().getY()));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", KeyCode.Z, false, false,
+                false, false));
+        verify(cursor, times(1)).setDrawing(false);
     }
+
     @Test
     public void keyReleasedY() throws Exception {
-        Cursor cursor = spy(new Cursor(1,1,1,1,new Stix()));
+        Cursor cursor = spy(new Cursor(1, 1, 1, 1, new Stix()));
         setCursor(cursor);
         getCursor().setCurrentMove(KeyCode.RIGHT);
-        gameController.getStix().addToStix(new Point(getCursor().getX(),getCursor().getY()));
-        gameController.keyReleased(new KeyEvent(null,null,KeyEvent.KEY_RELEASED," ","", KeyCode.Y,false,false,
-                false,false));
-        verify(cursor,times(0)).setDrawing(false);
+        gameController.getStix().addToStix(new Point(getCursor().getX(), getCursor().getY()));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", KeyCode.Y, false, false,
+                false, false));
+        verify(cursor, times(0)).setDrawing(false);
     }
     /*@Test
     public void gameWon() throws Exception {
