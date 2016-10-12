@@ -1,6 +1,8 @@
 package nl.tudelft.sem.group2;
 
 import java.awt.Point;
+
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Stix;
 
 import static org.junit.Assert.assertEquals;
@@ -185,13 +187,14 @@ public class AreaTrackerTest {
     }
 
     private AreaTracker instantiateAreaTracker() {
-        Stix stix = new Stix();
-        stix.addToStix(new Point(2, 0));
-        stix.addToStix(new Point(2, 1));
-        stix.addToStix(new Point(2, 2));
-        stix.addToStix(new Point(2, 3));
-        stix.addToStix(new Point(2, 4));
-        return new AreaTracker(TEST_MAP_WIDTH, TEST_MAP_HEIGHT, stix);
+        GameController.getInstance();
+        GameController.getInstance().getStix().addToStix(new Point(2, 0));
+        GameController.getInstance().getStix().addToStix(new Point(2, 1));
+        GameController.getInstance().getStix().addToStix(new Point(2, 1));
+        GameController.getInstance().getStix().addToStix(new Point(2, 3));
+        GameController.getInstance().getStix().addToStix(new Point(2, 4));
+
+        return GameController.getInstance().getAreaTracker();
 
     }
 }

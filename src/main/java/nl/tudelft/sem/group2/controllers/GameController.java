@@ -35,7 +35,7 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
  */
 public class GameController {
 
-    private static final GameController gameController = new GameController();
+    private static GameController gameController;
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
@@ -58,6 +58,15 @@ public class GameController {
 
 
     public static GameController getInstance() {
+        if (gameController == null) {
+            // Put lock on class since it we do not want to instantiate it twice
+            synchronized (GameController.class) {
+                // Check if logger is in the meanwhile not already instantiated.
+                if (gameController == null) {
+                    gameController = new GameController();
+                }
+            }
+        }
         return gameController;
     }
 
@@ -329,5 +338,9 @@ public class GameController {
 
     public Set<Unit> getUnits() {
         return units;
+    }
+
+    public void dispose(){
+       gameController = null;
     }
 }
