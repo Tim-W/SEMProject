@@ -10,7 +10,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -39,13 +41,24 @@ public class Qix extends Unit {
     private LinkedList<double[]> colorArray = new LinkedList<>();
     private float[] coordinate = new float[2];
 
+//    /**
+//     * Create a new Qix.
+//     * Is by default placed on 30,30.
+//     * last parameters are for width and height but its just set to 1
+//     */
+//    public Qix() {
+//        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+//    }
+
     /**
      * Create a new Qix.
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
+     * @param areaTracker the areatracker
      */
-    public Qix() {
-        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+    public Qix(AreaTracker areaTracker) {
+        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + "," + Globals.QIX_START_Y + ")", this.getClass());
     }
 
     public static int getLINESCOUNT() {

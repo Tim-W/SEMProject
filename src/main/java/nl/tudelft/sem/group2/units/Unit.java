@@ -20,6 +20,23 @@ public abstract class Unit implements Draw, Movable {
     private AreaTracker areaTracker;
     private static final Logger LOGGER = Logger.getLogger();
 
+//    /**
+//     * Create a Unit at (x,y) position.
+//     *
+//     * @param x x coord
+//     * @param y y coord
+//     * @param width  width, used for collision
+//     * @param height height, used for collision
+//     */
+//    Unit(int x, int y, int width, int height) {
+//        this.setX(x);
+//        this.setY(y);
+//        this.setWidth(width);
+//        this.setHeight(height);
+//        this.setAreaTracker(GameController.getInstance().getAreaTracker());
+//        LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
+//    }
+
     /**
      * Create a Unit at (x,y) position.
      *
@@ -27,15 +44,18 @@ public abstract class Unit implements Draw, Movable {
      * @param y y coord
      * @param width  width, used for collision
      * @param height height, used for collision
+     * @param areaTracker the areatracker
      */
-    Unit(int x, int y, int width, int height) {
+    Unit(int x, int y, int width, int height, AreaTracker areaTracker) {
         this.setX(x);
         this.setY(y);
         this.setWidth(width);
         this.setHeight(height);
-        this.setAreaTracker(GameController.getAreaTracker());
+        this.areaTracker = areaTracker;
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
+
+
 
     public int getX() {
         return this.x;

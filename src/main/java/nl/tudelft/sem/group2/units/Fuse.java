@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.units;
 import java.awt.Point;
 
 import javafx.scene.image.Image;
+import nl.tudelft.sem.group2.AreaTracker;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -30,8 +31,8 @@ public class Fuse extends LineTraveller {
      * @param height height of the fuse (used for collision detection)
      * @param stix   current stix to use
      */
-    public Fuse(int x, int y, int width, int height, Stix stix) {
-        super(x, y, width, height);
+    public Fuse(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker) {
+        super(x, y, width, height, areaTracker);
         Image[] sprite = new Image[2];
         lastX = x;
         lastY = y;

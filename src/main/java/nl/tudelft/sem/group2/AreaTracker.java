@@ -168,7 +168,7 @@ public class AreaTracker {
     }
 
     private void updateScoreCounter(boolean fastArea) {
-        ScoreCounter scoreCounter = GameController.getScoreCounter();
+        ScoreCounter scoreCounter = GameController.getInstance().getScoreCounter();
 
         //When testing create own scoreCounter
         if (scoreCounter == null) {

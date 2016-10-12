@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 
 import java.awt.Point;
@@ -39,8 +40,8 @@ public class Cursor extends LineTraveller {
      * @param height height, used for collision detection
      * @param stix   current stix to use
      */
-    public Cursor(int x, int y, int width, int height, Stix stix) {
-        super(x, y, width, height);
+    public Cursor(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker) {
+        super(x, y, width, height, areaTracker);
         Image[] sprite = new Image[1];
         sprite[0] = new Image("/images/cursor.png");
         setSprite(sprite);

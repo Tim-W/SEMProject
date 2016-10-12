@@ -1,8 +1,11 @@
 package nl.tudelft.sem.group2.controllers;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.CollisionHandler;
@@ -21,6 +24,8 @@ import nl.tudelft.sem.group2.units.Unit;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
@@ -29,6 +34,8 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
  * Controller class for the GameScene to implement the MVC.
  */
 public class GameController {
+
+    private static volatile GameController gameController;
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
@@ -46,11 +53,27 @@ public class GameController {
     // Boolean that states if the game is running
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
+    private GameScene gameScene;
+    private static Set<Unit> units;
+
+
+    public static GameController getInstance() {
+        if (gameController == null) {
+            // Put lock on class since it we do not want to instantiate it twice
+            synchronized (GameController.class) {
+                // Check if logger is in the meanwhile not already instantiated.
+                if (gameController == null) {
+                    gameController = new GameController();
+                }
+            }
+        }
+        return gameController;
+    }
 
     /**
      * Constructor for the GameController class.
      */
-    public GameController() {
+    private GameController() {
         // Initialize models for scoretracking.
 
         stix = new Stix();
@@ -58,25 +81,33 @@ public class GameController {
         areaTracker = new AreaTracker(stix);
         scoreCounter = new ScoreCounter();
 
+        units = new HashSet<>();
+
         // Initialize and add units to units set in Gamescene
-        qix = new Qix();
+        qix = new Qix(areaTracker);
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, stix);
+                Globals.BOARD_MARGIN * 2, stix, areaTracker);
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
+                Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT, areaTracker);
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, SparxDirection.LEFT);
-        GameScene.addUnit(cursor);
-        GameScene.addUnit(qix);
-        GameScene.addUnit(sparxRight);
-        GameScene.addUnit(sparxLeft);
+                Globals.BOARD_MARGIN * 2, SparxDirection.LEFT, areaTracker);
+
+        Group group = new Group();
+        gameScene = new GameScene(group, Color.BLACK);
+        addUnit(cursor);
+        addUnit(qix);
+        addUnit(sparxRight);
+        addUnit(sparxLeft);
 
         collisionHandler = new CollisionHandler();
 
         //Animation timer initialization
         previousTime = System.nanoTime();
         createAnimationTimer();
+    }
 
+    public GameScene getScene() {
+        return gameScene;
     }
 
     /**
@@ -98,16 +129,16 @@ public class GameController {
      * show game over text,
      * stop the animations.
      */
-    public static void gameOver() {
+    public void gameOver() {
         // TODO add code for gameover
         animationTimerStop();
-        GameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
-        GameScene.setMessageLabel(" Game Over! ");
+        gameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
+        gameScene.setMessageLabel(" Game Over! ");
 
         //Plays game over sound
         playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
         LOGGER.log(Level.INFO, "Game Over, player died with a score of "
-                + scoreCounter.getTotalScore(), GameScene.class);
+                + scoreCounter.getTotalScore(), GameController.class);
     }
 
     /**
@@ -115,27 +146,27 @@ public class GameController {
      * stop the animations,
      * show that the player has won
      */
-    public static void gameWon() {
+    public void gameWon() {
         animationTimerStop();
-        GameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        GameScene.setMessageLabel(" You Won! ");
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
+        gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+        gameScene.setMessageLabel(" You Won! ");
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameController.class);
     }
 
     //GETTERS
-    public static AreaTracker getAreaTracker() {
+    public AreaTracker getAreaTracker() {
         return areaTracker;
     }
 
-    public static Cursor getCursor() {
+    public Cursor getCursor() {
         return cursor;
     }
 
-    public static ScoreCounter getScoreCounter() {
+    public ScoreCounter getScoreCounter() {
         return scoreCounter;
     }
 
-    public static Stix getStix() {
+    public Stix getStix() {
         return stix;
     }
 
@@ -149,21 +180,19 @@ public class GameController {
                 if (now - previousTime > NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
                     // draw
-                    GameScene.draw();
+                    gameScene.draw();
 
                     if (getScoreCounter().getTotalPercentage() >= getScoreCounter().getTargetPercentage()) {
                         gameWon();
                     }
 
-                    if (collisionHandler.collisions(GameScene.getUnits(), stix)) {
+                    if (collisionHandler.collisions(units, stix)) {
                         gameOver();
                     }
-                    GameScene.updateScorescene(scoreCounter);
+                    gameScene.updateScorescene(scoreCounter);
                     calculateArea();
-
                 }
             }
-
         };
     }
 
@@ -180,12 +209,13 @@ public class GameController {
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());
             //Remove the Fuse from the gameView when completing an area
-            GameScene.removeFuse();
+            gameScene.removeFuse();
         }
     }
 
     /**
      * Method that handles the action when a key is released.
+     *
      * @param e describes which keyevent happened.
      */
     public void keyReleased(KeyEvent e) {
@@ -212,24 +242,25 @@ public class GameController {
     private void handleFuse() {
         if (stix.getStixCoordinates().contains(new Point(cursor.getX(), cursor.getY()))) {
             boolean fuseExists = false;
-            for (Unit unit : GameScene.getUnits()) {
+            for (Unit unit : units) {
                 if (unit instanceof Fuse) {
                     fuseExists = true;
                     ((Fuse) unit).setMoving(true);
                 }
             }
             if (!fuseExists) {
-                GameScene.addUnit(
+                addUnit(
                         new Fuse((int) stix.getStixCoordinates().getFirst().getX(),
                                 (int) stix.getStixCoordinates().getFirst().getY(),
                                 Globals.FUSE_WIDTH,
-                                Globals.FUSE_HEIGHT, stix));
+                                Globals.FUSE_HEIGHT, stix, areaTracker));
             }
         }
     }
 
     /**
      * Method that handles the action when a key is pressed.
+     *
      * @param e describes which keyevent happened.
      */
     public void keyPressed(KeyEvent e) {
@@ -242,13 +273,14 @@ public class GameController {
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
             // TODO remove this start and start using game
             playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
+            playSound("/sounds/qix.mp3", 1);
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
-            GameScene.setMessageLabel("");
+            gameScene.setMessageLabel("");
         } else if (arrowKeys.contains(e.getCode())) {
             if (cursor.isDrawing()) {
-                for (Unit unit : GameScene.getUnits()) {
+                for (Unit unit : units) {
                     if (unit instanceof Fuse) {
                         ((Fuse) unit).setMoving(false);
                     }
@@ -257,21 +289,21 @@ public class GameController {
 
             cursor.setCurrentMove(e.getCode());
         } else if (e.getCode().equals(KeyCode.X)) {
-            if(stix.getStixCoordinates()!=null && !stix.getStixCoordinates().isEmpty()) {
-                if(!cursor.isFast()){
+            if (stix.getStixCoordinates() != null && !stix.getStixCoordinates().isEmpty()) {
+                if (!cursor.isFast()) {
                     cursor.setSpeed(1);
                     cursor.setDrawing(true);
                     cursor.setFast(false);
                 }
-            }else{
+            } else {
                 cursor.setSpeed(1);
                 cursor.setDrawing(true);
                 cursor.setFast(false);
             }
         } else if (e.getCode().equals(KeyCode.Z)) {
-                    cursor.setSpeed(2);
-                    cursor.setDrawing(true);
-                    cursor.setFast(true);
+            cursor.setSpeed(2);
+            cursor.setDrawing(true);
+            cursor.setFast(true);
         }
     }
 
@@ -287,5 +319,24 @@ public class GameController {
                 gameOver();
             }
         }
+    }
+
+    /**
+     * Add a unit.
+     * @param unit unit to add
+     */
+    public void addUnit(Unit unit) {
+        if (unit instanceof Fuse) {
+            for (Unit unit1 : units) {
+                if (unit1 instanceof Fuse) {
+                    return;
+                }
+            }
+        }
+        units.add(unit);
+    }
+
+    public Set<Unit> getUnits() {
+        return units;
     }
 }

@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2.factories;
 
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.scenes.GameScene;
 

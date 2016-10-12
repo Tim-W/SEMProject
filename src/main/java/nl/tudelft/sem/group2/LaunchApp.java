@@ -8,6 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.scenes.GameScene;
 
 import java.util.logging.Level;
@@ -59,7 +60,7 @@ public class LaunchApp extends Application {
                 try {
                     Media hit = new Media(getClass().getResource(string).toString());
                     MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                    mediaPlayer.setVolume(volume);
+                    mediaPlayer.setVolume(1);
                     mediaPlayer.play();
                     mediaView.setMediaPlayer(mediaPlayer);
                 } catch (Exception e) {
@@ -82,20 +83,21 @@ public class LaunchApp extends Application {
         stage.getIcons().add(new Image("/images/stageIcon.png"));
         LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
-        GameScene scene;
-        Group root = new Group();
-
-        scene = new GameScene(root, Color.BLACK);
+//        GameScene scene;
+//        Group root = new Group();
+//
+//        scene = new GameScene(root, Color.BLACK);
         LOGGER.log(Level.INFO, "GameScene created succesfully", this.getClass());
-        stage.setScene(scene);
+        GameController gameController = GameController.getInstance();
+        stage.setScene(gameController.getScene());
         stage.setResizable(false);
         stage.sizeToScene();
         stage.show();
 
         //Comment to mute empty sound
-        playSound("/sounds/qix.mp3", 1);
+        //playSound("/sounds/qix.mp3", 1);
         mediaView = new MediaView();
-        ((Group) scene.getRoot()).getChildren().add(mediaView);
+        //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 
     }
