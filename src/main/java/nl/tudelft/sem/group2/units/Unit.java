@@ -29,12 +29,12 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
      * @param width  width, used for collision
      * @param height height, used for collision
      */
-    Unit(int x, int y, int width, int height) {
+    Unit(int x, int y, int width, int height, AreaTracker areaTracker) {
         this.setX(x);
         this.setY(y);
         this.setWidth(width);
         this.setHeight(height);
-        this.setAreaTracker(GameController.getAreaTracker());
+        this.setAreaTracker(areaTracker);
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 

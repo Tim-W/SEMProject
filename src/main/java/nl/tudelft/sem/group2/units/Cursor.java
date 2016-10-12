@@ -5,13 +5,17 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.global.Globals;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
+import static nl.tudelft.sem.group2.LaunchApp.playSound;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -28,6 +32,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private boolean isDrawing = false;
     private boolean isFast = true;
     private Stix stix;
+    private Fuse fuse;
+    private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
 
 
     /**
@@ -39,8 +45,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param height height, used for collision detection
      * @param stix   current stix to use
      */
-    public Cursor(int x, int y, int width, int height, Stix stix) {
-        super(x, y, width, height);
+    public Cursor(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix) {
+        super(x, y, width, height, areaTracker);
         Image[] sprite = new Image[1];
         sprite[0] = new Image("/images/cursor.png");
         setSprite(sprite);
@@ -52,22 +58,16 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         for (int i = 0; i < speed; i++) {
             int transX = 0;
             int transY = 0;
+
             if (currentMove != null) {
-                switch (currentMove) {
-                    case LEFT:
-                        transX = -1;
-                        break;
-                    case RIGHT:
-                        transX = 1;
-                        break;
-                    case UP:
-                        transY = -1;
-                        break;
-                    case DOWN:
-                        transY = 1;
-                        break;
-                    default:
-                        break;
+                if(currentMove.equals(arrowKeys.get(2))) {
+                    transX = -1;
+                }else if(currentMove.equals(arrowKeys.get(3))) {
+                    transX = 1;
+                }else if(currentMove.equals(arrowKeys.get(0))) {
+                    transY = -1;
+                }else if(currentMove.equals(arrowKeys.get(1))) {
+                    transY = 1;
                 }
                 assertMove(transX, transY);
             }
@@ -180,6 +180,46 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
+    /***** Handeling Fuse *****/
+    /**
+     * handles making fuse and makes it start moving.
+     */
+    public void handleFuse() {
+        if (this.getStix().getStixCoordinates().contains(new Point(this.getX(), this.getY()))) {
+            if (fuse == null) {
+                fuse =
+                        new Fuse((int) this.getStix().getStixCoordinates().getFirst().getX(),
+                                (int) this.getStix().getStixCoordinates().getFirst().getY(),
+                                Globals.FUSE_WIDTH,
+                                Globals.FUSE_HEIGHT, this.getAreaTracker(), this.getStix());
+            }else{fuse.setMoving(true);}
+            this.setCurrentMove(null);
+        }
+    }
+
+    /**
+     * If there is a Fuse on the screen, remove it.
+     */
+    public void removeFuse() {
+            fuse = null;
+    }
+
+    /**
+     * When a new area is completed, calculate the new score.
+     */
+    public void calculateArea(Qix qix) {
+        if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
+                && !this.getStix().getStixCoordinates().isEmpty()) {
+            playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
+                    this.isFast(), getStix());
+            //Remove the Fuse from the gameView when completing an area
+            removeFuse();
+        }
+    }
+
+    /***** Getters and setters *****/
+
     /**
      * @return
      */
@@ -214,6 +254,32 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void setFast(boolean isFast) {
         this.isFast = isFast;
     }
+
+    /**
+     *
+     * @return the stix of this cursor.
+     */
+    public Stix getStix(){return stix;}
+
+    /**
+     *
+     * @return the fuse if there is a fuse, otherwise null.
+     */
+    public Fuse getFuse(){return fuse;}
+
+    /**
+     *
+     * @param keycode the key that is specific to this cursor.
+     */
+    public void addKey(KeyCode keycode){
+        arrowKeys.add(keycode);
+    }
+
+    /**
+     *
+     * @return this cursor specific keys.
+     */
+    public ArrayList<KeyCode> getArrowKeys(){return arrowKeys;}
 
     /**
      * Method which log the current movement of the cursor.

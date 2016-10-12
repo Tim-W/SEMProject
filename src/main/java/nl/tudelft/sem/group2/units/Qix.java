@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
@@ -46,8 +47,8 @@ public class Qix extends Unit implements CollisionInterface {
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
      */
-    public Qix() {
-        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+    public Qix(AreaTracker areaTracker) {
+        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
     }
 
     public static int getLINESCOUNT() {

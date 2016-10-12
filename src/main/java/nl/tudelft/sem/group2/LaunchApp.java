@@ -94,7 +94,7 @@ public class LaunchApp extends Application {
         stage.show();
 
         //Comment to mute empty sound
-        playSound("/sounds/qix.mp3", 1);
+        playSound("/sounds/qix.mp3", 0);
         mediaView = new MediaView();
         ((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());

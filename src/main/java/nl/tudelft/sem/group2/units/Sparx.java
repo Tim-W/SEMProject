@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
@@ -30,8 +31,8 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param sparxDirection direction in which the sparx starts moving,
      *                       which is either LEFT or RIGHT
      */
-    public Sparx(int x, int y, int width, int height, SparxDirection sparxDirection) {
-        super(x, y, width, height);
+    public Sparx(int x, int y, int width, int height, AreaTracker areaTracker, SparxDirection sparxDirection) {
+        super(x, y, width, height, areaTracker);
         lastX = x;
         lastY = y;
         Image[] sprite = new Image[2];
