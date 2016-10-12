@@ -5,9 +5,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.collisions.CollisionHandler;
+import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -19,11 +20,12 @@ import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
-import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.LaunchApp.playSound;
+import static nl.tudelft.sem.group2.scenes.GameScene.addUnit;
+import static nl.tudelft.sem.group2.scenes.GameScene.setAreaTracker;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -33,15 +35,15 @@ public class GameController {
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
-    // Animation timer properties
-    private static AnimationTimer animationTimer;
     // Units
     private static Cursor cursor;
     private static Qix qix;
-    private static Stix stix;
-    // Models for score tracking
     private static AreaTracker areaTracker;
     private static ScoreCounter scoreCounter;
+    private final ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+    // Animation timer properties
+    private AnimationTimer animationTimer;
+    private Stix stix;
     private long previousTime;
     // Boolean that states if the game is running
     private boolean isRunning = false;
@@ -51,25 +53,28 @@ public class GameController {
      * Constructor for the GameController class.
      */
     public GameController() {
+        arrowKeys.add(KeyCode.UP);
+        arrowKeys.add(KeyCode.DOWN);
+        arrowKeys.add(KeyCode.LEFT);
+        arrowKeys.add(KeyCode.RIGHT);
         // Initialize models for scoretracking.
-
         stix = new Stix();
-
         areaTracker = new AreaTracker(stix);
-        scoreCounter = new ScoreCounter();
-
-        // Initialize and add units to units set in Gamescene
-        qix = new Qix();
+        setAreaTracker(areaTracker);
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, stix);
+                Globals.BOARD_MARGIN * 2, getStix());
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, SparxDirection.LEFT);
-        GameScene.addUnit(cursor);
-        GameScene.addUnit(qix);
-        GameScene.addUnit(sparxRight);
-        GameScene.addUnit(sparxLeft);
+        // Initialize and add units to units set in Gamescene
+        qix = new Qix();
+        addUnit(cursor);
+        addUnit(qix);
+        addUnit(sparxRight);
+        addUnit(sparxLeft);
+        scoreCounter = new ScoreCounter();
+
 
         collisionHandler = new CollisionHandler();
 
@@ -79,17 +84,38 @@ public class GameController {
 
     }
 
+    public static Cursor getCursor() {
+        return cursor;
+    }
+
+    /**
+     * Setter for testing.
+     *
+     * @param cursor for setting cursor.
+     */
+    public static void setCursor(Cursor cursor) {
+        GameController.cursor = cursor;
+    }
+
+    public static ScoreCounter getScoreCounter() {
+        return scoreCounter;
+    }
+
+    public static AreaTracker getAreaTracker() {
+        return areaTracker;
+    }
+
     /**
      * Stop animations.
      */
-    public static void animationTimerStop() {
+    private void animationTimerStop() {
         animationTimer.stop();
     }
 
     /**
      * Start animations.
      */
-    public static void animationTimerStart() {
+    public void animationTimerStart() {
         animationTimer.start();
     }
 
@@ -98,10 +124,10 @@ public class GameController {
      * show game over text,
      * stop the animations.
      */
-    public static void gameOver() {
+    private void gameOver() {
         animationTimerStop();
-        GameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
-        GameScene.setMessageLabel(" Game Over! ");
+        LaunchApp.scene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
+        LaunchApp.scene.setMessageLabel(" Game Over! ");
 
         //Plays game over sound
         playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
@@ -114,29 +140,20 @@ public class GameController {
      * stop the animations,
      * show that the player has won
      */
-    public static void gameWon() {
+    private void gameWon() {
         animationTimerStop();
         playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
-        GameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        GameScene.setMessageLabel(" You Won! ");
+        LaunchApp.scene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+        LaunchApp.scene.setMessageLabel(" You Won! ");
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
-    //GETTERS
-    public static AreaTracker getAreaTracker() {
-        return areaTracker;
-    }
-
-    public static Cursor getCursor() {
-        return cursor;
-    }
-
-    public static ScoreCounter getScoreCounter() {
-        return scoreCounter;
-    }
-
-    public static Stix getStix() {
+    public Stix getStix() {
         return stix;
+    }
+
+    public void setStix(Stix stix) {
+        this.stix = stix;
     }
 
     /**
@@ -149,16 +166,16 @@ public class GameController {
                 if (now - previousTime > NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
                     // draw
-                    GameScene.draw();
+                    LaunchApp.scene.draw();
 
                     if (getScoreCounter().getTotalPercentage() >= getScoreCounter().getTargetPercentage()) {
                         gameWon();
                     }
 
-                    if (collisionHandler.collisions(GameScene.getUnits(), stix)) {
+                    if (collisionHandler.collisions(LaunchApp.scene.getUnits(), stix)) {
                         gameOver();
                     }
-                    GameScene.updateScorescene(scoreCounter);
+                    LaunchApp.scene.updateScorescene(scoreCounter);
                     calculateArea();
 
                 }
@@ -177,12 +194,13 @@ public class GameController {
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());
             //Remove the Fuse from the gameView when completing an area
-            GameScene.removeFuse();
+            LaunchApp.scene.removeFuse();
         }
     }
 
     /**
      * Method that handles the action when a key is released.
+     *
      * @param e describes which keyevent happened.
      */
     public void keyReleased(KeyEvent e) {
@@ -192,11 +210,7 @@ public class GameController {
             handleFuse();
 
             cursor.setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.X)) {
-            cursor.setDrawing(false);
-            cursor.setSpeed(2);
-            handleFuse();
-        } else if (keyCode.equals(KeyCode.Z)) {
+        } else if (keyCode.equals(KeyCode.X) || keyCode.equals(KeyCode.Z)) {
             cursor.setDrawing(false);
             cursor.setSpeed(2);
             handleFuse();
@@ -209,79 +223,88 @@ public class GameController {
     private void handleFuse() {
         if (stix.getStixCoordinates().contains(new Point(cursor.getX(), cursor.getY()))) {
             boolean fuseExists = false;
-            for (Unit unit : GameScene.getUnits()) {
+            for (Unit unit : LaunchApp.scene.getUnits()) {
                 if (unit instanceof Fuse) {
                     fuseExists = true;
                     ((Fuse) unit).setMoving(true);
                 }
             }
             if (!fuseExists) {
-                GameScene.addUnit(
+                addUnit(
                         new Fuse((int) stix.getStixCoordinates().getFirst().getX(),
                                 (int) stix.getStixCoordinates().getFirst().getY(),
                                 Globals.FUSE_WIDTH,
                                 Globals.FUSE_HEIGHT, stix));
             }
+            cursor.setCurrentMove(null);
         }
     }
 
     /**
      * Method that handles the action when a key is pressed.
+     *
      * @param e describes which keyevent happened.
      */
     public void keyPressed(KeyEvent e) {
-        final ArrayList<KeyCode> arrowKeys = new ArrayList<>();
-        arrowKeys.add(KeyCode.UP);
-        arrowKeys.add(KeyCode.DOWN);
-        arrowKeys.add(KeyCode.LEFT);
-        arrowKeys.add(KeyCode.RIGHT);
 
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
             playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
-            GameScene.setMessageLabel("");
+            LaunchApp.scene.setMessageLabel("");
         } else if (arrowKeys.contains(e.getCode())) {
             if (cursor.isDrawing()) {
-                for (Unit unit : GameScene.getUnits()) {
+                for (Unit unit : LaunchApp.scene.getUnits()) {
                     if (unit instanceof Fuse) {
                         ((Fuse) unit).setMoving(false);
                     }
                 }
             }
-
             cursor.setCurrentMove(e.getCode());
         } else if (e.getCode().equals(KeyCode.X)) {
-            if(stix.getStixCoordinates()!=null && !stix.getStixCoordinates().isEmpty()) {
-                if(!cursor.isFast()){
+            if (stix.getStixCoordinates() != null && !stix.getStixCoordinates().isEmpty()) {
+                if (!cursor.isFast()) {
                     cursor.setSpeed(1);
                     cursor.setDrawing(true);
                     cursor.setFast(false);
                 }
-            }else{
+            } else {
                 cursor.setSpeed(1);
                 cursor.setDrawing(true);
                 cursor.setFast(false);
             }
         } else if (e.getCode().equals(KeyCode.Z)) {
-                    cursor.setSpeed(2);
-                    cursor.setDrawing(true);
-                    cursor.setFast(true);
+            cursor.setSpeed(2);
+            cursor.setDrawing(true);
+            cursor.setFast(true);
         }
     }
 
     /**
-     * TEMPORARY UNTILL COLLISIONHANDLER Calculates collisions between Stix and Qix.
+     * getter for testing.
+     *
+     * @return boolean isRunning
      */
-    private void qixStixCollisions() {
-        Polygon qixP = qix.toPolygon();
-        for (Point point : stix.getStixCoordinates()) {
-            if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
-                LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
-                        + "," + point.getY() + ")", this.getClass());
-                gameOver();
-            }
-        }
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    /**
+     * getter for testing.
+     *
+     * @return animationTimer
+     */
+    public AnimationTimer getAnimationTimer() {
+        return animationTimer;
+    }
+
+    /**
+     * setter for testing.
+     *
+     * @param previousTime setter
+     */
+    public void setPreviousTime(long previousTime) {
+        this.previousTime = previousTime;
     }
 }

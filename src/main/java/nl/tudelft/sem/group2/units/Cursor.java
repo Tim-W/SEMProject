@@ -5,8 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Point;
 import java.util.LinkedList;
@@ -76,17 +76,17 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
 
     private void assertMove(int transX, int transY) {
-    	if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
+        if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
                 + transY <= BOARD_WIDTH / 2) {
             if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
                 if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
                         && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
                         getY() + transY * 2))
                         && getAreaTracker().getBoardGrid()[getX() + transX + transY]
-                        		[getY() + transY + transX].equals(AreaState
+                        [getY() + transY + transX].equals(AreaState
                         .UNCOVERED)
                         && getAreaTracker().getBoardGrid()[getX() + transX - transY]
-                        		[getY() + transY - transX].equals(AreaState
+                        [getY() + transY - transX].equals(AreaState
                         .UNCOVERED)) {
 
                     if (outerBorderOn(getX(), getY())) {
@@ -102,10 +102,10 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 setY(getY() + transY);
                 logCurrentMove();
             }
-        }		
-	}
+        }
+    }
 
-	/**
+    /**
      * @return the current move direction (up/down/left/right)
      */
     public KeyCode getCurrentMove() {
@@ -181,7 +181,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
-     *
      * @return
      */
     public boolean isDrawing() {
@@ -196,7 +195,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
-     *
      * @param speed the amount of pixels the cursor moves per when moving
      */
     public void setSpeed(int speed) {
@@ -204,7 +202,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
-     *
      * @return whether the cursor is moving fast or slow
      */
     public boolean isFast() {
@@ -212,7 +209,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
-     *
      * @param isFast whether the cursor is moving fast or slow
      */
     public void setFast(boolean isFast) {

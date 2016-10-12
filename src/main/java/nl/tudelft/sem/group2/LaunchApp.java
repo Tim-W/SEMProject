@@ -24,6 +24,7 @@ public class LaunchApp extends Application {
 
     private static Stage stage;
     private static MediaView mediaView;
+    public static GameScene scene;
 
 
     private static final Logger LOGGER = Logger.getLogger();
@@ -82,7 +83,7 @@ public class LaunchApp extends Application {
         stage.getIcons().add(new Image("/images/stageIcon.png"));
         LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
-        GameScene scene;
+
         Group root = new Group();
 
         scene = new GameScene(root, Color.BLACK);
@@ -113,4 +114,5 @@ public class LaunchApp extends Application {
         }
         launch(args);
     }
+
 }

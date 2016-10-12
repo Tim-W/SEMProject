@@ -1,18 +1,19 @@
 package nl.tudelft.sem.group2.units;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.global.Globals;
+
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.collisions.CollisionInterface;
-import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.global.Globals;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -227,6 +228,7 @@ public class Qix extends Unit implements CollisionInterface {
 
     /**
      * Getter for an old coordinate.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -236,6 +238,7 @@ public class Qix extends Unit implements CollisionInterface {
 
     /**
      * Getter for current coordinate.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -257,6 +260,7 @@ public class Qix extends Unit implements CollisionInterface {
 
     /**
      * Getter for old direction.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -266,6 +270,7 @@ public class Qix extends Unit implements CollisionInterface {
 
     /**
      * Getter for current direction.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -275,8 +280,9 @@ public class Qix extends Unit implements CollisionInterface {
 
     /**
      * Setter for a direction.
+     *
      * @param direction the new direction
-     * @param i at which place
+     * @param i         at which place
      */
     public void setDirection(float direction, int i) {
         this.direction[i] = direction;
