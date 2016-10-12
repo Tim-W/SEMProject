@@ -91,7 +91,7 @@ public class GameController {
     /**
      * Setter for testing.
      *
-     * @param cursor
+     * @param cursor for setting cursor.
      */
     public static void setCursor(Cursor cursor) {
         GameController.cursor = cursor;
@@ -301,6 +301,8 @@ public class GameController {
 
     /**
      * setter for testing.
+     *
+     * @param previousTime setter
      */
     public void setPreviousTime(long previousTime) {
         this.previousTime = previousTime;
