@@ -3,16 +3,18 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A unit which can travel over outerborders and innerborders.
  */
-public abstract class LineTraveller extends Unit {
+public abstract class LineTraveller extends Unit implements CollisionInterface {
 
     private Image[] sprite;
     private int spriteIndex = 0;
+
     /**
      * Create a new LineTraveller.
      *

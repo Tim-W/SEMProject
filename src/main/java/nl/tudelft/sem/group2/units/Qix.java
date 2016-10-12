@@ -10,6 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.global.Globals;
 
@@ -21,7 +22,7 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
  * When the player touches the Qix while drawing,
  * or when the Qix touches the stix, it is views over.
  */
-public class Qix extends Unit {
+public class Qix extends Unit implements CollisionInterface {
 
     private static final int LINE_LENGTH = 5;
     private static final int POSITION_LENGTH = 4;

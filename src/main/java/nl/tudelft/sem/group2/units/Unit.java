@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.controllers.GameController;
 
@@ -12,7 +13,7 @@ import java.util.logging.Level;
  * An object that can be moved an drawn on a 2D grid.
  * Supports intersection checking between two units.
  */
-public abstract class Unit implements Draw, Movable {
+public abstract class Unit implements Draw, Movable, CollisionInterface {
     private int x;
     private int y;
     private int width;
