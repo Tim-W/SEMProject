@@ -73,6 +73,32 @@ public class GameControllerTest {
     }
 
     @Test
+    public void keyPressedXNotFast() throws Exception {
+        Stix stix = new Stix();
+        stix.addToStix(new Point(1, 1));
+        gameController.setStix(stix);
+        Cursor cursor = spy(new Cursor(1, 1, 1, 1, stix));
+        setCursor(cursor);
+        cursor.setFast(false);
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.X, false, false,
+                false, false));
+        verify(cursor, times(1)).setSpeed(1);
+    }
+
+    @Test
+    public void keyPressedXNotFastNothing() throws Exception {
+        Stix stix = new Stix();
+        stix.addToStix(new Point(1, 1));
+        gameController.setStix(stix);
+        Cursor cursor = spy(new Cursor(1, 1, 1, 1, stix));
+        setCursor(cursor);
+        cursor.setFast(true);
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.X, false, false,
+                false, false));
+        verify(cursor, times(0)).setSpeed(1);
+    }
+
+    @Test
     public void keyPressedZ() throws Exception {
 
         Cursor cursor = spy(new Cursor(1, 1, 1, 1, new Stix()));
@@ -104,6 +130,16 @@ public class GameControllerTest {
         verify(fuse, times(1)).setMoving(true);
     }
 
+    @Test
+    public void testHandle() throws Exception {
+
+        GameScene mock = mock(GameScene.class);
+        LaunchApp.scene = mock;
+        int previoustime = 1;
+        gameController.setPreviousTime(previoustime);
+        gameController.getAnimationTimer().handle(previoustime + 200000000);
+        verify(mock, times(1)).draw();
+    }
     @Test
     public void keyReleasedCurrentMoveCreateFuse() throws Exception {
         LaunchApp.scene.removeFuse();

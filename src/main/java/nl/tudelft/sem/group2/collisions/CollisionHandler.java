@@ -1,11 +1,12 @@
 package nl.tudelft.sem.group2.collisions;
 
-import java.util.ArrayList;
-import java.util.Set;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Class which handles all the collisions.
@@ -28,6 +29,9 @@ public class CollisionHandler {
      * @return if there is a collision
      */
     public boolean collisions(Set<Unit> units, Stix stix) {
+        if (units == null || units.isEmpty()) {
+            return false;
+        }
         ArrayList<Unit> unitsList = new ArrayList<>();
         unitsList.addAll(units);
 
@@ -46,7 +50,7 @@ public class CollisionHandler {
 
             if (collidee instanceof Qix) {
                 Cursor temp = (Cursor) collider;
-                if (stix.intersect((Qix) collidee)) {
+                if (stix.intersect(collidee)) {
                     return true;
                 } else if (collidee.intersect(collider) && temp.uncoveredOn(temp.getX(), temp.getY())) {
                     return true;

@@ -20,7 +20,6 @@ import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
-import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
@@ -283,25 +282,27 @@ public class GameController {
     }
 
     /**
-     * TEMPORARY UNTILL COLLISIONHANDLER Calculates collisions between Stix and Qix.
-     */
-    private void qixStixCollisions() {
-        Polygon qixP = qix.toPolygon();
-        for (Point point : stix.getStixCoordinates()) {
-            if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
-                LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
-                        + "," + point.getY() + ")", this.getClass());
-                gameOver();
-            }
-        }
-    }
-
-    /**
      * getter for testing.
      *
      * @return boolean isRunning
      */
     public boolean isRunning() {
         return isRunning;
+    }
+
+    /**
+     * getter for testing.
+     *
+     * @return animationTimer
+     */
+    public AnimationTimer getAnimationTimer() {
+        return animationTimer;
+    }
+
+    /**
+     * setter for testing.
+     */
+    public void setPreviousTime(long previousTime) {
+        this.previousTime = previousTime;
     }
 }
