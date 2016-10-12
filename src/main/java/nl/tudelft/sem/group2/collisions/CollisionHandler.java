@@ -1,4 +1,4 @@
-package nl.tudelft.sem.group2;
+package nl.tudelft.sem.group2.collisions;
 
 import java.util.ArrayList;
 import java.util.Set;

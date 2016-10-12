@@ -24,9 +24,6 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 
 /**
@@ -50,9 +47,6 @@ public class GameScene extends Scene {
     private static GraphicsContext gc;
     private static AreaTracker areaTracker;
     private static Image image;
-
-    // TODO implement life system
-    // private int lifes;
 
     /**
      * Create a new GameScene.
@@ -84,7 +78,7 @@ public class GameScene extends Scene {
         Random random = new Random();
         //Choose random image
         int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
-        setImage(new Image("/images/" + image + ".png", BOARD_WIDTH, BOARD_HEIGHT, false, false));
+        setImage(new Image("/images/" + image + ".png", Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, false, false));
         // Draw the board
        draw();
         // Initialize key pressed an key released actions
@@ -106,7 +100,7 @@ public class GameScene extends Scene {
         gc = canvas.getGraphicsContext2D();
         // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
-        gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+        gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
     }
 
     /**
@@ -138,7 +132,6 @@ public class GameScene extends Scene {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
 
-        // TODO shift this to a game class and save/load score
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }
@@ -196,8 +189,8 @@ public class GameScene extends Scene {
      */
     public void draw() {
         // gc.setFill(Color.BLACK);
-        gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
-        gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
+        gc.clearRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
+        gc.drawImage(image, Globals.BOARD_MARGIN, Globals.BOARD_MARGIN);
         gc.setFill(Color.WHITE);
         drawUncovered();
         drawBorders();

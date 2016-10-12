@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.Logger;
 
 import java.awt.Point;
@@ -17,14 +18,13 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 /**
  * A cursor which can travel over lines and is controlled by user input (arrow keys).
  */
-public class Cursor extends LineTraveller {
+public class Cursor extends LineTraveller implements CollisionInterface {
     private static final Logger LOGGER = Logger.getLogger();
     private final int animationSpeed = 30;
     private KeyCode currentMove = null;
     private int loops = 0;
     private int speed = 2;
     private LinkedList<double[][]> oldLines = new LinkedList<>();
-    //TODO set stix to false when implementation is done
     private boolean isDrawing = false;
     private boolean isFast = true;
     private Stix stix;

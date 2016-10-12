@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.units;
 import java.awt.Point;
 
 import javafx.scene.image.Image;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -13,7 +14,7 @@ import static nl.tudelft.sem.group2.global.Globals.FUSE_DELAY;
  * A Fuse is an enemy that travels over the stix which the cursor draws,
  * but it only moves over the stix when the cursor is standing still.
  */
-public class Fuse extends LineTraveller {
+public class Fuse extends LineTraveller implements CollisionInterface {
     private int speed = 1;
     private int lastX;
     private int lastY;

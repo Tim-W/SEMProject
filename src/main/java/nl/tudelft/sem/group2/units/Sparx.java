@@ -2,6 +2,7 @@ package nl.tudelft.sem.group2.units;
 
 import java.util.logging.Level;
 import javafx.scene.image.Image;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.Logger;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
@@ -11,7 +12,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  * An enemy unit which travels over the outerborders.
  * When a Sparx collides with a cursor, the views ends.
  */
-public class Sparx extends LineTraveller {
+public class Sparx extends LineTraveller implements CollisionInterface {
     private static final Logger LOGGER = Logger.getLogger();
     private final SparxDirection sparxDirection;
     private int speed = 2;
