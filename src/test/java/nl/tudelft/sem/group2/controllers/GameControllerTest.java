@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Gijs on 2-10-2016.
  */
+@org.junit.Ignore
 public class GameControllerTest {
     GameController gameController;
 
