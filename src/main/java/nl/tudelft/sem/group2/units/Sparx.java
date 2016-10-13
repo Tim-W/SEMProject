@@ -7,8 +7,6 @@ import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.util.logging.Level;
 
-import java.util.logging.Level;
-
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 

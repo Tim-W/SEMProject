@@ -31,7 +31,7 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
 /**
  * Controller class for the GameScene to implement the MVC.
  */
-public class GameController {
+public final class GameController {
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
