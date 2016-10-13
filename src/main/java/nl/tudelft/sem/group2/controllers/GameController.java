@@ -208,6 +208,7 @@ public class GameController {
             playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());
+            areaTracker.updateScoreCounter(cursor.isFast());
             //Remove the Fuse from the gameView when completing an area
             gameScene.removeFuse();
         }

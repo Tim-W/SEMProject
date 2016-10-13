@@ -120,9 +120,8 @@ public class AreaTracker {
         checkDirections(qixCoordinates, start, dir);
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
-        updateScoreCounter(fastArea);
         if (fastArea) {
-            LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
+            Logger.getLogger().log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {
             LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size(), this.getClass());
         }
@@ -167,7 +166,11 @@ public class AreaTracker {
         border2 = null;
     }
 
-    private void updateScoreCounter(boolean fastArea) {
+    /**
+     * Updates the scorecounter.
+     * @param fastArea true if the area was drawn with fast mode
+     */
+    public void updateScoreCounter(boolean fastArea) {
         ScoreCounter scoreCounter = GameController.getInstance().getScoreCounter();
 
         //When testing create own scoreCounter
