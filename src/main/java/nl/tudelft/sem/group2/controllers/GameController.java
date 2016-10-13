@@ -54,6 +54,7 @@ public class GameController {
 
         areaTracker = new AreaTracker();
 
+        makeCursors();
 
 
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
