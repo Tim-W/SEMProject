@@ -32,6 +32,9 @@ public final class Globals {
     public static final int FAST_AREA_MULTIPLIER = 10000;
     public static final int SLOW_AREA_MULTIPLIER = 20000;
     public static final int FUSE_DELAY = 13;
+    public static final int STARTSCENE_VBOX_LAYOUT_Y = 80;
+    public static final int STARTSCENE_HBOX_SPACING = 20;
+
 
     private Globals() {
     }
