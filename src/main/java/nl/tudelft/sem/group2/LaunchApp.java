@@ -22,12 +22,10 @@ import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
  */
 public class LaunchApp extends Application {
 
+    private static final Logger LOGGER = Logger.getLogger();
+    public static GameScene scene;
     private static Stage stage;
     private static MediaView mediaView;
-    public static GameScene scene;
-
-
-    private static final Logger LOGGER = Logger.getLogger();
 
     /**
      * @return grid height - a point on the boardgrid is 2x2 pixels,
@@ -70,6 +68,20 @@ public class LaunchApp extends Application {
         }).start();
     }
 
+    /**
+     * Launches the application.
+     *
+     * @param args - not used
+     */
+    public static void main(String[] args) {
+        if (args.length > 0 && args[0].equals("detailedLogging")) {
+            LOGGER.setLevel(Level.ALL);
+        } else if (args.length > 0 && args[0].equals("loggingOff")) {
+            LOGGER.setLevel(Level.OFF);
+        }
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -99,20 +111,6 @@ public class LaunchApp extends Application {
         ((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 
-    }
-
-    /**
-     * Launches the application.
-     *
-     * @param args - not used
-     */
-    public static void main(String[] args) {
-        if (args.length > 0 && args[0].equals("detailedLogging")) {
-            LOGGER.setLevel(Level.ALL);
-        } else if (args.length > 0 && args[0].equals("loggingOff")) {
-            LOGGER.setLevel(Level.OFF);
-        }
-        launch(args);
     }
 
 }

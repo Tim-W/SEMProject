@@ -1,8 +1,8 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
+
 import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.FAST_AREA_MULTIPLIER;
@@ -30,7 +30,9 @@ public class ScoreCounter extends Observable {
     private Color color = Color.RED;
 
     /**
+     *
      * Default score counter constructor.
+     * @param color
      */
     public ScoreCounter(Color color) {
         this.totalPercentage = 0;
@@ -72,15 +74,21 @@ public class ScoreCounter extends Observable {
         notifyObservers();
 
     }
-    public boolean hasWon(){
+
+    /**
+     * @return true if the claimed percentage is high enough.
+     */
+    public boolean hasWon() {
         return getTotalPercentage() >= getTargetPercentage();
     }
 
+
     /**
-     *
      * @return the color of the cursor that matches this scorecounter
      */
-    public Color getColor(){return this.color;}
+    public Color getColor() {
+        return this.color;
+    }
 
     public double getTotalPercentage() {
         return totalPercentage;

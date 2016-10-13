@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -27,7 +26,6 @@ public class AreaTracker {
     /**
      * Constructor for the AreaTracker class.
      * The constructor sets all the grid points to border and the rest to uncovered
-     * @param stix   current stix to use
      */
     public AreaTracker() {
         for (int i = 0; i < boardGrid.length; i++) {
@@ -61,7 +59,6 @@ public class AreaTracker {
      *
      * @param width  width of the boardGrid
      * @param height height of the boardGrid
-     * @param stix   current stix to use
      */
     public AreaTracker(int width, int height) {
         boardGrid = new AreaState[width][height];
@@ -95,10 +92,13 @@ public class AreaTracker {
     }
 
     /**
+     * /**
      * Method that updates the grid when a stix is completed.
      *
      * @param qixCoordinates current qix coordinates
      * @param fastArea       tells if stix was created fast or slow (double points if slow)
+     * @param stix           current stix to use
+     * @param scoreCounter   the counter that handles the score
      */
     public void calculateNewArea(Point qixCoordinates, boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
         setOuterBorders(stix);
@@ -218,6 +218,7 @@ public class AreaTracker {
      * @param qixCoordinates The coordinates of the qix.
      * @param chosenState    The state of points which get added to the new area.
      * @param addToArea1     Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
+     * @param stix           current stix to use
      */
     public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState, boolean addToArea1, Stix stix) {
         visiting.push(pointToCheck);
@@ -239,6 +240,7 @@ public class AreaTracker {
      *                      that gets added to the new area,
      *                      practically always AreaStates.UNCOVERED
      * @param addToArea1    boolean that keeps thrack of which temporary AreaTracker to use.
+     * @param stix          current stix to use
      */
     public void floodFill(Point qixCoorinates, AreaState chosenState, boolean addToArea1, Stix stix) {
         Point pointToCheck = visiting.pop();

@@ -51,28 +51,9 @@ public class GameController {
      */
     public GameController() {
         // Initialize models for scoretracking.
-        //first
-        Stix stix = new Stix();
+
         areaTracker = new AreaTracker();
-        //setAreaTracker(areaTracker);
-        cursors = new ArrayList<>();
 
-        cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW));
-        cursors.get(0).addKey(KeyCode.UP);
-        cursors.get(0).addKey(KeyCode.DOWN);
-        cursors.get(0).addKey(KeyCode.LEFT);
-        cursors.get(0).addKey(KeyCode.RIGHT);
-        //second
-
-        stix = new Stix();
-        //areaTracker = new AreaTracker(stix);
-        cursors.add(new Cursor(0, 0, Globals.BOARD_MARGIN * 2,
-               Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.RED));
-        cursors.get(1).addKey(KeyCode.W);
-        cursors.get(1).addKey(KeyCode.S);
-        cursors.get(1).addKey(KeyCode.A);
-        cursors.get(1).addKey(KeyCode.D);
 
 
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
@@ -96,6 +77,28 @@ public class GameController {
 
     }
 
+    private void makeCursors() {
+
+        cursors = new ArrayList<>();
+        //first
+        Stix stix = new Stix();
+        cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW));
+        cursors.get(0).addKey(KeyCode.UP);
+        cursors.get(0).addKey(KeyCode.DOWN);
+        cursors.get(0).addKey(KeyCode.LEFT);
+        cursors.get(0).addKey(KeyCode.RIGHT);
+
+        //second
+        Stix stix2 = new Stix();
+        cursors.add(new Cursor(0, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED));
+        cursors.get(1).addKey(KeyCode.W);
+        cursors.get(1).addKey(KeyCode.S);
+        cursors.get(1).addKey(KeyCode.A);
+        cursors.get(1).addKey(KeyCode.D);
+    }
+
     public Cursor getCursor() {
         return cursors.get(0);
     }
@@ -107,6 +110,7 @@ public class GameController {
     public Set<Unit> getUnits() {
         return units;
     }
+
     /**
      * Add a unit.
      *
@@ -182,8 +186,8 @@ public class GameController {
         //Plays game over sound
         playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
         String score = "";
-        for(Cursor cursor : cursors) {
-            score += cursor.getScoreCounter()+", ";
+        for (Cursor cursor : cursors) {
+            score += cursor.getScoreCounter() + ", ";
         }
         LOGGER.log(Level.INFO, "Game Over, player(s) died with a score of "
                 + score, GameScene.class);
@@ -202,9 +206,10 @@ public class GameController {
 
         //check high score
         int score = 0;
-        for(Cursor cursor : cursors) {
-            if(cursor.getScoreCounter().getTotalScore() > score)
+        for (Cursor cursor : cursors) {
+            if (cursor.getScoreCounter().getTotalScore() > score) {
                 score = cursor.getScoreCounter().getTotalScore();
+            }
         }
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
     }
@@ -221,21 +226,21 @@ public class GameController {
                     // draw
                     LaunchApp.scene.draw();
 
-                    for(Cursor cursor : cursors) {
-                        if(cursor.getScoreCounter().hasWon()){
+                    for (Cursor cursor : cursors) {
+                        if (cursor.getScoreCounter().hasWon()) {
                             gameWon();
                         }
                     }
 
 
-                    for(Cursor cursor : cursors) {
+                    for (Cursor cursor : cursors) {
                         if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
                             gameOver();
                         }
                     }
                     //LaunchApp.scene.updateScorescene(scoreCounter);
 
-                    for(Cursor cursor : cursors) {
+                    for (Cursor cursor : cursors) {
                         cursor.calculateArea(qix);
                     }
 
@@ -264,9 +269,7 @@ public class GameController {
             cursors.get(0).setDrawing(false);
             cursors.get(0).setSpeed(2);
             cursors.get(0).handleFuse();
-        }
-
-        else if (keyCode.equals(cursors.get(1).getCurrentMove())) {
+        } else if (keyCode.equals(cursors.get(1).getCurrentMove())) {
 
             cursors.get(1).handleFuse();
 
@@ -291,12 +294,12 @@ public class GameController {
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
             LaunchApp.scene.setMessageLabel("");
-        /*** first cursor ***/
+            /*** first cursor ***/
         } else if (cursors.get(0).getArrowKeys().contains(e.getCode())) {
             if (cursors.get(0).isDrawing()) {
-                    if (cursors.get(0).getFuse() != null) {
-                        cursors.get(0).getFuse().setMoving(false);
-                    }
+                if (cursors.get(0).getFuse() != null) {
+                    cursors.get(0).getFuse().setMoving(false);
+                }
             }
             cursors.get(0).setCurrentMove(e.getCode());
         } else if (e.getCode().equals(KeyCode.X)) {
@@ -316,8 +319,8 @@ public class GameController {
             cursors.get(0).setDrawing(true);
             cursors.get(0).setFast(true);
 
-         /*** second cursor ***/
-        }else if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
+            /*** second cursor ***/
+        } else if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
             if (cursors.get(1).isDrawing()) {
                 if (cursors.get(1).getFuse() != null) {
                     cursors.get(1).getFuse().setMoving(false);
@@ -343,10 +346,11 @@ public class GameController {
         }
     }
 
-
-    /***** AreaTracker *****/
-
-    public AreaTracker getAreaTracker(){
+    /**
+     * AreaTracker.
+     * @return the area tracker
+     */
+    public AreaTracker getAreaTracker() {
         return areaTracker;
     }
 }

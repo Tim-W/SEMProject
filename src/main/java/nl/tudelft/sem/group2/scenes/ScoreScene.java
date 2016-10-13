@@ -15,7 +15,6 @@ import nl.tudelft.sem.group2.global.Globals;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
 
 /**
  * Displays info about the current score and gained percentage.
@@ -37,7 +36,6 @@ public class ScoreScene extends SubScene implements Observer {
     private ImageView title;
     private Label claimed = new Label("Claimed");
     private Color color = Color.YELLOW;
-    private Observable scoreCounter;
     private int highClaimedPercentage = 0;
 
     /**
@@ -49,6 +47,7 @@ public class ScoreScene extends SubScene implements Observer {
      * @param root   the root this scene is placed on top of
      * @param width  width of the scene
      * @param height height of the scene
+     * @param color
      */
     public ScoreScene(Group root, double width, double height, Color color) {
         super(root, width, height);
@@ -117,8 +116,6 @@ public class ScoreScene extends SubScene implements Observer {
         tilePane.setVgap(TITLE_VGAP);
     }
 
-    public void addObservable(Observable observable){scoreCounter = observable;}
-
     /**
      * Set the current score amount.
      *
@@ -139,7 +136,7 @@ public class ScoreScene extends SubScene implements Observer {
         );
     }
 
-    private void setColor(Color color){
+    private void setColor(Color color) {
         this.color = color;
         claimedPercentage.setTextFill(color);
         score.setTextFill(color);
@@ -148,14 +145,15 @@ public class ScoreScene extends SubScene implements Observer {
 
     /**
      * Update the info on the scorescene with actual info from scorecounter.
+     *
      * @param o
      * @param arg
      */
     @Override
     public void update(Observable o, Object arg) {
 
-        if(o instanceof ScoreCounter){
-            if((int) (((ScoreCounter)o).getTotalPercentage() * 100) > highClaimedPercentage) {
+        if (o instanceof ScoreCounter) {
+            if ((int) (((ScoreCounter) o).getTotalPercentage() * 100) > highClaimedPercentage) {
 
                 setScore(((ScoreCounter) o).getTotalScore());
                 setClaimedPercentage((int) (((ScoreCounter) o).getTotalPercentage() * 100));
@@ -163,7 +161,7 @@ public class ScoreScene extends SubScene implements Observer {
                  LOGGER.log(Level.WARNING, "Score updated "
                  + color.toString(), this.getClass());
                  **/
-                setColor(((ScoreCounter)o).getColor());
+                setColor(((ScoreCounter) o).getColor());
             }
         }
     }

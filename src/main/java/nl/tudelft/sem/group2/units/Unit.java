@@ -1,9 +1,8 @@
 package nl.tudelft.sem.group2.units;
 
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -14,20 +13,21 @@ import java.util.logging.Level;
  * Supports intersection checking between two units.
  */
 public abstract class Unit implements Draw, Movable, CollisionInterface {
+    private static final Logger LOGGER = Logger.getLogger();
     private int x;
     private int y;
     private int width;
     private int height;
     private AreaTracker areaTracker;
-    private static final Logger LOGGER = Logger.getLogger();
 
     /**
      * Create a Unit at (x,y) position.
      *
-     * @param x x coord
-     * @param y y coord
+     * @param x      x coord
+     * @param y      y coord
      * @param width  width, used for collision
      * @param height height, used for collision
+     * @param areaTracker used for calculating areas
      */
     Unit(int x, int y, int width, int height, AreaTracker areaTracker) {
         this.setX(x);
@@ -72,6 +72,7 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
 
     /**
      * Check for intersection between current unit and another unit.
+     *
      * @param collidee the other unit
      * @return true if the collidee is on the same (x,y) coordinate as the current unit
      */

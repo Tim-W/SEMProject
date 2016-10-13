@@ -1,10 +1,10 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+
+import java.awt.Point;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -30,6 +30,7 @@ public class Fuse extends LineTraveller implements CollisionInterface {
      * @param y      the start y coord
      * @param width  width of the fuse (used for collision detection)
      * @param height height of the fuse (used for collision detection)
+     * @param areaTracker used for calculating areas
      * @param stix   current stix to use
      */
     public Fuse(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix) {

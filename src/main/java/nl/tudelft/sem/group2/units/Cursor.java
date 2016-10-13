@@ -39,7 +39,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private ScoreCounter scoreCounter;
 
-
     /**
      * Create a cursor.
      *
@@ -47,21 +46,23 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param y      start y coordinate
      * @param width  width, used for collision detection
      * @param height height, used for collision detection
+     * @param areaTracker used for calculating areas
      * @param stix   current stix to use
+     * @param color  specifies color for this cursor.
      */
     public Cursor(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix, Color color) {
         super(x, y, width, height, areaTracker);
         Image[] sprite = new Image[1];
 
         String colorString = "red";
-        if(color.equals(Color.BLUE)){
+        if (color.equals(Color.BLUE)) {
             colorString = "blue";
-        }else if (color.equals(Color.YELLOW)){
+        } else if (color.equals(Color.YELLOW)) {
             colorString = "yellow";
-        }else {
-            color=Color.RED;
+        } else {
+            color = Color.RED;
         }
-        sprite[0] = new Image("/images/cursor_"+colorString+".png");
+        sprite[0] = new Image("/images/cursor_" + colorString + ".png");
         setSprite(sprite);
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
@@ -75,13 +76,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             int transY = 0;
 
             if (currentMove != null) {
-                if(currentMove.equals(arrowKeys.get(2))) {
+                if (currentMove.equals(arrowKeys.get(2))) {
                     transX = -1;
-                }else if(currentMove.equals(arrowKeys.get(3))) {
+                } else if (currentMove.equals(arrowKeys.get(3))) {
                     transX = 1;
-                }else if(currentMove.equals(arrowKeys.get(0))) {
+                } else if (currentMove.equals(arrowKeys.get(0))) {
                     transY = -1;
-                }else if(currentMove.equals(arrowKeys.get(1))) {
+                } else if (currentMove.equals(arrowKeys.get(1))) {
                     transY = 1;
                 }
                 assertMove(transX, transY);
@@ -207,7 +208,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                                 (int) this.getStix().getStixCoordinates().getFirst().getY(),
                                 Globals.FUSE_WIDTH,
                                 Globals.FUSE_HEIGHT, this.getAreaTracker(), this.getStix());
-            }else{fuse.setMoving(true);}
+            } else {
+                fuse.setMoving(true);
+            }
             this.setCurrentMove(null);
         }
     }
@@ -216,11 +219,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * If there is a Fuse on the screen, remove it.
      */
     public void removeFuse() {
-            fuse = null;
+        fuse = null;
     }
 
     /**
      * When a new area is completed, calculate the new score.
+     * @param qix the qix of the game
      */
     public void calculateArea(Qix qix) {
         if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
@@ -236,7 +240,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /***** Getters and setters *****/
 
     /**
-     * @return
+     * @return true if the cursor is drawing
      */
     public boolean isDrawing() {
         return isDrawing;
@@ -271,33 +275,34 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
-     *
      * @return the stix of this cursor.
      */
-    public Stix getStix(){return stix;}
+    public Stix getStix() {
+        return stix;
+    }
 
     /**
-     *
      * @return the fuse if there is a fuse, otherwise null.
      */
-    public Fuse getFuse(){return fuse;}
+    public Fuse getFuse() {
+        return fuse;
+    }
 
     /**
-     *
      * @param keycode the key that is specific to this cursor.
      */
-    public void addKey(KeyCode keycode){
+    public void addKey(KeyCode keycode) {
         arrowKeys.add(keycode);
     }
 
     /**
-     *
      * @return this cursor specific keys.
      */
-    public ArrayList<KeyCode> getArrowKeys(){return arrowKeys;}
+    public ArrayList<KeyCode> getArrowKeys() {
+        return arrowKeys;
+    }
 
     /**
-     *
      * @return The scoreCounter of this specific cursor.
      */
     public ScoreCounter getScoreCounter() {

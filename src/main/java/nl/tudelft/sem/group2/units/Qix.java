@@ -46,6 +46,7 @@ public class Qix extends Unit implements CollisionInterface {
      * Create a new Qix.
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
+     * @param areaTracker used for calculating areas
      */
     public Qix(AreaTracker areaTracker) {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
@@ -77,8 +78,8 @@ public class Qix extends Unit implements CollisionInterface {
             colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
         getColorArray().addFirst(colors);
-        getOldDirections().addFirst(new float[] {direction[0], direction[1]});
-        getOldCoordinates().addFirst(new float[] {coordinate[0], coordinate[1]});
+        getOldDirections().addFirst(new float[]{direction[0], direction[1]});
+        getOldCoordinates().addFirst(new float[]{coordinate[0], coordinate[1]});
         if (oldDirections.size() > LINESCOUNT) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();

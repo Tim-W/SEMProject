@@ -64,13 +64,13 @@ public class GameScene extends Scene {
         root.getChildren().add(scoreScene);
         gameController = new GameController();
         /**
-        Group group = new Group();
-        scoreScene2 = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y, Color.BLUE);
+         Group group = new Group();
+         scoreScene2 = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y, Color.BLUE);
 
-        scoreScene2.setScore(0);
-        scoreScene2.setClaimedPercentage(0);
+         scoreScene2.setScore(0);
+         scoreScene2.setClaimedPercentage(0);
 
-        root.getChildren().add(scoreScene2);
+         root.getChildren().add(scoreScene2);
          **/
         root.getChildren().add(canvas);
         root.getChildren().add(bottomBorder);
@@ -97,7 +97,6 @@ public class GameScene extends Scene {
     }
 
     /**
-     *
      * @return the scorescene
      */
     public static ScoreScene getScoreScene() {
@@ -214,14 +213,13 @@ public class GameScene extends Scene {
         List<Cursor> cursorList = new ArrayList<Cursor>();
 
 
-
         for (Unit unit : gameController.getUnits()) {
             if (unit instanceof Cursor) {
-                cursorList.add(((Cursor)unit));
+                cursorList.add(((Cursor) unit));
             }
         }
-        for(Cursor cursor : cursorList) {
-            if(cursor.getFuse() != null){
+        for (Cursor cursor : cursorList) {
+            if (cursor.getFuse() != null) {
                 fuse = new Point(cursor.getFuse().getX(), (cursor.getFuse().getY()));
                 foundFuse = false;
             }
@@ -245,11 +243,10 @@ public class GameScene extends Scene {
                             gc.setFill(Color.GRAY);
                         }
                     }
-
                     gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
                 }
             }
-            if(cursor.getFuse()!=null) {
+            if (cursor.getFuse() != null) {
                 cursor.getFuse().move();
                 cursor.getFuse().draw(canvas);
             }
