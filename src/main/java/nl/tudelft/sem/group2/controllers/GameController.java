@@ -21,6 +21,7 @@ import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -111,14 +112,14 @@ public final class GameController {
     /**
      * Stop animations.
      */
-    public static void animationTimerStop() {
+    public void animationTimerStop() {
         animationTimer.stop();
     }
 
     /**
      * Start animations.
      */
-    public static void animationTimerStart() {
+    public void animationTimerStart() {
         animationTimer.start();
     }
 
@@ -131,7 +132,7 @@ public final class GameController {
      * show game over text,
      * stop the animations.
      */
-    public static void gameOver() {
+    public void gameOver() {
         animationTimerStop();
         gameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
         gameScene.setMessageLabel(" Game Over! ");
@@ -150,8 +151,8 @@ public final class GameController {
     public void gameWon() {
         animationTimerStop();
         playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
-        GameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        GameScene.setMessageLabel(" You Won! ");
+        gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+        gameScene.setMessageLabel(" You Won! ");
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
@@ -280,9 +281,7 @@ public final class GameController {
         } else if (arrowKeys.contains(e.getCode())) {
             if (cursor.isDrawing()) {
                 for (Unit unit : units) {
-                    if (unit instanceof Fuse) {
-                        ((Fuse) unit).setMoving(false);
-                    }
+                    if (unit instanceof Fuse) ((Fuse) unit).setMoving(false);
                 }
             }
             cursor.setCurrentMove(e.getCode());
@@ -302,6 +301,20 @@ public final class GameController {
             cursor.setSpeed(2);
             cursor.setDrawing(true);
             cursor.setFast(true);
+        }
+    }
+
+    /**
+     * TEMPORARY UNTILL COLLISIONHANDLER Calculates collisions between Stix and Qix.
+     */
+    private void qixStixCollisions() {
+        Polygon qixP = qix.toPolygon();
+        for (Point point : stix.getStixCoordinates()) {
+            if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
+                LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
+                        + "," + point.getY() + ")", this.getClass());
+                gameOver();
+            }
         }
     }
 

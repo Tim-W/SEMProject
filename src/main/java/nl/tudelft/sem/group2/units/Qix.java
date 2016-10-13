@@ -58,8 +58,8 @@ public class Qix extends Unit {
      */
     public Qix(AreaTracker areaTracker) {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
-        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
-                + Globals.QIX_START_Y + ")", this.getClass());
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + "," +
+                Globals.QIX_START_Y + ")", this.getClass());
     }
 
     public static int getLINESCOUNT() {
