@@ -5,10 +5,20 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.*;
+import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.CollisionHandler;
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.scenes.GameScene;
-import nl.tudelft.sem.group2.units.*;
+import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Fuse;
+import nl.tudelft.sem.group2.units.Qix;
+import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.SparxDirection;
+import nl.tudelft.sem.group2.units.Stix;
+import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
 import java.awt.Polygon;
@@ -266,7 +276,6 @@ public final class GameController {
         arrowKeys.add(KeyCode.RIGHT);
 
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
-            // TODO remove this start and start using game
             playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             playSound("/sounds/qix.mp3", 1);
             animationTimerStart();
@@ -276,9 +285,7 @@ public final class GameController {
         } else if (arrowKeys.contains(e.getCode())) {
             if (cursor.isDrawing()) {
                 for (Unit unit : units) {
-                    if (unit instanceof Fuse) {
-                        ((Fuse) unit).setMoving(false);
-                    }
+                    if (unit instanceof Fuse) ((Fuse) unit).setMoving(false);
                 }
             }
             cursor.setCurrentMove(e.getCode());
@@ -333,9 +340,5 @@ public final class GameController {
 
     public Set<Unit> getUnits() {
         return units;
-    }
-
-    public void dispose() {
-        gameController = null;
     }
 }
