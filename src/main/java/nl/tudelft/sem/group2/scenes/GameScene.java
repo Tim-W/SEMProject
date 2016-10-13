@@ -11,21 +11,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Fuse;
-import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 
 /**
@@ -39,7 +33,6 @@ public class GameScene extends Scene {
     private static Label messageLabel;
     private static VBox messageBox;
     private static ScoreScene scoreScene;
-    private static ScoreScene scoreScene2;
     private static Canvas canvas;
     private static GraphicsContext gc;
     private static Image image;
@@ -104,6 +97,14 @@ public class GameScene extends Scene {
     }
 
     /**
+     *
+     * @return the scorescene
+     */
+    public static ScoreScene getScoreScene() {
+        return scoreScene;
+    }
+
+    /**
      * Initializes canvas and gc.
      */
     public void initializeCanvas() {
@@ -151,12 +152,6 @@ public class GameScene extends Scene {
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }
-
-    /**
-     *
-     * @return the scorescene
-     */
-    public static ScoreScene getScoreScene(){return scoreScene;}
 
     private void addMessageBox() {
         // Messagebox&label for displaying start and end messages
@@ -280,10 +275,4 @@ public class GameScene extends Scene {
     public void setMessageBoxLayoutX(int position) {
         GameScene.messageBox.setLayoutX(position);
     }
-
-    /**
-     *
-     * @return
-     */
-    public GameController getGameController(){return gameController;}
 }

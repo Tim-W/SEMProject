@@ -4,11 +4,9 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.scenes.GameScene;
@@ -20,7 +18,6 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +45,6 @@ public class GameController {
     // Boolean that states if the game is running
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
-    private static ScoreCounter scoreCounter;
 
     /**
      * Constructor for the GameController class.
@@ -103,12 +99,6 @@ public class GameController {
     public Cursor getCursor() {
         return cursors.get(0);
     }
-
-
-    public static ScoreCounter getScoreCounter() {
-        return scoreCounter;
-    }
-
 
     /***** Units *****/
     /**
