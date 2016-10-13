@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2;
 
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Stix;
 
@@ -99,7 +100,7 @@ public class AreaTracker {
      * @param qixCoordinates current qix coordinates
      * @param fastArea       tells if stix was created fast or slow (double points if slow)
      */
-    public void calculateNewArea(Point qixCoordinates, boolean fastArea, Stix stix) {
+    public void calculateNewArea(Point qixCoordinates, boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
         setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm
@@ -117,7 +118,7 @@ public class AreaTracker {
         checkDirections(qixCoordinates, start, dir, stix);
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
-        updateScoreCounter(fastArea, stix);
+        updateScoreCounter(fastArea, stix, scoreCounter);
         if (fastArea) {
             LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {
@@ -164,12 +165,11 @@ public class AreaTracker {
         border2 = null;
     }
 
-    private void updateScoreCounter(boolean fastArea, Stix stix) {
-        ScoreCounter scoreCounter = GameController.getScoreCounter();
+    private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
 
         //When testing create own scoreCounter
         if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter();
+            scoreCounter = new ScoreCounter(Color.RED);
         }
 
         //Update score and percentage with newly created area,

@@ -39,6 +39,7 @@ public class GameScene extends Scene {
     private static Label messageLabel;
     private static VBox messageBox;
     private static ScoreScene scoreScene;
+    private static ScoreScene scoreScene2;
     private static Canvas canvas;
     private static GraphicsContext gc;
     private static Image image;
@@ -55,7 +56,7 @@ public class GameScene extends Scene {
         super(root, color);
         // Initialize units set because it's necessary in GameController
         // Temporary until CollisionHandler is merged into this
-        gameController = new GameController();
+
         initializeCanvas();
         // Initialize label in middle of screen to display start message
         messageLabel = new Label("Press SPACE to begin!");
@@ -68,6 +69,16 @@ public class GameScene extends Scene {
         // Add scene elements to root group
         createScoreScene();
         root.getChildren().add(scoreScene);
+        gameController = new GameController();
+        /**
+        Group group = new Group();
+        scoreScene2 = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y, Color.BLUE);
+
+        scoreScene2.setScore(0);
+        scoreScene2.setClaimedPercentage(0);
+
+        root.getChildren().add(scoreScene2);
+         **/
         root.getChildren().add(canvas);
         root.getChildren().add(bottomBorder);
         root.getChildren().add(messageBox);
@@ -135,11 +146,17 @@ public class GameScene extends Scene {
 
     private void createScoreScene() {
         Group group = new Group();
-        scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
+        scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y, Color.RED);
 
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }
+
+    /**
+     *
+     * @return the scorescene
+     */
+    public static ScoreScene getScoreScene(){return scoreScene;}
 
     private void addMessageBox() {
         // Messagebox&label for displaying start and end messages
@@ -265,12 +282,8 @@ public class GameScene extends Scene {
     }
 
     /**
-     * Update the info on the scorescene with actual info from scorecounter.
      *
-     * @param scoreCounter scorecounter from GameController.
+     * @return
      */
-    public void updateScorescene(ScoreCounter scoreCounter) {
-        scoreScene.setScore(scoreCounter.getTotalScore());
-        scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
-    }
+    public GameController getGameController(){return gameController;}
 }

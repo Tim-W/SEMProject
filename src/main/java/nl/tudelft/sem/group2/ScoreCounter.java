@@ -1,5 +1,8 @@
 package nl.tudelft.sem.group2;
 
+import javafx.scene.paint.Color;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.FAST_AREA_MULTIPLIER;
@@ -11,7 +14,7 @@ import static nl.tudelft.sem.group2.global.Globals.TARGET_PERCENTAGE;
  *
  * @author Rheddes.
  */
-public class ScoreCounter {
+public class ScoreCounter extends Observable {
 
     private static final Logger LOGGER = Logger.getLogger();
 
@@ -24,14 +27,19 @@ public class ScoreCounter {
     // Percentage which player needs to achieve to win the level.
     private double targetPercentage;
 
+    private Color color = Color.RED;
+
     /**
      * Default score counter constructor.
      */
-    public ScoreCounter() {
+    public ScoreCounter(Color color) {
         this.totalPercentage = 0;
         this.totalScore = 0;
         this.targetPercentage = TARGET_PERCENTAGE;
+        this.color = color;
+
     }
+
 
     /**
      * Method to update current score and percentage.
@@ -60,7 +68,19 @@ public class ScoreCounter {
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
 
+        setChanged();
+        notifyObservers();
+
     }
+    public boolean hasWon(){
+        return getTotalPercentage() >= getTargetPercentage();
+    }
+
+    /**
+     *
+     * @return the color of the cursor that matches this scorecounter
+     */
+    public Color getColor(){return this.color;}
 
     public double getTotalPercentage() {
         return totalPercentage;

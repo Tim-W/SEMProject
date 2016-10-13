@@ -4,9 +4,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
 
@@ -34,6 +37,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private Stix stix;
     private Fuse fuse;
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+    private ScoreCounter scoreCounter;
 
 
     /**
@@ -45,12 +49,23 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param height height, used for collision detection
      * @param stix   current stix to use
      */
-    public Cursor(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix) {
+    public Cursor(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix, Color color) {
         super(x, y, width, height, areaTracker);
         Image[] sprite = new Image[1];
-        sprite[0] = new Image("/images/cursor.png");
+
+        String colorString = "red";
+        if(color.equals(Color.BLUE)){
+            colorString = "blue";
+        }else if (color.equals(Color.YELLOW)){
+            colorString = "yellow";
+        }else {
+            color=Color.RED;
+        }
+        sprite[0] = new Image("/images/cursor_"+colorString+".png");
         setSprite(sprite);
         this.stix = stix;
+        scoreCounter = new ScoreCounter(color);
+        scoreCounter.addObserver(LaunchApp.scene.getScoreScene());
     }
 
     @Override
@@ -212,7 +227,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 && !this.getStix().getStixCoordinates().isEmpty()) {
             playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
-                    this.isFast(), getStix());
+                    this.isFast(), getStix(), scoreCounter);
             //Remove the Fuse from the gameView when completing an area
             removeFuse();
         }
@@ -280,6 +295,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @return this cursor specific keys.
      */
     public ArrayList<KeyCode> getArrowKeys(){return arrowKeys;}
+
+    /**
+     *
+     * @return The scoreCounter of this specific cursor.
+     */
+    public ScoreCounter getScoreCounter() {
+        return scoreCounter;
+    }
 
     /**
      * Method which log the current movement of the cursor.

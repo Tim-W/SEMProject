@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.controllers;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
@@ -40,7 +41,6 @@ public class GameController {
     private List<Cursor> cursors;
     private Qix qix;
     private AreaTracker areaTracker;
-    private static ScoreCounter scoreCounter;
     // Animation timer properties
     private AnimationTimer animationTimer;
     private Set<Unit> units;
@@ -48,6 +48,7 @@ public class GameController {
     // Boolean that states if the game is running
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
+    private static ScoreCounter scoreCounter;
 
     /**
      * Constructor for the GameController class.
@@ -61,20 +62,22 @@ public class GameController {
         cursors = new ArrayList<>();
 
         cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix));
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW));
         cursors.get(0).addKey(KeyCode.UP);
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
         cursors.get(0).addKey(KeyCode.RIGHT);
         //second
+
         stix = new Stix();
         //areaTracker = new AreaTracker(stix);
         cursors.add(new Cursor(0, 0, Globals.BOARD_MARGIN * 2,
-               Globals.BOARD_MARGIN * 2, areaTracker, stix));
+               Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.RED));
         cursors.get(1).addKey(KeyCode.W);
         cursors.get(1).addKey(KeyCode.S);
         cursors.get(1).addKey(KeyCode.A);
         cursors.get(1).addKey(KeyCode.D);
+
 
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
@@ -87,7 +90,6 @@ public class GameController {
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
-        scoreCounter = new ScoreCounter();
 
 
         collisionHandler = new CollisionHandler();
@@ -132,22 +134,6 @@ public class GameController {
             }
         }
         units.add(unit);
-    }
-
-    /***** Stix *****/
-
-    /**
-     * a 'samenvoeging' of the stix of the cursors
-     * @return
-     */
-    public List<Stix> getStix() {
-        List<Stix> stixList = new ArrayList<Stix>();
-        for(Cursor cursor : cursors){
-            if(cursor.getStix() != null && !cursor.getStix().isStixEmpty())
-            stixList.add(cursor.getStix());
-        }
-
-        return stixList;
     }
 
     /****** AnimationTime ******/
@@ -205,8 +191,12 @@ public class GameController {
 
         //Plays game over sound
         playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
-        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
-                + scoreCounter.getTotalScore(), GameScene.class);
+        String score = "";
+        for(Cursor cursor : cursors) {
+            score += cursor.getScoreCounter()+", ";
+        }
+        LOGGER.log(Level.INFO, "Game Over, player(s) died with a score of "
+                + score, GameScene.class);
     }
 
     /**
@@ -219,7 +209,14 @@ public class GameController {
         playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
         LaunchApp.scene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
         LaunchApp.scene.setMessageLabel(" You Won! ");
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
+
+        //check high score
+        int score = 0;
+        for(Cursor cursor : cursors) {
+            if(cursor.getScoreCounter().getTotalScore() > score)
+                score = cursor.getScoreCounter().getTotalScore();
+        }
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
     }
 
     /**
@@ -234,16 +231,19 @@ public class GameController {
                     // draw
                     LaunchApp.scene.draw();
 
-                    if (getScoreCounter().getTotalPercentage() >= getScoreCounter().getTargetPercentage()) {
-                        gameWon();
+                    for(Cursor cursor : cursors) {
+                        if(cursor.getScoreCounter().hasWon()){
+                            gameWon();
+                        }
                     }
+
 
                     for(Cursor cursor : cursors) {
                         if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
                             gameOver();
                         }
                     }
-                    LaunchApp.scene.updateScorescene(scoreCounter);
+                    //LaunchApp.scene.updateScorescene(scoreCounter);
 
                     for(Cursor cursor : cursors) {
                         cursor.calculateArea(qix);
@@ -275,6 +275,7 @@ public class GameController {
             cursors.get(0).setSpeed(2);
             cursors.get(0).handleFuse();
         }
+
         else if (keyCode.equals(cursors.get(1).getCurrentMove())) {
 
             cursors.get(1).handleFuse();
