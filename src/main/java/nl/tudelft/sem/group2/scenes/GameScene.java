@@ -24,7 +24,6 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
-
 /**
  * GameScene contains all the information about the current game.
  */
@@ -241,7 +240,6 @@ public class GameScene extends Scene {
             GameController.getInstance().getUnits().remove(removingItem);
         }
     }
-
 
     /**
      * Set the label for the message in the middle of the screen.

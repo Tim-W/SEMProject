@@ -4,28 +4,17 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A unit which can travel over outerborders and innerborders.
  */
-public abstract class LineTraveller extends Unit {
+public abstract class LineTraveller extends Unit implements CollisionInterface {
 
     private Image[] sprite;
     private int spriteIndex = 0;
-
-//    /**
-//     * Create a new LineTraveller.
-//     *
-//     * @param x      x coord
-//     * @param y      y coord
-//     * @param width  width, used for collision
-//     * @param height height, used for collision
-//     */
-//    public LineTraveller(int x, int y, int width, int height) {
-//        super(x, y, width, height);
-//    }
 
     /**
      * Create a new LineTraveller.

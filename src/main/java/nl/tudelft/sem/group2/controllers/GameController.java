@@ -7,9 +7,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.CollisionHandler;
+import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -21,7 +22,6 @@ import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
-import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,6 +47,9 @@ public final class GameController {
     // Models for score tracking
     private static AreaTracker areaTracker;
     private static ScoreCounter scoreCounter;
+    private final ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+    // Animation timer properties
+    private Stix stix;
     private static Set<Unit> units;
     private long previousTime;
     // Boolean that states if the game is running
@@ -59,10 +62,12 @@ public final class GameController {
      * Constructor for the GameController class.
      */
     private GameController() {
+        arrowKeys.add(KeyCode.UP);
+        arrowKeys.add(KeyCode.DOWN);
+        arrowKeys.add(KeyCode.LEFT);
+        arrowKeys.add(KeyCode.RIGHT);
         // Initialize models for scoretracking.
-
         stix = new Stix();
-
         areaTracker = new AreaTracker(stix);
         scoreCounter = new ScoreCounter();
 
@@ -169,9 +174,6 @@ public final class GameController {
         return scoreCounter;
     }
 
-    public Stix getStix() {
-        return stix;
-    }
 
     /**
      * Setup an animation timer that runs at 300FPS.
@@ -226,11 +228,7 @@ public final class GameController {
             handleFuse();
 
             cursor.setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.X)) {
-            cursor.setDrawing(false);
-            cursor.setSpeed(2);
-            handleFuse();
-        } else if (keyCode.equals(KeyCode.Z)) {
+        } else if (keyCode.equals(KeyCode.X) || keyCode.equals(KeyCode.Z)) {
             cursor.setDrawing(false);
             cursor.setSpeed(2);
             handleFuse();
@@ -256,6 +254,7 @@ public final class GameController {
                                 Globals.FUSE_WIDTH,
                                 Globals.FUSE_HEIGHT, stix, areaTracker));
             }
+            cursor.setCurrentMove(null);
         }
     }
 
@@ -265,14 +264,9 @@ public final class GameController {
      * @param e describes which keyevent happened.
      */
     public void keyPressed(KeyEvent e) {
-        final ArrayList<KeyCode> arrowKeys = new ArrayList<>();
-        arrowKeys.add(KeyCode.UP);
-        arrowKeys.add(KeyCode.DOWN);
-        arrowKeys.add(KeyCode.LEFT);
-        arrowKeys.add(KeyCode.RIGHT);
+
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
             playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
-            playSound("/sounds/qix.mp3", 1);
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
@@ -306,17 +300,30 @@ public final class GameController {
     }
 
     /**
-     * TEMPORARY UNTILL COLLISIONHANDLER Calculates collisions between Stix and Qix.
+     * getter for testing.
+     *
+     * @return boolean isRunning
      */
-    private void qixStixCollisions() {
-        Polygon qixP = qix.toPolygon();
-        for (Point point : stix.getStixCoordinates()) {
-            if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
-                LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
-                        + "," + point.getY() + ")", this.getClass());
-                gameOver();
-            }
-        }
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    /**
+     * getter for testing.
+     *
+     * @return animationTimer
+     */
+    public AnimationTimer getAnimationTimer() {
+        return animationTimer;
+    }
+
+    /**
+     * setter for testing.
+     *
+     * @param previousTime setter
+     */
+    public void setPreviousTime(long previousTime) {
+        this.previousTime = previousTime;
     }
 
     /**

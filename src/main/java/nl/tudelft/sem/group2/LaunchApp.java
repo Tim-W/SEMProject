@@ -55,7 +55,7 @@ public class LaunchApp extends Application {
                 try {
                     Media hit = new Media(getClass().getResource(string).toString());
                     MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                    mediaPlayer.setVolume(1);
+                    mediaPlayer.setVolume(volume);
                     mediaPlayer.play();
                     mediaView.setMediaPlayer(mediaPlayer);
                 } catch (Exception e) {
@@ -92,10 +92,6 @@ public class LaunchApp extends Application {
         stage.getIcons().add(new Image("/images/stageIcon.png"));
         LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
-//        GameScene scene;
-//        Group root = new Group();
-//
-//        scene = new GameScene(root, Color.BLACK);
         LOGGER.log(Level.INFO, "GameScene created succesfully", this.getClass());
         GameController gameController = GameController.getInstance();
         stage.setScene(gameController.getScene());
@@ -110,4 +106,5 @@ public class LaunchApp extends Application {
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 
     }
+
 }
