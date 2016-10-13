@@ -104,8 +104,8 @@ public class GameScene extends Scene {
         for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
             for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
                 if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER
-                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] ==
-                        AreaState.INNERBORDER) {
+                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j]
+                        == AreaState.INNERBORDER) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }

@@ -270,7 +270,6 @@ public final class GameController {
         arrowKeys.add(KeyCode.DOWN);
         arrowKeys.add(KeyCode.LEFT);
         arrowKeys.add(KeyCode.RIGHT);
-
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
             playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             playSound("/sounds/qix.mp3", 1);
@@ -281,7 +280,9 @@ public final class GameController {
         } else if (arrowKeys.contains(e.getCode())) {
             if (cursor.isDrawing()) {
                 for (Unit unit : units) {
-                    if (unit instanceof Fuse) ((Fuse) unit).setMoving(false);
+                    if (unit instanceof Fuse) {
+                        ((Fuse) unit).setMoving(false);
+                    }
                 }
             }
             cursor.setCurrentMove(e.getCode());

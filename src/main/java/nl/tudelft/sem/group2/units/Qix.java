@@ -54,12 +54,13 @@ public class Qix extends Unit {
      * Create a new Qix.
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
+     *
      * @param areaTracker the areatracker
      */
     public Qix(AreaTracker areaTracker) {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
-        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + "," +
-                Globals.QIX_START_Y + ")", this.getClass());
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
+                + Globals.QIX_START_Y + ")", this.getClass());
     }
 
     public static int getLINESCOUNT() {
@@ -88,8 +89,8 @@ public class Qix extends Unit {
             colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
         getColorArray().addFirst(colors);
-        getOldDirections().addFirst(new float[] {direction[0], direction[1]});
-        getOldCoordinates().addFirst(new float[] {coordinate[0], coordinate[1]});
+        getOldDirections().addFirst(new float[]{direction[0], direction[1]});
+        getOldCoordinates().addFirst(new float[]{coordinate[0], coordinate[1]});
         if (oldDirections.size() > LINESCOUNT) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();
@@ -240,6 +241,7 @@ public class Qix extends Unit {
 
     /**
      * Getter for an old coordinate.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -249,6 +251,7 @@ public class Qix extends Unit {
 
     /**
      * Getter for current coordinate.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -270,6 +273,7 @@ public class Qix extends Unit {
 
     /**
      * Getter for old direction.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -279,6 +283,7 @@ public class Qix extends Unit {
 
     /**
      * Getter for current direction.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -288,8 +293,9 @@ public class Qix extends Unit {
 
     /**
      * Setter for a direction.
+     *
      * @param direction the new direction
-     * @param i at which place
+     * @param i         at which place
      */
     public void setDirection(float direction, int i) {
         this.direction[i] = direction;
