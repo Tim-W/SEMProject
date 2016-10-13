@@ -8,7 +8,7 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -34,11 +34,12 @@ public class Cursor extends LineTraveller {
     /**
      * Create a cursor.
      *
-     * @param x      start x coordinate
-     * @param y      start y coordinate
-     * @param width  width, used for collision detection
-     * @param height height, used for collision detection
-     * @param stix   current stix to use
+     * @param x           start x coordinate
+     * @param y           start y coordinate
+     * @param width       width, used for collision detection
+     * @param height      height, used for collision detection
+     * @param stix        current stix to use
+     * @param areaTracker the areatracker
      */
     public Cursor(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
@@ -77,17 +78,17 @@ public class Cursor extends LineTraveller {
 
 
     private void assertMove(int transX, int transY) {
-    	if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
+        if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
                 + transY <= BOARD_WIDTH / 2) {
             if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
                 if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
                         && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
                         getY() + transY * 2))
                         && getAreaTracker().getBoardGrid()[getX() + transX + transY]
-                        		[getY() + transY + transX].equals(AreaState
+                        [getY() + transY + transX].equals(AreaState
                         .UNCOVERED)
                         && getAreaTracker().getBoardGrid()[getX() + transX - transY]
-                        		[getY() + transY - transX].equals(AreaState
+                        [getY() + transY - transX].equals(AreaState
                         .UNCOVERED)) {
 
                     if (outerBorderOn(getX(), getY())) {
@@ -103,10 +104,10 @@ public class Cursor extends LineTraveller {
                 setY(getY() + transY);
                 logCurrentMove();
             }
-        }		
-	}
+        }
+    }
 
-	/**
+    /**
      * @return the current move direction (up/down/left/right)
      */
     public KeyCode getCurrentMove() {
@@ -182,8 +183,7 @@ public class Cursor extends LineTraveller {
     }
 
     /**
-     *
-     * @return
+     * @return true if the cursor is drawing
      */
     public boolean isDrawing() {
         return isDrawing;
@@ -197,7 +197,6 @@ public class Cursor extends LineTraveller {
     }
 
     /**
-     *
      * @param speed the amount of pixels the cursor moves per when moving
      */
     public void setSpeed(int speed) {
@@ -205,7 +204,6 @@ public class Cursor extends LineTraveller {
     }
 
     /**
-     *
      * @return whether the cursor is moving fast or slow
      */
     public boolean isFast() {
@@ -213,7 +211,6 @@ public class Cursor extends LineTraveller {
     }
 
     /**
-     *
      * @param isFast whether the cursor is moving fast or slow
      */
     public void setFast(boolean isFast) {

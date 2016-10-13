@@ -11,22 +11,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
-import nl.tudelft.sem.group2.factories.SinglePlayerGameFactory;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Point;
-import java.util.HashSet;
+import java.awt.*;
 import java.util.Random;
-import java.util.Set;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.*;
 
 
 /**
@@ -36,13 +30,10 @@ public class GameScene extends Scene {
 
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
-
+    private static final int MARGIN = 8;
     private static Label messageLabel;
     private static VBox messageBox;
-
     private static ScoreScene scoreScene;
-
-    private static final int MARGIN = 8;
     private static Canvas canvas;
     private static GraphicsContext gc;
     //private static AreaTracker areaTracker;
@@ -90,6 +81,78 @@ public class GameScene extends Scene {
     }
 
     /**
+     * Transforms grid to canvas coordinates.
+     *
+     * @param b an x or y coordinate
+     * @return the coordinate to draw an image on
+     */
+    public static int gridToCanvas(int b) {
+        return b * 2 + MARGIN - 1;
+    }
+
+    private static void drawUncovered() {
+        gc.setFill(Color.BLACK);
+        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
+            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
+                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.UNCOVERED) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
+        }
+    }
+
+    private static void drawBorders() {
+        gc.setFill(Color.WHITE);
+        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
+            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
+                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER
+                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] ==
+                        AreaState.INNERBORDER) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
+        }
+    }
+
+    /**
+     * Draw current Stix and Fuse on screen.
+     */
+    private static void drawStixAndFuse() {
+        boolean foundFuse = true;
+        Point fuse = new Point(-1, -1);
+        for (Unit unit : GameController.getInstance().getUnits()) {
+            if (unit instanceof Fuse) {
+                foundFuse = false;
+                fuse = new Point(unit.getX(), unit.getY());
+            }
+        }
+        for (Point p : GameController.getInstance().getStix().getStixCoordinates()) {
+            if (!p.equals(GameController.getInstance().getStix().getStixCoordinates().getFirst())) {
+                if (foundFuse) {
+                    if (GameController.getInstance().getCursor().isFast()) {
+                        gc.setFill(Color.MEDIUMBLUE);
+                    } else {
+                        gc.setFill(Color.DARKRED);
+                    }
+                } else {
+                    if (p.equals(fuse)) {
+                        foundFuse = true;
+                        if (GameController.getInstance().getCursor().isFast()) {
+                            gc.setFill(Color.MEDIUMBLUE);
+                        } else {
+                            gc.setFill(Color.DARKRED);
+                        }
+                    } else {
+                        gc.setFill(Color.GRAY);
+                    }
+                }
+
+                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+            }
+        }
+    }
+
+    /**
      * Initializes canvas and gc.
      */
     public void initializeCanvas() {
@@ -130,7 +193,6 @@ public class GameScene extends Scene {
         setOnKeyPressed((KeyEvent e) -> GameController.getInstance().keyPressed(e));
     }
 
-
     private void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
@@ -139,7 +201,6 @@ public class GameScene extends Scene {
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }
-
 
     private void addMessageBox() {
         // Messagebox&label for displaying start and end messages
@@ -150,16 +211,6 @@ public class GameScene extends Scene {
         messageBox.setLayoutY(Globals.MESSAGEBOX_POSITION_Y);
         messageLabel.setStyle("-fx-font-size: 24px;");
         messageLabel.setTextFill(Color.YELLOW);
-    }
-
-    /**
-     * Transforms grid to canvas coordinates.
-     *
-     * @param b an x or y coordinate
-     * @return the coordinate to draw an image on
-     */
-    public static int gridToCanvas(int b) {
-        return b * 2 + MARGIN - 1;
     }
 
     /**
@@ -176,68 +227,6 @@ public class GameScene extends Scene {
         for (Unit unit : GameController.getInstance().getUnits()) {
             unit.move();
             unit.draw(canvas);
-        }
-    }
-
-    private static void drawUncovered() {
-        gc.setFill(Color.BLACK);
-        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
-            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
-                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.UNCOVERED) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    private static void drawBorders() {
-        gc.setFill(Color.WHITE);
-        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
-            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
-                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER
-                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.INNERBORDER) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Draw current Stix and Fuse on screen.
-     */
-    private static void drawStixAndFuse() {
-        boolean foundFuse = true;
-        Point fuse = new Point(-1, -1);
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            if (unit instanceof Fuse) {
-                foundFuse = false;
-                fuse = new Point(unit.getX(), unit.getY());
-            }
-        }
-        for (Point p : GameController.getInstance().getStix().getStixCoordinates()) {
-            if (!p.equals(GameController.getInstance().getStix().getStixCoordinates().getFirst())) {
-                if (foundFuse) {
-                    if (GameController.getInstance().getCursor().isFast()) {
-                        gc.setFill(Color.MEDIUMBLUE);
-                    } else {
-                        gc.setFill(Color.DARKRED);
-                    }
-                } else {
-                    if (p.equals(fuse)) {
-                        foundFuse = true;
-                        if (GameController.getInstance().getCursor().isFast()) {
-                            gc.setFill(Color.MEDIUMBLUE);
-                        } else {
-                            gc.setFill(Color.DARKRED);
-                        }
-                    } else {
-                        gc.setFill(Color.GRAY);
-                    }
-                }
-
-                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
-            }
         }
     }
 

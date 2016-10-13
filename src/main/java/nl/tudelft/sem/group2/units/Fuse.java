@@ -1,13 +1,11 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
-import static nl.tudelft.sem.group2.global.Globals.FUSE_DELAY;
+import java.awt.*;
+
+import static nl.tudelft.sem.group2.global.Globals.*;
 
 /**
  * Describes the Fuse.
@@ -25,11 +23,12 @@ public class Fuse extends LineTraveller {
     /**
      * Create a new Fuse.
      *
-     * @param x      the start x coord
-     * @param y      the start y coord
-     * @param width  width of the fuse (used for collision detection)
-     * @param height height of the fuse (used for collision detection)
-     * @param stix   current stix to use
+     * @param x           the start x coord
+     * @param y           the start y coord
+     * @param width       width of the fuse (used for collision detection)
+     * @param height      height of the fuse (used for collision detection)
+     * @param stix        current stix to use
+     * @param areaTracker the AreaTracker
      */
     public Fuse(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);

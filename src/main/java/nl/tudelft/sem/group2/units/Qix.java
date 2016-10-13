@@ -1,19 +1,18 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -58,7 +57,8 @@ public class Qix extends Unit {
      */
     public Qix(AreaTracker areaTracker) {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
-        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + "," + Globals.QIX_START_Y + ")", this.getClass());
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + "," +
+                Globals.QIX_START_Y + ")", this.getClass());
     }
 
     public static int getLINESCOUNT() {

@@ -1,9 +1,10 @@
 package nl.tudelft.sem.group2.units;
 
-import java.util.logging.Level;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -19,27 +20,6 @@ public class Sparx extends LineTraveller {
     private int lastX;
     private int lastY;
 
-//    /**
-//     * Create a new Sparx with its default sprites.
-//     *
-//     * @param x              x coord to start at
-//     * @param y              y coord to start at
-//     * @param width          width, used for collision
-//     * @param height         height, used for collision
-//     * @param sparxDirection direction in which the sparx starts moving,
-//     *                       which is either LEFT or RIGHT
-//     */
-//    public Sparx(int x, int y, int width, int height, SparxDirection sparxDirection) {
-//        super(x, y, width, height);
-//        lastX = x;
-//        lastY = y;
-//        Image[] sprite = new Image[2];
-//        sprite[0] = new Image("/images/sparx-1.png");
-//        sprite[1] = new Image("/images/sparx-2.png");
-//        setSprite(sprite);
-//        this.sparxDirection = sparxDirection;
-//    }
-
     /**
      * Create a new Sparx with its default sprites.
      *
@@ -49,6 +29,7 @@ public class Sparx extends LineTraveller {
      * @param height         height, used for collision
      * @param sparxDirection direction in which the sparx starts moving,
      *                       which is either LEFT or RIGHT
+     * @param areaTracker the AreaTracker
      */
     public Sparx(int x, int y, int width, int height, SparxDirection sparxDirection, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
