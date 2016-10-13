@@ -115,14 +115,14 @@ public final class GameController {
     /**
      * Stop animations.
      */
-    public void animationTimerStop() {
+    private void animationTimerStop() {
         animationTimer.stop();
     }
 
     /**
      * Start animations.
      */
-    public void animationTimerStart() {
+    private void animationTimerStart() {
         animationTimer.start();
     }
 
@@ -143,7 +143,7 @@ public final class GameController {
      * show game over text,
      * stop the animations.
      */
-    public void gameOver() {
+    private void gameOver() {
         animationTimerStop();
         gameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
         gameScene.setMessageLabel(" Game Over! ");
@@ -159,7 +159,7 @@ public final class GameController {
      * stop the animations,
      * show that the player has won
      */
-    public void gameWon() {
+    private void gameWon() {
         animationTimerStop();
         playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
         gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
@@ -176,7 +176,7 @@ public final class GameController {
         return cursor;
     }
 
-    public void setCursor(Cursor cursor) {
+    void setCursor(Cursor cursor) {
         GameController.cursor = cursor;
     }
 
@@ -188,7 +188,7 @@ public final class GameController {
     /**
      * Setup an animation timer that runs at 300FPS.
      */
-    public void createAnimationTimer() {
+    private void createAnimationTimer() {
         // animation timer for handling a loop
         animationTimer = new AnimationTimer() {
             public void handle(long now) {
@@ -314,7 +314,7 @@ public final class GameController {
      *
      * @return boolean isRunning
      */
-    public boolean isRunning() {
+    boolean isRunning() {
         return isRunning;
     }
 
@@ -323,7 +323,7 @@ public final class GameController {
      *
      * @return animationTimer
      */
-    public AnimationTimer getAnimationTimer() {
+    AnimationTimer getAnimationTimer() {
         return animationTimer;
     }
 
@@ -332,7 +332,7 @@ public final class GameController {
      *
      * @param previousTime setter
      */
-    public void setPreviousTime(long previousTime) {
+    void setPreviousTime(long previousTime) {
         this.previousTime = previousTime;
     }
 
@@ -341,7 +341,7 @@ public final class GameController {
      *
      * @param unit unit to add
      */
-    public void addUnit(Unit unit) {
+    private void addUnit(Unit unit) {
         if (unit instanceof Fuse) {
             for (Unit unit1 : units) {
                 if (unit1 instanceof Fuse) {
