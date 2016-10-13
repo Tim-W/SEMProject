@@ -17,11 +17,8 @@ import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Random;
-
-import static nl.tudelft.sem.group2.global.Globals.*;
-
 
 /**
  * GameScene contains all the information about the current game.
@@ -71,10 +68,11 @@ public class GameScene extends Scene {
         Random random = new Random();
         //Choose random image
         int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
-        setImage(new Image("/images/" + image + ".png", BOARD_WIDTH, BOARD_HEIGHT, false, false));
+        setImage(new Image("/images/" + image + ".png", Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, false, false));
         //Draw black rectangle over image to avoid spoilers
         gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, BOARD_WIDTH + 2 * BOARD_MARGIN, BOARD_HEIGHT + 2 * BOARD_MARGIN);
+        gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
+                Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
@@ -106,8 +104,8 @@ public class GameScene extends Scene {
         for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
             for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
                 if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER
-                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] ==
-                        AreaState.INNERBORDER) {
+                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j]
+                        == AreaState.INNERBORDER) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
@@ -166,7 +164,7 @@ public class GameScene extends Scene {
         gc = canvas.getGraphicsContext2D();
         // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
-        gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+        gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
     }
 
     /**
@@ -218,8 +216,8 @@ public class GameScene extends Scene {
      */
     public void draw() {
         // gc.setFill(Color.BLACK);
-        gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
-        gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
+        gc.clearRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
+        gc.drawImage(image, Globals.BOARD_MARGIN, Globals.BOARD_MARGIN);
         gc.setFill(Color.WHITE);
         drawUncovered();
         drawBorders();

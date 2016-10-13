@@ -3,9 +3,11 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 
-import java.awt.*;
+import java.awt.Point;
 
-import static nl.tudelft.sem.group2.global.Globals.*;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.FUSE_DELAY;
 
 /**
  * Describes the Fuse.

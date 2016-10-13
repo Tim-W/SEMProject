@@ -8,7 +8,7 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.LinkedList;
 import java.util.logging.Level;
 

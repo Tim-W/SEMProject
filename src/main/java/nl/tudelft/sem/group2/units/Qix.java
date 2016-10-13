@@ -8,7 +8,8 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.global.Globals;
 
-import java.awt.*;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -57,8 +58,8 @@ public class Qix extends Unit {
      */
     public Qix(AreaTracker areaTracker) {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
-        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + "," +
-                Globals.QIX_START_Y + ")", this.getClass());
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
+                + Globals.QIX_START_Y + ")", this.getClass());
     }
 
     public static int getLINESCOUNT() {
