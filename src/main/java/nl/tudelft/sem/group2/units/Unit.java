@@ -3,7 +3,7 @@ package nl.tudelft.sem.group2.units;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.logging.Level;
 
 /**
@@ -78,8 +78,6 @@ public abstract class Unit implements Draw, Movable {
     public boolean intersect(Unit collidee) {
         if (collidee instanceof Qix) {
             Qix qix = (Qix) collidee;
-            Polygon collideeP = qix.toPolygon();
-
             return qix.intersect(this);
         }
         Rectangle colliderR = new Rectangle(this.getX(), this.getY(), 2, 2);

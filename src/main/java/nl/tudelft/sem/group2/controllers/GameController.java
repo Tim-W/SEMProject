@@ -8,10 +8,10 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.*;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.scenes.GameScene;
-import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.*;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
 /**
  * Controller class for the GameScene to implement the MVC.
  */
-public class GameController {
+public final class GameController {
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
@@ -143,8 +143,8 @@ public class GameController {
         animationTimerStop();
         gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
         gameScene.setMessageLabel(" You Won! ");
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore()
-                , GameController.class);
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(),
+                GameController.class);
     }
 
     //GETTERS
