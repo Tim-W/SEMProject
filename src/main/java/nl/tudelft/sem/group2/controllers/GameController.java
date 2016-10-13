@@ -7,7 +7,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
@@ -32,7 +31,7 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
 /**
  * Controller class for the GameScene to implement the MVC.
  */
-public final class GameController {
+public class GameController {
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
@@ -43,14 +42,13 @@ public final class GameController {
     // Units
     private static Cursor cursor;
     private static Qix qix;
-    private static Stix stix;
     // Models for score tracking
     private static AreaTracker areaTracker;
     private static ScoreCounter scoreCounter;
+    private static Set<Unit> units;
     private final ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     // Animation timer properties
     private Stix stix;
-    private static Set<Unit> units;
     private long previousTime;
     // Boolean that states if the game is running
     private boolean isRunning = false;
@@ -132,6 +130,14 @@ public final class GameController {
         return gameScene;
     }
 
+    public Stix getStix() {
+        return stix;
+    }
+
+    public void setStix(Stix stix) {
+        this.stix = stix;
+    }
+
     /**
      * Play a game over sound.
      * show game over text,
@@ -168,6 +174,10 @@ public final class GameController {
 
     public Cursor getCursor() {
         return cursor;
+    }
+
+    public void setCursor(Cursor cursor) {
+        GameController.cursor = cursor;
     }
 
     public ScoreCounter getScoreCounter() {
