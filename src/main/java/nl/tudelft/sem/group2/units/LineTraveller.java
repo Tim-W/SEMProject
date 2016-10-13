@@ -44,7 +44,6 @@ public abstract class LineTraveller extends Unit {
      * @param x x coord
      * @param y y coord
      * @return true if the tile at (x,y) has an UNCOVERED AreaState
-     * TODO implement
      */
     public boolean uncoveredOn(int x, int y) {
         return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.UNCOVERED);

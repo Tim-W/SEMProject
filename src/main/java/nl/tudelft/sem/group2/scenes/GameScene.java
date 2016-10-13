@@ -33,11 +33,7 @@ public class GameScene extends Scene {
     private static ScoreScene scoreScene;
     private static Canvas canvas;
     private static GraphicsContext gc;
-    //private static AreaTracker areaTracker;
     private static Image image;
-
-    // TODO implement life system
-    // private int lifes;
 
     /**
      * Create a new GameScene.
@@ -195,7 +191,6 @@ public class GameScene extends Scene {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
 
-        // TODO shift this to a game class and save/load score
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }

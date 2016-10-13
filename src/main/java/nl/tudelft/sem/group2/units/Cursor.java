@@ -25,7 +25,6 @@ public class Cursor extends LineTraveller {
     private int loops = 0;
     private int speed = 2;
     private LinkedList<double[][]> oldLines = new LinkedList<>();
-    //TODO set stix to false when implementation is done
     private boolean isDrawing = false;
     private boolean isFast = true;
     private Stix stix;

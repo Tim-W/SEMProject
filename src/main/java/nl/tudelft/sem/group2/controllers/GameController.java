@@ -131,8 +131,7 @@ public final class GameController {
      * show game over text,
      * stop the animations.
      */
-    public void gameOver() {
-        // TODO add code for gameover
+    public static void gameOver() {
         animationTimerStop();
         gameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
         gameScene.setMessageLabel(" Game Over! ");
@@ -150,10 +149,10 @@ public final class GameController {
      */
     public void gameWon() {
         animationTimerStop();
-        gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        gameScene.setMessageLabel(" You Won! ");
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(),
-                GameController.class);
+        playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
+        GameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+        GameScene.setMessageLabel(" You Won! ");
+        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
     }
 
     //GETTERS
@@ -203,9 +202,6 @@ public final class GameController {
      * When a new area is completed, calculate the new score.
      */
     private void calculateArea() {
-        // TODO turn on if isdrawing is implemented
-        // if (cursor.isDrawing()) {
-
         if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
                 && !stix.getStixCoordinates().isEmpty()) {
             playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
