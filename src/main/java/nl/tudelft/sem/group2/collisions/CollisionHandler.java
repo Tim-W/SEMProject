@@ -35,30 +35,30 @@ public class CollisionHandler {
         ArrayList<Unit> unitsList = new ArrayList<>();
         unitsList.addAll(units);
 
-        int indexOfCursor = 0;
+        ArrayList<Cursor> cursorList = new ArrayList<>();
+
         for (int i = 0; i < unitsList.size(); i++) {
             Unit collider = unitsList.get(i);
             if (collider instanceof Cursor) {
-                indexOfCursor = i;
-                break;
+                cursorList.add((Cursor)collider);
             }
         }
-        Unit collider = unitsList.get(indexOfCursor);
-        unitsList.remove(indexOfCursor);
 
-        for (Unit collidee : unitsList) {
+        for(Cursor cursor: cursorList) {
+            unitsList.remove(cursor);
+            for (Unit collidee : unitsList) {
 
-            if (collidee instanceof Qix) {
-                Cursor temp = (Cursor) collider;
-                if (stix.intersect(collidee)) {
-                    return true;
-                } else if (collidee.intersect(collider) && temp.uncoveredOn(temp.getX(), temp.getY())) {
-                    return true;
-                }
+                if (collidee instanceof Qix) {
+                    if (stix != null && stix.intersect(collidee)) {
+                        return true;
+                    } else if (collidee.intersect(cursor) && cursor.uncoveredOn(cursor.getX(), cursor.getY())) {
+                        return true;
+                    }
 
-            } else {
-                if (collider.intersect(collidee)) {
-                    return true;
+                } else {
+                    if (cursor.intersect(collidee)) {
+                        return true;
+                    }
                 }
             }
         }
