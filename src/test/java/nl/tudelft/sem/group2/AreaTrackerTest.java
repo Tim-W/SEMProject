@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2;
 
 import java.awt.Point;
+
 import nl.tudelft.sem.group2.units.Stix;
 
 import static org.junit.Assert.assertEquals;
@@ -192,6 +193,5 @@ public class AreaTrackerTest {
         stix.addToStix(new Point(2, 3));
         stix.addToStix(new Point(2, 4));
         return new AreaTracker(TEST_MAP_WIDTH, TEST_MAP_HEIGHT, stix);
-
     }
 }

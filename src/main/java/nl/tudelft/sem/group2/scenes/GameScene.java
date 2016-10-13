@@ -11,19 +11,18 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Fuse;
-import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**
  * GameScene contains all the information about the current game.
@@ -37,12 +36,8 @@ public class GameScene extends Scene {
     private static VBox messageBox;
     private static ScoreScene scoreScene;
     private static Canvas canvas;
-    private static Set<Unit> units;
-    private static Stix stix;
     private static GraphicsContext gc;
-    private static AreaTracker areaTracker;
     private static Image image;
-    private GameController gameController;
 
     /**
      * Create a new GameScene.
@@ -53,10 +48,9 @@ public class GameScene extends Scene {
      */
     public GameScene(final Group root, Color color) {
         super(root, color);
-        // Initialize units set because it's necessary in GameController
-        // Temporary until CollisionHandler is merged into this
-        gameController = new GameController();
+
         initializeCanvas();
+
         // Initialize label in middle of screen to display start message
         messageLabel = new Label("Press SPACE to begin!");
         final int messageBoxSpacing = 10;
@@ -74,9 +68,10 @@ public class GameScene extends Scene {
         Random random = new Random();
         //Choose random image
         int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
-        setImage(new Image("/images/" + image + ".png", Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, false, false));
-        // Draw the board
-        draw();
+        setImage(new Image("/images/" + image + ".png", BOARD_WIDTH, BOARD_HEIGHT, false, false));
+        //Draw black rectangle over image to avoid spoilers
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, BOARD_WIDTH + 2 * BOARD_MARGIN, BOARD_HEIGHT + 2 * BOARD_MARGIN);
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
@@ -92,35 +87,66 @@ public class GameScene extends Scene {
         return b * 2 + MARGIN - 1;
     }
 
-    /**
-     * Add a unit.
-     *
-     * @param unit unit to add
-     */
-    public static void addUnit(Unit unit) {
-        if (units == null) {
-            units = new HashSet<>();
-        }
-        if (unit instanceof Fuse) {
-            for (Unit unit1 : units) {
-                if (unit1 instanceof Fuse) {
-                    return;
+    private static void drawUncovered() {
+        gc.setFill(Color.BLACK);
+        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
+            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
+                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.UNCOVERED) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
         }
-        units.add(unit);
     }
 
-    public static Stix getStix() {
-        return stix;
+    private static void drawBorders() {
+        gc.setFill(Color.WHITE);
+        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
+            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
+                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER
+                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j]
+                        == AreaState.INNERBORDER) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
+        }
     }
 
-    public static void setStix(Stix stix) {
-        GameScene.stix = stix;
-    }
+    /**
+     * Draw current Stix and Fuse on screen.
+     */
+    private static void drawStixAndFuse() {
+        boolean foundFuse = true;
+        Point fuse = new Point(-1, -1);
+        for (Unit unit : GameController.getInstance().getUnits()) {
+            if (unit instanceof Fuse) {
+                foundFuse = false;
+                fuse = new Point(unit.getX(), unit.getY());
+            }
+        }
+        for (Point p : GameController.getInstance().getStix().getStixCoordinates()) {
+            if (!p.equals(GameController.getInstance().getStix().getStixCoordinates().getFirst())) {
+                if (foundFuse) {
+                    if (GameController.getInstance().getCursor().isFast()) {
+                        gc.setFill(Color.MEDIUMBLUE);
+                    } else {
+                        gc.setFill(Color.DARKRED);
+                    }
+                } else {
+                    if (p.equals(fuse)) {
+                        foundFuse = true;
+                        if (GameController.getInstance().getCursor().isFast()) {
+                            gc.setFill(Color.MEDIUMBLUE);
+                        } else {
+                            gc.setFill(Color.DARKRED);
+                        }
+                    } else {
+                        gc.setFill(Color.GRAY);
+                    }
+                }
 
-    public static void setAreaTracker(AreaTracker areaTracker) {
-        GameScene.areaTracker = areaTracker;
+                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+            }
+        }
     }
 
     /**
@@ -137,7 +163,7 @@ public class GameScene extends Scene {
         gc = canvas.getGraphicsContext2D();
         // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
-        gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
+        gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
     }
 
     /**
@@ -154,14 +180,14 @@ public class GameScene extends Scene {
      * When a key is released send event to GameController.
      */
     private void registerKeyReleasedHandler() {
-        setOnKeyReleased((KeyEvent e) -> gameController.keyReleased(e));
+        setOnKeyReleased((KeyEvent e) -> GameController.getInstance().keyReleased(e));
     }
 
     /**
      * When a key is pressed send event to GameController.
      */
     private void registerKeyPressedHandler() {
-        setOnKeyPressed((KeyEvent e) -> gameController.keyPressed(e));
+        setOnKeyPressed((KeyEvent e) -> GameController.getInstance().keyPressed(e));
     }
 
     private void createScoreScene() {
@@ -184,87 +210,19 @@ public class GameScene extends Scene {
     }
 
     /**
-     * @return units of the board
-     */
-    public Set<Unit> getUnits() {
-        return units;
-    }
-
-    /**
      * Draw all the units on the screen.
      */
     public void draw() {
         // gc.setFill(Color.BLACK);
-        gc.clearRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
-        gc.drawImage(image, Globals.BOARD_MARGIN, Globals.BOARD_MARGIN);
+        gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+        gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
         gc.setFill(Color.WHITE);
         drawUncovered();
         drawBorders();
         drawStixAndFuse();
-        for (Unit unit : units) {
+        for (Unit unit : GameController.getInstance().getUnits()) {
             unit.move();
             unit.draw(canvas);
-        }
-    }
-
-    private void drawUncovered() {
-        gc.setFill(Color.BLACK);
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.UNCOVERED) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    private void drawBorders() {
-        gc.setFill(Color.WHITE);
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
-                        || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    /**
-     * Draw current Stix and Fuse on screen.
-     */
-    private void drawStixAndFuse() {
-        boolean foundFuse = true;
-        Point fuse = new Point(-1, -1);
-        for (Unit unit : units) {
-            if (unit instanceof Fuse) {
-                foundFuse = false;
-                fuse = new Point(unit.getX(), unit.getY());
-            }
-        }
-        for (Point p : gameController.getStix().getStixCoordinates()) {
-            if (!p.equals(gameController.getStix().getStixCoordinates().getFirst())) {
-                if (foundFuse) {
-                    if (GameController.getCursor().isFast()) {
-                        gc.setFill(Color.MEDIUMBLUE);
-                    } else {
-                        gc.setFill(Color.DARKRED);
-                    }
-                } else {
-                    if (p.equals(fuse)) {
-                        foundFuse = true;
-                        if (GameController.getCursor().isFast()) {
-                            gc.setFill(Color.MEDIUMBLUE);
-                        } else {
-                            gc.setFill(Color.DARKRED);
-                        }
-                    } else {
-                        gc.setFill(Color.GRAY);
-                    }
-                }
-
-                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
-            }
         }
     }
 
@@ -273,13 +231,13 @@ public class GameScene extends Scene {
      */
     public void removeFuse() {
         Unit removingItem = null;
-        for (Unit unit : units) {
+        for (Unit unit : GameController.getInstance().getUnits()) {
             if (unit instanceof Fuse) {
                 removingItem = unit;
             }
         }
         if (removingItem != null) {
-            units.remove(removingItem);
+            GameController.getInstance().getUnits().remove(removingItem);
         }
     }
 

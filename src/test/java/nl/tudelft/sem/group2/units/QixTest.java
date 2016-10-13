@@ -35,7 +35,7 @@ public class QixTest {
     public void setUp() throws Exception {
         new JFXPanel();
         canvas = new Canvas(1, 1);
-        qix = new Qix();
+        qix = new Qix(areaTracker);
         areaTracker = Mockito.mock(AreaTracker.class);
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         qix.setAreaTracker(areaTracker);

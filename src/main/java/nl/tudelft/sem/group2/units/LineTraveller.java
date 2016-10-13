@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -22,9 +23,10 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
      * @param y      y coord
      * @param width  width, used for collision
      * @param height height, used for collision
+     * @param areaTracker the AreaTracker
      */
-    public LineTraveller(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public LineTraveller(int x, int y, int width, int height, AreaTracker areaTracker) {
+        super(x, y, width, height, areaTracker);
     }
 
     /**

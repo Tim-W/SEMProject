@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
@@ -41,13 +42,26 @@ public class Qix extends Unit implements CollisionInterface {
     private LinkedList<double[]> colorArray = new LinkedList<>();
     private float[] coordinate = new float[2];
 
+//    /**
+//     * Create a new Qix.
+//     * Is by default placed on 30,30.
+//     * last parameters are for width and height but its just set to 1
+//     */
+//    public Qix() {
+//        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+//    }
+
     /**
      * Create a new Qix.
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
+     *
+     * @param areaTracker the areatracker
      */
-    public Qix() {
-        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+    public Qix(AreaTracker areaTracker) {
+        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
+                + Globals.QIX_START_Y + ")", this.getClass());
     }
 
     public static int getLINESCOUNT() {
@@ -76,8 +90,8 @@ public class Qix extends Unit implements CollisionInterface {
             colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
         getColorArray().addFirst(colors);
-        getOldDirections().addFirst(new float[] {direction[0], direction[1]});
-        getOldCoordinates().addFirst(new float[] {coordinate[0], coordinate[1]});
+        getOldDirections().addFirst(new float[]{direction[0], direction[1]});
+        getOldCoordinates().addFirst(new float[]{coordinate[0], coordinate[1]});
         if (oldDirections.size() > LINESCOUNT) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();
