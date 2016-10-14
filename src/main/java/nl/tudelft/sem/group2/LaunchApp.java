@@ -1,17 +1,14 @@
 package nl.tudelft.sem.group2;
 
+import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.StartScene;
-
-import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -42,30 +39,6 @@ public class LaunchApp extends Application {
      */
     public static int getGridWidth() {
         return BOARD_WIDTH / 2;
-    }
-
-    /**
-     * Plays a sound file.
-     *
-     * @param string - the path to the sound file
-     * @param volume - the volume in decibels
-     */
-    public static synchronized void playSound(final String string, final double volume) {
-        new Thread(new Runnable() {
-            // The wrapper thread is unnecessary, unless it blocks on the
-            // Clip finishing; see comments.
-            public void run() {
-                try {
-                    Media hit = new Media(getClass().getResource(string).toString());
-                    MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                    mediaPlayer.setVolume(volume);
-                    mediaPlayer.play();
-                    mediaView.setMediaPlayer(mediaPlayer);
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-        }).start();
     }
 
     /**
@@ -112,7 +85,6 @@ public class LaunchApp extends Application {
 
         //Comment to mute empty sound
         //playSound("/sounds/qix.mp3", 1);
-        mediaView = new MediaView();
         //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
     }
