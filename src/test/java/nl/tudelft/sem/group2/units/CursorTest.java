@@ -42,7 +42,7 @@ public class CursorTest {
     public void setUp() throws Exception {
         new JFXPanel();
         stix = mock(Stix.class);
-        createCursor(new Cursor(2, 2, 2, 2, stix, areaTracker, 1));
+        createCursor(new Cursor(2, 2, 2, 2, stix, areaTracker, 2));
         cursor.setSpeed(1);
         canvas = new Canvas(50, 50);
         for (int i = 0; i < boardGrid.length; i++) {
@@ -219,6 +219,18 @@ public class CursorTest {
         Cursor spy = spy(new Cursor(1, 1, 1, 1, stix, areaTracker, 1));
         spy.draw(new Canvas(1, 1));
         verify(spy).getSpriteIndex();
+    }
+
+    @Test
+    public void testCursorHasDied() throws Exception {
+        Assert.assertEquals(2, cursor.getLives());
+        cursor.cursorDied();
+        Assert.assertEquals(1, cursor.getLives());
+        cursor.cursorDied();
+        Assert.assertEquals(0, cursor.getLives());
+        cursor.cursorDied();
+        Assert.assertEquals(0, cursor.getLives());
+
     }
 
 

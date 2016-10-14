@@ -209,14 +209,9 @@ public final class GameController {
                         if (cursor.getLives() == 0) {
                             gameOver();
                         }
-                        if (cursor.isDrawing()) {
-                            Point newStartPos = stix.getStixCoordinates().getFirst();
-                            cursor.setX((int) newStartPos.getX());
-                            cursor.setY((int) newStartPos.getY());
-                            stix.emptyStix();
-                        }
+
                     }
-                    gameScene.updateScorescene(scoreCounter);
+                    gameScene.updateScorescene(scoreCounter, cursor);
                     calculateArea();
                 }
             }
