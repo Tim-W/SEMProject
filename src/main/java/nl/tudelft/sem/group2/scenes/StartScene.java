@@ -143,9 +143,10 @@ public class StartScene extends javafx.scene.Scene {
         this.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DIGIT1) {
                 LaunchApp.setScene(GameController.getInstance().getScene());
+                GameController.getInstance().makeCursor();
             } else if (event.getCode() == KeyCode.DIGIT2) {
-                //TODO change to multiplayer code
                 LaunchApp.setScene(GameController.getInstance().getScene());
+                GameController.getInstance().makeCursors();
             }
         });
     }
