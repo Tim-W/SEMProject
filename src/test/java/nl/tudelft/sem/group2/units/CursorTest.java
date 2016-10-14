@@ -1,7 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
@@ -12,6 +10,9 @@ import nl.tudelft.sem.group2.scenes.GameScene;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.awt.Point;
+import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;

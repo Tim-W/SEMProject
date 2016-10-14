@@ -1,12 +1,13 @@
 package nl.tudelft.sem.group2.units;
 
-import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_X;
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_Y;

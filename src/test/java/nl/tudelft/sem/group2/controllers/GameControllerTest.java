@@ -1,40 +1,39 @@
 package nl.tudelft.sem.group2.controllers;
 
-import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Stix;
-import nl.tudelft.sem.group2.units.Unit;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.Point;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Gijs on 2-10-2016.
  */
-@org.junit.Ignore
+@Ignore
 public class GameControllerTest {
     GameController gameController;
 
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
-        gameController = mock(GameController.class);
-        Set<Unit> units = new HashSet<>();
-        when(gameController.getUnits()).thenReturn(units);
+        Group root = new Group();
+        Scene s = new Scene(root, 300, 300, Color.BLACK);
+        GameController.setGameController(null);
+        gameController = GameController.getInstance();
     }
 
     @Test
@@ -79,6 +78,7 @@ public class GameControllerTest {
         cursor.setFast(false);
         gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.X, false, false,
                 false, false));
+        //verify(cursor, times(1)).setSpeed(1);
         verify(cursor, times(1)).setSpeed(1);
     }
 
@@ -129,13 +129,14 @@ public class GameControllerTest {
 
     @Test
     public void testHandle() throws Exception {
-
         GameScene mock = mock(GameScene.class);
+        gameController.setGameScene(mock);
         int previoustime = 1;
         gameController.setPreviousTime(previoustime);
         gameController.getAnimationTimer().handle(previoustime + 200000000);
         verify(mock, times(1)).draw();
     }
+
     @Test
     public void keyReleasedCurrentMoveCreateFuse() throws Exception {
         GameController.getInstance().getScene().removeFuse();
@@ -205,4 +206,19 @@ public class GameControllerTest {
         verify(gameController,times(1)).gameWon();
     }*/
 
+    /**
+     * test addUnit not to add two fuses
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testAddUnit() throws Exception {
+        int oldLength = gameController.getUnits().size();
+        Fuse fuse = new Fuse(1, 1, 1, 1, new Stix(), gameController.getAreaTracker());
+        gameController.getScene().removeFuse();
+        gameController.getUnits().add(fuse);
+        Assert.assertTrue(gameController.getUnits().contains(fuse));
+        gameController.getUnits().add(fuse);
+        Assert.assertEquals(oldLength + 1, gameController.getUnits().size());
+    }
 }

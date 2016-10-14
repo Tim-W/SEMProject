@@ -2,9 +2,9 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Point;
-import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
