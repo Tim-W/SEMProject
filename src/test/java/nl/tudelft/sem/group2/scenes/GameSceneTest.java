@@ -1,6 +1,9 @@
 package nl.tudelft.sem.group2.scenes;
 
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
@@ -29,6 +32,8 @@ public class GameSceneTest {
     }
     @Before
     public void setUp() throws Exception {
+        Group root = new Group();
+        Scene s = new Scene(root, 300, 300, Color.BLACK);
         removeGameController();
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();

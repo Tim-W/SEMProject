@@ -1,8 +1,10 @@
 package nl.tudelft.sem.group2.controllers;
 
-import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
@@ -26,7 +28,8 @@ public class GameControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
+        Group root = new Group();
+        Scene s = new Scene(root, 300, 300, Color.BLACK);
         GameController.setGameController(null);
         gameController = GameController.getInstance();
     }
