@@ -1,7 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
@@ -12,6 +10,9 @@ import nl.tudelft.sem.group2.scenes.GameScene;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.awt.Point;
+import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -41,7 +42,7 @@ public class CursorTest {
     public void setUp() throws Exception {
         new JFXPanel();
         stix = mock(Stix.class);
-        createCursor(new Cursor(2, 2, 2, 2, stix));
+        createCursor(new Cursor(2, 2, 2, 2, stix, areaTracker, 2));
         cursor.setSpeed(1);
         canvas = new Canvas(50, 50);
         for (int i = 0; i < boardGrid.length; i++) {
@@ -91,7 +92,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveL() throws Exception {
-        createCursor(new Cursor(0, 2, 2, 2, stix));
+        createCursor(new Cursor(0, 2, 2, 2, stix, areaTracker,1));
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.LEFT);
         cursor.move();
@@ -100,7 +101,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveR() throws Exception {
-        createCursor(new Cursor(BOARD_WIDTH / 2, 2, 2, 2, stix));
+        createCursor(new Cursor(BOARD_WIDTH / 2, 2, 2, 2, stix, areaTracker, 1));
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.RIGHT);
         cursor.move();
@@ -109,7 +110,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveU() throws Exception {
-        createCursor(new Cursor(2, 0, 2, 2, stix));
+        createCursor(new Cursor(2, 0, 2, 2, stix, areaTracker, 1));
         int dim = cursor.getY();
         cursor.setCurrentMove(KeyCode.UP);
         cursor.move();
@@ -118,7 +119,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveD() throws Exception {
-        createCursor(new Cursor(2, BOARD_HEIGHT / 2, 2, 2, stix));
+        createCursor(new Cursor(2, BOARD_HEIGHT / 2, 2, 2, stix, areaTracker, 1));
         int dim = cursor.getY();
         cursor.setCurrentMove(KeyCode.DOWN);
         cursor.move();
@@ -215,9 +216,21 @@ public class CursorTest {
 
     @Test
     public void draw() throws Exception {
-        Cursor spy = spy(new Cursor(1, 1, 1, 1, stix));
+        Cursor spy = spy(new Cursor(1, 1, 1, 1, stix, areaTracker, 1));
         spy.draw(new Canvas(1, 1));
         verify(spy).getSpriteIndex();
+    }
+
+    @Test
+    public void testCursorHasDied() throws Exception {
+        Assert.assertEquals(2, cursor.getLives());
+        cursor.cursorDied();
+        Assert.assertEquals(1, cursor.getLives());
+        cursor.cursorDied();
+        Assert.assertEquals(0, cursor.getLives());
+        cursor.cursorDied();
+        Assert.assertEquals(0, cursor.getLives());
+
     }
 
 

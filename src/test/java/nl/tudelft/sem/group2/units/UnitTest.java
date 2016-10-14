@@ -1,12 +1,13 @@
 package nl.tudelft.sem.group2.units;
 
-import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_X;
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_Y;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.spy;
 public class UnitTest {
     private Unit unit;
     private Stix stix;
+    private AreaTracker areaTracker;
 
     /**
      * Setup test unit.
@@ -28,7 +30,7 @@ public class UnitTest {
     public void setUp() throws Exception {
         new JFXPanel();
         stix = new Stix();
-        AreaTracker areaTracker = new AreaTracker(0, 0, stix);
+        areaTracker = new AreaTracker(0, 0, stix);
         unit = Mockito.mock(Unit.class, Mockito.CALLS_REAL_METHODS);
         unit.setX(1);
         unit.setY(1);
@@ -108,59 +110,59 @@ public class UnitTest {
 
     @Test
     public void intersectQixCursor() throws Exception {
-        Qix qix = spy(new Qix());
+        Qix qix = spy(new Qix(areaTracker));
         LinkedList<float[]> linkedList = new LinkedList<>();
         linkedList.add(new float[] {QIX_START_X, QIX_START_Y});
         qix.setOldCoordinates(linkedList);
         qix.setOldDirections(linkedList);
-        Cursor cursor = spy(new Cursor(QIX_START_X, QIX_START_Y, 10, 10, stix));
+        Cursor cursor = spy(new Cursor(QIX_START_X, QIX_START_Y, 10, 10, stix, areaTracker, 1));
         Assert.assertTrue(qix.intersect(cursor));
     }
 
     @Test
     public void intersectNotQixCursor() throws Exception {
-        Qix qix = spy(new Qix());
+        Qix qix = spy(new Qix(areaTracker));
         LinkedList<float[]> linkedList = new LinkedList<>();
         linkedList.add(new float[] {1, 1});
         qix.setOldCoordinates(linkedList);
         qix.setOldDirections(linkedList);
-        Cursor cursor = spy(new Cursor(100, 100, 10, 10, stix));
+        Cursor cursor = spy(new Cursor(100, 100, 10, 10, stix, areaTracker, 1));
         Assert.assertFalse(qix.intersect(cursor));
     }
 
     @Test
     public void intersectFuseCursor() throws Exception {
-        Fuse fuse = spy(new Fuse(1, 1, 5, 5, stix));
-        Cursor cursor = spy(new Cursor(1, 1, 5, 5, stix));
+        Fuse fuse = spy(new Fuse(1, 1, 5, 5, stix, areaTracker));
+        Cursor cursor = spy(new Cursor(1, 1, 5, 5, stix, areaTracker, 1));
         Assert.assertTrue(fuse.intersect(cursor));
     }
 
     @Test
     public void intersectNotFuseCursor() throws Exception {
-        Fuse fuse = spy(new Fuse(20, 20, 5, 5, stix));
-        Cursor cursor = spy(new Cursor(1, 1, 5, 5, stix));
+        Fuse fuse = spy(new Fuse(20, 20, 5, 5, stix, areaTracker));
+        Cursor cursor = spy(new Cursor(1, 1, 5, 5, stix, areaTracker, 1));
         Assert.assertFalse(fuse.intersect(cursor));
     }
 
     @Test
     public void intersectCursorQix() throws Exception {
-        Qix qix = spy(new Qix());
+        Qix qix = spy(new Qix(areaTracker));
         LinkedList<float[]> linkedList = new LinkedList<>();
         linkedList.add(new float[] {QIX_START_X, QIX_START_Y});
         qix.setOldCoordinates(linkedList);
         qix.setOldDirections(linkedList);
-        Cursor cursor = spy(new Cursor(QIX_START_X, QIX_START_Y, 10, 10, stix));
+        Cursor cursor = spy(new Cursor(QIX_START_X, QIX_START_Y, 10, 10, stix, areaTracker, 1));
         Assert.assertTrue(cursor.intersect(qix));
     }
 
     @Test
     public void intersectNotCursorQix() throws Exception {
-        Qix qix = spy(new Qix());
+        Qix qix = spy(new Qix(areaTracker));
         LinkedList<float[]> linkedList = new LinkedList<>();
         linkedList.add(new float[] {1, 1});
         qix.setOldCoordinates(linkedList);
         qix.setOldDirections(linkedList);
-        Cursor cursor = spy(new Cursor(100, 100, 10, 10, stix));
+        Cursor cursor = spy(new Cursor(100, 100, 10, 10, stix, areaTracker, 1));
         Assert.assertFalse(cursor.intersect(qix));
     }
 
