@@ -52,7 +52,7 @@ public class SparxTest {
     }
 
     public void createSparx(int x, int y, int width, int height, SparxDirection e) {
-        sparx = new Sparx(x, y, width, height, e);
+        sparx = new Sparx(x, y, width, height, e, areaTracker);
         sparx.setAreaTracker(areaTracker);
     }
 

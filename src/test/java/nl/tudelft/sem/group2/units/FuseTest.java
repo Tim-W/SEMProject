@@ -1,11 +1,14 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
+import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.awt.Point;
+import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -19,12 +22,15 @@ public class FuseTest {
     private Fuse fuse;
     private LinkedList<Point> linkedList;
     private Stix stix;
+    private AreaTracker areaTracker;
+
 
     @Before
     public void setUp() throws Exception {
         new JFXPanel();
         stix = mock(Stix.class);
-        createFuse(new Fuse(3, 3, 3, 4, stix));
+        areaTracker = Mockito.mock(AreaTracker.class);
+        createFuse(new Fuse(3, 3, 3, 4, stix, areaTracker));
         fuse.setDelay(0);
     }
 
@@ -59,7 +65,7 @@ public class FuseTest {
 
     @Test
     public void testMoveLeftLastX() {
-        createFuse(new Fuse(BOARD_WIDTH - 2, BOARD_HEIGHT - 1, 1, 1, stix));
+        createFuse(new Fuse(BOARD_WIDTH - 2, BOARD_HEIGHT - 1, 1, 1, stix, areaTracker));
         moveFuse(-1, 0);
         int oldx = fuse.getX();
         moveFuse(1, 0);
@@ -116,7 +122,7 @@ public class FuseTest {
 
     @Test
     public void testNotMoveL2() {
-        createFuse(new Fuse(0, 0, 1, 1, stix));
+        createFuse(new Fuse(0, 0, 1, 1, stix, areaTracker));
         int oldx = fuse.getX();
         fuse.setMoving(true);
         moveFuse(-1, 0);

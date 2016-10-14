@@ -1,5 +1,6 @@
 language: java
 script: mvn clean verify
+sudo: false
 jdk:
   - oraclejdk8
 notifications:
