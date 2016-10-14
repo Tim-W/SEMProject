@@ -46,7 +46,7 @@ public class StartScene extends javafx.scene.Scene {
         ImageView image = new ImageView("/images/logo.png");
 
         handleSinglePlayerButton();
-        handleMultiplayerButton();
+        handleMultiPlayerButton();
 
         hBox.getChildren().add(singleButton);
         hBox.getChildren().add(multiButton);
@@ -80,7 +80,7 @@ public class StartScene extends javafx.scene.Scene {
         singleButton.setOnMouseClicked(event -> LaunchApp.setScene(GameController.getInstance().getScene()));
     }
 
-    private void handleMultiplayerButton() {
+    private void handleMultiPlayerButton() {
         multiButton = new Button("2 players");
         multiButton.setTextFill(Color.YELLOW);
         multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px; ");
@@ -90,7 +90,6 @@ public class StartScene extends javafx.scene.Scene {
                 multiButton.setStyle("-fx-background-color: #5d5d5d; -fx-font-size: 20px"));
         multiButton.setOnMouseExited(event ->
                 multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
-
 
         multiButton.setOnMouseClicked(event -> {
             //TODO code for multiplayer
