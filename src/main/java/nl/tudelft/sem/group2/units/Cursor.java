@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -7,19 +11,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.sound.SoundHandler;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.logging.Level;
-
-import static nl.tudelft.sem.group2.LaunchApp.playSound;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -249,7 +247,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void calculateArea(Qix qix) {
         if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
                 && !this.getStix().getStixCoordinates().isEmpty()) {
-            playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
                     this.isFast(), getStix(), scoreCounter);
             //Remove the Fuse from the gameView when completing an area

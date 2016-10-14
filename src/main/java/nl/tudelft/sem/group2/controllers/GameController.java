@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
@@ -24,15 +22,6 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
-
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-
-import static nl.tudelft.sem.group2.LaunchApp.playSound;
-
 /**
  * Controller class for the GameScene to implement the MVC.
  */
@@ -45,7 +34,7 @@ public final class GameController {
     // Animation timer properties
     private AnimationTimer animationTimer;
     // Units
-    private List<Cursor> cursors;
+    private ArrayList<Cursor> cursors;
     private Qix qix;
     private AreaTracker areaTracker;
     private Set<Unit> units;
@@ -78,6 +67,24 @@ public final class GameController {
         previousTime = System.nanoTime();
         createAnimationTimer();
 
+    }
+
+    /**
+     * returns the single instance of GameController.
+     *
+     * @return the only GameController
+     */
+    public static GameController getInstance() {
+        if (gameController == null) {
+            // Put lock on class since it we do not want to instantiate it twice
+            synchronized (GameController.class) {
+                // Check if logger is in the meanwhile not already instantiated.
+                if (gameController == null) {
+                    gameController = new GameController();
+                }
+            }
+        }
+        return gameController;
     }
 
     /**
@@ -142,25 +149,8 @@ public final class GameController {
         addUnit(sparxLeft);
     }
 
-    /**
-     * returns the single instance of GameController.
-     *
-     * @return the only GameController
-     */
-    public static GameController getInstance() {
-        if (gameController == null) {
-            // Put lock on class since it we do not want to instantiate it twice
-            synchronized (GameController.class) {
-                // Check if logger is in the meanwhile not already instantiated.
-                if (gameController == null) {
-                    gameController = new GameController();
-                }
-            }
-        }
-        return gameController;
-    }
-
     /***** Units *****/
+
     /**
      * @return units of the board
      */
@@ -245,9 +235,9 @@ public final class GameController {
         String score = "";
         for (Cursor cursor : cursors) {
             score += cursor.getScoreCounter() + ", ";
+            LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+                    + cursor.getScoreCounter().getTotalScore(), GameController.class);
         }
-        LOGGER.log(Level.INFO, "Game Over, player died with a score of "
-                + scoreCounter.getTotalScore(), GameController.class);
     }
 
     /**
