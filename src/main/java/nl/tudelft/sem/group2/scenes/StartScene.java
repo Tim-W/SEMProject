@@ -65,22 +65,35 @@ public class StartScene extends javafx.scene.Scene {
         root.getChildren().add(vBox);
     }
 
+    private void handleSinglePlayerButton() {
+
+        singleButton = new Button("1 player");
+        singleButton.setTextFill(Color.YELLOW);
+        singleButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px");
+        singleButton.setPrefWidth(Globals.STARTSCENE_BUTTON_WIDTH);
+
+        singleButton.setOnMouseEntered(event ->
+                singleButton.setStyle("-fx-background-color: #5d5d5d; -fx-font-size: 20px"));
+        singleButton.setOnMouseExited(event ->
+                singleButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
+
+        singleButton.setOnMouseClicked(event -> LaunchApp.setScene(GameController.getInstance().getScene()));
+    }
+
     private void handleMultiplayerButton() {
-        multiButton = new Button("MultiPlayer");
+        multiButton = new Button("2 players");
         multiButton.setTextFill(Color.YELLOW);
-        multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px");
+        multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px; ");
+        multiButton.setPrefWidth(Globals.STARTSCENE_BUTTON_WIDTH);
+
+        multiButton.setOnMouseEntered(event ->
+                multiButton.setStyle("-fx-background-color: #5d5d5d; -fx-font-size: 20px"));
+        multiButton.setOnMouseExited(event ->
+                multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
+
 
         multiButton.setOnMouseClicked(event -> {
             //TODO code for multiplayer
         });
-    }
-
-    private void handleSinglePlayerButton() {
-
-        singleButton = new Button("Single Player");
-        singleButton.setTextFill(Color.YELLOW);
-        singleButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px");
-
-        singleButton.setOnMouseClicked(event -> LaunchApp.setScene(GameController.getInstance().getScene()));
     }
 }

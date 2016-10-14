@@ -34,6 +34,7 @@ public final class Globals {
     public static final int FUSE_DELAY = 13;
     public static final int STARTSCENE_VBOX_LAYOUT_Y = 80;
     public static final int STARTSCENE_HBOX_SPACING = 20;
+    public static final int STARTSCENE_BUTTON_WIDTH = 120;
 
 
     private Globals() {
