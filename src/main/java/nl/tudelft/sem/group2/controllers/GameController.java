@@ -1,5 +1,10 @@
 package nl.tudelft.sem.group2.controllers;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -12,6 +17,7 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Qix;
@@ -19,14 +25,6 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
-
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-
-import static nl.tudelft.sem.group2.LaunchApp.playSound;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -149,7 +147,7 @@ public final class GameController {
         gameScene.setMessageLabel(" Game Over! ");
 
         //Plays game over sound
-        playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+        new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
         LOGGER.log(Level.INFO, "Game Over, player died with a score of "
                 + scoreCounter.getTotalScore(), GameController.class);
     }
@@ -161,7 +159,7 @@ public final class GameController {
      */
     private void gameWon() {
         animationTimerStop();
-        playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
+        new SoundHandler().playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
         gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
         gameScene.setMessageLabel(" You Won! ");
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + scoreCounter.getTotalScore(), GameScene.class);
@@ -217,7 +215,7 @@ public final class GameController {
     private void calculateArea() {
         if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
                 && !stix.getStixCoordinates().isEmpty()) {
-            playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
                     cursor.isFast());
             areaTracker.updateScoreCounter(cursor.isFast());
@@ -276,7 +274,7 @@ public final class GameController {
     public void keyPressed(KeyEvent e) {
 
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
-            playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
+            new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
