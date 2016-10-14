@@ -266,7 +266,7 @@ public class GameController {
             cursors.get(0).handleFuse();
 
             cursors.get(0).setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.X) || keyCode.equals(KeyCode.Z)) {
+        } else if (keyCode.equals(KeyCode.O) || keyCode.equals(KeyCode.I)) {
             cursors.get(0).setDrawing(false);
             cursors.get(0).setSpeed(2);
             cursors.get(0).handleFuse();
@@ -275,7 +275,7 @@ public class GameController {
             cursors.get(1).handleFuse();
 
             cursors.get(1).setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.O) || keyCode.equals(KeyCode.I)) {
+        } else if (keyCode.equals(KeyCode.X) || keyCode.equals(KeyCode.Z)) {
             cursors.get(1).setDrawing(false);
             cursors.get(1).setSpeed(2);
             cursors.get(1).handleFuse();
