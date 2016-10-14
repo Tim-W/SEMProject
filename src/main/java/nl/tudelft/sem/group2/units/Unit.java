@@ -23,10 +23,10 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
     /**
      * Create a Unit at (x,y) position.
      *
-     * @param x      x coord
-     * @param y      y coord
-     * @param width  width, used for collision
-     * @param height height, used for collision
+     * @param x           x coord
+     * @param y           y coord
+     * @param width       width, used for collision
+     * @param height      height, used for collision
      * @param areaTracker used for calculating areas
      */
     Unit(int x, int y, int width, int height, AreaTracker areaTracker) {

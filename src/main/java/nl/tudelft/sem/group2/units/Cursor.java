@@ -42,13 +42,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /**
      * Create a cursor.
      *
-     * @param x      start x coordinate
-     * @param y      start y coordinate
-     * @param width  width, used for collision detection
-     * @param height height, used for collision detection
+     * @param x           start x coordinate
+     * @param y           start y coordinate
+     * @param width       width, used for collision detection
+     * @param height      height, used for collision detection
      * @param areaTracker used for calculating areas
-     * @param stix   current stix to use
-     * @param color  specifies color for this cursor.
+     * @param stix        current stix to use
+     * @param color       specifies color for this cursor.
      */
     public Cursor(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix, Color color) {
         super(x, y, width, height, areaTracker);
@@ -117,6 +117,23 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 setX(getX() + transX);
                 setY(getY() + transY);
                 logCurrentMove();
+            }
+        }
+    }
+
+    /**
+     * @param collidee the other unit
+     * @return
+     */
+    @Override
+    public boolean intersect(Unit collidee) {
+        if (super.intersect(collidee)) {
+            return true;
+        } else {
+            if (fuse != null) {
+                return fuse.intersect(this);
+            } else {
+                return false;
             }
         }
     }
@@ -224,6 +241,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * When a new area is completed, calculate the new score.
+     *
      * @param qix the qix of the game
      */
     public void calculateArea(Qix qix) {

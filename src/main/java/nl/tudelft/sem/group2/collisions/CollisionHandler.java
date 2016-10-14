@@ -59,6 +59,12 @@ public class CollisionHandler {
                 } else {
                     if (cursor.intersect(collidee)) {
                         return true;
+                    } else if (collidee instanceof Cursor) {
+                        if (cursor.getStix().intersect(collidee)) {
+                            return true;
+                        } else if (((Cursor) collidee).getStix().intersect(cursor)) {
+                            return true;
+                        }
                     }
                 }
             }

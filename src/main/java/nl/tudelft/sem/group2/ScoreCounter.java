@@ -30,8 +30,8 @@ public class ScoreCounter extends Observable {
     private Color color = Color.RED;
 
     /**
-     *
      * Default score counter constructor.
+     *
      * @param color
      */
     public ScoreCounter(Color color) {

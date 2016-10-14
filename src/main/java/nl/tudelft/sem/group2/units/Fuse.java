@@ -26,12 +26,12 @@ public class Fuse extends LineTraveller implements CollisionInterface {
     /**
      * Create a new Fuse.
      *
-     * @param x      the start x coord
-     * @param y      the start y coord
-     * @param width  width of the fuse (used for collision detection)
-     * @param height height of the fuse (used for collision detection)
+     * @param x           the start x coord
+     * @param y           the start y coord
+     * @param width       width of the fuse (used for collision detection)
+     * @param height      height of the fuse (used for collision detection)
      * @param areaTracker used for calculating areas
-     * @param stix   current stix to use
+     * @param stix        current stix to use
      */
     public Fuse(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix) {
         super(x, y, width, height, areaTracker);

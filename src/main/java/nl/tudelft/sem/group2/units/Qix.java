@@ -46,6 +46,7 @@ public class Qix extends Unit implements CollisionInterface {
      * Create a new Qix.
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
+     *
      * @param areaTracker used for calculating areas
      */
     public Qix(AreaTracker areaTracker) {

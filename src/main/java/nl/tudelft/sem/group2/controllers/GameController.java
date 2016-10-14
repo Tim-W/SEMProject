@@ -303,7 +303,7 @@ public class GameController {
                 }
             }
             cursors.get(0).setCurrentMove(e.getCode());
-        } else if (e.getCode().equals(KeyCode.X)) {
+        } else if (e.getCode().equals(KeyCode.O)) {
             if (cursors.get(0).getStix().getStixCoordinates() != null && !cursors.get(0).getStix().getStixCoordinates().isEmpty()) {
                 if (!cursors.get(0).isFast()) {
                     cursors.get(0).setSpeed(1);
@@ -315,7 +315,7 @@ public class GameController {
                 cursors.get(0).setDrawing(true);
                 cursors.get(0).setFast(false);
             }
-        } else if (e.getCode().equals(KeyCode.Z)) {
+        } else if (e.getCode().equals(KeyCode.I)) {
             cursors.get(0).setSpeed(2);
             cursors.get(0).setDrawing(true);
             cursors.get(0).setFast(true);
@@ -328,7 +328,7 @@ public class GameController {
                 }
             }
             cursors.get(1).setCurrentMove(e.getCode());
-        } else if (e.getCode().equals(KeyCode.O)) {
+        } else if (e.getCode().equals(KeyCode.Z)) {
             if (cursors.get(1).getStix().getStixCoordinates() != null && !cursors.get(1).getStix().getStixCoordinates().isEmpty()) {
                 if (!cursors.get(1).isFast()) {
                     cursors.get(1).setSpeed(1);
@@ -340,7 +340,7 @@ public class GameController {
                 cursors.get(1).setDrawing(true);
                 cursors.get(1).setFast(false);
             }
-        } else if (e.getCode().equals(KeyCode.I)) {
+        } else if (e.getCode().equals(KeyCode.X)) {
             cursors.get(1).setSpeed(2);
             cursors.get(1).setDrawing(true);
             cursors.get(1).setFast(true);
@@ -349,6 +349,7 @@ public class GameController {
 
     /**
      * AreaTracker.
+     *
      * @return the area tracker
      */
     public AreaTracker getAreaTracker() {
