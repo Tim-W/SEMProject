@@ -1,17 +1,20 @@
 package nl.tudelft.sem.group2.units;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.global.Globals;
+
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.global.Globals;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -21,7 +24,7 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
  * When the player touches the Qix while drawing,
  * or when the Qix touches the stix, it is views over.
  */
-public class Qix extends Unit {
+public class Qix extends Unit implements CollisionInterface {
 
     private static final int LINE_LENGTH = 5;
     private static final int POSITION_LENGTH = 4;
@@ -39,13 +42,26 @@ public class Qix extends Unit {
     private LinkedList<double[]> colorArray = new LinkedList<>();
     private float[] coordinate = new float[2];
 
+//    /**
+//     * Create a new Qix.
+//     * Is by default placed on 30,30.
+//     * last parameters are for width and height but its just set to 1
+//     */
+//    public Qix() {
+//        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+//    }
+
     /**
      * Create a new Qix.
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
+     *
+     * @param areaTracker the areatracker
      */
-    public Qix() {
-        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+    public Qix(AreaTracker areaTracker) {
+        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
+        LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
+                + Globals.QIX_START_Y + ")", this.getClass());
     }
 
     public static int getLINESCOUNT() {
@@ -74,8 +90,8 @@ public class Qix extends Unit {
             colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
         getColorArray().addFirst(colors);
-        getOldDirections().addFirst(new float[] {direction[0], direction[1]});
-        getOldCoordinates().addFirst(new float[] {coordinate[0], coordinate[1]});
+        getOldDirections().addFirst(new float[]{direction[0], direction[1]});
+        getOldCoordinates().addFirst(new float[]{coordinate[0], coordinate[1]});
         if (oldDirections.size() > LINESCOUNT) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();
@@ -226,6 +242,7 @@ public class Qix extends Unit {
 
     /**
      * Getter for an old coordinate.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -235,6 +252,7 @@ public class Qix extends Unit {
 
     /**
      * Getter for current coordinate.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -256,6 +274,7 @@ public class Qix extends Unit {
 
     /**
      * Getter for old direction.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -265,6 +284,7 @@ public class Qix extends Unit {
 
     /**
      * Getter for current direction.
+     *
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
@@ -274,8 +294,9 @@ public class Qix extends Unit {
 
     /**
      * Setter for a direction.
+     *
      * @param direction the new direction
-     * @param i at which place
+     * @param i         at which place
      */
     public void setDirection(float direction, int i) {
         this.direction[i] = direction;

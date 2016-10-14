@@ -5,7 +5,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Point;
 import java.util.LinkedList;
@@ -17,14 +19,13 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 /**
  * A cursor which can travel over lines and is controlled by user input (arrow keys).
  */
-public class Cursor extends LineTraveller {
+public class Cursor extends LineTraveller implements CollisionInterface {
     private static final Logger LOGGER = Logger.getLogger();
     private final int animationSpeed = 30;
     private KeyCode currentMove = null;
     private int loops = 0;
     private int speed = 2;
     private LinkedList<double[][]> oldLines = new LinkedList<>();
-    //TODO set stix to false when implementation is done
     private boolean isDrawing = false;
     private boolean isFast = true;
     private Stix stix;
@@ -33,14 +34,15 @@ public class Cursor extends LineTraveller {
     /**
      * Create a cursor.
      *
-     * @param x      start x coordinate
-     * @param y      start y coordinate
-     * @param width  width, used for collision detection
-     * @param height height, used for collision detection
-     * @param stix   current stix to use
+     * @param x           start x coordinate
+     * @param y           start y coordinate
+     * @param width       width, used for collision detection
+     * @param height      height, used for collision detection
+     * @param stix        current stix to use
+     * @param areaTracker the areatracker
      */
-    public Cursor(int x, int y, int width, int height, Stix stix) {
-        super(x, y, width, height);
+    public Cursor(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker) {
+        super(x, y, width, height, areaTracker);
         Image[] sprite = new Image[1];
         sprite[0] = new Image("/images/cursor.png");
         setSprite(sprite);
@@ -76,17 +78,17 @@ public class Cursor extends LineTraveller {
 
 
     private void assertMove(int transX, int transY) {
-    	if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
+        if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
                 + transY <= BOARD_WIDTH / 2) {
             if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
                 if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
                         && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
                         getY() + transY * 2))
                         && getAreaTracker().getBoardGrid()[getX() + transX + transY]
-                        		[getY() + transY + transX].equals(AreaState
+                        [getY() + transY + transX].equals(AreaState
                         .UNCOVERED)
                         && getAreaTracker().getBoardGrid()[getX() + transX - transY]
-                        		[getY() + transY - transX].equals(AreaState
+                        [getY() + transY - transX].equals(AreaState
                         .UNCOVERED)) {
 
                     if (outerBorderOn(getX(), getY())) {
@@ -102,10 +104,10 @@ public class Cursor extends LineTraveller {
                 setY(getY() + transY);
                 logCurrentMove();
             }
-        }		
-	}
+        }
+    }
 
-	/**
+    /**
      * @return the current move direction (up/down/left/right)
      */
     public KeyCode getCurrentMove() {
@@ -181,6 +183,13 @@ public class Cursor extends LineTraveller {
     }
 
     /**
+     * @return true if the cursor is drawing
+     */
+    public boolean isDrawing() {
+        return isDrawing;
+    }
+
+    /**
      * @param drawing if cursor is moving while user has key X or Z down
      */
     public void setDrawing(boolean drawing) {
@@ -188,7 +197,6 @@ public class Cursor extends LineTraveller {
     }
 
     /**
-     *
      * @param speed the amount of pixels the cursor moves per when moving
      */
     public void setSpeed(int speed) {
@@ -196,7 +204,6 @@ public class Cursor extends LineTraveller {
     }
 
     /**
-     *
      * @return whether the cursor is moving fast or slow
      */
     public boolean isFast() {
@@ -204,7 +211,6 @@ public class Cursor extends LineTraveller {
     }
 
     /**
-     *
      * @param isFast whether the cursor is moving fast or slow
      */
     public void setFast(boolean isFast) {

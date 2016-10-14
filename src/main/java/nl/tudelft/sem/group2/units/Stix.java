@@ -1,15 +1,17 @@
 package nl.tudelft.sem.group2.units;
 
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
+
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.LinkedList;
 import java.util.logging.Level;
-import nl.tudelft.sem.group2.Logger;
 
 /**
  * Class which keeps track of the current stix.
  */
-public class Stix {
+public class Stix implements CollisionInterface {
 
     private static final Logger LOGGER = Logger.getLogger();
     private LinkedList<Point> stixCoordinates;
@@ -32,6 +34,7 @@ public class Stix {
 
     /**
      * Checks if stix stix is empty.
+     *
      * @return boolean isempty()
      */
     public boolean isStixEmpty() {
@@ -40,10 +43,15 @@ public class Stix {
 
     /**
      * Check if stix intersects with qix.
-     * @param qix the current qix
+     *
+     * @param unit the current unit casted to qix
      * @return if they intersect
      */
-    public boolean intersect(Qix qix) {
+    public boolean intersect(Unit unit) {
+        if (!(unit instanceof Qix)) {
+            return false;
+        }
+        Qix qix = (Qix) unit;
         if (!this.isStixEmpty()) {
 
             Polygon qixP = qix.toPolygon();
@@ -56,8 +64,6 @@ public class Stix {
             }
         }
         return false;
-
-
     }
 
     /**
@@ -77,5 +83,4 @@ public class Stix {
     public LinkedList<Point> getStixCoordinates() {
         return stixCoordinates;
     }
-
 }
