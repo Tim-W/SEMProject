@@ -35,7 +35,11 @@ public final class Globals {
     public static final int STARTSCENE_VBOX_LAYOUT_Y = 80;
     public static final int STARTSCENE_HBOX_SPACING = 20;
     public static final int STARTSCENE_BUTTON_WIDTH = 120;
-
+    public static final String HELP_SCREEN_MESSAGE = "1 player: \nUse arrow-keys to move. Use z and x to draw fast "
+            + "and slow.\n\n2 players: \nfirst player uses the regular controls. Second player uses wasd-keys to"
+            + " move and i and o to draw\n\nPress 1 for single player game and 2 for a 2 player game!";
+    public static final int STARTSCENE_SPACING = 30;
+    public static final int STARTSCENE_HELPTEXT_WRAPPING = 200;
 
     private Globals() {
     }
