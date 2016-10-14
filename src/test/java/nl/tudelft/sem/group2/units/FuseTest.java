@@ -1,14 +1,14 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.awt.geom.Area;
-import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.awt.Point;
+import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
