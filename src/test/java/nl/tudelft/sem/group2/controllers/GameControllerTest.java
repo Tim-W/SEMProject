@@ -11,6 +11,7 @@ import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.Point;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.verify;
 /**
  * Created by Gijs on 2-10-2016.
  */
+@Ignore
 public class GameControllerTest {
     GameController gameController;
 
