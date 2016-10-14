@@ -31,6 +31,9 @@ public class CollisionHandlerTest {
     private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
     private Cursor cursor;
 
+    /**
+     * Sets up the mocks and variables.
+     */
     @Before
     public void setUp() {
         new JFXPanel();
@@ -43,18 +46,26 @@ public class CollisionHandlerTest {
         set.add(cursor);
     }
 
+    /**
+     * tests an empty set.
+     */
     @Test
     public void emptyTest() {
         set.clear();
         Assert.assertFalse(handler.collisions(set, stix));
     }
 
+    /**
+     * tests a null set.
+     */
     @Test
     public void nullTest() {
-        set = null;
-        Assert.assertFalse(handler.collisions(set, stix));
+        Assert.assertFalse(handler.collisions(null, stix));
     }
 
+    /**
+     * tests the collision between sparx and cursor.
+     */
     @Test
     public void cursorSparxTest() {
         //Cursor cursor = new Cursor(0, 0, 1, 1, stix, areaTracker);
@@ -65,8 +76,11 @@ public class CollisionHandlerTest {
         Assert.assertTrue(handler.collisions(set, stix));
     }
 
+    /**
+     * tests the collision between qix and stix.
+     */
     @Test
-    public void QixStixTest() {
+    public void qixStixTest() {
         Qix qix = mock(Qix.class);
         stix = mock(Stix.class);
         when(stix.intersect(qix)).thenReturn(true);
@@ -74,9 +88,11 @@ public class CollisionHandlerTest {
         Assert.assertTrue(handler.collisions(set, stix));
     }
 
-
+    /**
+     * tests the collision between qix and cursor.
+     */
     @Test
-    public void QixCursorTest() {
+    public void qixCursorTest() {
         Qix qix = mock(Qix.class);
         set.add(qix);
         stix = mock(Stix.class);
@@ -86,11 +102,17 @@ public class CollisionHandlerTest {
         Assert.assertTrue(handler.collisions(set, stix));
     }
 
+    /**
+     * Test for no collisions with just a cursor.
+     */
     @Test
     public void noCollisionsTest() {
         Assert.assertFalse(handler.collisions(set, stix));
     }
 
+    /**
+     * Tests for no collisions between units.
+     */
     @Test
     public void noCollisionsTest2() {
         Sparx sparx = mock(Sparx.class);
