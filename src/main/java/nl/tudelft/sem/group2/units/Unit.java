@@ -4,7 +4,6 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.logging.Level;
 
@@ -37,6 +36,7 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         this.setAreaTracker(areaTracker);
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
+
 
     public int getX() {
         return this.x;
@@ -79,8 +79,6 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
     public boolean intersect(Unit collidee) {
         if (collidee instanceof Qix) {
             Qix qix = (Qix) collidee;
-            Polygon collideeP = qix.toPolygon();
-
             return qix.intersect(this);
         }
         Rectangle colliderR = new Rectangle(this.getX(), this.getY(), 2, 2);

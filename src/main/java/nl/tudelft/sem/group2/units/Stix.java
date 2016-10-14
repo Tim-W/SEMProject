@@ -77,8 +77,6 @@ public class Stix implements CollisionInterface {
             }
         }
         return false;
-
-
     }
 
     /**
@@ -98,5 +96,4 @@ public class Stix implements CollisionInterface {
     public LinkedList<Point> getStixCoordinates() {
         return stixCoordinates;
     }
-
 }

@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2.controllers;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -29,46 +30,41 @@ import static nl.tudelft.sem.group2.LaunchApp.playSound;
 /**
  * Controller class for the GameScene to implement the MVC.
  */
-public class GameController {
+public final class GameController {
 
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
+    private static GameController gameController;
+    // Animation timer properties
+    private AnimationTimer animationTimer;
     // Units
     private List<Cursor> cursors;
     private Qix qix;
     private AreaTracker areaTracker;
-    // Animation timer properties
-    private AnimationTimer animationTimer;
     private Set<Unit> units;
+
     private long previousTime;
     // Boolean that states if the game is running
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
+    private GameScene gameScene;
+
 
     /**
      * Constructor for the GameController class.
      */
-    public GameController() {
+    private GameController() {
         // Initialize models for scoretracking.
 
         areaTracker = new AreaTracker();
 
-        makeCursors();
 
 
-        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
-        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
-        // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker);
-        addUnit(cursors.get(0));
-        addUnit(cursors.get(1));
-        addUnit(qix);
-        addUnit(sparxRight);
-        addUnit(sparxLeft);
 
+
+        Group group = new Group();
+        gameScene = new GameScene(group, Color.BLACK);
 
         collisionHandler = new CollisionHandler();
 
@@ -78,7 +74,10 @@ public class GameController {
 
     }
 
-    private void makeCursors() {
+    /**
+     *
+     */
+    public void makeCursors() {
 
         cursors = new ArrayList<>();
         //first
@@ -98,10 +97,61 @@ public class GameController {
         cursors.get(1).addKey(KeyCode.S);
         cursors.get(1).addKey(KeyCode.A);
         cursors.get(1).addKey(KeyCode.D);
+
+
+        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
+        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
+        // Initialize and add units to units set in Gamescene
+        qix = new Qix(areaTracker);
+        addUnit(cursors.get(0));
+        addUnit(cursors.get(1));
+        addUnit(qix);
+        addUnit(sparxRight);
+        addUnit(sparxLeft);
     }
 
-    public Cursor getCursor() {
-        return cursors.get(0);
+    public void makeCursor() {
+
+        cursors = new ArrayList<>();
+        //first
+        Stix stix = new Stix();
+        cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW));
+        cursors.get(0).addKey(KeyCode.UP);
+        cursors.get(0).addKey(KeyCode.DOWN);
+        cursors.get(0).addKey(KeyCode.LEFT);
+        cursors.get(0).addKey(KeyCode.RIGHT);
+
+        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
+        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
+        // Initialize and add units to units set in Gamescene
+        qix = new Qix(areaTracker);
+        addUnit(cursors.get(0));
+        addUnit(qix);
+        addUnit(sparxRight);
+        addUnit(sparxLeft);
+    }
+
+    /**
+     * returns the single instance of GameController.
+     *
+     * @return the only GameController
+     */
+    public static GameController getInstance() {
+        if (gameController == null) {
+            // Put lock on class since it we do not want to instantiate it twice
+            synchronized (GameController.class) {
+                // Check if logger is in the meanwhile not already instantiated.
+                if (gameController == null) {
+                    gameController = new GameController();
+                }
+            }
+        }
+        return gameController;
     }
 
     /***** Units *****/
@@ -181,8 +231,8 @@ public class GameController {
      */
     private void gameOver() {
         animationTimerStop();
-        LaunchApp.scene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
-        LaunchApp.scene.setMessageLabel(" Game Over! ");
+        gameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
+        gameScene.setMessageLabel(" Game Over! ");
 
         //Plays game over sound
         playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
@@ -202,8 +252,8 @@ public class GameController {
     private void gameWon() {
         animationTimerStop();
         playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
-        LaunchApp.scene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        LaunchApp.scene.setMessageLabel(" You Won! ");
+        gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+        gameScene.setMessageLabel(" You Won! ");
 
         //check high score
         int score = 0;
@@ -225,7 +275,7 @@ public class GameController {
                 if (now - previousTime > NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
                     // draw
-                    LaunchApp.scene.draw();
+                    gameScene.draw();
 
                     for (Cursor cursor : cursors) {
                         if (cursor.getScoreCounter().hasWon()) {
@@ -270,15 +320,17 @@ public class GameController {
             cursors.get(0).setDrawing(false);
             cursors.get(0).setSpeed(2);
             cursors.get(0).handleFuse();
-        } else if (keyCode.equals(cursors.get(1).getCurrentMove())) {
+        } else if(cursors.size()>1) {
+            if (keyCode.equals(cursors.get(1).getCurrentMove())) {
 
-            cursors.get(1).handleFuse();
+                cursors.get(1).handleFuse();
 
-            cursors.get(1).setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.X) || keyCode.equals(KeyCode.Z)) {
-            cursors.get(1).setDrawing(false);
-            cursors.get(1).setSpeed(2);
-            cursors.get(1).handleFuse();
+                cursors.get(1).setCurrentMove(null);
+            } else if (keyCode.equals(KeyCode.X) || keyCode.equals(KeyCode.Z)) {
+                cursors.get(1).setDrawing(false);
+                cursors.get(1).setSpeed(2);
+                cursors.get(1).handleFuse();
+            }
         }
     }
 
@@ -294,7 +346,7 @@ public class GameController {
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
-            LaunchApp.scene.setMessageLabel("");
+            gameScene.setMessageLabel("");
             /*** first cursor ***/
         } else if (cursors.get(0).getArrowKeys().contains(e.getCode())) {
             if (cursors.get(0).isDrawing()) {
@@ -321,29 +373,31 @@ public class GameController {
             cursors.get(0).setFast(true);
 
             /*** second cursor ***/
-        } else if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
-            if (cursors.get(1).isDrawing()) {
-                if (cursors.get(1).getFuse() != null) {
-                    cursors.get(1).getFuse().setMoving(false);
+        } else if(cursors.size()>1){
+            if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
+                if (cursors.get(1).isDrawing()) {
+                    if (cursors.get(1).getFuse() != null) {
+                        cursors.get(1).getFuse().setMoving(false);
+                    }
                 }
-            }
-            cursors.get(1).setCurrentMove(e.getCode());
-        } else if (e.getCode().equals(KeyCode.Z)) {
-            if (cursors.get(1).getStix().getStixCoordinates() != null && !cursors.get(1).getStix().getStixCoordinates().isEmpty()) {
-                if (!cursors.get(1).isFast()) {
+                cursors.get(1).setCurrentMove(e.getCode());
+            } else if (e.getCode().equals(KeyCode.Z)) {
+                if (cursors.get(1).getStix().getStixCoordinates() != null && !cursors.get(1).getStix().getStixCoordinates().isEmpty()) {
+                    if (!cursors.get(1).isFast()) {
+                        cursors.get(1).setSpeed(1);
+                        cursors.get(1).setDrawing(true);
+                        cursors.get(1).setFast(false);
+                    }
+                } else {
                     cursors.get(1).setSpeed(1);
                     cursors.get(1).setDrawing(true);
                     cursors.get(1).setFast(false);
                 }
-            } else {
-                cursors.get(1).setSpeed(1);
+            } else if (e.getCode().equals(KeyCode.X)) {
+                cursors.get(1).setSpeed(2);
                 cursors.get(1).setDrawing(true);
-                cursors.get(1).setFast(false);
+                cursors.get(1).setFast(true);
             }
-        } else if (e.getCode().equals(KeyCode.X)) {
-            cursors.get(1).setSpeed(2);
-            cursors.get(1).setDrawing(true);
-            cursors.get(1).setFast(true);
         }
     }
 
@@ -354,5 +408,13 @@ public class GameController {
      */
     public AreaTracker getAreaTracker() {
         return areaTracker;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public GameScene getScene() {
+        return gameScene;
     }
 }

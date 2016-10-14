@@ -119,8 +119,9 @@ public class AreaTracker {
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
         updateScoreCounter(fastArea, stix, scoreCounter);
+
         if (fastArea) {
-            LOGGER.log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
+            Logger.getLogger().log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {
             LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size(), this.getClass());
         }

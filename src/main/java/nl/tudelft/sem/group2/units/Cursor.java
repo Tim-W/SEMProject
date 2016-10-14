@@ -11,6 +11,7 @@ import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 
 import java.awt.Point;
@@ -66,7 +67,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
-        scoreCounter.addObserver(LaunchApp.scene.getScoreScene());
+        scoreCounter.addObserver(GameController.getInstance().getScene().getScoreScene());
     }
 
     @Override
@@ -215,6 +216,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /***** Handeling Fuse *****/
     /**
+<<<<<<< HEAD
      * handles making fuse and makes it start moving.
      */
     public void handleFuse() {
@@ -258,6 +260,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /***** Getters and setters *****/
 
     /**
+=======
+>>>>>>> develop
      * @return true if the cursor is drawing
      */
     public boolean isDrawing() {
