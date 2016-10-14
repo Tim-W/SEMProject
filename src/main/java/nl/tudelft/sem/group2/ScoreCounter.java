@@ -24,6 +24,8 @@ public class ScoreCounter {
     // Percentage which player needs to achieve to win the level.
     private double targetPercentage;
 
+    private int lives;
+
     /**
      * Default score counter constructor.
      */
@@ -84,5 +86,13 @@ public class ScoreCounter {
 
     public void setTargetPercentage(double targetPercentage) {
         this.targetPercentage = targetPercentage;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 }
