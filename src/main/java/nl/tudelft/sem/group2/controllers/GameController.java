@@ -111,6 +111,14 @@ public final class GameController {
     }
 
     /**
+     * only used for testing.
+     * @param gameController setter.
+     */
+    public static void setGameController(GameController gameController) {
+        GameController.gameController = gameController;
+    }
+
+    /**
      * Stop animations.
      */
     private void animationTimerStop() {
@@ -122,18 +130,6 @@ public final class GameController {
      */
     private void animationTimerStart() {
         animationTimer.start();
-    }
-
-    public GameScene getScene() {
-        return gameScene;
-    }
-
-    public Stix getStix() {
-        return stix;
-    }
-
-    public void setStix(Stix stix) {
-        this.stix = stix;
     }
 
     /**
@@ -174,7 +170,8 @@ public final class GameController {
         return cursor;
     }
 
-    void setCursor(Cursor cursor) {
+    //SETTERS
+    public void setCursor(Cursor cursor) {
         GameController.cursor = cursor;
     }
 
@@ -182,6 +179,25 @@ public final class GameController {
         return scoreCounter;
     }
 
+    public GameScene getScene() {
+        return gameScene;
+    }
+
+    public Stix getStix() {
+        return stix;
+    }
+
+    public void setStix(Stix stix) {
+        this.stix = stix;
+    }
+
+    /**
+     * only used for testing.
+     * @param gameScene setter
+     */
+    public void setGameScene(GameScene gameScene) {
+        this.gameScene = gameScene;
+    }
 
     /**
      * Setup an animation timer that runs at 300FPS.
@@ -321,7 +337,7 @@ public final class GameController {
      *
      * @return animationTimer
      */
-    AnimationTimer getAnimationTimer() {
+    public AnimationTimer getAnimationTimer() {
         return animationTimer;
     }
 
@@ -330,7 +346,7 @@ public final class GameController {
      *
      * @param previousTime setter
      */
-    void setPreviousTime(long previousTime) {
+    public void setPreviousTime(long previousTime) {
         this.previousTime = previousTime;
     }
 
@@ -353,4 +369,13 @@ public final class GameController {
     public Set<Unit> getUnits() {
         return units;
     }
+
+    /**
+     * only used for testing.
+     * @param units setter.
+     */
+    public static void setUnits(Set<Unit> units) {
+        GameController.units = units;
+    }
+
 }

@@ -2,10 +2,13 @@ package nl.tudelft.sem.group2;
 
 import java.util.logging.Level;
 import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.scenes.StartScene;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -52,6 +55,15 @@ public class LaunchApp extends Application {
         launch(args);
     }
 
+    /**
+     * Sets the scene of the stage.
+     *
+     * @param scene the new scene
+     */
+    public static void setScene(Scene scene) {
+        stage.setScene(scene);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -66,8 +78,7 @@ public class LaunchApp extends Application {
         LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
         LOGGER.log(Level.INFO, "GameScene created succesfully", this.getClass());
-        GameController gameController = GameController.getInstance();
-        stage.setScene(gameController.getScene());
+        stage.setScene(new StartScene(new Group(), GAME_WIDTH, GAME_HEIGHT, Color.BLACK));
         stage.setResizable(false);
         stage.sizeToScene();
         stage.show();
@@ -76,7 +87,5 @@ public class LaunchApp extends Application {
         //playSound("/sounds/qix.mp3", 1);
         //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
-
     }
-
 }

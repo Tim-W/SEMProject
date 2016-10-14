@@ -168,6 +168,7 @@ public class AreaTracker {
 
     /**
      * Updates the scorecounter.
+     *
      * @param fastArea true if the area was drawn with fast mode
      */
     public void updateScoreCounter(boolean fastArea) {
