@@ -29,6 +29,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private boolean isDrawing = false;
     private boolean isFast = true;
     private Stix stix;
+    private int lives;
 
 
     /**
@@ -40,13 +41,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param height      height, used for collision detection
      * @param stix        current stix to use
      * @param areaTracker the areatracker
+     * @param lives       the amount of lives a players starts with
      */
-    public Cursor(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker) {
+    public Cursor(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker, int lives) {
         super(x, y, width, height, areaTracker);
         Image[] sprite = new Image[1];
         sprite[0] = new Image("/images/cursor.png");
         setSprite(sprite);
         this.stix = stix;
+        this.lives = lives;
     }
 
     @Override
@@ -223,5 +226,22 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     private void logCurrentMove() {
         LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
+    }
+
+    /**
+     * Getter for the amount of lives the cursor has.
+     * @return amount of lives left
+     */
+    public int getLives() {
+        return lives;
+    }
+
+    /**
+     * Method that decreases amount of lives cursor has upon dying.
+     */
+    public void cursorDied() {
+        if (lives >= 1) {
+            lives = lives - 1;
+        }
     }
 }

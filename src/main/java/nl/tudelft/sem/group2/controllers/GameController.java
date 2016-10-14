@@ -56,6 +56,9 @@ public final class GameController {
     private GameScene gameScene;
 
 
+    //TODO MAKE STARTUP ARGUMENT
+    private static final int LIVES = 3;
+
     /**
      * Constructor for the GameController class.
      */
@@ -74,7 +77,7 @@ public final class GameController {
         // Initialize and add units to units set in Gamescene
         qix = new Qix(areaTracker);
         cursor = new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, stix, areaTracker);
+                Globals.BOARD_MARGIN * 2, stix, areaTracker, LIVES);
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT, areaTracker);
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
@@ -202,7 +205,16 @@ public final class GameController {
                     }
 
                     if (collisionHandler.collisions(units, stix)) {
-                        gameOver();
+                        cursor.cursorDied();
+                        if (cursor.getLives() == 0) {
+                            gameOver();
+                        }
+                        if (cursor.isDrawing()) {
+                            Point newStartPos = stix.getStixCoordinates().getFirst();
+                            cursor.setX((int) newStartPos.getX());
+                            cursor.setY((int) newStartPos.getY());
+                            stix.emptyStix();
+                        }
                     }
                     gameScene.updateScorescene(scoreCounter);
                     calculateArea();
