@@ -26,6 +26,7 @@ public class ScoreScene extends SubScene {
     private TilePane tilePane;
     private Label score;
     private Label claimedPercentage;
+    private Label livesLabel;
     private ImageView title;
     private Label claimed = new Label("Claimed");
 
@@ -56,6 +57,8 @@ public class ScoreScene extends SubScene {
 
         displayClaimedPercentage();
 
+        createLivesLabel();
+
         displayTitle();
         //TODO Fix font
         //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
@@ -64,6 +67,7 @@ public class ScoreScene extends SubScene {
         left.getChildren().add(title);
         center.getChildren().add(claimed);
         center.getChildren().add(claimedPercentage);
+        center.getChildren().add(livesLabel);
         right.getChildren().add(score);
 
         tilePane.getChildren().add(left);
@@ -97,6 +101,12 @@ public class ScoreScene extends SubScene {
         claimed.setStyle("-fx-font-size:14;");
     }
 
+    private void createLivesLabel() {
+        livesLabel = new Label();
+        livesLabel.setTextFill(Color.YELLOW);
+        livesLabel.setStyle("-fx-font-size:14;");
+    }
+
     private void createTitlePane() {
         tilePane = new TilePane();
         tilePane.prefTileWidthProperty().setValue(TITLE_WIDTH);
@@ -124,5 +134,11 @@ public class ScoreScene extends SubScene {
         );
     }
 
-
+    /**
+     * setter for the lives label.
+     * @param lives the amount of lives the player has left
+     */
+    public void setLivesLabel(int lives) {
+        livesLabel.setText("Lives: " + lives);
+    }
 }
