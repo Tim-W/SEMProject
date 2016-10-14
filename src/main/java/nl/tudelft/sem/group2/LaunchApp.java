@@ -1,14 +1,14 @@
 package nl.tudelft.sem.group2;
 
-import javafx.application.Application;
-import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
-import nl.tudelft.sem.group2.controllers.GameController;
-
 import java.util.logging.Level;
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import nl.tudelft.sem.group2.scenes.StartScene;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -42,30 +42,6 @@ public class LaunchApp extends Application {
     }
 
     /**
-     * Plays a sound file.
-     *
-     * @param string - the path to the sound file
-     * @param volume - the volume in decibels
-     */
-    public static synchronized void playSound(final String string, final double volume) {
-        new Thread(new Runnable() {
-            // The wrapper thread is unnecessary, unless it blocks on the
-            // Clip finishing; see comments.
-            public void run() {
-                try {
-                    Media hit = new Media(getClass().getResource(string).toString());
-                    MediaPlayer mediaPlayer = new MediaPlayer(hit);
-                    mediaPlayer.setVolume(volume);
-                    mediaPlayer.play();
-                    mediaView.setMediaPlayer(mediaPlayer);
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-        }).start();
-    }
-
-    /**
      * Launches the application.
      *
      * @param args - not used
@@ -77,6 +53,15 @@ public class LaunchApp extends Application {
             LOGGER.setLevel(Level.OFF);
         }
         launch(args);
+    }
+
+    /**
+     * Sets the scene of the stage.
+     *
+     * @param scene the new scene
+     */
+    public static void setScene(Scene scene) {
+        stage.setScene(scene);
     }
 
     @Override
@@ -93,18 +78,14 @@ public class LaunchApp extends Application {
         LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
         LOGGER.log(Level.INFO, "GameScene created succesfully", this.getClass());
-        GameController gameController = GameController.getInstance();
-        stage.setScene(gameController.getScene());
+        stage.setScene(new StartScene(new Group(), GAME_WIDTH, GAME_HEIGHT, Color.BLACK));
         stage.setResizable(false);
         stage.sizeToScene();
         stage.show();
 
         //Comment to mute empty sound
         //playSound("/sounds/qix.mp3", 1);
-        mediaView = new MediaView();
         //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
-
     }
-
 }
