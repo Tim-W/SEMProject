@@ -1,10 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -16,6 +11,7 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.powerups.PowerType;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -26,6 +22,13 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+
 /**
  * Controller class for the GameScene to implement the MVC.
  */
@@ -34,6 +37,8 @@ public final class GameController {
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
+    //TODO MAKE STARTUP ARGUMENT
+    private static final int LIVES = 3;
     private static GameController gameController;
     // Animation timer properties
     private static AnimationTimer animationTimer;
@@ -52,10 +57,7 @@ public final class GameController {
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
     private GameScene gameScene;
-
-
-    //TODO MAKE STARTUP ARGUMENT
-    private static final int LIVES = 3;
+    private double powerUpThreshold = Globals.POWERUP_THRESHOLD;
 
     /**
      * Constructor for the GameController class.
@@ -227,9 +229,20 @@ public final class GameController {
                     }
                     gameScene.updateScorescene(scoreCounter, cursor);
                     calculateArea();
+
+                    spawnPowerup();
                 }
             }
         };
+    }
+
+    private void spawnPowerup() {
+        double rand = ThreadLocalRandom.current().nextDouble();
+        if (rand < powerUpThreshold) {
+            System.out.println("power up spawned!");
+            PowerType.randomType();
+        }
+        System.out.println(cursor.oppositeQuadrant());
     }
 
     /**

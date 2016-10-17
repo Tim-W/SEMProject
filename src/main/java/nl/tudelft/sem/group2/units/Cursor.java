@@ -13,6 +13,7 @@ import java.awt.Point;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -230,6 +231,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * Getter for the amount of lives the cursor has.
+     *
      * @return amount of lives left
      */
     public int getLives() {
@@ -251,6 +253,43 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 this.setY((int) newStartPos.getY());
                 stix.emptyStix();
             }
+        }
+    }
+
+    /**
+     * Return the quadrant the cursor is in, as follows.
+     * 12
+     * 34
+     *
+     * @return the quadrant the cursor is in
+     */
+    public int quadrant() {
+        if (this.getX() < BOARD_WIDTH / 4) {
+            if (this.getY() < BOARD_HEIGHT / 4) {
+                return 1;
+            } else {
+                return 3;
+            }
+        } else if (this.getY() < BOARD_HEIGHT / 4) {
+            return 2;
+        }
+        return 4;
+    }
+
+    public int oppositeQuadrant() {
+        int quadrant = this.quadrant();
+
+        switch (quadrant) {
+            case 1:
+                return 4;
+            case 2:
+                return 3;
+            case 3:
+                return 2;
+            case 4:
+                return 1;
+            default:
+                return 1;
         }
     }
 }
