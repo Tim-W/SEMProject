@@ -14,6 +14,7 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
 
@@ -75,6 +76,7 @@ public class GameScene extends Scene {
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
+        scoreScene.setLivesLabel(3);
     }
 
     /**
@@ -263,9 +265,11 @@ public class GameScene extends Scene {
      * Update the info on the scorescene with actual info from scorecounter.
      *
      * @param scoreCounter scorecounter from GameController.
+     * @param cursor current cursor for which lives should be updated.
      */
-    public void updateScorescene(ScoreCounter scoreCounter) {
+    public void updateScorescene(ScoreCounter scoreCounter, Cursor cursor) {
         scoreScene.setScore(scoreCounter.getTotalScore());
         scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
+        scoreScene.setLivesLabel(cursor.getLives());
     }
 }
