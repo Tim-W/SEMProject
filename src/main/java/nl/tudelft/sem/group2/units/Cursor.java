@@ -276,6 +276,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return 4;
     }
 
+    /**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @return the opposite quadrant the cursor is in
+     */
     public int oppositeQuadrant() {
         int quadrant = this.quadrant();
 
@@ -291,5 +296,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             default:
                 return 1;
         }
+    }
+
+    /**
+     * Adds a life to the cursor.
+     */
+    public void addLife() {
+        lives++;
     }
 }

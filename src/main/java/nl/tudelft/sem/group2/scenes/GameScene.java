@@ -195,7 +195,6 @@ public class GameScene extends Scene {
     private void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
-
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }

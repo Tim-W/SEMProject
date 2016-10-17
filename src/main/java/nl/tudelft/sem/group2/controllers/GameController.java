@@ -11,6 +11,7 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerType;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
@@ -90,6 +91,7 @@ public final class GameController {
         addUnit(sparxRight);
         addUnit(sparxLeft);
 
+
         collisionHandler = new CollisionHandler();
 
         //Animation timer initialization
@@ -117,6 +119,7 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param gameController setter.
      */
     public static void setGameController(GameController gameController) {
@@ -198,6 +201,7 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param gameScene setter
      */
     public void setGameScene(GameScene gameScene) {
@@ -225,10 +229,11 @@ public final class GameController {
                         if (cursor.getLives() == 0) {
                             gameOver();
                         }
-
                     }
                     gameScene.updateScorescene(scoreCounter, cursor);
                     calculateArea();
+
+                    handlePowerups();
 
                     spawnPowerup();
                 }
@@ -236,13 +241,60 @@ public final class GameController {
         };
     }
 
+    private void handlePowerups() {
+        int collision = collisionHandler.powerUpCollisions(units);
+        switch (collision) {
+            // nothing
+            case 0:
+                return;
+            case 1:
+                // life pickup
+                cursor.addLife();
+                return;
+            case 2:
+                // eat pickup
+                return;
+            case 3:
+                // speed pickup
+                cursor.setSpeed(3);
+        }
+    }
+
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
-        if (rand < powerUpThreshold) {
+        if (rand < powerUpThreshold * 2) {
             System.out.println("power up spawned!");
             PowerType.randomType();
+            int x = 0;
+            int y = 0;
+            switch (cursor.oppositeQuadrant()) {
+                case 1:
+                    x = 0;
+                    y = 0;
+                    break;
+                case 2:
+                    x = Globals.BOARD_WIDTH / 2;
+                    y = 0;
+                    break;
+                case 3:
+                    x = 0;
+                    y = Globals.BOARD_HEIGHT / 2;
+                    break;
+                case 4:
+                    x = Globals.BOARD_WIDTH / 2;
+                    y = Globals.BOARD_HEIGHT / 2;
+                    break;
+            }
+
+            int[] coordinates = findPowerupLocation();
+            PowerLife powerLife = new PowerLife(x, y, Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+            addUnit(powerLife);
         }
-        System.out.println(cursor.oppositeQuadrant());
+    }
+
+    private int[] findPowerupLocation() {
+        int[] res = new int[2];
+        return res;
     }
 
     /**
@@ -392,10 +444,14 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param units setter.
      */
     public static void setUnits(Set<Unit> units) {
         GameController.units = units;
     }
 
+    public void removeUnit(Unit unit) {
+        units.remove(unit);
+    }
 }

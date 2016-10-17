@@ -1,7 +1,7 @@
 package nl.tudelft.sem.group2.powerups;
 
+import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.units.Unit;
 
 /**
  * Created by dennis on 17-10-16.
@@ -10,16 +10,11 @@ public class PowerLife extends Powerup {
 
     public PowerLife(int x, int y, int width, int height, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
-    }
-
-    /**
-     * Check for intersection between current unit and another unit.
-     *
-     * @param collidee the other unit
-     * @return true if the collidee is on the same (x,y) coordinate as the current unit
-     */
-    @Override
-    public boolean intersect(Unit collidee) {
-        return super.intersect(collidee);
+        Image[] sprite = new Image[4];
+        sprite[0] = new Image("/images/heart.png");
+        sprite[1] = new Image("/images/heart.png");
+        sprite[2] = new Image("/images/heart-1.png");
+        sprite[3] = new Image("/images/heart-1.png");
+        setSprite(sprite);
     }
 }

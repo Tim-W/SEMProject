@@ -5,9 +5,9 @@ import nl.tudelft.sem.group2.AreaTracker;
 /**
  * Created by dennis on 17-10-16.
  */
-public class PowerEat extends Powerup {
+public class PowerSpeed extends Powerup {
 
-    public PowerEat(int x, int y, int width, int height, AreaTracker areaTracker) {
+    public PowerSpeed(int x, int y, int width, int height, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
     }
 }
