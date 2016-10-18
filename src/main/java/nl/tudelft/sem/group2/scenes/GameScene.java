@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -151,6 +152,10 @@ public class GameScene extends Scene {
         }
     }
 
+    public static GraphicsContext getGc() {
+        return gc;
+    }
+
     /**
      * Initializes canvas and gc.
      */
@@ -214,8 +219,10 @@ public class GameScene extends Scene {
      * Draw all the units on the screen.
      */
     public void draw() {
+
         // gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+
         gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
         gc.setFill(Color.WHITE);
         drawUncovered();
@@ -225,6 +232,9 @@ public class GameScene extends Scene {
             unit.move();
             unit.draw(canvas);
         }
+        //TODO apply effect per powerup
+        gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
+
     }
 
     /**
