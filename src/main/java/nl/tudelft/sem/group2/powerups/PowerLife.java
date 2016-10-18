@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 
 /**
- * Created by dennis on 17-10-16.
+ * Life Powerup.
  */
 public class PowerLife extends Powerup {
 

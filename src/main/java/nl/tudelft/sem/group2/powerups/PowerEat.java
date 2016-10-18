@@ -1,9 +1,10 @@
 package nl.tudelft.sem.group2.powerups;
 
+import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 
 /**
- * Created by dennis on 17-10-16.
+ * Eat Powerup.
  */
 public class PowerEat extends Powerup {
 
@@ -18,6 +19,12 @@ public class PowerEat extends Powerup {
      */
     public PowerEat(int x, int y, int width, int height, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
+        Image[] sprite = new Image[4];
+        sprite[0] = new Image("/images/eat.png");
+        sprite[1] = new Image("/images/eat.png");
+        sprite[2] = new Image("/images/eat-1.png");
+        sprite[3] = new Image("/images/eat-1.png");
+        setSprite(sprite);
     }
 
     /**

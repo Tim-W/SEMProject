@@ -71,8 +71,15 @@ public class CollisionHandler {
                     return true;
                 }
             } else {
+                Cursor cursor = (Cursor) collider;
                 if (collider.intersect(collidee)) {
-                    return true;
+                    if (cursor.getCurrentPowerup() == EAT) {
+                        unitsList.remove(collidee);
+                        GameController.getInstance().removeUnit(collidee);
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
             }
         }

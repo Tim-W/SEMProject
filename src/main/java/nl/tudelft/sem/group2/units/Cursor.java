@@ -35,6 +35,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     // 0 for nothing, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
     private PowerUpType currentPowerup;
     private int powerUpDuration;
+    private Image[] sprite;
+    private Image[] spriteEat;
 
 
     /**
@@ -50,9 +52,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public Cursor(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker, int lives) {
         super(x, y, width, height, areaTracker);
-        Image[] sprite = new Image[1];
+        sprite = new Image[1];
         sprite[0] = new Image("/images/cursor.png");
         setSprite(sprite);
+        spriteEat = new Image[1];
+        spriteEat[0] = new Image("/images/cursor-eat.png");
         this.stix = stix;
         this.lives = lives;
         this.currentPowerup = PowerUpType.NONE;
@@ -275,7 +279,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      *
      * @return the quadrant the cursor is in
      */
-    private int quadrant() {
+    public int quadrant() {
         if (this.getX() < BOARD_WIDTH / 4) {
             if (this.getY() < BOARD_HEIGHT / 4) {
                 return 1;
@@ -322,8 +326,18 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return currentPowerup;
     }
 
+    /**
+     * sets the current powerup status of the cursor.
+     *
+     * @param currentPowerup the new powerup status
+     */
     public void setCurrentPowerup(PowerUpType currentPowerup) {
         this.currentPowerup = currentPowerup;
+        if (this.currentPowerup == PowerUpType.EAT) {
+            setSprite(spriteEat);
+        } else {
+            setSprite(sprite);
+        }
     }
 
     public int getPowerUpDuration() {

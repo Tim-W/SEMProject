@@ -5,7 +5,7 @@ import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.LineTraveller;
 
 /**
- * Created by dennis on 17-10-16.
+ * Main PowerUp class.
  */
 public class Powerup extends LineTraveller {
 

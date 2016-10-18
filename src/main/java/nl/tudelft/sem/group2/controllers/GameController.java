@@ -11,6 +11,7 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
@@ -227,9 +228,13 @@ public final class GameController {
                     }
 
                     if (collisionHandler.collisions(units, stix)) {
-                        cursor.cursorDied();
-                        if (cursor.getLives() == 0) {
-                            gameOver();
+                        if (cursor.getCurrentPowerup() == PowerUpType.EAT) {
+
+                        } else {
+                            cursor.cursorDied();
+                            if (cursor.getLives() == 0) {
+                                gameOver();
+                            }
                         }
                     }
                     gameScene.updateScorescene(scoreCounter, cursor);
@@ -261,18 +266,16 @@ public final class GameController {
 
         PowerUpType powerUpType = collisionHandler.powerUpCollisions(units);
         switch (powerUpType) {
-            // nothing
             case NONE:
                 return;
             case LIFE:
-                // life pickup
                 cursor.addLife();
                 return;
             case EAT:
-                // eat pickup
+                cursor.setCurrentPowerup(PowerUpType.EAT);
+                cursor.setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
                 return;
             case SPEED:
-                // speed pickup
                 cursor.setCurrentPowerup(PowerUpType.SPEED);
                 cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
         }
@@ -283,7 +286,7 @@ public final class GameController {
      */
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
-        if (rand < Globals.POWERUP_THRESHOLD * 3 && !powerUpActive()) {
+        if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
             PowerUpType type = PowerUpType.randomType();
             int quadrant = cursor.oppositeQuadrant();
 
@@ -293,8 +296,7 @@ public final class GameController {
             Powerup powerup = null;
             switch (type) {
                 case EAT:
-                    //TODO change this to eat
-                    powerup = new PowerSpeed(coordinates[0], coordinates[1],
+                    powerup = new PowerEat(coordinates[0], coordinates[1],
                             Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
                     break;
                 case LIFE:
@@ -308,7 +310,6 @@ public final class GameController {
                 case NONE:
                     return;
             }
-
             LOGGER.log(Level.INFO, powerup.toString() + " spawned at (" + powerup.getX() + ", "
                     + powerup.getY() + ")", GameController.this.getClass());
 

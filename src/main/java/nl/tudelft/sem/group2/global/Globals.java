@@ -40,9 +40,10 @@ public final class Globals {
             + " move and i and o to draw\n\nPress 1 for single player game and 2 for a 2 player game!";
     public static final int STARTSCENE_SPACING = 30;
     public static final int STARTSCENE_HELPTEXT_WRAPPING = 200;
-    public static final double POWERUP_THRESHOLD = 0.004;
+    public static final double POWERUP_THRESHOLD = 0.003;
     public static final int POWERUP_LIFETIME = 200;
     public static final int POWERUP_SPEED_DURATION = 75;
+    public static final int POWERUP_EAT_DURATION = 100;
     public static final int CURSOR_FAST = 2;
     public static final int CURSOR_SLOW = 1;
 
