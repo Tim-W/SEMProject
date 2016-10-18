@@ -39,8 +39,6 @@ public class AreaTracker {
             }
         }
         //If the current row is the first row set all grid points border on that row
-        boardGrid[0][0] = AreaState.OUTERBORDER;
-
         for (int i = 0; i < boardGrid.length; i++) {
             //If current column is the last column set the grid point on that column and the current row border
             boardGrid[0][i] = AreaState.OUTERBORDER;
@@ -50,11 +48,9 @@ public class AreaTracker {
         for (int j = 0; j < boardGrid[0].length; j++) {
             //If the current row is the bottom row set all grid points border on that row
             boardGrid[j][0] = AreaState.OUTERBORDER;
+            //If the current column is the last column set the grid point on that column and the current row border
             boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
         }
-
-        //If the current column is the last column set the grid point on that column and the current row border
-        boardGrid[boardGrid[0].length - 1][boardGrid.length - 1] = AreaState.OUTERBORDER;
     }
 
     /**
@@ -69,29 +65,22 @@ public class AreaTracker {
         boardGrid = new AreaState[width][height];
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
-                //If the current row is the first row set all grid points border on that row
-                if (j == 0) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
+                //By default, all points are uncovered
+                boardGrid[j][i] = AreaState.UNCOVERED;
+            }
+        }
+
+        for (int i = 0; i < boardGrid.length; i++) {
+            //If current column is the last column set the grid point on that column and the current row border
+            boardGrid[0][i] = AreaState.OUTERBORDER;
+            boardGrid[boardGrid[0].length - 1][i] = AreaState.OUTERBORDER;
+        }
+
+        if (boardGrid.length > 0) {
+            for (int j = 0; j < boardGrid[0].length; j++) {
                 //If the current row is the bottom row set all grid points border on that row
-                else if (j == boardGrid[i].length - 1) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If current column is the last column set the grid point on that column and the current row border
-                else {
-                    if (i == 0) {
-                        boardGrid[j][i] = AreaState.OUTERBORDER;
-                    }
-                    //If the current column is the last column,
-                    // set the grid point on that column and the current row border
-                    else if (i == boardGrid.length - 1) {
-                        boardGrid[j][i] = AreaState.OUTERBORDER;
-                    }
-                    //If the current point is none of the above set that point to uncovered
-                    else {
-                        boardGrid[j][i] = AreaState.UNCOVERED;
-                    }
-                }
+                boardGrid[j][0] = AreaState.OUTERBORDER;
+                boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
             }
         }
     }
