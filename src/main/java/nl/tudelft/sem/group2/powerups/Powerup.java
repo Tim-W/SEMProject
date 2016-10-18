@@ -39,4 +39,11 @@ public class Powerup extends LineTraveller {
     public int getDuration() {
         return this.duration;
     }
+
+    /**
+     * @return PowerUp to string format
+     */
+    public String toString() {
+        return "PowerUp";
+    }
 }

@@ -23,7 +23,7 @@ public enum PowerUpType {
             case 2:
                 return SPEED;
             default:
-                return null;
+                return NONE;
         }
     }
 }

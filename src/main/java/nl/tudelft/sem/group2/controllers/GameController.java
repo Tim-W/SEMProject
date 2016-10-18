@@ -12,6 +12,7 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerLife;
+import nl.tudelft.sem.group2.powerups.PowerSpeed;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.scenes.GameScene;
@@ -266,9 +267,7 @@ public final class GameController {
                 return;
             case LIFE:
                 // life pickup
-                //cursor.addLife();
-                cursor.setCurrentPowerup(PowerUpType.SPEED);
-                cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
+                cursor.addLife();
                 return;
             case EAT:
                 // eat pickup
@@ -278,7 +277,6 @@ public final class GameController {
                 cursor.setCurrentPowerup(PowerUpType.SPEED);
                 cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
         }
-
     }
 
     /**
@@ -288,35 +286,33 @@ public final class GameController {
         double rand = ThreadLocalRandom.current().nextDouble();
         if (rand < powerUpThreshold * 3 && !powerUpActive()) {
             System.out.println("power up spawned!");
-            PowerUpType.randomType();
-            int x = 0;
-            int y = 0;
+            PowerUpType type = PowerUpType.randomType();
             int quadrant = cursor.oppositeQuadrant();
-            switch (quadrant) {
-                case 1:
-                    x = 0;
-                    y = 0;
-                    break;
-                case 2:
-                    x = Globals.BOARD_WIDTH / 2;
-                    y = 0;
-                    break;
-                case 3:
-                    x = 0;
-                    y = Globals.BOARD_HEIGHT / 2;
-                    break;
-                case 4:
-                    x = Globals.BOARD_WIDTH / 2;
-                    y = Globals.BOARD_HEIGHT / 2;
-                    break;
-            }
-            int[] corner = new int[2];
-            corner[0] = x;
-            corner[1] = y;
+
+            int[] corner = getCornerCoordinates(quadrant);
             int[] coordinates = areaTracker.findPowerupLocation(corner, quadrant);
-            PowerLife powerLife = new PowerLife(coordinates[0], coordinates[1],
+
+            Powerup powerup = null;
+            switch (type) {
+                case EAT:
+                    //TODO change this to eat
+                    powerup = new PowerSpeed(coordinates[0], coordinates[1],
+                            Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+                    break;
+                case LIFE:
+                    powerup = new PowerLife(coordinates[0], coordinates[1],
+                            Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+                    break;
+                case SPEED:
+                    powerup = new PowerSpeed(coordinates[0], coordinates[1],
+                            Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+                    break;
+                case NONE:
+                    return;
+            }
+            powerup = new PowerSpeed(coordinates[0], coordinates[1],
                     Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
-            addUnit(powerLife);
+            addUnit(powerup);
         }
     }
 
@@ -344,6 +340,33 @@ public final class GameController {
         if (cursor.hasPowerUp() && cursor.getPowerUpDuration() > 0) {
             cursor.decrementPowerupDuration();
         }
+    }
+
+    private int[] getCornerCoordinates(int quadrant) {
+        int x = 0;
+        int y = 0;
+        switch (quadrant) {
+            case 1:
+                x = 0;
+                y = 0;
+                break;
+            case 2:
+                x = Globals.BOARD_WIDTH / 2;
+                y = 0;
+                break;
+            case 3:
+                x = 0;
+                y = Globals.BOARD_HEIGHT / 2;
+                break;
+            case 4:
+                x = Globals.BOARD_WIDTH / 2;
+                y = Globals.BOARD_HEIGHT / 2;
+                break;
+        }
+        int[] res = new int[2];
+        res[0] = x;
+        res[1] = y;
+        return res;
     }
 
 

@@ -10,4 +10,11 @@ public class PowerEat extends Powerup {
     public PowerEat(int x, int y, int width, int height, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
     }
+
+    /**
+     * @return PowerUp to string format
+     */
+    public String toString() {
+        return "Eat PowerUp";
+    }
 }
