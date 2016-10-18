@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Class that test the powerUpCollisions method of CollisionsHandler
+ * Class that test the powerUpCollisions method of CollisionsHandler.
  */
 public class PowerUpCollisionsTest {
 
@@ -40,18 +40,26 @@ public class PowerUpCollisionsTest {
         set.add(cursor);
     }
 
+    /**
+     * Tests an empty set.
+     */
     @Test
     public void testEmpty() {
         set.clear();
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
     }
 
+    /**
+     * Tests a null set.
+     */
     @Test
     public void testNull() {
-        set = null;
-        Assert.assertEquals(NONE, handler.powerUpCollisions(set));
+        Assert.assertEquals(NONE, handler.powerUpCollisions(null));
     }
 
+    /**
+     * Tests an eat powerup collision.
+     */
     @Test
     public void testEat() {
         PowerEat powerup = mock(PowerEat.class);
@@ -60,6 +68,9 @@ public class PowerUpCollisionsTest {
         Assert.assertEquals(EAT, handler.powerUpCollisions(set));
     }
 
+    /**
+     * Tests a speed powerup collision.
+     */
     @Test
     public void testSpeed() {
         PowerSpeed powerup = mock(PowerSpeed.class);
@@ -68,6 +79,9 @@ public class PowerUpCollisionsTest {
         Assert.assertEquals(SPEED, handler.powerUpCollisions(set));
     }
 
+    /**
+     * Tests a life powerup collision.
+     */
     @Test
     public void testLife() {
         PowerLife powerup = mock(PowerLife.class);
@@ -76,6 +90,9 @@ public class PowerUpCollisionsTest {
         Assert.assertEquals(LIFE, handler.powerUpCollisions(set));
     }
 
+    /**
+     * Tests an eat powerup without collision.
+     */
     @Test
     public void testEatNoIntersection() {
         PowerEat powerup = mock(PowerEat.class);
@@ -84,6 +101,10 @@ public class PowerUpCollisionsTest {
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
     }
 
+
+    /**
+     * Tests a speed powerup without collision.
+     */
     @Test
     public void testSpeedNoIntersection() {
         PowerSpeed powerup = mock(PowerSpeed.class);
@@ -92,6 +113,9 @@ public class PowerUpCollisionsTest {
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
     }
 
+    /**
+     * Tests a life powerup without collision.
+     */
     @Test
     public void testLifeNoIntersection() {
         PowerLife powerup = mock(PowerLife.class);
@@ -100,6 +124,10 @@ public class PowerUpCollisionsTest {
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
     }
 
+
+    /**
+     * Tests a set without cursor or powerups.
+     */
     @Test
     public void testNoPowerupsNoCursor() {
         set.clear();
@@ -108,6 +136,10 @@ public class PowerUpCollisionsTest {
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
     }
 
+
+    /**
+     * Tests a powerup without subclass.
+     */
     @Test
     public void testNoInstanceOf() {
         Powerup powerup = mock(Powerup.class);
@@ -115,8 +147,4 @@ public class PowerUpCollisionsTest {
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
     }
 
-    @Test
-    public void test() {
-
-    }
 }

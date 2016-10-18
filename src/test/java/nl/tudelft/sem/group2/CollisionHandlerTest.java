@@ -124,6 +124,9 @@ public class CollisionHandlerTest {
         Assert.assertFalse(handler.collisions(set, stix));
     }
 
+    /**
+     * Tests a collision between cursor with eat powerup and sparx.
+     */
     @Test
     public void eatPowerupTest() {
         Sparx sparx = mock(Sparx.class);
@@ -133,11 +136,14 @@ public class CollisionHandlerTest {
         Assert.assertFalse(handler.collisions(set, stix));
     }
 
+    /**
+     * Tests a cursor with powerup without collision.
+     */
     @Test
     public void testNoCollisionPowerup() {
         Powerup powerup = mock(Powerup.class);
         set.add(powerup);
-        when(cursor.intersect(powerup)).thenReturn(true);
+        when(cursor.intersect(powerup)).thenReturn(false);
         Assert.assertFalse(handler.collisions(set, stix));
     }
 }
