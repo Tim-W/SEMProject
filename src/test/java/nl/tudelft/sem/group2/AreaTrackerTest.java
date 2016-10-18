@@ -1,6 +1,9 @@
 package nl.tudelft.sem.group2;
 
+import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.awt.Point;
 
@@ -163,6 +166,107 @@ public class AreaTrackerTest {
         }
         return expectedGrid;
     }
+
+    /**
+     * Tests if the findPowerupLocation returns the corner if its not covered.
+     */
+    @Test
+    public void findPowerupLocationAtCornerTest1() {
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        int[] coordinates = areaTracker.findPowerupLocation(1);
+        assertEquals(0, coordinates[0]);
+        assertEquals(0, coordinates[1]);
+    }
+
+    /**
+     * Tests if the findPowerupLocation returns the corner if its not covered.
+     */
+    @Test
+    public void findPowerupLocationAtCornerTest2() {
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        int[] coordinates = areaTracker.findPowerupLocation(2);
+        assertEquals(Globals.BOARD_WIDTH / 2, coordinates[0]);
+        assertEquals(0, coordinates[1]);
+    }
+
+    /**
+     * Tests if the findPowerupLocation returns the corner if its not covered.
+     */
+    @Test
+    public void findPowerupLocationAtCornerTest3() {
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        int[] coordinates = areaTracker.findPowerupLocation(3);
+        assertEquals(0, coordinates[0]);
+        assertEquals(Globals.BOARD_HEIGHT / 2, coordinates[1]);
+    }
+
+    /**
+     * Tests if the findPowerupLocation returns the corner if its not covered.
+     */
+    @Test
+    public void findPowerupLocationAtCornerTest4() {
+        AreaTracker areaTracker = new AreaTracker(new Stix());
+        int[] coordinates = areaTracker.findPowerupLocation(4);
+        assertEquals(Globals.BOARD_WIDTH / 2, coordinates[0]);
+        assertEquals(Globals.BOARD_HEIGHT / 2, coordinates[1]);
+    }
+
+    /**
+     * Tests if the corner gets set to innerborder when the area around it is covered.
+     */
+    @Test
+    public void testCornerBorders1() {
+        AreaTracker areaTracker = new AreaTracker(new Stix());
+        areaTracker.getBoardGrid()[1][1] = AreaState.FAST;
+        areaTracker.findPowerupLocation(1);
+        assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[0][0]);
+    }
+
+    /**
+     * Tests if the corner gets set to innerborder when the area around it is covered.
+     */
+    @Test
+    public void testCornerBorders2() {
+        AreaTracker areaTracker = new AreaTracker(new Stix());
+        areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2 - 1][1] = AreaState.FAST;
+        areaTracker.findPowerupLocation(2);
+        assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2][0]);
+    }
+
+    /**
+     * Tests if the corner gets set to innerborder when the area around it is covered.
+     */
+    @Test
+    public void testCornerBorders3() {
+        AreaTracker areaTracker = new AreaTracker(new Stix());
+        areaTracker.getBoardGrid()[1][Globals.BOARD_WIDTH / 2 - 1] = AreaState.FAST;
+        areaTracker.findPowerupLocation(3);
+        assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[0][Globals.BOARD_WIDTH / 2]);
+    }
+
+    /**
+     * Tests if the corner gets set to innerborder when the area around it is covered.
+     */
+    @Test
+    public void testCornerBorders4() {
+        AreaTracker areaTracker = new AreaTracker(new Stix());
+        areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] = AreaState.FAST;
+        areaTracker.findPowerupLocation(4);
+        assertEquals(AreaState.INNERBORDER,
+                areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2][Globals.BOARD_WIDTH / 2]);
+    }
+
+    /**
+     * Tests for a false quadrant input.
+     */
+    @Test
+    public void testFalseQuadrant() {
+        AreaTracker areaTracker = new AreaTracker(new Stix());
+        int[] coord = areaTracker.findPowerupLocation(5);
+        Assert.assertEquals(0, coord[0]);
+        Assert.assertEquals(0, coord[1]);
+    }
+
 
     private AreaTracker instantiateAreaTracker() {
         Stix stix = new Stix();

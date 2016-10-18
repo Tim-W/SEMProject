@@ -25,6 +25,7 @@ public class AreaTracker {
     private Set<Point> visited;
     private boolean foundQix;
     private Stix stix;
+    private ThreadLocalRandom threadLocalRandom;
 
     /**
      * Constructor for the AreaTracker class.
@@ -58,6 +59,7 @@ public class AreaTracker {
                 }
             }
         }
+        threadLocalRandom = ThreadLocalRandom.current();
     }
 
     /**
@@ -97,6 +99,7 @@ public class AreaTracker {
                 }
             }
         }
+        threadLocalRandom = ThreadLocalRandom.current();
     }
 
     /**
@@ -406,10 +409,10 @@ public class AreaTracker {
                 x = newLocation[0];
                 y = newLocation[1];
 
-                if (x > Globals.BOARD_WIDTH / 2 - 1 || x < 0) {
+                if (x > Globals.BOARD_WIDTH / 2 || x < 0) {
                     x = Globals.BOARD_WIDTH / 4;
                 }
-                if (y > Globals.BOARD_HEIGHT / 2 - 1 || y < 0) {
+                if (y > Globals.BOARD_HEIGHT / 2 || y < 0) {
                     y = Globals.BOARD_HEIGHT / 4;
                 }
             }
@@ -423,39 +426,54 @@ public class AreaTracker {
         return res;
     }
 
+    /**
+     * Computes a new random location depending on the quadrant.
+     *
+     * @param x        the x of the old location
+     * @param y        the y of the new location
+     * @param quadrant the quadrant it needs to be in
+     * @return an int[] containing a new random location
+     */
     private int[] permutateLocation(int x, int y, int quadrant) {
         int[] res = new int[2];
         switch (quadrant) {
             case 1:
-                x += ThreadLocalRandom.current().nextInt(-1, 1);
-                y += ThreadLocalRandom.current().nextInt(-1, 1);
+                x += threadLocalRandom.nextInt(-1, 1);
+                y += threadLocalRandom.nextInt(-1, 1);
                 break;
             case 2:
-                x += ThreadLocalRandom.current().nextInt(0, 2);
-                y += ThreadLocalRandom.current().nextInt(-1, 1);
+                x += threadLocalRandom.nextInt(0, 2);
+                y += threadLocalRandom.nextInt(-1, 1);
                 break;
             case 3:
-                x += ThreadLocalRandom.current().nextInt(-1, 1);
-                y += ThreadLocalRandom.current().nextInt(0, 2);
+                x += threadLocalRandom.nextInt(-1, 1);
+                y += threadLocalRandom.nextInt(0, 2);
                 break;
             case 4:
-                x += ThreadLocalRandom.current().nextInt(0, 2);
-                y += ThreadLocalRandom.current().nextInt(0, 2);
+                x += threadLocalRandom.nextInt(0, 2);
+                y += threadLocalRandom.nextInt(0, 2);
                 break;
             default:
-                x += ThreadLocalRandom.current().nextInt(-1, 2);
-                y += ThreadLocalRandom.current().nextInt(-1, 2);
+                x += threadLocalRandom.nextInt(-1, 2);
+                y += threadLocalRandom.nextInt(-1, 2);
                 break;
         }
 
         res[0] = x;
         res[1] = y;
+
         return res;
     }
 
+    /**
+     * Gets the coordinates of the corner of a quadrant.
+     *
+     * @param quadrant the quadrant
+     * @return an int[] containing the coordinates of the corner of the quadrant
+     */
     private int[] getCornerCoordinates(int quadrant) {
-        int x = 0;
-        int y = 0;
+        int x;
+        int y;
         switch (quadrant) {
             case 1:
                 x = 0;
@@ -472,6 +490,10 @@ public class AreaTracker {
             case 4:
                 x = Globals.BOARD_WIDTH / 2;
                 y = Globals.BOARD_HEIGHT / 2;
+                break;
+            default:
+                x = 0;
+                y = 0;
                 break;
         }
         int[] res = new int[2];
