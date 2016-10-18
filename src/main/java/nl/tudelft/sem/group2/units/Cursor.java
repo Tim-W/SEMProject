@@ -38,6 +38,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private ScoreCounter scoreCounter;
 
+
     /**
      * Create a cursor.
      *
@@ -48,8 +49,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param areaTracker used for calculating areas
      * @param stix        current stix to use
      * @param color       specifies color for this cursor.
+     * @param lives       the amount of lives a players starts with
      */
-    public Cursor(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix, Color color) {
+    public Cursor(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
         super(x, y, width, height, areaTracker);
         Image[] sprite = new Image[1];
 
@@ -66,6 +68,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
         scoreCounter.addObserver(GameController.getInstance().getScene().getScoreScene());
+        scoreCounter.setLives(lives);
     }
 
     @Override
@@ -214,7 +217,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /***** Handeling Fuse *****/
     /**
-<<<<<<< HEAD
      * handles making fuse and makes it start moving.
      */
     public void handleFuse() {
@@ -258,8 +260,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /***** Getters and setters *****/
 
     /**
-=======
->>>>>>> develop
      * @return true if the cursor is drawing
      */
     public boolean isDrawing() {
@@ -335,5 +335,31 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     private void logCurrentMove() {
         LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
+    }
+
+    /**
+     * Getter for the amount of lives the cursor has.
+     * @return amount of lives left
+     */
+    public int getLives() {
+        return scoreCounter.getLives();
+    }
+
+    /**
+     * Method that decreases amount of lives cursor has upon dying.
+     */
+    public void cursorDied() {
+        if (scoreCounter.getLives() >= 1) {
+            scoreCounter.setLives(scoreCounter.getLives() - 1);
+        }
+        LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
+        if (scoreCounter.getLives() == 0) {
+            if (this.isDrawing()) {
+                Point newStartPos = stix.getStixCoordinates().getFirst();
+                this.setX((int) newStartPos.getX());
+                this.setY((int) newStartPos.getY());
+                stix.emptyStix();
+            }
+        }
     }
 }

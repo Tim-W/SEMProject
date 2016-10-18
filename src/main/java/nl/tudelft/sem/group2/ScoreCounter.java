@@ -29,6 +29,8 @@ public class ScoreCounter extends Observable {
 
     private Color color = Color.RED;
 
+    private int lives;
+
     /**
      * Default score counter constructor.
      *
@@ -112,5 +114,13 @@ public class ScoreCounter extends Observable {
 
     public void setTargetPercentage(double targetPercentage) {
         this.targetPercentage = targetPercentage;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 }

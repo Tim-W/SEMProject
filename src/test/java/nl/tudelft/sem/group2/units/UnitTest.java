@@ -109,7 +109,6 @@ public class UnitTest {
         Assert.assertEquals(unit.getHeight(), 1);
     }
 
-
     @Test
     public void intersectUnitUnit() throws Exception {
         ConcreteUnit concreteUnit = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
@@ -119,19 +118,9 @@ public class UnitTest {
 
     @Test
     public void intersectNotUnitUnit() throws Exception {
-        ConcreteUnit concreteUnit= spy(new ConcreteUnit(20, 20, 5, 5, areaTracker));
+        ConcreteUnit concreteUnit = spy(new ConcreteUnit(20, 20, 5, 5, areaTracker));
         ConcreteUnit concreteUnit2 = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
         Assert.assertFalse(concreteUnit.intersect(concreteUnit2));
-    }
-
-    @Test
-    public void getAreaTracker() throws Exception {
-
-    }
-
-    @Test
-    public void setAreaTracker() throws Exception {
-
     }
 
 }

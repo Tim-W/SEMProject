@@ -46,6 +46,9 @@ public final class GameController {
     private GameScene gameScene;
 
 
+    //TODO MAKE STARTUP ARGUMENT
+    private static final int LIVES = 3;
+
     /**
      * Constructor for the GameController class.
      */
@@ -53,9 +56,6 @@ public final class GameController {
         // Initialize models for scoretracking.
 
         areaTracker = new AreaTracker();
-
-
-
 
 
         Group group = new Group();
@@ -96,7 +96,7 @@ public final class GameController {
         //first
         Stix stix = new Stix();
         cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW));
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
         cursors.get(0).addKey(KeyCode.UP);
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
@@ -105,7 +105,7 @@ public final class GameController {
         //second
         Stix stix2 = new Stix();
         cursors.add(new Cursor(0, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED));
+                Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, 3));
         cursors.get(1).addKey(KeyCode.W);
         cursors.get(1).addKey(KeyCode.S);
         cursors.get(1).addKey(KeyCode.A);
@@ -131,7 +131,7 @@ public final class GameController {
         //first
         Stix stix = new Stix();
         cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW));
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
         cursors.get(0).addKey(KeyCode.UP);
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
@@ -288,18 +288,14 @@ public final class GameController {
                         }
                     }
 
-
                     for (Cursor cursor : cursors) {
                         if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
-                            gameOver();
+                            cursor.cursorDied();
+                            if (cursor.getLives() == 0) {
+                                gameOver();
+                            }
                         }
                     }
-                    //LaunchApp.scene.updateScorescene(scoreCounter);
-
-                    for (Cursor cursor : cursors) {
-                        cursor.calculateArea(qix);
-                    }
-
                 }
             }
 

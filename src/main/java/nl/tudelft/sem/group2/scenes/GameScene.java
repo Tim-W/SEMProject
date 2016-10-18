@@ -263,3 +263,4 @@ public class GameScene extends Scene {
         GameScene.messageBox.setLayoutX(position);
     }
 }
+

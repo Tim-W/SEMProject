@@ -31,7 +31,7 @@ public class LineTravellerTest {
         new JFXPanel();
         areaTracker = Mockito.mock(AreaTracker.class);
         stix = new Stix();
-        createCursor(new Cursor(2, 2, 2, 2, areaTracker, stix, Color.RED));
+        createCursor(new Cursor(2, 2, 2, 2, areaTracker, stix, Color.RED, 3));
     }
 
     public void createCursor(Cursor c) {

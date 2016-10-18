@@ -33,6 +33,7 @@ public class ScoreScene extends SubScene implements Observer {
     private TilePane tilePane;
     private Label score;
     private Label claimedPercentage;
+    private Label livesLabel;
     private ImageView title;
     private Label claimed = new Label("Claimed");
     private Color color = Color.YELLOW;
@@ -65,6 +66,8 @@ public class ScoreScene extends SubScene implements Observer {
 
         displayClaimedPercentage();
 
+        createLivesLabel();
+
         displayTitle();
         //TODO Fix font
         //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
@@ -73,6 +76,7 @@ public class ScoreScene extends SubScene implements Observer {
         left.getChildren().add(title);
         center.getChildren().add(claimed);
         center.getChildren().add(claimedPercentage);
+        center.getChildren().add(livesLabel);
         right.getChildren().add(score);
 
         tilePane.getChildren().add(left);
@@ -81,6 +85,7 @@ public class ScoreScene extends SubScene implements Observer {
 
 
         root.getChildren().add(tilePane);
+        setLivesLabel(0);
     }
 
     private void displayTitle() {
@@ -104,6 +109,12 @@ public class ScoreScene extends SubScene implements Observer {
     private void setClaimedText() {
         claimed.setTextFill(color);
         claimed.setStyle("-fx-font-size:14;");
+    }
+
+    private void createLivesLabel() {
+        livesLabel = new Label();
+        livesLabel.setTextFill(Color.YELLOW);
+        livesLabel.setStyle("-fx-font-size:14;");
     }
 
     private void createTitlePane() {
@@ -159,7 +170,15 @@ public class ScoreScene extends SubScene implements Observer {
                  + color.toString(), this.getClass());
                  **/
                 setColor(((ScoreCounter) o).getColor());
+                setLivesLabel(((ScoreCounter) o).getLives());
             }
         }
+    }
+    /**
+     * setter for the lives label.
+     * @param lives the amount of lives the player has left
+     */
+    private void setLivesLabel(int lives) {
+        livesLabel.setText("Lives: " + lives);
     }
 }
