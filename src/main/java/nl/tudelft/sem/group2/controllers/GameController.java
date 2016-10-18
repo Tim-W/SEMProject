@@ -285,7 +285,6 @@ public final class GameController {
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
         if (rand < powerUpThreshold * 3 && !powerUpActive()) {
-            System.out.println("power up spawned!");
             PowerUpType type = PowerUpType.randomType();
             int quadrant = cursor.oppositeQuadrant();
 
@@ -310,8 +309,10 @@ public final class GameController {
                 case NONE:
                     return;
             }
-            powerup = new PowerSpeed(coordinates[0], coordinates[1],
-                    Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+
+            LOGGER.log(Level.INFO, powerup.toString() + " spawned at (" + powerup.getX() + ", "
+                    + powerup.getY() + ")", GameController.this.getClass());
+
             addUnit(powerup);
         }
     }
