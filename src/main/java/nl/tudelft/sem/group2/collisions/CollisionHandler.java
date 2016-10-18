@@ -47,14 +47,7 @@ public class CollisionHandler {
         ArrayList<Unit> unitsList = new ArrayList<>();
         unitsList.addAll(units);
 
-        int indexOfCursor = 0;
-        for (int i = 0; i < unitsList.size(); i++) {
-            Unit collider = unitsList.get(i);
-            if (collider instanceof Cursor) {
-                indexOfCursor = i;
-                break;
-            }
-        }
+        int indexOfCursor = findCursor(unitsList);
         Unit collider = unitsList.get(indexOfCursor);
         unitsList.remove(indexOfCursor);
 
@@ -62,7 +55,6 @@ public class CollisionHandler {
             if (collidee instanceof Powerup) {
                 continue;
             }
-
             if (collidee instanceof Qix) {
                 Cursor temp = (Cursor) collider;
                 if (stix.intersect(collidee)) {
@@ -105,14 +97,8 @@ public class CollisionHandler {
         if (unitsList.isEmpty()) {
             return NONE;
         }
-        int indexOfCursor = 0;
-        for (int i = 0; i < unitsList.size(); i++) {
-            Unit collider = unitsList.get(i);
-            if (collider instanceof Cursor) {
-                indexOfCursor = i;
-                break;
-            }
-        }
+        int indexOfCursor = findCursor(unitsList);
+
         Cursor cursor = (Cursor) unitsList.get(indexOfCursor);
         unitsList.remove(indexOfCursor);
 
@@ -135,5 +121,23 @@ public class CollisionHandler {
             }
         }
         return NONE;
+    }
+
+    /**
+     * Finds the cursor in the unitslist.
+     *
+     * @param unitsList the list of units
+     * @return the index of the cursor
+     */
+    private int findCursor(ArrayList<Unit> unitsList) {
+        int indexOfCursor = 0;
+        for (int i = 0; i < unitsList.size(); i++) {
+            Unit collider = unitsList.get(i);
+            if (collider instanceof Cursor) {
+                indexOfCursor = i;
+                break;
+            }
+        }
+        return indexOfCursor;
     }
 }

@@ -2,6 +2,8 @@ package nl.tudelft.sem.group2;
 
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
+import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
@@ -43,6 +45,7 @@ public class CollisionHandlerTest {
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         set = new HashSet<>();
         cursor = mock(Cursor.class);
+        when(cursor.getCurrentPowerup()).thenReturn(PowerUpType.NONE);
         set.add(cursor);
     }
 
@@ -118,6 +121,23 @@ public class CollisionHandlerTest {
         Sparx sparx = mock(Sparx.class);
         set.add(sparx);
         when(cursor.intersect(sparx)).thenReturn(false);
+        Assert.assertFalse(handler.collisions(set, stix));
+    }
+
+    @Test
+    public void eatPowerupTest() {
+        Sparx sparx = mock(Sparx.class);
+        set.add(sparx);
+        when(cursor.intersect(sparx)).thenReturn(false);
+        when(cursor.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
+        Assert.assertFalse(handler.collisions(set, stix));
+    }
+
+    @Test
+    public void testNoCollisionPowerup() {
+        Powerup powerup = mock(Powerup.class);
+        set.add(powerup);
+        when(cursor.intersect(powerup)).thenReturn(true);
         Assert.assertFalse(handler.collisions(set, stix));
     }
 }
