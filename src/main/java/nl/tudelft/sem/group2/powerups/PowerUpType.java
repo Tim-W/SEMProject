@@ -5,15 +5,15 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Enum for the power up types.
  */
-public enum PowerType {
-    EAT, LIFE, SPEED;
+public enum PowerUpType {
+    EAT, LIFE, SPEED, NONE;
 
     /**
      * Returs a random power type.
      *
      * @return a random power type
      */
-    public static PowerType randomType() {
+    public static PowerUpType randomType() {
         int rand = ThreadLocalRandom.current().nextInt(3);
         switch (rand) {
             case 0:

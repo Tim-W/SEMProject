@@ -12,7 +12,8 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerLife;
-import nl.tudelft.sem.group2.powerups.PowerType;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
+import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -26,6 +27,7 @@ import nl.tudelft.sem.group2.units.Unit;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -242,60 +244,78 @@ public final class GameController {
     }
 
     private void handlePowerups() {
-        int collision = collisionHandler.powerUpCollisions(units);
-        switch (collision) {
+        Iterator<Unit> iter = units.iterator();
+        //code to remove powerups from the board after a certain amount of time
+        while (iter.hasNext()) {
+            Unit unit = iter.next();
+            if (unit instanceof Powerup) {
+                Powerup powerup = (Powerup) unit;
+                powerup.decreaseDuration();
+                if (powerup.getDuration() < 0) {
+                    iter.remove();
+                }
+            }
+        }
+
+        PowerUpType powerUpType = collisionHandler.powerUpCollisions(units);
+        switch (powerUpType) {
             // nothing
-            case 0:
+            case NONE:
                 return;
-            case 1:
+            case LIFE:
                 // life pickup
-                cursor.addLife();
+                //cursor.addLife();
+                cursor.setCurrentPowerup(PowerUpType.SPEED);
+                cursor.setPowerUpDuration(Globals.POWERUP_DURATION);
                 return;
-            case 2:
+            case EAT:
                 // eat pickup
                 return;
-            case 3:
+            case SPEED:
                 // speed pickup
-                cursor.setSpeed(3);
+                cursor.setCurrentPowerup(PowerUpType.SPEED);
+                cursor.setPowerUpDuration(Globals.POWERUP_DURATION);
         }
+
+        applyPowerups();
     }
 
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
-        if (rand < powerUpThreshold * 2) {
+        if (rand < powerUpThreshold * 3 && !powerUpActive()) {
             System.out.println("power up spawned!");
-            PowerType.randomType();
-            int x = 0;
-            int y = 0;
-            switch (cursor.oppositeQuadrant()) {
-                case 1:
-                    x = 0;
-                    y = 0;
-                    break;
-                case 2:
-                    x = Globals.BOARD_WIDTH / 2;
-                    y = 0;
-                    break;
-                case 3:
-                    x = 0;
-                    y = Globals.BOARD_HEIGHT / 2;
-                    break;
-                case 4:
-                    x = Globals.BOARD_WIDTH / 2;
-                    y = Globals.BOARD_HEIGHT / 2;
-                    break;
-            }
+            PowerUpType.randomType();
 
-            int[] coordinates = findPowerupLocation();
-            PowerLife powerLife = new PowerLife(x, y, Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+            int quadrant = cursor.oppositeQuadrant();
+            int[] coordinates = areaTracker.findPowerupLocation(quadrant);
+
+            PowerLife powerLife = new PowerLife(coordinates[0], coordinates[1],
+                    Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
             addUnit(powerLife);
         }
     }
 
-    private int[] findPowerupLocation() {
-        int[] res = new int[2];
-        return res;
+    private boolean powerUpActive() {
+        if (cursor.getCurrentPowerup() != PowerUpType.NONE) {
+            return true;
+        }
+
+        for (Unit u : units) {
+            if (u instanceof Powerup) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    private void applyPowerups() {
+        if (cursor.getPowerUpDuration() <= 0) {
+            cursor.setCurrentPowerup(PowerUpType.NONE);
+        } else {
+            cursor.decrementPowerupDuration();
+        }
+    }
+
 
     /**
      * When a new area is completed, calculate the new score.
@@ -360,7 +380,11 @@ public final class GameController {
      * @param e describes which keyevent happened.
      */
     public void keyPressed(KeyEvent e) {
-
+        if (cursor.isFast() || !cursor.isDrawing()) {
+            cursor.setSpeed(Globals.CURSOR_FAST);
+        } else {
+            cursor.setSpeed(Globals.CURSOR_SLOW);
+        }
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
             new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
@@ -379,19 +403,23 @@ public final class GameController {
         } else if (e.getCode().equals(KeyCode.X)) {
             if (stix.getStixCoordinates() != null && !stix.getStixCoordinates().isEmpty()) {
                 if (!cursor.isFast()) {
-                    cursor.setSpeed(1);
+                    cursor.setSpeed(Globals.CURSOR_SLOW);
                     cursor.setDrawing(true);
                     cursor.setFast(false);
                 }
             } else {
-                cursor.setSpeed(1);
+                cursor.setSpeed(Globals.CURSOR_SLOW);
                 cursor.setDrawing(true);
                 cursor.setFast(false);
             }
         } else if (e.getCode().equals(KeyCode.Z)) {
-            cursor.setSpeed(2);
+            cursor.setSpeed(Globals.CURSOR_FAST);
             cursor.setDrawing(true);
             cursor.setFast(true);
+        }
+
+        if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
+            cursor.setSpeed(cursor.getSpeed() * 2);
         }
     }
 

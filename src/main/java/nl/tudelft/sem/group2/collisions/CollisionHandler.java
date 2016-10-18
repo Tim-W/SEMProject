@@ -4,6 +4,7 @@ import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
@@ -12,6 +13,11 @@ import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.ArrayList;
 import java.util.Set;
+
+import static nl.tudelft.sem.group2.powerups.PowerUpType.EAT;
+import static nl.tudelft.sem.group2.powerups.PowerUpType.LIFE;
+import static nl.tudelft.sem.group2.powerups.PowerUpType.NONE;
+import static nl.tudelft.sem.group2.powerups.PowerUpType.SPEED;
 
 /**
  * Class which handles all the collisions.
@@ -79,9 +85,9 @@ public class CollisionHandler {
      * @param units the list of units
      * @return 0 if no collision, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
      */
-    public int powerUpCollisions(Set<Unit> units) {
+    public PowerUpType powerUpCollisions(Set<Unit> units) {
         if (units == null || units.isEmpty()) {
-            return 0;
+            return NONE;
         }
         ArrayList<Unit> unitsList = new ArrayList<>();
         for (Unit unit : units) {
@@ -91,7 +97,7 @@ public class CollisionHandler {
         }
 
         if (unitsList.isEmpty()) {
-            return 0;
+            return NONE;
         }
 
         int indexOfCursor = 0;
@@ -110,20 +116,20 @@ public class CollisionHandler {
                 synchronized (GameController.class) {
                     GameController.getInstance().removeUnit(collidee);
                 }
-                return 1;
+                return LIFE;
             } else if (collidee instanceof PowerEat && cursor.intersect(collidee)) {
                 synchronized (GameController.class) {
                     GameController.getInstance().removeUnit(collidee);
                 }
-                return 2;
+                return EAT;
             } else if (collidee instanceof PowerSpeed && cursor.intersect(collidee)) {
                 synchronized (GameController.class) {
                     GameController.getInstance().removeUnit(collidee);
                 }
-                return 3;
+                return SPEED;
             }
         }
 
-        return 0;
+        return NONE;
     }
 }

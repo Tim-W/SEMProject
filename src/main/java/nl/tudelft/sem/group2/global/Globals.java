@@ -41,6 +41,11 @@ public final class Globals {
     public static final int STARTSCENE_SPACING = 30;
     public static final int STARTSCENE_HELPTEXT_WRAPPING = 200;
     public static final double POWERUP_THRESHOLD = 0.004;
+    public static final int POWERUP_LIFETIME = 200;
+    public static final int POWERUP_DURATION = 50;
+    public static final int POWERUP_SPEED = 4;
+    public static final int CURSOR_FAST = 2;
+    public static final int CURSOR_SLOW = 1;
 
     private Globals() {
     }

@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2;
 
 import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 /**
@@ -27,7 +29,8 @@ public class AreaTracker {
     /**
      * Constructor for the AreaTracker class.
      * The constructor sets all the grid points to border and the rest to uncovered
-     * @param stix   current stix to use
+     *
+     * @param stix current stix to use
      */
     public AreaTracker(Stix stix) {
         this.stix = stix;
@@ -273,7 +276,6 @@ public class AreaTracker {
         } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.INNERBORDER) {
             visited.add(pointToCheck);
         }
-
     }
 
     private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
@@ -345,5 +347,89 @@ public class AreaTracker {
             }
             System.out.println();
         }
+    }
+
+    /**
+     * @param quadrant the quadrant of the corner to be checked
+     * @return True if the corner of the quadrant is already covered area
+     */
+    private boolean cornerIsCovered(int quadrant) {
+        switch (quadrant) {
+            case 1:
+                if (boardGrid[1][1] != AreaState.UNCOVERED) {
+                    boardGrid[0][0] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 2:
+                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
+                    boardGrid[Globals.BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 3:
+                if (boardGrid[1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[0][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 4:
+                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[Globals.BOARD_WIDTH / 2][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
+
+    /**
+     * Finds a location for the powerup.
+     * Starts searching a border that is reachable for the cursor from the middle
+     *
+     * @param quadrant the opposite quadrant the cursor is in
+     * @return an int[] containing the x and y values of the location.
+     */
+    public int[] findPowerupLocation(int quadrant) {
+        int[] res = new int[2];
+        int x = Globals.BOARD_WIDTH / 4;
+        int y = Globals.BOARD_HEIGHT / 4;
+        if (this.cornerIsCovered(quadrant)) {
+            while (this.getBoardGrid()[x][y] != AreaState.OUTERBORDER) {
+                switch (quadrant) {
+                    case 1:
+                        x += ThreadLocalRandom.current().nextInt(-1, 1);
+                        y += ThreadLocalRandom.current().nextInt(-1, 1);
+                        break;
+                    case 2:
+                        x += ThreadLocalRandom.current().nextInt(0, 2);
+                        y += ThreadLocalRandom.current().nextInt(-1, 1);
+                        break;
+                    case 3:
+                        x += ThreadLocalRandom.current().nextInt(-1, 1);
+                        y += ThreadLocalRandom.current().nextInt(0, 2);
+                        break;
+                    case 4:
+                        x += ThreadLocalRandom.current().nextInt(0, 2);
+                        y += ThreadLocalRandom.current().nextInt(0, 2);
+                        break;
+                    default:
+                        x += ThreadLocalRandom.current().nextInt(-1, 2);
+                        y += ThreadLocalRandom.current().nextInt(-1, 2);
+                        break;
+                }
+                if (x > Globals.BOARD_WIDTH / 2 - 1 || x < 0) {
+                    x = Globals.BOARD_WIDTH / 4;
+                }
+                if (y > Globals.BOARD_HEIGHT / 2 - 1 || y < 0) {
+                    y = Globals.BOARD_HEIGHT / 4;
+                }
+            }
+        }
+        res[0] = x;
+        res[1] = y;
+        return res;
     }
 }

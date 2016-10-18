@@ -8,6 +8,7 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
 
 import java.awt.Point;
 import java.util.LinkedList;
@@ -31,6 +32,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private boolean isFast = true;
     private Stix stix;
     private int lives;
+    // 0 for nothing, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
+    private PowerUpType currentPowerup;
+    private int powerUpDuration;
 
 
     /**
@@ -51,10 +55,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         this.lives = lives;
+        this.currentPowerup = PowerUpType.NONE;
     }
 
     @Override
     public void move() {
+        System.out.println(this.getPowerUpDuration());
         for (int i = 0; i < speed; i++) {
             int transX = 0;
             int transY = 0;
@@ -201,6 +207,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * @return the speed of the cursor
+     */
+    public int getSpeed() {
+        return this.speed;
+    }
+
+    /**
      * @param speed the amount of pixels the cursor moves per when moving
      */
     public void setSpeed(int speed) {
@@ -303,5 +316,30 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void addLife() {
         lives++;
+    }
+
+
+    public PowerUpType getCurrentPowerup() {
+        return currentPowerup;
+    }
+
+    public void setCurrentPowerup(PowerUpType currentPowerup) {
+        this.currentPowerup = currentPowerup;
+    }
+
+    public int getPowerUpDuration() {
+        return powerUpDuration;
+    }
+
+    public void setPowerUpDuration(int powerUpDuration) {
+        this.powerUpDuration = powerUpDuration;
+    }
+
+    public void decrementPowerupDuration() {
+        this.powerUpDuration -= 1;
+    }
+
+    public boolean hasPowerUp() {
+        return this.currentPowerup != PowerUpType.NONE;
     }
 }
