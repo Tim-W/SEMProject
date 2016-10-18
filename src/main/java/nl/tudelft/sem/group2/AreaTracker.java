@@ -390,11 +390,10 @@ public class AreaTracker {
     /**
      * method that finds a suitable location for a new powerup drop.
      *
-     * @param corner   the corner location
      * @param quadrant the quadrant to be working towards
      * @return an int[] containing the coordinates of the powerup drop location
      */
-    public int[] findPowerupLocation(int[] corner, int quadrant) {
+    public int[] findPowerupLocation(int quadrant) {
         int[] res = new int[2];
         int x = Globals.BOARD_WIDTH / 4;
         int y = Globals.BOARD_HEIGHT / 4;
@@ -408,17 +407,17 @@ public class AreaTracker {
                 y = newLocation[1];
 
                 if (x > Globals.BOARD_WIDTH / 2 - 1 || x < 0) {
-                    x = corner[0];
+                    x = Globals.BOARD_WIDTH / 4;
                 }
                 if (y > Globals.BOARD_HEIGHT / 2 - 1 || y < 0) {
-                    y = corner[1];
+                    y = Globals.BOARD_HEIGHT / 4;
                 }
             }
             res[0] = x;
             res[1] = y;
         } else {
-            res[0] = corner[0];
-            res[1] = corner[1];
+            res[0] = getCornerCoordinates(quadrant)[0];
+            res[1] = getCornerCoordinates(quadrant)[1];
         }
 
         return res;
@@ -449,6 +448,33 @@ public class AreaTracker {
                 break;
         }
 
+        res[0] = x;
+        res[1] = y;
+        return res;
+    }
+
+    private int[] getCornerCoordinates(int quadrant) {
+        int x = 0;
+        int y = 0;
+        switch (quadrant) {
+            case 1:
+                x = 0;
+                y = 0;
+                break;
+            case 2:
+                x = Globals.BOARD_WIDTH / 2;
+                y = 0;
+                break;
+            case 3:
+                x = 0;
+                y = Globals.BOARD_HEIGHT / 2;
+                break;
+            case 4:
+                x = Globals.BOARD_WIDTH / 2;
+                y = Globals.BOARD_HEIGHT / 2;
+                break;
+        }
+        int[] res = new int[2];
         res[0] = x;
         res[1] = y;
         return res;

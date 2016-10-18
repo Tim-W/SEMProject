@@ -228,24 +228,35 @@ public final class GameController {
                     }
 
                     if (collisionHandler.collisions(units, stix)) {
-                        if (cursor.getCurrentPowerup() == PowerUpType.EAT) {
-
-                        } else {
-                            cursor.cursorDied();
-                            if (cursor.getLives() == 0) {
-                                gameOver();
-                            }
+                        cursor.cursorDied();
+                        if (cursor.getLives() == 0) {
+                            gameOver();
                         }
                     }
                     gameScene.updateScorescene(scoreCounter, cursor);
                     calculateArea();
-
                     handlePowerups();
-
                     spawnPowerup();
                 }
             }
         };
+    }
+
+    private void checkSparx() {
+        int nSparx = 0;
+        for (Unit u : units) {
+            if (u instanceof Sparx) {
+                nSparx++;
+            }
+        }
+
+        while (nSparx < 2) {
+            int[] coordinates = areaTracker.findPowerupLocation(cursor.oppositeQuadrant());
+            Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
+                    Globals.BOARD_MARGIN * 2, SparxDirection.randomDirection(), areaTracker);
+            addUnit(sparx);
+            nSparx++;
+        }
     }
 
     private void handlePowerups() {
@@ -290,8 +301,7 @@ public final class GameController {
             PowerUpType type = PowerUpType.randomType();
             int quadrant = cursor.oppositeQuadrant();
 
-            int[] corner = getCornerCoordinates(quadrant);
-            int[] coordinates = areaTracker.findPowerupLocation(corner, quadrant);
+            int[] coordinates = areaTracker.findPowerupLocation(quadrant);
 
             Powerup powerup = null;
             switch (type) {
@@ -312,7 +322,8 @@ public final class GameController {
             }
             LOGGER.log(Level.INFO, powerup.toString() + " spawned at (" + powerup.getX() + ", "
                     + powerup.getY() + ")", GameController.this.getClass());
-
+            powerup = new PowerEat(coordinates[0], coordinates[1],
+                    Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
             addUnit(powerup);
         }
     }
@@ -343,32 +354,6 @@ public final class GameController {
         }
     }
 
-    private int[] getCornerCoordinates(int quadrant) {
-        int x = 0;
-        int y = 0;
-        switch (quadrant) {
-            case 1:
-                x = 0;
-                y = 0;
-                break;
-            case 2:
-                x = Globals.BOARD_WIDTH / 2;
-                y = 0;
-                break;
-            case 3:
-                x = 0;
-                y = Globals.BOARD_HEIGHT / 2;
-                break;
-            case 4:
-                x = Globals.BOARD_WIDTH / 2;
-                y = Globals.BOARD_HEIGHT / 2;
-                break;
-        }
-        int[] res = new int[2];
-        res[0] = x;
-        res[1] = y;
-        return res;
-    }
 
 
     /**
@@ -543,5 +528,6 @@ public final class GameController {
      */
     public void removeUnit(Unit unit) {
         units.remove(unit);
+        checkSparx();
     }
 }

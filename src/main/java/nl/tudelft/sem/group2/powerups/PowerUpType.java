@@ -9,7 +9,7 @@ public enum PowerUpType {
     EAT, LIFE, SPEED, NONE;
 
     /**
-     * Returs a random power type.
+     * Returns a random power type.
      *
      * @return a random power type
      */
