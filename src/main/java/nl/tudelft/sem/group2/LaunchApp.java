@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.StartScene;
 
-import java.awt.EventQueue;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
@@ -54,12 +53,7 @@ public class LaunchApp extends Application {
         } else if (args.length > 0 && args[0].equals("loggingOff")) {
             LOGGER.setLevel(Level.OFF);
         }
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                javafx.application.Application.launch(LaunchApp.class);
-            }
-        });
+        launch(args);
     }
 
     /**
