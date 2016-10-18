@@ -44,7 +44,6 @@ public class LineTravellerTest {
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         cursor.setAreaTracker(areaTracker);
         Assert.assertTrue(cursor.innerBorderOn(0, 0));
-
     }
 
     @Test

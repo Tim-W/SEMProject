@@ -275,7 +275,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      *
      * @return the quadrant the cursor is in
      */
-    public int quadrant() {
+    private int quadrant() {
         if (this.getX() < BOARD_WIDTH / 4) {
             if (this.getY() < BOARD_HEIGHT / 4) {
                 return 1;
@@ -334,10 +334,16 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.powerUpDuration = powerUpDuration;
     }
 
+    /**
+     * decrements the duration of current powerup.
+     */
     public void decrementPowerupDuration() {
         this.powerUpDuration -= 1;
     }
 
+    /**
+     * @return true if the cursor has a powerup active
+     */
     public boolean hasPowerUp() {
         return this.currentPowerup != PowerUpType.NONE;
     }

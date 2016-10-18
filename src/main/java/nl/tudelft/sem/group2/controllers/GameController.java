@@ -61,7 +61,6 @@ public final class GameController {
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
     private GameScene gameScene;
-    private double powerUpThreshold = Globals.POWERUP_THRESHOLD;
 
     /**
      * Constructor for the GameController class.
@@ -284,7 +283,7 @@ public final class GameController {
      */
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
-        if (rand < powerUpThreshold * 3 && !powerUpActive()) {
+        if (rand < Globals.POWERUP_THRESHOLD * 3 && !powerUpActive()) {
             PowerUpType type = PowerUpType.randomType();
             int quadrant = cursor.oppositeQuadrant();
 
@@ -434,11 +433,7 @@ public final class GameController {
      * @param e describes which keyevent happened.
      */
     public void keyPressed(KeyEvent e) {
-        if (cursor.isFast() || !cursor.isDrawing()) {
-            cursor.setSpeed(Globals.CURSOR_FAST);
-        } else {
-            cursor.setSpeed(Globals.CURSOR_SLOW);
-        }
+        initializeCursorSpeed();
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
             new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
@@ -471,9 +466,16 @@ public final class GameController {
             cursor.setDrawing(true);
             cursor.setFast(true);
         }
-
         if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
             cursor.setSpeed(cursor.getSpeed() + 1);
+        }
+    }
+
+    private void initializeCursorSpeed() {
+        if (cursor.isFast() || !cursor.isDrawing()) {
+            cursor.setSpeed(Globals.CURSOR_FAST);
+        } else {
+            cursor.setSpeed(Globals.CURSOR_SLOW);
         }
     }
 
@@ -533,6 +535,11 @@ public final class GameController {
         GameController.units = units;
     }
 
+    /**
+     * removes a unit of the list of units.
+     *
+     * @param unit the unit to be removed
+     */
     public void removeUnit(Unit unit) {
         units.remove(unit);
     }

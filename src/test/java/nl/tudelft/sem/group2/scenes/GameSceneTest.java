@@ -28,10 +28,12 @@ public class GameSceneTest {
     private GameScene scene;
     private GameController gameController;
     private Cursor spyCursor;
+
     @BeforeClass
-    public static void BeforeClass(){
+    public static void BeforeClass() {
         new JFXPanel();
     }
+
     @Before
     public void setUp() throws Exception {
         Group root = new Group();
@@ -60,8 +62,9 @@ public class GameSceneTest {
         scene.removeFuse();
         gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
         scene.draw();
-        verify(spyCursor,times(1)).isFast();
+        verify(spyCursor, times(1)).isFast();
     }
+
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
         gameController.getStix().addToStix(new Point(1, 1));
@@ -69,8 +72,9 @@ public class GameSceneTest {
         scene.removeFuse();
         gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
         scene.draw();
-        verify(spyCursor,times(0)).isFast();
+        verify(spyCursor, times(0)).isFast();
     }
+
     @Test
     public void testRemoveFuse() throws Exception {
         int oldSize = gameController.getUnits().size();
@@ -78,7 +82,5 @@ public class GameSceneTest {
         gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
         scene.removeFuse();
         Assert.assertEquals(oldSize, gameController.getUnits().size());
-
     }
-
 }

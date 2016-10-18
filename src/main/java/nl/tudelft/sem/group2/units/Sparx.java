@@ -30,7 +30,7 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param height         height, used for collision
      * @param sparxDirection direction in which the sparx starts moving,
      *                       which is either LEFT or RIGHT
-     * @param areaTracker the AreaTracker
+     * @param areaTracker    the AreaTracker
      */
     public Sparx(int x, int y, int width, int height, SparxDirection sparxDirection, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
@@ -80,7 +80,6 @@ public class Sparx extends LineTraveller implements CollisionInterface {
         } else if (getY() > 0 && !(lastY == getY() - 1) && innerBorderOn(getX(), getY() - 1)) {
             setYAndLastY(getY() - 1);
         }
-
     }
 
     private void moveLeft() {

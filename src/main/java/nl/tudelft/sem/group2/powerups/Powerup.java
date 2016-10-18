@@ -11,11 +11,16 @@ public class Powerup extends LineTraveller {
 
     private int duration;
 
-    public Powerup(int x, int y, int width, int height, AreaTracker areaTracker, int duration) {
-        super(x, y, width, height, areaTracker);
-        this.duration = duration;
-    }
 
+    /**
+     * Creates a new powerup.
+     *
+     * @param x           x coord
+     * @param y           y coord
+     * @param width       width, used for collision
+     * @param height      height, used for collision
+     * @param areaTracker the AreaTracker
+     */
     public Powerup(int x, int y, int width, int height, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
         this.duration = Globals.POWERUP_LIFETIME;
@@ -28,10 +33,18 @@ public class Powerup extends LineTraveller {
     public void move() {
     }
 
+    /**
+     * decreases the lifetime duration of the powerup.
+     *
+     * @param n the decrease amount
+     */
     public void decreaseDuration(int n) {
         duration -= n;
     }
 
+    /**
+     * decreases the lifetime duration of the powerup.
+     */
     public void decreaseDuration() {
         decreaseDuration(1);
     }

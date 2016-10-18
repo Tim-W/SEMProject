@@ -38,6 +38,7 @@ public class CursorTest {
     private LinkedList<Point> stixCoordinates;
     private int x;
     private int y;
+
     @Before
     public void setUp() throws Exception {
         new JFXPanel();
@@ -92,7 +93,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveL() throws Exception {
-        createCursor(new Cursor(0, 2, 2, 2, stix, areaTracker,1));
+        createCursor(new Cursor(0, 2, 2, 2, stix, areaTracker, 1));
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.LEFT);
         cursor.move();
@@ -132,6 +133,7 @@ public class CursorTest {
         moveCursor(KeyCode.RIGHT, x + 1, y, false);
         Assert.assertEquals(x + 1, cursor.getX());
     }
+
     @Test
     public void moveRightDraw() throws Exception {
         cursor.setDrawing(true);
@@ -145,16 +147,19 @@ public class CursorTest {
         cursor.move();
         verify(stix, times(2)).addToStix(any());
     }
+
     @Test
     public void moveRightOuterBorder() throws Exception {
         moveCursor(KeyCode.RIGHT, x + 1, y, true);
         Assert.assertEquals(x + 1, cursor.getX());
     }
+
     @Test
     public void dontMoveR2() throws Exception {
         moveCursor(KeyCode.RIGHT, x, y, true);
         Assert.assertEquals(x, cursor.getX());
     }
+
     @Test
     public void dontMoveR3() throws Exception {
         cursor.setDrawing(true);
@@ -194,6 +199,7 @@ public class CursorTest {
         cursor.move();
         Assert.assertEquals(x, cursor.getX());
     }
+
     @Test
     public void testGetCurrentMove() throws Exception {
         cursor.setCurrentMove(KeyCode.RIGHT);
@@ -230,8 +236,5 @@ public class CursorTest {
         Assert.assertEquals(0, cursor.getLives());
         cursor.cursorDied();
         Assert.assertEquals(0, cursor.getLives());
-
     }
-
-
 }

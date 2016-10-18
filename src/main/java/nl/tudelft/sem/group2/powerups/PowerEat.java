@@ -7,6 +7,15 @@ import nl.tudelft.sem.group2.AreaTracker;
  */
 public class PowerEat extends Powerup {
 
+    /**
+     * Creates a new Eat powerup.
+     *
+     * @param x           x coord
+     * @param y           y coord
+     * @param width       width, used for collision
+     * @param height      height, used for collision
+     * @param areaTracker the AreaTracker
+     */
     public PowerEat(int x, int y, int width, int height, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);
     }

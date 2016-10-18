@@ -29,14 +29,11 @@ public class AreaTrackerTest {
             for (int y = 0; y < expectedGrid[x].length; y++) {
                 if (x == 0) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == expectedGrid.length - 1) {
+                } else if (x == expectedGrid.length - 1) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (y == 0 || y == expectedGrid[x].length - 1) {
+                } else if (y == 0 || y == expectedGrid[x].length - 1) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else {
+                } else {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
                 }
             }
@@ -68,7 +65,6 @@ public class AreaTrackerTest {
                 assertEquals(expectedGrid[j][i], currentGrid[j][i]);
             }
         }
-
     }
 
     /**
@@ -90,7 +86,6 @@ public class AreaTrackerTest {
                 assertEquals(expectedGrid[j][i], currentGrid[j][i]);
             }
         }
-
     }
 
     /**
@@ -113,7 +108,6 @@ public class AreaTrackerTest {
                 assertEquals(expectedGrid[j][i], currentGrid[j][i]);
             }
         }
-
     }
 
     private AreaState[][] createExpectedBoardGridQixAboveStix(boolean fastArea) {
@@ -122,31 +116,24 @@ public class AreaTrackerTest {
             for (int x = 0; x < TEST_MAP_WIDTH; x++) {
                 if (x == 0) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if ((x == 1 || x == 4) && (y == 0 || y == 4)) {
+                } else if ((x == 1 || x == 4) && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 1) {
+                } else if (x == 1) {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
-                }
-                else if (x == 2) {
+                } else if (x == 2) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3 && (y == 0 || y == 4)) {
+                } else if (x == 3 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 3 && fastArea) {
+                } else if (x == 3 && fastArea) {
                     expectedGrid[x][y] = AreaState.FAST;
-                }
-                else if (x == 3) {
+                } else if (x == 3) {
                     expectedGrid[x][y] = AreaState.SLOW;
-                }
-                else if (x == 4 && y > 0 && y < 4) {
+                } else if (x == 4 && y > 0 && y < 4) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
                 }
             }
         }
-        return  expectedGrid;
+        return expectedGrid;
     }
 
     private AreaState[][] createExpectedBoardGridQixUnderStix(boolean fastArea) {
@@ -155,34 +142,26 @@ public class AreaTrackerTest {
             for (int x = 0; x < TEST_MAP_WIDTH; x++) {
                 if (x == 0 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 0) {
+                } else if (x == 0) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 1 && (y == 0 || y == 4)) {
+                } else if (x == 1 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 1 && fastArea) {
+                } else if (x == 1 && fastArea) {
                     expectedGrid[x][y] = AreaState.FAST;
-                }
-                else if (x == 1) {
+                } else if (x == 1) {
                     expectedGrid[x][y] = AreaState.SLOW;
-                }
-                else if (x == 2) {
+                } else if (x == 2) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3 && (y == 0 || y == 4)) {
+                } else if (x == 3 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3) {
+                } else if (x == 3) {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
-                }
-                else if (x == 4) {
+                } else if (x == 4) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
                 }
             }
         }
-        return  expectedGrid;
+        return expectedGrid;
     }
 
     private AreaTracker instantiateAreaTracker() {

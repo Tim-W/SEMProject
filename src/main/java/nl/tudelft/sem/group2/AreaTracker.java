@@ -349,7 +349,13 @@ public class AreaTracker {
         }
     }
 
-    public boolean cornerIsCovered(int quadrant) {
+    /**
+     * Method that returns true if the corner is covered.
+     *
+     * @param quadrant the quadrant to be checked
+     * @return true if the corner is covered
+     */
+    private boolean cornerIsCovered(int quadrant) {
         switch (quadrant) {
             case 1:
                 if (boardGrid[1][1] != AreaState.UNCOVERED) {
@@ -381,7 +387,14 @@ public class AreaTracker {
         return false;
     }
 
-    public int[] findPowerupLocation(int[] start, int quadrant) {
+    /**
+     * method that finds a suitable location for a new powerup drop.
+     *
+     * @param corner   the corner location
+     * @param quadrant the quadrant to be working towards
+     * @return an int[] containing the coordinates of the powerup drop location
+     */
+    public int[] findPowerupLocation(int[] corner, int quadrant) {
         int[] res = new int[2];
         int x = Globals.BOARD_WIDTH / 4;
         int y = Globals.BOARD_HEIGHT / 4;
@@ -395,17 +408,17 @@ public class AreaTracker {
                 y = newLocation[1];
 
                 if (x > Globals.BOARD_WIDTH / 2 - 1 || x < 0) {
-                    x = start[0];
+                    x = corner[0];
                 }
                 if (y > Globals.BOARD_HEIGHT / 2 - 1 || y < 0) {
-                    y = start[1];
+                    y = corner[1];
                 }
             }
             res[0] = x;
             res[1] = y;
         } else {
-            res[0] = start[0];
-            res[1] = start[1];
+            res[0] = corner[0];
+            res[1] = corner[1];
         }
 
         return res;

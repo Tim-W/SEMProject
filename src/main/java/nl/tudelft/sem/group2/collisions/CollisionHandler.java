@@ -95,11 +95,9 @@ public class CollisionHandler {
                 unitsList.add(unit);
             }
         }
-
         if (unitsList.isEmpty()) {
             return NONE;
         }
-
         int indexOfCursor = 0;
         for (int i = 0; i < unitsList.size(); i++) {
             Unit collider = unitsList.get(i);
@@ -129,7 +127,6 @@ public class CollisionHandler {
                 return SPEED;
             }
         }
-
         return NONE;
     }
 }

@@ -264,7 +264,7 @@ public class GameScene extends Scene {
      * Update the info on the scorescene with actual info from scorecounter.
      *
      * @param scoreCounter scorecounter from GameController.
-     * @param cursor current cursor for which lives should be updated.
+     * @param cursor       current cursor for which lives should be updated.
      */
     public void updateScorescene(ScoreCounter scoreCounter, Cursor cursor) {
         scoreScene.setScore(scoreCounter.getTotalScore());
