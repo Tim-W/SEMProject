@@ -10,7 +10,6 @@ import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.EventQueue;
@@ -21,13 +20,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-/**
- * Created by Gijs on 2-10-2016.
- */
-@Ignore
 public class GameControllerTest {
     private GameController gameController;
-
 
     public void setUp() {
         Group root = new Group();
