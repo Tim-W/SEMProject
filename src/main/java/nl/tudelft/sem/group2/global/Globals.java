@@ -46,6 +46,7 @@ public final class Globals {
     public static final int POWERUP_EAT_DURATION = 100;
     public static final int CURSOR_FAST = 2;
     public static final int CURSOR_SLOW = 1;
+    public static final double HALF = 0.5;
 
     private Globals() {
     }

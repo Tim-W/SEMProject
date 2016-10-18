@@ -232,9 +232,19 @@ public class GameScene extends Scene {
             unit.move();
             unit.draw(canvas);
         }
-        //TODO apply effect per powerup
-        gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
 
+        applyEffect();
+    }
+
+    private void applyEffect() {
+        switch (GameController.getInstance().getCursor().getCurrentPowerup()) {
+            case EAT:
+                gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
+                break;
+            case SPEED:
+                gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                break;
+        }
     }
 
     /**

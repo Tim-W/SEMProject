@@ -297,7 +297,7 @@ public final class GameController {
      */
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
-        if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
+        if (rand < Globals.POWERUP_THRESHOLD + 1 && !powerUpActive()) {
             PowerUpType type = PowerUpType.randomType();
             int quadrant = cursor.oppositeQuadrant();
 
@@ -322,8 +322,8 @@ public final class GameController {
             }
             LOGGER.log(Level.INFO, powerup.toString() + " spawned at (" + powerup.getX() + ", "
                     + powerup.getY() + ")", GameController.this.getClass());
-            powerup = new PowerEat(coordinates[0], coordinates[1],
-                    Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+            //powerup = new PowerEat(coordinates[0], coordinates[1],
+            //        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
             addUnit(powerup);
         }
     }
