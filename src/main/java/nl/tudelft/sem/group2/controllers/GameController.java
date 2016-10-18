@@ -244,6 +244,8 @@ public final class GameController {
     }
 
     private void handlePowerups() {
+        applyPowerups();
+
         Iterator<Unit> iter = units.iterator();
         //code to remove powerups from the board after a certain amount of time
         while (iter.hasNext()) {
@@ -266,7 +268,7 @@ public final class GameController {
                 // life pickup
                 //cursor.addLife();
                 cursor.setCurrentPowerup(PowerUpType.SPEED);
-                cursor.setPowerUpDuration(Globals.POWERUP_DURATION);
+                cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
                 return;
             case EAT:
                 // eat pickup
@@ -274,27 +276,53 @@ public final class GameController {
             case SPEED:
                 // speed pickup
                 cursor.setCurrentPowerup(PowerUpType.SPEED);
-                cursor.setPowerUpDuration(Globals.POWERUP_DURATION);
+                cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
         }
 
-        applyPowerups();
     }
 
+    /**
+     * Spawns a new powerup at random and when none is active yet.
+     */
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
         if (rand < powerUpThreshold * 3 && !powerUpActive()) {
             System.out.println("power up spawned!");
             PowerUpType.randomType();
-
+            int x = 0;
+            int y = 0;
             int quadrant = cursor.oppositeQuadrant();
-            int[] coordinates = areaTracker.findPowerupLocation(quadrant);
-
+            switch (quadrant) {
+                case 1:
+                    x = 0;
+                    y = 0;
+                    break;
+                case 2:
+                    x = Globals.BOARD_WIDTH / 2;
+                    y = 0;
+                    break;
+                case 3:
+                    x = 0;
+                    y = Globals.BOARD_HEIGHT / 2;
+                    break;
+                case 4:
+                    x = Globals.BOARD_WIDTH / 2;
+                    y = Globals.BOARD_HEIGHT / 2;
+                    break;
+            }
+            int[] corner = new int[2];
+            corner[0] = x;
+            corner[1] = y;
+            int[] coordinates = areaTracker.findPowerupLocation(corner, quadrant);
             PowerLife powerLife = new PowerLife(coordinates[0], coordinates[1],
                     Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
             addUnit(powerLife);
         }
     }
 
+    /**
+     * @return true if a power up is active
+     */
     private boolean powerUpActive() {
         if (cursor.getCurrentPowerup() != PowerUpType.NONE) {
             return true;
@@ -309,9 +337,11 @@ public final class GameController {
     }
 
     private void applyPowerups() {
-        if (cursor.getPowerUpDuration() <= 0) {
+        if (cursor.hasPowerUp() && cursor.getPowerUpDuration() <= 0) {
             cursor.setCurrentPowerup(PowerUpType.NONE);
-        } else {
+        }
+
+        if (cursor.hasPowerUp() && cursor.getPowerUpDuration() > 0) {
             cursor.decrementPowerupDuration();
         }
     }
@@ -419,7 +449,7 @@ public final class GameController {
         }
 
         if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
-            cursor.setSpeed(cursor.getSpeed() * 2);
+            cursor.setSpeed(cursor.getSpeed() + 1);
         }
     }
 

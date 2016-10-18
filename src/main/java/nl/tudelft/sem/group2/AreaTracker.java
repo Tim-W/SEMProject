@@ -349,11 +349,7 @@ public class AreaTracker {
         }
     }
 
-    /**
-     * @param quadrant the quadrant of the corner to be checked
-     * @return True if the corner of the quadrant is already covered area
-     */
-    private boolean cornerIsCovered(int quadrant) {
+    public boolean cornerIsCovered(int quadrant) {
         switch (quadrant) {
             case 1:
                 if (boardGrid[1][1] != AreaState.UNCOVERED) {
@@ -385,49 +381,61 @@ public class AreaTracker {
         return false;
     }
 
-    /**
-     * Finds a location for the powerup.
-     * Starts searching a border that is reachable for the cursor from the middle
-     *
-     * @param quadrant the opposite quadrant the cursor is in
-     * @return an int[] containing the x and y values of the location.
-     */
-    public int[] findPowerupLocation(int quadrant) {
+    public int[] findPowerupLocation(int[] start, int quadrant) {
         int[] res = new int[2];
         int x = Globals.BOARD_WIDTH / 4;
         int y = Globals.BOARD_HEIGHT / 4;
+
         if (this.cornerIsCovered(quadrant)) {
+
             while (this.getBoardGrid()[x][y] != AreaState.OUTERBORDER) {
-                switch (quadrant) {
-                    case 1:
-                        x += ThreadLocalRandom.current().nextInt(-1, 1);
-                        y += ThreadLocalRandom.current().nextInt(-1, 1);
-                        break;
-                    case 2:
-                        x += ThreadLocalRandom.current().nextInt(0, 2);
-                        y += ThreadLocalRandom.current().nextInt(-1, 1);
-                        break;
-                    case 3:
-                        x += ThreadLocalRandom.current().nextInt(-1, 1);
-                        y += ThreadLocalRandom.current().nextInt(0, 2);
-                        break;
-                    case 4:
-                        x += ThreadLocalRandom.current().nextInt(0, 2);
-                        y += ThreadLocalRandom.current().nextInt(0, 2);
-                        break;
-                    default:
-                        x += ThreadLocalRandom.current().nextInt(-1, 2);
-                        y += ThreadLocalRandom.current().nextInt(-1, 2);
-                        break;
-                }
+
+                int[] newLocation = permutateLocation(x, y, quadrant);
+                x = newLocation[0];
+                y = newLocation[1];
+
                 if (x > Globals.BOARD_WIDTH / 2 - 1 || x < 0) {
-                    x = Globals.BOARD_WIDTH / 4;
+                    x = start[0];
                 }
                 if (y > Globals.BOARD_HEIGHT / 2 - 1 || y < 0) {
-                    y = Globals.BOARD_HEIGHT / 4;
+                    y = start[1];
                 }
             }
+            res[0] = x;
+            res[1] = y;
+        } else {
+            res[0] = start[0];
+            res[1] = start[1];
         }
+
+        return res;
+    }
+
+    private int[] permutateLocation(int x, int y, int quadrant) {
+        int[] res = new int[2];
+        switch (quadrant) {
+            case 1:
+                x += ThreadLocalRandom.current().nextInt(-1, 1);
+                y += ThreadLocalRandom.current().nextInt(-1, 1);
+                break;
+            case 2:
+                x += ThreadLocalRandom.current().nextInt(0, 2);
+                y += ThreadLocalRandom.current().nextInt(-1, 1);
+                break;
+            case 3:
+                x += ThreadLocalRandom.current().nextInt(-1, 1);
+                y += ThreadLocalRandom.current().nextInt(0, 2);
+                break;
+            case 4:
+                x += ThreadLocalRandom.current().nextInt(0, 2);
+                y += ThreadLocalRandom.current().nextInt(0, 2);
+                break;
+            default:
+                x += ThreadLocalRandom.current().nextInt(-1, 2);
+                y += ThreadLocalRandom.current().nextInt(-1, 2);
+                break;
+        }
+
         res[0] = x;
         res[1] = y;
         return res;

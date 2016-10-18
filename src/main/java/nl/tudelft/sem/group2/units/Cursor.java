@@ -60,6 +60,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     @Override
     public void move() {
+        System.out.println(this.hasPowerUp());
         System.out.println(this.getPowerUpDuration());
         for (int i = 0; i < speed; i++) {
             int transX = 0;
