@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2;
 
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -13,6 +14,8 @@ public class AreaTrackerTest {
     private static final int TEST_MAP_WIDTH = 5;
     private static final int TEST_MAP_HEIGHT = 5;
 
+    private Stix stix;
+
     /**
      * Test method for the default constructor of AreaTracker.
      *
@@ -20,8 +23,8 @@ public class AreaTrackerTest {
      */
     @org.junit.Test
     public void testConstructor() throws Exception {
-        Stix stix = new Stix();
-        AreaTracker areaTracker = new AreaTracker(stix);
+        stix = new Stix();
+        AreaTracker areaTracker = new AreaTracker();
 
         AreaState[][] expectedGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
 
@@ -58,7 +61,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), true);
+        areaTracker.calculateNewArea(new Point(1, 2), true, stix, new ScoreCounter(Color.RED));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
 
@@ -80,7 +83,7 @@ public class AreaTrackerTest {
     public void testCalculateNewSlowArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), false);
+        areaTracker.calculateNewArea(new Point(1, 2), false, stix, new ScoreCounter(Color.RED));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(false);
 
@@ -102,7 +105,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastAreaWithQixOnOtherSide() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(3, 2), true);
+        areaTracker.calculateNewArea(new Point(3, 2), true, stix, new ScoreCounter(Color.RED));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
 
@@ -186,12 +189,12 @@ public class AreaTrackerTest {
     }
 
     private AreaTracker instantiateAreaTracker() {
-        Stix stix = new Stix();
+        stix = new Stix();
         stix.addToStix(new Point(2, 0));
         stix.addToStix(new Point(2, 1));
         stix.addToStix(new Point(2, 2));
         stix.addToStix(new Point(2, 3));
         stix.addToStix(new Point(2, 4));
-        return new AreaTracker(TEST_MAP_WIDTH, TEST_MAP_HEIGHT, stix);
+        return new AreaTracker(TEST_MAP_WIDTH, TEST_MAP_HEIGHT);
     }
 }

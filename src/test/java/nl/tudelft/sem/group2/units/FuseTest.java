@@ -30,7 +30,7 @@ public class FuseTest {
         new JFXPanel();
         stix = mock(Stix.class);
         areaTracker = Mockito.mock(AreaTracker.class);
-        createFuse(new Fuse(3, 3, 3, 4, stix, areaTracker));
+        createFuse(new Fuse(3, 3, 3, 4, areaTracker, stix));
         fuse.setDelay(0);
     }
 
@@ -65,7 +65,7 @@ public class FuseTest {
 
     @Test
     public void testMoveLeftLastX() {
-        createFuse(new Fuse(BOARD_WIDTH - 2, BOARD_HEIGHT - 1, 1, 1, stix, areaTracker));
+        createFuse(new Fuse(BOARD_WIDTH - 2, BOARD_HEIGHT - 1, 1, 1, areaTracker, stix));
         moveFuse(-1, 0);
         int oldx = fuse.getX();
         moveFuse(1, 0);
@@ -122,7 +122,7 @@ public class FuseTest {
 
     @Test
     public void testNotMoveL2() {
-        createFuse(new Fuse(0, 0, 1, 1, stix, areaTracker));
+        createFuse(new Fuse(0, 0, 1, 1, areaTracker, stix));
         int oldx = fuse.getX();
         fuse.setMoving(true);
         moveFuse(-1, 0);

@@ -200,20 +200,20 @@ public class Qix extends Unit implements CollisionInterface {
 
     @Override
     public boolean intersect(Unit collidee) {
-        //if (!(obj instanceof Qix) ) {
-        Polygon colliderP = this.toPolygon();
+        if (!(collidee instanceof Qix) ) {
+            Polygon colliderP = this.toPolygon();
 
-        // subtract one from width&height to make collisions look more real
-        Rectangle collideeR = new Rectangle(collidee.getX(),
-                collidee.getY(), collidee.getWidth() / 2 - 1,
-                collidee.getHeight() / 2 - 1);
-        if (colliderP.intersects(collideeR)) {
-            LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
-                    + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
-        }
-        return colliderP.intersects(collideeR);
-        //}
-        // return false;
+            // subtract one from width&height to make collisions look more real
+            Rectangle collideeR = new Rectangle(collidee.getX(),
+                    collidee.getY(), collidee.getWidth() / 2 - 1,
+                    collidee.getHeight() / 2 - 1);
+            if (colliderP.intersects(collideeR)) {
+                LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
+                        + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
+            }
+            return colliderP.intersects(collideeR);
+            }
+        return false;
     }
 
     /**

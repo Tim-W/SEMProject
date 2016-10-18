@@ -88,8 +88,9 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         if (colliderR.intersects(collideeR)) {
             LOGGER.log(Level.WARNING, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
                     + "," + this.getY() + ")", this.getClass());
+            return true;
         }
-        return colliderR.intersects(collideeR);
+        return false;
     }
 
     public AreaTracker getAreaTracker() {

@@ -149,6 +149,15 @@ public final class GameController {
         addUnit(sparxLeft);
     }
 
+    public void addCursor(Cursor cursor){
+        if(cursors.size()<2){
+            cursors.add(cursor);
+        }
+    }
+    public ArrayList<Cursor> getCursors(){return cursors;}
+
+
+
     /***** Units *****/
 
     /**
@@ -413,4 +422,16 @@ public final class GameController {
     public GameScene getScene() {
         return gameScene;
     }
+
+    /**
+     *
+     * @param scene
+     */
+    public void setGameScene(GameScene scene) { this.gameScene = scene; }
+
+    /**
+     *
+     */
+    public static void deleteGameController() { GameController.gameController = null; }
+
 }

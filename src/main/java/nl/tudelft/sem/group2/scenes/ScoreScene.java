@@ -47,12 +47,9 @@ public class ScoreScene extends SubScene implements Observer {
      * @param root   the root this scene is placed on top of
      * @param width  width of the scene
      * @param height height of the scene
-     * @param color
      */
-    public ScoreScene(Group root, double width, double height, Color color) {
+    public ScoreScene(Group root, double width, double height) {
         super(root, width, height);
-
-        this.color = color;
 
         setClaimedText();
         createTitlePane();
