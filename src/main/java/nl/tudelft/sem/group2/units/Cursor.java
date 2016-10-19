@@ -230,6 +230,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * Getter for the amount of lives the cursor has.
+     *
      * @return amount of lives left
      */
     public int getLives() {

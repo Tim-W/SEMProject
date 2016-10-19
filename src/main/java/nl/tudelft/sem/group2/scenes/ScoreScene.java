@@ -136,6 +136,7 @@ public class ScoreScene extends SubScene {
 
     /**
      * setter for the lives label.
+     *
      * @param lives the amount of lives the player has left
      */
     public void setLivesLabel(int lives) {

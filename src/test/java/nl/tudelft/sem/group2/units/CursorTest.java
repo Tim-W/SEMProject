@@ -92,7 +92,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveL() throws Exception {
-        createCursor(new Cursor(0, 2, 2, 2, stix, areaTracker,1));
+        createCursor(new Cursor(0, 2, 2, 2, stix, areaTracker, 1));
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.LEFT);
         cursor.move();
