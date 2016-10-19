@@ -48,9 +48,7 @@ public class CollisionHandler {
         ArrayList<Unit> unitsList = new ArrayList<>();
         unitsList.addAll(units);
 
-        int indexOfCursor = findCursor(unitsList);
-        Unit collider = unitsList.get(indexOfCursor);
-        unitsList.remove(indexOfCursor);
+        Unit collider = unitsList.remove(findCursor(unitsList));
 
         for (Unit collidee : unitsList) {
             if (collidee instanceof Powerup) {
@@ -98,10 +96,8 @@ public class CollisionHandler {
         if (unitsList.isEmpty()) {
             return NONE;
         }
-        int indexOfCursor = findCursor(unitsList);
 
-        Cursor cursor = (Cursor) unitsList.get(indexOfCursor);
-        unitsList.remove(indexOfCursor);
+        Cursor cursor = (Cursor) unitsList.remove(findCursor(unitsList));
 
         for (Unit collidee : unitsList) {
             if (collidee instanceof PowerLife && cursor.intersect(collidee)) {
