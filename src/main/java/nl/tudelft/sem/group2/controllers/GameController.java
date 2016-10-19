@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.logging.Level;
-import java.awt.Point;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -113,8 +112,8 @@ public final class GameController {
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
         cursors.get(0).addKey(KeyCode.RIGHT);
-        cursorFastMoveKey.add(KeyCode.Z);
-        cursorSlowMoveKey.add(KeyCode.X);
+        cursorFastMoveKey.add(KeyCode.O);
+        cursorSlowMoveKey.add(KeyCode.I);
         if (multiplayer) {
             //second
             Stix stix2 = new Stix();
@@ -124,8 +123,8 @@ public final class GameController {
             cursors.get(1).addKey(KeyCode.S);
             cursors.get(1).addKey(KeyCode.A);
             cursors.get(1).addKey(KeyCode.D);
-            cursorFastMoveKey.add(KeyCode.O);
-            cursorSlowMoveKey.add(KeyCode.I);
+            cursorFastMoveKey.add(KeyCode.Z);
+            cursorSlowMoveKey.add(KeyCode.X);
             addUnit(cursors.get(1));
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
