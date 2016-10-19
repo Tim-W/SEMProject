@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.StartScene;
@@ -23,7 +22,6 @@ public class LaunchApp extends Application {
 
     private static final Logger LOGGER = Logger.getLogger();
     private static Stage stage;
-    private static MediaView mediaView;
 
     /**
      * @return grid height - a point on the boardgrid is 2x2 pixels,

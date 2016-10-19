@@ -100,7 +100,7 @@ public final class GameController {
      * @return the only GameController
      */
     public static GameController getInstance() {
-        if (gameController == null) {
+        //if (gameController == null) {
             // Put lock on class since it we do not want to instantiate it twice
             synchronized (GameController.class) {
                 // Check if logger is in the meanwhile not already instantiated.
@@ -108,7 +108,7 @@ public final class GameController {
                     gameController = new GameController();
                 }
             }
-        }
+        //}
         return gameController;
     }
 

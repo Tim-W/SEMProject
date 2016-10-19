@@ -245,13 +245,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             lives = lives - 1;
         }
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + lives, this.getClass());
-        if (lives == 0) {
-            if (this.isDrawing()) {
-                Point newStartPos = stix.getStixCoordinates().getFirst();
-                this.setX((int) newStartPos.getX());
-                this.setY((int) newStartPos.getY());
-                stix.emptyStix();
-            }
+        if (lives == 0 && this.isDrawing()) {
+            Point newStartPos = stix.getStixCoordinates().getFirst();
+            this.setX((int) newStartPos.getX());
+            this.setY((int) newStartPos.getY());
+            stix.emptyStix();
         }
     }
 }
