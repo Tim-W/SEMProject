@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Point;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -8,10 +9,9 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.awt.Point;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

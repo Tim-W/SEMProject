@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -12,14 +16,9 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
-import nl.tudelft.sem.group2.powerups.PowerUpType;
-
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -106,8 +105,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
 
     private void assertMove(int transX, int transY) {
-        if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
-                + transY <= BOARD_WIDTH / 2) {
+        if (getX() + transX >= 0 && getX() + transX <= Globals.BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
+                + transY <= Globals.BOARD_WIDTH / 2) {
             if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
                 if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
                         && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
@@ -159,6 +158,48 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.currentMove = currentMove;
     }
 
+
+    /**
+     * Return the quadrant the cursor is in, as follows.
+     * 12
+     * 34
+     *
+     * @return the quadrant the cursor is in
+     */
+    public int quadrant() {
+        if (this.getX() < Globals.BOARD_WIDTH / 4) {
+            if (this.getY() < Globals.BOARD_HEIGHT / 4) {
+                return 1;
+            } else {
+                return 3;
+            }
+        } else if (this.getY() < Globals.BOARD_HEIGHT / 4) {
+            return 2;
+        }
+        return 4;
+    }
+
+    /**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @return the opposite quadrant the cursor is in
+     */
+    public int oppositeQuadrant() {
+        int quadrant = this.quadrant();
+
+        switch (quadrant) {
+            case 1:
+                return 4;
+            case 2:
+                return 3;
+            case 3:
+                return 2;
+            case 4:
+                return 1;
+            default:
+                return 1;
+        }
+    }
 
     @Override
     public void draw(Canvas canvas) {
@@ -374,56 +415,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
-    /**
-     * Return the quadrant the cursor is in, as follows.
-     * 12
-     * 34
-     *
-     * @return the quadrant the cursor is in
-     */
-    public int quadrant() {
-        if (this.getX() < BOARD_WIDTH / 4) {
-            if (this.getY() < BOARD_HEIGHT / 4) {
-                return 1;
-            } else {
-                return 3;
-            }
-        } else if (this.getY() < BOARD_HEIGHT / 4) {
-            return 2;
-        }
-        return 4;
-    }
-
-    /**
-     * Gives the opposite quadrant the cursor is in.
-     *
-     * @return the opposite quadrant the cursor is in
-     */
-    public int oppositeQuadrant() {
-        int quadrant = this.quadrant();
-
-        switch (quadrant) {
-            case 1:
-                return 4;
-            case 2:
-                return 3;
-            case 3:
-                return 2;
-            case 4:
-                return 1;
-            default:
-                return 1;
-        }
-    }
-
-    /**
-     * Adds a life to the cursor.
-     */
-    public void addLife() {
-        lives++;
-    }
-
-
     public PowerUpType getCurrentPowerup() {
         return currentPowerup;
     }
@@ -462,5 +453,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public boolean hasPowerUp() {
         return this.currentPowerup != PowerUpType.NONE;
+    }
+
+    /**
+     * Adds a life to the cursor.
+     */
+    public void addLife() {
+        lives++;
     }
 }

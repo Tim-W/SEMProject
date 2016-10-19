@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Point;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,15 +17,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Unit;
-
-import java.awt.Point;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 
 /**
@@ -179,13 +179,17 @@ public class GameScene extends Scene {
     }
 
     private void applyEffect() {
-        switch (GameController.getInstance().getCursor().getCurrentPowerup()) {
-            case EAT:
-                gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
-                break;
-            case SPEED:
-                gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
-                break;
+        List<Cursor> cursors = GameController.getInstance().getCursors();
+        for (Cursor cursor : cursors) {
+            switch (cursor.getCurrentPowerup()) {
+                case EAT:
+                    gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
+                    break;
+                case SPEED:
+                    gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                    break;
+            }
+
         }
     }
 

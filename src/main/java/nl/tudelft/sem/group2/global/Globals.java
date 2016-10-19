@@ -41,7 +41,6 @@ public final class Globals {
             + "There are 3 powerups in the game:\n- Speed - Gives you extra speed\n- Life - Gives you an extra life"
             + "\n- Hungry - Lets you eat Sparx\n\nPress 1 for single player game and 2 for a 2 player game!";
     public static final int STARTSCENE_SPACING = 30;
-    public static final int STARTSCENE_HELPTEXT_WRAPPING = 300;
     public static final double POWERUP_THRESHOLD = 0.003;
     public static final int POWERUP_LIFETIME = 200;
     public static final int POWERUP_SPEED_DURATION = 75;

@@ -1,11 +1,10 @@
 package nl.tudelft.sem.group2.units;
 
+import java.util.logging.Level;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
-
-import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -28,11 +27,11 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param y              y coord to start at
      * @param width          width, used for collision
      * @param height         height, used for collision
+     * @param areaTracker    the AreaTracker
      * @param sparxDirection direction in which the sparx starts moving,
      *                       which is either LEFT or RIGHT
-     * @param areaTracker    the AreaTracker
      */
-    public Sparx(int x, int y, int width, int height, SparxDirection sparxDirection, AreaTracker areaTracker) {
+    public Sparx(int x, int y, int width, int height, AreaTracker areaTracker, SparxDirection sparxDirection) {
         super(x, y, width, height, areaTracker);
         lastX = x;
         lastY = y;
