@@ -29,10 +29,10 @@ import nl.tudelft.sem.group2.units.Unit;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
+import java.util.Iterator;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Controller class for the GameScene to implement the MVC.
