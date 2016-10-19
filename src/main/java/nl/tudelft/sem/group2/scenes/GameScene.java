@@ -1,9 +1,9 @@
 package nl.tudelft.sem.group2.scenes;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -170,6 +170,9 @@ public class GameScene extends Scene {
         drawUncovered();
         drawBorders();
         drawStixAndFuse();
+        if (GameController.getInstance().getUnits() == null) {
+            return;
+        }
         for (Unit unit : GameController.getInstance().getUnits()) {
             unit.move();
             unit.draw(canvas);
@@ -223,8 +226,15 @@ public class GameScene extends Scene {
     private void drawStixAndFuse() {
         boolean foundFuse = true;
         Point fuse = new Point(-1, -1);
-        List<Cursor> cursorList = GameController.getInstance().getUnits().stream().filter(unit ->
-                unit instanceof Cursor).map(unit -> ((Cursor) unit)).collect(Collectors.toList());
+        List<Cursor> cursorList = new ArrayList<>();
+        if (GameController.getInstance().getUnits() == null) {
+            return;
+        }
+        for (Unit unit : GameController.getInstance().getUnits()) {
+            if (unit instanceof Cursor) {
+                cursorList.add((Cursor) unit);
+            }
+        }
         for (Cursor cursor : cursorList) {
             if (cursor.getFuse() != null) {
                 fuse = new Point(cursor.getFuse().getX(), cursor.getFuse().getY());

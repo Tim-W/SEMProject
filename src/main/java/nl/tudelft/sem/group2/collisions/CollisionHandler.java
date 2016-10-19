@@ -10,6 +10,7 @@ import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
+import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
@@ -54,7 +55,9 @@ public class CollisionHandler {
         for (Cursor cursor : cursorList) {
             unitsList.remove(cursor);
             for (Unit collidee : unitsList) {
-
+                if (collidee instanceof Powerup) {
+                    continue;
+                }
                 if (collidee instanceof Qix) {
                     if (stix != null && stix.intersect(collidee)) {
                         return true;
@@ -64,7 +67,13 @@ public class CollisionHandler {
 
                 } else {
                     if (cursor.intersect(collidee)) {
-                        return true;
+                        if (cursor.getCurrentPowerup() == EAT && collidee instanceof Sparx) {
+                            unitsList.remove(collidee);
+                            GameController.getInstance().removeUnit(collidee);
+                            return false;
+                        } else {
+                            return true;
+                        }
                     } else if (collidee instanceof Cursor) {
                         if (cursor.getStix().intersect(collidee)) {
                             return true;

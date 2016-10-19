@@ -70,7 +70,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             color = Color.RED;
         }
         sprite[0] = new Image("/images/cursor_" + colorString + ".png");
-        setSprite(sprite);
+        this.sprite = sprite;
         spriteEat = new Image[1];
         spriteEat[0] = new Image("/images/cursor-eat.png");
         this.stix = stix;

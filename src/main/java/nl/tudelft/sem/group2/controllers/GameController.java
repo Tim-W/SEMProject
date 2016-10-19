@@ -520,6 +520,9 @@ public final class GameController {
                     cursor.setDrawing(true);
                     cursor.setFast(true);
                 }
+                if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
+                    cursor.setSpeed(cursor.getSpeed() + 1);
+                }
             }
         }
     }
