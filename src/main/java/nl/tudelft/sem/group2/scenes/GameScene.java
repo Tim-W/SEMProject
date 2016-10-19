@@ -152,9 +152,6 @@ public class GameScene extends Scene {
         }
     }
 
-    public static GraphicsContext getGc() {
-        return gc;
-    }
 
     /**
      * Initializes canvas and gc.
@@ -219,7 +216,6 @@ public class GameScene extends Scene {
      * Draw all the units on the screen.
      */
     public void draw() {
-
         // gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
 
