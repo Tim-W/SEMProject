@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2.controllers;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -10,9 +12,9 @@ import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.awt.EventQueue;
 import java.awt.Point;
 
 import static org.mockito.Mockito.mock;
@@ -23,6 +25,10 @@ import static org.mockito.Mockito.verify;
 public class GameControllerTest {
     private GameController gameController;
 
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     public void setUp() {
         Group root = new Group();
         Scene s = new Scene(root, 300, 300, Color.BLACK);
@@ -32,7 +38,7 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedSpace() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -46,7 +52,7 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedArrow() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -66,7 +72,7 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedX() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -81,7 +87,7 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedXNotFast() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -101,7 +107,7 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedXNotFastNothing() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -120,7 +126,7 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedZ() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -135,7 +141,7 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedY() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -150,7 +156,7 @@ public class GameControllerTest {
 
     @Test
     public void keyReleasedCurrentMove() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -168,7 +174,7 @@ public class GameControllerTest {
 
     @Test
     public void testHandle() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -184,7 +190,7 @@ public class GameControllerTest {
 
     @Test
     public void keyReleasedCurrentMoveCreateFuse() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -201,7 +207,7 @@ public class GameControllerTest {
 
     @Test
     public void keyReleasedCurrentMoveNoCoordinates() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -219,7 +225,7 @@ public class GameControllerTest {
 
     @Test
     public void keyReleasedX() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -239,7 +245,7 @@ public class GameControllerTest {
 
     @Test
     public void keyReleasedZ() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -259,7 +265,7 @@ public class GameControllerTest {
 
     @Test
     public void keyReleasedY() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -288,7 +294,7 @@ public class GameControllerTest {
      */
     @Test
     public void testAddUnit() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
