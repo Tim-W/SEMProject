@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.powerups.PowerEat;
@@ -10,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.EventQueue;
 import java.util.HashSet;
 
 import static nl.tudelft.sem.group2.powerups.PowerUpType.EAT;
@@ -63,7 +63,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testEat() {
-        EventQueue.invokeLater(() -> {
+        Platform.runLater(() -> {
             PowerEat powerup = mock(PowerEat.class);
             set.add(powerup);
             when(cursor.intersect(powerup)).thenReturn(true);
@@ -76,7 +76,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testSpeed() {
-        EventQueue.invokeLater(() -> {
+        Platform.runLater(() -> {
             PowerSpeed powerup = mock(PowerSpeed.class);
             set.add(powerup);
             when(cursor.intersect(powerup)).thenReturn(true);
@@ -89,7 +89,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testLife() {
-        EventQueue.invokeLater(() -> {
+        Platform.runLater(() -> {
             PowerLife powerup = mock(PowerLife.class);
             set.add(powerup);
             when(cursor.intersect(powerup)).thenReturn(true);
