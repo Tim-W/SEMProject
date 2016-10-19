@@ -42,7 +42,6 @@ public final class GameController {
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
     //TODO MAKE STARTUP ARGUMENT
-    private static final int LIVES = 3;
     private static GameController gameController;
     // Animation timer properties
     private AnimationTimer animationTimer;
@@ -444,10 +443,10 @@ public final class GameController {
     }
 
 
-    /**
-     * When a new area is completed, calculate the new score.
-     */
-    private void calculateArea() {
+//    /**
+//     * When a new area is completed, calculate the new score.
+//     */
+//    private void calculateArea() {
 //        if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
 //                && !stix.getStixCoordinates().isEmpty()) {
 //            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
@@ -457,7 +456,7 @@ public final class GameController {
 //            //Remove the Fuse from the gameView when completing an area
 //            gameScene.removeFuse();
 //        }
-    }
+//    }
 
     /**
      * Method that handles the action when a key is released.

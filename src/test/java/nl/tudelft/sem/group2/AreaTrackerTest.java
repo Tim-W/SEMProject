@@ -175,7 +175,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void findPowerupLocationAtCornerTest1() {
-        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT);
         int[] coordinates = areaTracker.findPowerupLocation(1);
         assertEquals(0, coordinates[0]);
         assertEquals(0, coordinates[1]);
@@ -186,7 +186,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void findPowerupLocationAtCornerTest2() {
-        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT);
         int[] coordinates = areaTracker.findPowerupLocation(2);
         assertEquals(Globals.BOARD_WIDTH / 2, coordinates[0]);
         assertEquals(0, coordinates[1]);
@@ -197,7 +197,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void findPowerupLocationAtCornerTest3() {
-        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT);
         int[] coordinates = areaTracker.findPowerupLocation(3);
         assertEquals(0, coordinates[0]);
         assertEquals(Globals.BOARD_HEIGHT / 2, coordinates[1]);
@@ -208,7 +208,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void findPowerupLocationAtCornerTest4() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
+        AreaTracker areaTracker = new AreaTracker();
         int[] coordinates = areaTracker.findPowerupLocation(4);
         assertEquals(Globals.BOARD_WIDTH / 2, coordinates[0]);
         assertEquals(Globals.BOARD_HEIGHT / 2, coordinates[1]);
@@ -219,7 +219,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void testCornerBorders1() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
+        AreaTracker areaTracker = new AreaTracker();
         areaTracker.getBoardGrid()[1][1] = AreaState.FAST;
         areaTracker.findPowerupLocation(1);
         assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[0][0]);
@@ -230,7 +230,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void testCornerBorders2() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
+        AreaTracker areaTracker = new AreaTracker();
         areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2 - 1][1] = AreaState.FAST;
         areaTracker.findPowerupLocation(2);
         assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2][0]);
@@ -241,7 +241,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void testCornerBorders3() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
+        AreaTracker areaTracker = new AreaTracker();
         areaTracker.getBoardGrid()[1][Globals.BOARD_WIDTH / 2 - 1] = AreaState.FAST;
         areaTracker.findPowerupLocation(3);
         assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[0][Globals.BOARD_WIDTH / 2]);
@@ -252,7 +252,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void testCornerBorders4() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
+        AreaTracker areaTracker = new AreaTracker();
         areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] = AreaState.FAST;
         areaTracker.findPowerupLocation(4);
         assertEquals(AreaState.INNERBORDER,
@@ -264,7 +264,7 @@ public class AreaTrackerTest {
      */
     @Test
     public void testFalseQuadrant() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
+        AreaTracker areaTracker = new AreaTracker();
         int[] coord = areaTracker.findPowerupLocation(5);
         Assert.assertEquals(0, coord[0]);
         Assert.assertEquals(0, coord[1]);

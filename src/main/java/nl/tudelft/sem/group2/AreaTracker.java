@@ -1,9 +1,6 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.units.Stix;
-
-import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 
@@ -27,7 +24,6 @@ public class AreaTracker {
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
-    private Stix stix;
     private ThreadLocalRandom threadLocalRandom;
 
     /**

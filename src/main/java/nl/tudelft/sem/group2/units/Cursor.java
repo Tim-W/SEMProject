@@ -40,7 +40,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     // 0 for nothing, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
     private PowerUpType currentPowerup;
     private int powerUpDuration;
-    private Image[] sprite;
     private Fuse fuse;
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private ScoreCounter scoreCounter;
@@ -210,7 +209,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 oldLines.removeLast();
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
-            gC.setStroke(javafx.scene.paint.Color.WHITE);
+            gC.setStroke(Color.WHITE);
             for (double[][] l : oldLines) {
                 gC.beginPath();
                 for (int i = 0; i < 4; i++) {
@@ -458,6 +457,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
     }
 
+    /**
+     * @return String format of cursor.
+     */
     public String toString() {
         return "Cursor";
     }

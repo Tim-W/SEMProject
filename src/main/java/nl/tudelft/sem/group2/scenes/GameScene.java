@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2.scenes;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -22,6 +18,12 @@ import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Unit;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 
 /**
@@ -230,11 +232,8 @@ public class GameScene extends Scene {
         if (GameController.getInstance().getUnits() == null) {
             return;
         }
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            if (unit instanceof Cursor) {
-                cursorList.add((Cursor) unit);
-            }
-        }
+        cursorList.addAll(GameController.getInstance().getUnits().stream().
+                filter(unit -> unit instanceof Cursor).map(unit -> (Cursor) unit).collect(Collectors.toList()));
         for (Cursor cursor : cursorList) {
             if (cursor.getFuse() != null) {
                 fuse = new Point(cursor.getFuse().getX(), cursor.getFuse().getY());
