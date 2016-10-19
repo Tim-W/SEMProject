@@ -350,7 +350,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
 
-        if (scoreCounter.getLives()>0 && stix != null && !stix.isStixEmpty()) {
+        if (scoreCounter.getLives() > 0 && stix != null && !stix.isStixEmpty()) {
             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());
