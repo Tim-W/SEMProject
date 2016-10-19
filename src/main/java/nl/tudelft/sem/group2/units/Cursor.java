@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -19,6 +15,11 @@ import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -40,7 +41,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private PowerUpType currentPowerup;
     private int powerUpDuration;
     private Image[] sprite;
-    private Image[] spriteEat;
     private Fuse fuse;
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private ScoreCounter scoreCounter;
@@ -70,9 +70,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             color = Color.RED;
         }
         sprite[0] = new Image("/images/cursor_" + colorString + ".png");
-        this.sprite = sprite;
-        spriteEat = new Image[1];
-        spriteEat[0] = new Image("/images/cursor-eat.png");
+        setSprite(sprite);
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
         GameController.getInstance().getScene();
@@ -404,10 +402,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void cursorDied() {
         if (scoreCounter.getLives() >= 1) {
-            scoreCounter.subtractLive();
+            scoreCounter.subtractLife();
         }
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
-        if (scoreCounter.getLives() == 0 && this.isDrawing()) {
+        if (scoreCounter.getLives() > 0 && this.isDrawing()) {
+            removeFuse();
             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());
@@ -426,11 +425,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void setCurrentPowerup(PowerUpType currentPowerup) {
         this.currentPowerup = currentPowerup;
-        if (this.currentPowerup == PowerUpType.EAT) {
-            setSprite(spriteEat);
-        } else {
-            setSprite(sprite);
-        }
     }
 
     public int getPowerUpDuration() {
@@ -460,5 +454,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void addLife() {
         lives++;
+        scoreCounter.addLife();
+        LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
+    }
+
+    public String toString() {
+        return "Cursor";
     }
 }

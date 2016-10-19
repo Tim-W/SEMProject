@@ -128,8 +128,18 @@ public class ScoreCounter extends Observable {
      * subtracts lives.
      */
     //TODO rename this
-    public void subtractLive() {
+    public void subtractLife() {
         this.lives = lives - 1;
+        setChanged();
+        notifyObservers();
+    }
+
+    /**
+     * subtracts lives.
+     */
+    //TODO rename this
+    public void addLife() {
+        this.lives = lives + 1;
         setChanged();
         notifyObservers();
     }

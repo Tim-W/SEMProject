@@ -1,13 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -32,6 +24,15 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -352,7 +353,7 @@ public final class GameController {
             if (unit instanceof Powerup) {
                 Powerup powerup = (Powerup) unit;
                 powerup.decreaseDuration();
-                if (powerup.getDuration() < 0) {
+                if (powerup.getDuration() <= 0) {
                     iter.remove();
                 }
             }
@@ -384,16 +385,14 @@ public final class GameController {
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
         if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
-            PowerUpType type = PowerUpType.randomType();
 
             for (Cursor cursor : cursors) {
 
                 int quadrant = cursor.oppositeQuadrant();
 
                 int[] coordinates = areaTracker.findPowerupLocation(quadrant);
-
                 Powerup powerup = null;
-                switch (type) {
+                switch (PowerUpType.randomType()) {
                     case EAT:
                         powerup = new PowerEat(coordinates[0], coordinates[1],
                                 Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
@@ -409,9 +408,6 @@ public final class GameController {
                     case NONE:
                         return;
                 }
-                LOGGER.log(Level.INFO, powerup.toString() + " spawned at (" + powerup.getX() + ", "
-                        + powerup.getY() + ")", GameController.this.getClass());
-
                 addUnit(powerup);
             }
         }
@@ -421,15 +417,17 @@ public final class GameController {
      * @return true if a power up is active
      */
     private boolean powerUpActive() {
-//        if (cursor.getCurrentPowerup() != PowerUpType.NONE) {
-//            return true;
-//        }
-//
-//        for (Unit u : units) {
-//            if (u instanceof Powerup) {
-//                return true;
-//            }
-//        }
+        for (Cursor cursor : cursors) {
+            if (cursor.hasPowerUp()) {
+                return true;
+            }
+        }
+
+        for (Unit u : units) {
+            if (u instanceof Powerup) {
+                return true;
+            }
+        }
         return false;
     }
 
