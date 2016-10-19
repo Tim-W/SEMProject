@@ -11,6 +11,11 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.powerups.PowerEat;
+import nl.tudelft.sem.group2.powerups.PowerLife;
+import nl.tudelft.sem.group2.powerups.PowerSpeed;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
+import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -24,7 +29,9 @@ import nl.tudelft.sem.group2.units.Unit;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 /**
@@ -87,6 +94,7 @@ public final class GameController {
         addUnit(sparxRight);
         addUnit(sparxLeft);
 
+
         collisionHandler = new CollisionHandler();
 
         //Animation timer initialization
@@ -114,6 +122,7 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param gameController setter.
      */
     public static void setGameController(GameController gameController) {
@@ -195,6 +204,7 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param gameScene setter
      */
     public void setGameScene(GameScene gameScene) {
@@ -222,14 +232,128 @@ public final class GameController {
                         if (cursor.getLives() == 0) {
                             gameOver();
                         }
-
                     }
                     gameScene.updateScorescene(scoreCounter, cursor);
                     calculateArea();
+                    handlePowerups();
+                    spawnPowerup();
                 }
             }
         };
     }
+
+    private void checkSparx() {
+        int nSparx = 0;
+        for (Unit u : units) {
+            if (u instanceof Sparx) {
+                nSparx++;
+            }
+        }
+
+        while (nSparx < 2) {
+            int[] coordinates = areaTracker.findPowerupLocation(cursor.oppositeQuadrant());
+            Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
+                    Globals.BOARD_MARGIN * 2, SparxDirection.randomDirection(), areaTracker);
+            addUnit(sparx);
+            nSparx++;
+        }
+    }
+
+    private void handlePowerups() {
+        applyPowerups();
+
+        Iterator<Unit> iter = units.iterator();
+        //code to remove powerups from the board after a certain amount of time
+        while (iter.hasNext()) {
+            Unit unit = iter.next();
+            if (unit instanceof Powerup) {
+                Powerup powerup = (Powerup) unit;
+                powerup.decreaseDuration();
+                if (powerup.getDuration() < 0) {
+                    iter.remove();
+                }
+            }
+        }
+
+        PowerUpType powerUpType = collisionHandler.powerUpCollisions(units);
+        switch (powerUpType) {
+            case NONE:
+                return;
+            case LIFE:
+                cursor.addLife();
+                return;
+            case EAT:
+                cursor.setCurrentPowerup(PowerUpType.EAT);
+                cursor.setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
+                return;
+            case SPEED:
+                cursor.setCurrentPowerup(PowerUpType.SPEED);
+                cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
+        }
+    }
+
+    /**
+     * Spawns a new powerup at random and when none is active yet.
+     */
+    private void spawnPowerup() {
+        double rand = ThreadLocalRandom.current().nextDouble();
+        if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
+            PowerUpType type = PowerUpType.randomType();
+            int quadrant = cursor.oppositeQuadrant();
+
+            int[] coordinates = areaTracker.findPowerupLocation(quadrant);
+
+            Powerup powerup = null;
+            switch (type) {
+                case EAT:
+                    powerup = new PowerEat(coordinates[0], coordinates[1],
+                            Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+                    break;
+                case LIFE:
+                    powerup = new PowerLife(coordinates[0], coordinates[1],
+                            Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+                    break;
+                case SPEED:
+                    powerup = new PowerSpeed(coordinates[0], coordinates[1],
+                            Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+                    break;
+                case NONE:
+                    return;
+            }
+            LOGGER.log(Level.INFO, powerup.toString() + " spawned at (" + powerup.getX() + ", "
+                    + powerup.getY() + ")", GameController.this.getClass());
+
+            addUnit(powerup);
+        }
+    }
+
+    /**
+     * @return true if a power up is active (player has a powerup or there is a powerup on the board)
+     */
+    private boolean powerUpActive() {
+        if (cursor.hasPowerUp()) {
+            return true;
+        }
+
+        for (Unit u : units) {
+            if (u instanceof Powerup) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void applyPowerups() {
+        if (cursor.hasPowerUp() && cursor.getPowerUpDuration() <= 0) {
+            cursor.setCurrentPowerup(PowerUpType.NONE);
+        }
+
+        if (cursor.hasPowerUp() && cursor.getPowerUpDuration() > 0) {
+            cursor.decrementPowerupDuration();
+        }
+    }
+
+
 
     /**
      * When a new area is completed, calculate the new score.
@@ -294,7 +418,7 @@ public final class GameController {
      * @param e describes which keyevent happened.
      */
     public void keyPressed(KeyEvent e) {
-
+        initializeCursorSpeed();
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
             new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
@@ -313,19 +437,30 @@ public final class GameController {
         } else if (e.getCode().equals(KeyCode.X)) {
             if (stix.getStixCoordinates() != null && !stix.getStixCoordinates().isEmpty()) {
                 if (!cursor.isFast()) {
-                    cursor.setSpeed(1);
+                    cursor.setSpeed(Globals.CURSOR_SLOW);
                     cursor.setDrawing(true);
                     cursor.setFast(false);
                 }
             } else {
-                cursor.setSpeed(1);
+                cursor.setSpeed(Globals.CURSOR_SLOW);
                 cursor.setDrawing(true);
                 cursor.setFast(false);
             }
         } else if (e.getCode().equals(KeyCode.Z)) {
-            cursor.setSpeed(2);
+            cursor.setSpeed(Globals.CURSOR_FAST);
             cursor.setDrawing(true);
             cursor.setFast(true);
+        }
+        if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
+            cursor.setSpeed(cursor.getSpeed() + 1);
+        }
+    }
+
+    private void initializeCursorSpeed() {
+        if (cursor.isFast() || !cursor.isDrawing()) {
+            cursor.setSpeed(Globals.CURSOR_FAST);
+        } else {
+            cursor.setSpeed(Globals.CURSOR_SLOW);
         }
     }
 
@@ -378,10 +513,20 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param units setter.
      */
     public static void setUnits(Set<Unit> units) {
         GameController.units = units;
     }
 
+    /**
+     * removes a unit of the list of units.
+     *
+     * @param unit the unit to be removed
+     */
+    public void removeUnit(Unit unit) {
+        units.remove(unit);
+        checkSparx();
+    }
 }

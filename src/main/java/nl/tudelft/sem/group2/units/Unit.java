@@ -28,7 +28,7 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
      * @param height      height, used for collision
      * @param areaTracker the areatracker
      */
-    Unit(int x, int y, int width, int height, AreaTracker areaTracker) {
+    public Unit(int x, int y, int width, int height, AreaTracker areaTracker) {
         this.setX(x);
         this.setY(y);
         this.setWidth(width);

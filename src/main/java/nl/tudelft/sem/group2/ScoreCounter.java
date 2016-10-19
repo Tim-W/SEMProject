@@ -61,7 +61,6 @@ public class ScoreCounter {
             LOGGER.log(Level.INFO, "Score updated with "
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
-
     }
 
     public double getTotalPercentage() {

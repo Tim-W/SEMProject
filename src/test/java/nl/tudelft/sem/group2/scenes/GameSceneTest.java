@@ -26,8 +26,9 @@ public class GameSceneTest {
     private GameScene scene;
     private GameController gameController;
     private Cursor spyCursor;
+
     @BeforeClass
-    public static void BeforeClass(){
+    public static void BeforeClass() {
         new JFXPanel();
     }
 
@@ -68,6 +69,7 @@ public class GameSceneTest {
             }
         });
     }
+
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
         Platform.runLater(new Runnable() {
@@ -83,6 +85,7 @@ public class GameSceneTest {
             }
         });
     }
+
     @Test
     public void testRemoveFuse() throws Exception {
         Platform.runLater(new Runnable() {
@@ -98,5 +101,4 @@ public class GameSceneTest {
         });
 
     }
-
 }

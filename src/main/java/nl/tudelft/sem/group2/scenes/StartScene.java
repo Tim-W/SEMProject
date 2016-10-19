@@ -141,6 +141,8 @@ public class StartScene extends javafx.scene.Scene {
             } else if (event.getCode() == KeyCode.DIGIT2) {
                 //TODO change to multiplayer code
                 LaunchApp.setScene(GameController.getInstance().getScene());
+            } else if (event.getCode() == KeyCode.H) {
+                helpTextWrapper.setVisible(true);
             }
         });
     }

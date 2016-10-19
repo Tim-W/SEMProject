@@ -60,8 +60,8 @@ public class QixTest {
             spyQix.getColorArray().addFirst(colors);
         }
         LinkedList<float[]> linkedList2 = new LinkedList<>();
-        linkedList2.add(new float[] {1, 1});
-        linkedList2.add(new float[] {1, 1});
+        linkedList2.add(new float[]{1, 1});
+        linkedList2.add(new float[]{1, 1});
         spyQix.setOldCoordinates(linkedList2);
         spyQix.setOldDirections(linkedList2);
         spyQix.draw(canvas);
@@ -145,11 +145,10 @@ public class QixTest {
     @Test
     public void toPolygon2() throws Exception {
         LinkedList<float[]> linkedlist = new LinkedList<float[]>();
-        linkedlist.add(new float[] {1, 1});
+        linkedlist.add(new float[]{1, 1});
         spyQix.setOldDirections(linkedlist);
         spyQix.setOldCoordinates(linkedlist);
         spyQix.toPolygon();
         verify(spyQix, times(6)).getOldCoordinates();
     }
-
 }

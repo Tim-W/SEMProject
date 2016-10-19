@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -149,6 +150,7 @@ public class GameScene extends Scene {
         }
     }
 
+
     /**
      * Initializes canvas and gc.
      */
@@ -193,7 +195,6 @@ public class GameScene extends Scene {
     private void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
-
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }
@@ -215,6 +216,7 @@ public class GameScene extends Scene {
     public void draw() {
         // gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
+
         gc.drawImage(image, Globals.BOARD_MARGIN, Globals.BOARD_MARGIN);
         gc.setFill(Color.WHITE);
         drawUncovered();
@@ -223,6 +225,19 @@ public class GameScene extends Scene {
         for (Unit unit : GameController.getInstance().getUnits()) {
             unit.move();
             unit.draw(canvas);
+        }
+
+        applyEffect();
+    }
+
+    private void applyEffect() {
+        switch (GameController.getInstance().getCursor().getCurrentPowerup()) {
+            case EAT:
+                gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
+                break;
+            case SPEED:
+                gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                break;
         }
     }
 
@@ -263,7 +278,7 @@ public class GameScene extends Scene {
      * Update the info on the scorescene with actual info from scorecounter.
      *
      * @param scoreCounter scorecounter from GameController.
-     * @param cursor current cursor for which lives should be updated.
+     * @param cursor       current cursor for which lives should be updated.
      */
     public void updateScorescene(ScoreCounter scoreCounter, Cursor cursor) {
         scoreScene.setScore(scoreCounter.getTotalScore());

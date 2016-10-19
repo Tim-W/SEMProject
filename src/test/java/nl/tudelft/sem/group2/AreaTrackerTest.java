@@ -1,6 +1,9 @@
 package nl.tudelft.sem.group2;
 
+import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.awt.Point;
 
@@ -29,14 +32,11 @@ public class AreaTrackerTest {
             for (int y = 0; y < expectedGrid[x].length; y++) {
                 if (x == 0) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == expectedGrid.length - 1) {
+                } else if (x == expectedGrid.length - 1) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (y == 0 || y == expectedGrid[x].length - 1) {
+                } else if (y == 0 || y == expectedGrid[x].length - 1) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else {
+                } else {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
                 }
             }
@@ -68,7 +68,6 @@ public class AreaTrackerTest {
                 assertEquals(expectedGrid[j][i], currentGrid[j][i]);
             }
         }
-
     }
 
     /**
@@ -90,7 +89,6 @@ public class AreaTrackerTest {
                 assertEquals(expectedGrid[j][i], currentGrid[j][i]);
             }
         }
-
     }
 
     /**
@@ -113,7 +111,6 @@ public class AreaTrackerTest {
                 assertEquals(expectedGrid[j][i], currentGrid[j][i]);
             }
         }
-
     }
 
     private AreaState[][] createExpectedBoardGridQixAboveStix(boolean fastArea) {
@@ -122,31 +119,24 @@ public class AreaTrackerTest {
             for (int x = 0; x < TEST_MAP_WIDTH; x++) {
                 if (x == 0) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if ((x == 1 || x == 4) && (y == 0 || y == 4)) {
+                } else if ((x == 1 || x == 4) && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 1) {
+                } else if (x == 1) {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
-                }
-                else if (x == 2) {
+                } else if (x == 2) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3 && (y == 0 || y == 4)) {
+                } else if (x == 3 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 3 && fastArea) {
+                } else if (x == 3 && fastArea) {
                     expectedGrid[x][y] = AreaState.FAST;
-                }
-                else if (x == 3) {
+                } else if (x == 3) {
                     expectedGrid[x][y] = AreaState.SLOW;
-                }
-                else if (x == 4 && y > 0 && y < 4) {
+                } else if (x == 4 && y > 0 && y < 4) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
                 }
             }
         }
-        return  expectedGrid;
+        return expectedGrid;
     }
 
     private AreaState[][] createExpectedBoardGridQixUnderStix(boolean fastArea) {
@@ -155,35 +145,83 @@ public class AreaTrackerTest {
             for (int x = 0; x < TEST_MAP_WIDTH; x++) {
                 if (x == 0 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 0) {
+                } else if (x == 0) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 1 && (y == 0 || y == 4)) {
+                } else if (x == 1 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 1 && fastArea) {
+                } else if (x == 1 && fastArea) {
                     expectedGrid[x][y] = AreaState.FAST;
-                }
-                else if (x == 1) {
+                } else if (x == 1) {
                     expectedGrid[x][y] = AreaState.SLOW;
-                }
-                else if (x == 2) {
+                } else if (x == 2) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3 && (y == 0 || y == 4)) {
+                } else if (x == 3 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3) {
+                } else if (x == 3) {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
-                }
-                else if (x == 4) {
+                } else if (x == 4) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
                 }
             }
         }
-        return  expectedGrid;
+        return expectedGrid;
     }
+
+    /**
+     * Tests if the findPowerupLocation returns the corner if its not covered.
+     */
+    @Test
+    public void findPowerupLocationAtCornerTest1() {
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        int[] coordinates = areaTracker.findPowerupLocation(1);
+        assertEquals(0, coordinates[0]);
+        assertEquals(0, coordinates[1]);
+    }
+
+    /**
+     * Tests if the findPowerupLocation returns the corner if its not covered.
+     */
+    @Test
+    public void findPowerupLocationAtCornerTest2() {
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        int[] coordinates = areaTracker.findPowerupLocation(2);
+        assertEquals(Globals.BOARD_WIDTH / 2, coordinates[0]);
+        assertEquals(0, coordinates[1]);
+    }
+
+    /**
+     * Tests if the findPowerupLocation returns the corner if its not covered.
+     */
+    @Test
+    public void findPowerupLocationAtCornerTest3() {
+        AreaTracker areaTracker = new AreaTracker(Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, new Stix());
+        int[] coordinates = areaTracker.findPowerupLocation(3);
+        assertEquals(0, coordinates[0]);
+        assertEquals(Globals.BOARD_HEIGHT / 2, coordinates[1]);
+    }
+
+    /**
+     * Tests if the findPowerupLocation returns the corner if its not covered.
+     */
+    @Test
+    public void findPowerupLocationAtCornerTest4() {
+        AreaTracker areaTracker = new AreaTracker(new Stix());
+        int[] coordinates = areaTracker.findPowerupLocation(4);
+        assertEquals(Globals.BOARD_WIDTH / 2, coordinates[0]);
+        assertEquals(Globals.BOARD_HEIGHT / 2, coordinates[1]);
+    }
+
+    /**
+     * Tests for a false quadrant input.
+     */
+    @Test
+    public void testFalseQuadrant() {
+        AreaTracker areaTracker = new AreaTracker(new Stix());
+        int[] coord = areaTracker.findPowerupLocation(5);
+        Assert.assertEquals(0, coord[0]);
+        Assert.assertEquals(0, coord[1]);
+    }
+
 
     private AreaTracker instantiateAreaTracker() {
         Stix stix = new Stix();

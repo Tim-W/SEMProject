@@ -87,7 +87,7 @@ public class ScoreScene extends SubScene {
     private void displayClaimedPercentage() {
         claimedPercentage = new Label();
         claimedPercentage.setTextFill(Color.YELLOW);
-        claimedPercentage.setStyle("-fx-font-size:14;");
+        claimedPercentage.setStyle("-fx-font-size:12;");
     }
 
     private void createScoreLabel() {
@@ -98,13 +98,13 @@ public class ScoreScene extends SubScene {
 
     private void setClaimedText() {
         claimed.setTextFill(Color.YELLOW);
-        claimed.setStyle("-fx-font-size:14;");
+        claimed.setStyle("-fx-font-size:12;");
     }
 
     private void createLivesLabel() {
         livesLabel = new Label();
         livesLabel.setTextFill(Color.YELLOW);
-        livesLabel.setStyle("-fx-font-size:14;");
+        livesLabel.setStyle("-fx-font-size:12;");
     }
 
     private void createTitlePane() {
@@ -130,7 +130,7 @@ public class ScoreScene extends SubScene {
      */
     public void setClaimedPercentage(int claimedPercentageInput) {
         claimedPercentage.setText(
-                String.valueOf(claimedPercentageInput) + "% of " + String.valueOf(Globals.TARGET_PERCENTAGE * 100) + "%"
+                claimedPercentageInput + "% of " + String.valueOf(Globals.TARGET_PERCENTAGE * 100) + "%"
         );
     }
 

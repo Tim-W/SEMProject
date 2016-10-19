@@ -54,7 +54,6 @@ public class FuseTest {
     }
 
 
-
     @Test
     public void testMoveRightLastX() {
         moveFuse(-1, 0);
@@ -151,5 +150,4 @@ public class FuseTest {
     public void testToString() {
         Assert.assertEquals(fuse.toString(), "Fuse");
     }
-
 }
