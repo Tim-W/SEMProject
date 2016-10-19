@@ -22,6 +22,7 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
+
 /**
  * Controller class for the GameScene to implement the MVC.
  */
@@ -30,6 +31,8 @@ public final class GameController {
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
+    //TODO MAKE STARTUP ARGUMENT
+    private static final int LIVES = 3;
     private static GameController gameController;
     // Animation timer properties
     private AnimationTimer animationTimer;
@@ -44,10 +47,6 @@ public final class GameController {
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
     private GameScene gameScene;
-
-
-    //TODO MAKE STARTUP ARGUMENT
-    private static final int LIVES = 3;
 
     /**
      * Constructor for the GameController class.
@@ -75,7 +74,7 @@ public final class GameController {
      * @return the only GameController
      */
     public static GameController getInstance() {
-        if (gameController == null) {
+        //if (gameController == null) {
             // Put lock on class since it we do not want to instantiate it twice
             synchronized (GameController.class) {
                 // Check if logger is in the meanwhile not already instantiated.
@@ -83,7 +82,7 @@ public final class GameController {
                     gameController = new GameController();
                 }
             }
-        }
+        //}
         return gameController;
     }
 

@@ -70,7 +70,8 @@ public class GameScene extends Scene {
         setImage(new Image("/images/" + image + ".png", Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, false, false));
         //Draw black rectangle over image to avoid spoilers
         gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN, Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
+        gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
+                Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();

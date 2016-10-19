@@ -176,6 +176,7 @@ public class ScoreScene extends SubScene implements Observer {
     }
     /**
      * setter for the lives label.
+     *
      * @param lives the amount of lives the player has left
      */
     private void setLivesLabel(int lives) {

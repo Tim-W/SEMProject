@@ -339,6 +339,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * Getter for the amount of lives the cursor has.
+     *
      * @return amount of lives left
      */
     public int getLives() {
@@ -353,13 +354,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             scoreCounter.setLives(scoreCounter.getLives() - 1);
         }
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
-        if (scoreCounter.getLives() == 0) {
-            if (this.isDrawing()) {
-                Point newStartPos = stix.getStixCoordinates().getFirst();
-                this.setX((int) newStartPos.getX());
-                this.setY((int) newStartPos.getY());
-                stix.emptyStix();
-            }
+        if (scoreCounter.getLives() == 0 && this.isDrawing()) {
+            Point newStartPos = stix.getStixCoordinates().getFirst();
+            this.setX((int) newStartPos.getX());
+            this.setY((int) newStartPos.getY());
+            stix.emptyStix();
         }
     }
 }
