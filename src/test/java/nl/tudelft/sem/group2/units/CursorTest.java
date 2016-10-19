@@ -51,7 +51,7 @@ public class CursorTest {
     public void setUp() throws Exception {
         new JFXPanel();
         stix = mock(Stix.class);
-        createCursor(new Cursor(2, 2, 2, 2, areaTracker, stix, Color.RED, 3));
+        createCursor(new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, Color.RED, 3));
         cursor.setSpeed(1);
         canvas = new Canvas(50, 50);
         for (int i = 0; i < boardGrid.length; i++) {
@@ -101,7 +101,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveL() throws Exception {
-        createCursor(new Cursor(0, 2, 2, 2, areaTracker, stix, Color.RED, 3));
+        createCursor(new Cursor(new Point(0, 2), 2, 2, areaTracker, stix, Color.RED, 3));
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.LEFT);
         cursor.move();
@@ -110,7 +110,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveR() throws Exception {
-        createCursor(new Cursor(BOARD_WIDTH / 2, 2, 2, 2, areaTracker, stix, Color.RED, 3));
+        createCursor(new Cursor(new Point(BOARD_WIDTH / 2, 2), 2, 2, areaTracker, stix, Color.RED, 3));
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.RIGHT);
         cursor.move();
@@ -119,7 +119,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveU() throws Exception {
-        createCursor(new Cursor(2, 0, 2, 2, areaTracker, stix, Color.RED, 3));
+        createCursor(new Cursor(new Point(2, 0), 2, 2, areaTracker, stix, Color.RED, 3));
         int dim = cursor.getY();
         cursor.setCurrentMove(KeyCode.UP);
         cursor.move();
@@ -128,7 +128,7 @@ public class CursorTest {
 
     @Test
     public void dontMoveD() throws Exception {
-        createCursor(new Cursor(2, BOARD_HEIGHT / 2, 2, 2, areaTracker, stix, Color.RED, 3));
+        createCursor(new Cursor(new Point(2, BOARD_HEIGHT / 2), 2, 2, areaTracker, stix, Color.RED, 3));
         int dim = cursor.getY();
         cursor.setCurrentMove(KeyCode.DOWN);
         cursor.move();
@@ -230,7 +230,7 @@ public class CursorTest {
 
     @Test
     public void draw() throws Exception {
-        Cursor spy = spy(new Cursor(1, 1, 1, 1, areaTracker, stix, Color.RED, 3));
+        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, Color.RED, 3));
         spy.draw(new Canvas(1, 1));
         verify(spy).getSpriteIndex();
     }

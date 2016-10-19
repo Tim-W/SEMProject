@@ -19,6 +19,7 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -102,7 +103,7 @@ public final class GameController {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
-        cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
+        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
         cursors.get(0).addKey(KeyCode.UP);
         cursors.get(0).addKey(KeyCode.DOWN);
@@ -111,7 +112,7 @@ public final class GameController {
 
         //second
         Stix stix2 = new Stix();
-        cursors.add(new Cursor(0, 0, Globals.BOARD_MARGIN * 2,
+        cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, 3));
         cursors.get(1).addKey(KeyCode.W);
         cursors.get(1).addKey(KeyCode.S);
@@ -140,7 +141,7 @@ public final class GameController {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
-        cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
+        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
         cursors.get(0).addKey(KeyCode.UP);
         cursors.get(0).addKey(KeyCode.DOWN);

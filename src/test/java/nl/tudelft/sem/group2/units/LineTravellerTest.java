@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.mockito.Mockito;
 
+import java.awt.Point;
+
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -30,7 +32,7 @@ public class LineTravellerTest {
         new JFXPanel();
         areaTracker = Mockito.mock(AreaTracker.class);
         stix = new Stix();
-        createCursor(new Cursor(2, 2, 2, 2, areaTracker, stix, Color.RED, 3));
+        createCursor(new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, Color.RED, 3));
     }
 
     public void createCursor(Cursor c) {
