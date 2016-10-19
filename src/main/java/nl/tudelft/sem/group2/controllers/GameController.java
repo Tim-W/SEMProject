@@ -107,7 +107,7 @@ public final class GameController {
         //first
         Stix stix = new Stix();
         cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES));
         cursors.get(0).addKey(KeyCode.UP);
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
@@ -118,7 +118,7 @@ public final class GameController {
             //second
             Stix stix2 = new Stix();
             cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, 3));
+                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES));
             cursors.get(1).addKey(KeyCode.W);
             cursors.get(1).addKey(KeyCode.S);
             cursors.get(1).addKey(KeyCode.A);
