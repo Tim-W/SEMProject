@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.EventQueue;
 import java.util.HashSet;
 
 import static nl.tudelft.sem.group2.powerups.PowerUpType.EAT;
@@ -62,10 +63,12 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testEat() {
-        PowerEat powerup = mock(PowerEat.class);
-        set.add(powerup);
-        when(cursor.intersect(powerup)).thenReturn(true);
-        Assert.assertEquals(EAT, handler.powerUpCollisions(set));
+        EventQueue.invokeLater(() -> {
+            PowerEat powerup = mock(PowerEat.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(true);
+            Assert.assertEquals(EAT, handler.powerUpCollisions(set));
+        });
     }
 
     /**
@@ -73,10 +76,12 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testSpeed() {
-        PowerSpeed powerup = mock(PowerSpeed.class);
-        set.add(powerup);
-        when(cursor.intersect(powerup)).thenReturn(true);
-        Assert.assertEquals(SPEED, handler.powerUpCollisions(set));
+        EventQueue.invokeLater(() -> {
+            PowerSpeed powerup = mock(PowerSpeed.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(true);
+            Assert.assertEquals(SPEED, handler.powerUpCollisions(set));
+        });
     }
 
     /**
@@ -84,10 +89,12 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testLife() {
-        PowerLife powerup = mock(PowerLife.class);
-        set.add(powerup);
-        when(cursor.intersect(powerup)).thenReturn(true);
-        Assert.assertEquals(LIFE, handler.powerUpCollisions(set));
+        EventQueue.invokeLater(() -> {
+            PowerLife powerup = mock(PowerLife.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(true);
+            Assert.assertEquals(LIFE, handler.powerUpCollisions(set));
+        });
     }
 
     /**
@@ -146,5 +153,4 @@ public class PowerUpCollisionsTest {
         set.add(powerup);
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
     }
-
 }
