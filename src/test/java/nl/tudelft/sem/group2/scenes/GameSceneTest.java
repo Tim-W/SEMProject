@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.scenes;
 
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,7 +12,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.awt.EventQueue;
 import java.awt.Point;
 
 import static org.mockito.Mockito.spy;
@@ -55,7 +55,7 @@ public class GameSceneTest {
 
     @Test
     public void testDrawStixAndFuseVerify() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -70,7 +70,7 @@ public class GameSceneTest {
     }
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -85,7 +85,7 @@ public class GameSceneTest {
     }
     @Test
     public void testRemoveFuse() throws Exception {
-        EventQueue.invokeLater(new Runnable() {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 setUp();
