@@ -38,6 +38,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private Stix stix;
     private Fuse fuse;
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+    private KeyCode FastMoveKey, SlowMoveKey;
     private ScoreCounter scoreCounter;
 
 
@@ -355,5 +356,21 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             this.setY((int) newStartPos.getY());
             stix.emptyStix();
         }
+    }
+
+    public KeyCode getFastMoveKey() {
+        return FastMoveKey;
+    }
+
+    public void setFastMoveKey(KeyCode fastMoveKey) {
+        FastMoveKey = fastMoveKey;
+    }
+
+    public KeyCode getSlowMoveKey() {
+        return SlowMoveKey;
+    }
+
+    public void setSlowMoveKey(KeyCode slowMoveKey) {
+        SlowMoveKey = slowMoveKey;
     }
 }

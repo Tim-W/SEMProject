@@ -110,7 +110,7 @@ public class ScoreScene extends SubScene implements Observer {
 
     private void createLivesLabel() {
         livesLabel = new Label();
-        livesLabel.setTextFill(Color.YELLOW);
+        livesLabel.setTextFill(color);
         livesLabel.setStyle("-fx-font-size:14;");
     }
 
@@ -146,6 +146,7 @@ public class ScoreScene extends SubScene implements Observer {
         claimedPercentage.setTextFill(color);
         score.setTextFill(color);
         claimed.setTextFill(color);
+        livesLabel.setTextFill(color);
     }
 
     /**

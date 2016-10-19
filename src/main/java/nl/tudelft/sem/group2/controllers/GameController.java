@@ -48,9 +48,6 @@ public final class GameController {
     private CollisionHandler collisionHandler;
     private GameScene gameScene;
 
-    private LinkedList<KeyCode> cursorFastMoveKey = new LinkedList<>();
-    private LinkedList<KeyCode> cursorSlowMoveKey = new LinkedList<>();
-
     /**
      * Constructor for the GameController class.
      */
@@ -114,8 +111,8 @@ public final class GameController {
         cursors.get(1).addKey(KeyCode.S);
         cursors.get(1).addKey(KeyCode.A);
         cursors.get(1).addKey(KeyCode.D);
-        cursorFastMoveKey.add(KeyCode.Z);
-        cursorSlowMoveKey.add(KeyCode.X);
+        cursors.get(1).setFastMoveKey(KeyCode.Z);
+        cursors.get(1).setSlowMoveKey(KeyCode.X);
 
 
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
@@ -164,8 +161,8 @@ public final class GameController {
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
         cursors.get(0).addKey(KeyCode.RIGHT);
-        cursorFastMoveKey.add(KeyCode.O);
-        cursorSlowMoveKey.add(KeyCode.I);
+        cursors.get(0).setFastMoveKey(KeyCode.O);
+        cursors.get(0).setSlowMoveKey(KeyCode.I);
     }
 
     /**
@@ -330,12 +327,11 @@ public final class GameController {
      */
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
-        for (int i = 0; i < cursors.size(); i++) {
-            Cursor cursor = cursors.get(i);
+        for (Cursor cursor : cursors) {
             if (keyCode.equals(cursor.getCurrentMove())) {
                 cursor.handleFuse();
                 cursor.setCurrentMove(null);
-            } else if (keyCode.equals(cursorFastMoveKey.get(i)) || keyCode.equals(cursorSlowMoveKey.get(i))) {
+            } else if (keyCode.equals(cursor.getFastMoveKey()) || keyCode.equals(cursor.getSlowMoveKey())) {
                 cursor.setDrawing(false);
                 cursor.setSpeed(2);
                 cursor.handleFuse();
@@ -357,14 +353,13 @@ public final class GameController {
             isRunning = true;
             gameScene.setMessageLabel("");
         } else {
-            for (int i = 0; i < cursors.size(); i++) {
-                Cursor cursor = cursors.get(i);
+            for (Cursor cursor : cursors) {
                 if (cursor.getArrowKeys().contains(e.getCode())) {
                     if (cursor.isDrawing() && cursor.getFuse() != null) {
                         cursor.getFuse().setMoving(false);
                     }
                     cursor.setCurrentMove(e.getCode());
-                } else if (e.getCode().equals(cursorSlowMoveKey.get(i))) {
+                } else if (e.getCode().equals(cursor.getSlowMoveKey())) {
                     if (cursor.getStix().getStixCoordinates() != null
                             && !cursor.getStix().getStixCoordinates().isEmpty()) {
                         if (!cursor.isFast()) {
@@ -377,7 +372,7 @@ public final class GameController {
                         cursor.setDrawing(true);
                         cursor.setFast(false);
                     }
-                } else if (e.getCode().equals(cursorFastMoveKey.get(i))) {
+                } else if (e.getCode().equals(cursor.getFastMoveKey())) {
                     cursor.setSpeed(2);
                     cursor.setDrawing(true);
                     cursor.setFast(true);
