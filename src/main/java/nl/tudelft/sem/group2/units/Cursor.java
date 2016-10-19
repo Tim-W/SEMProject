@@ -44,8 +44,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /**
      * Create a cursor.
      *
-     * @param x           start x coordinate
-     * @param y           start y coordinate
+     * @param position    start position
      * @param width       width, used for collision detection
      * @param height      height, used for collision detection
      * @param areaTracker used for calculating areas
@@ -53,8 +52,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param color       specifies color for this cursor.
      * @param lives       the amount of lives a players starts with
      */
-    public Cursor(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
-        super(x, y, width, height, areaTracker);
+    public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
+        super(position.x, position.y, width, height, areaTracker);
         Image[] sprite = new Image[1];
 
         String colorString = "red";
@@ -347,11 +346,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void cursorDied() {
         if (scoreCounter.getLives() >= 1) {
-            scoreCounter.setLives(scoreCounter.getLives() - 1);
+            scoreCounter.subtractLive();
         }
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
         if (scoreCounter.getLives() == 0 && this.isDrawing()) {
-             Point newStartPos = stix.getStixCoordinates().getFirst();
+            Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());
             stix.emptyStix();

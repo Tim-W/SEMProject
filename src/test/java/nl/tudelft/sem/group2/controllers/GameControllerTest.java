@@ -29,6 +29,7 @@ public class GameControllerTest {
     public static void BeforeClass() {
         new JFXPanel();
     }
+
     public void setUp() {
         Group root = new Group();
         Scene s = new Scene(root, 300, 300, Color.BLACK);
@@ -56,7 +57,8 @@ public class GameControllerTest {
             @Override
             public void run() {
                 setUp();
-                Cursor cursor = new Cursor(1, 1, 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3);
+                Cursor cursor = new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new
+                        Stix(), Color.RED, 3);
                 GameController.getInstance().addCursor(cursor);
                 cursor.setDrawing(true);
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.RIGHT, false, false,
@@ -73,7 +75,8 @@ public class GameControllerTest {
             @Override
             public void run() {
                 setUp();
-                Cursor cursor = spy(new Cursor(1, 1, 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
+                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(),
+                        new Stix(), Color.RED, 3));
                 gameController.addCursor(cursor);
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.O, false, false,
                         false, false));
@@ -90,7 +93,8 @@ public class GameControllerTest {
                 setUp();
                 Stix stix = new Stix();
                 stix.addToStix(new Point(1, 1));
-                Cursor cursor = spy(new Cursor(1, 1, 1, 1, gameController.getAreaTracker(), stix, Color.RED, 3));
+                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, gameController.getAreaTracker(), stix, Color
+                        .RED, 3));
                 gameController.addCursor(cursor);
                 cursor.setFast(false);
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.O, false, false,
@@ -109,7 +113,8 @@ public class GameControllerTest {
                 setUp();
                 Stix stix = new Stix();
                 stix.addToStix(new Point(1, 1));
-                Cursor cursor = spy(new Cursor(1, 1, 1, 1, GameController.getInstance().getAreaTracker(), stix, Color.RED, 3));
+                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(),
+                        stix, Color.RED, 3));
                 gameController.addCursor(cursor);
                 cursor.setFast(true);
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.O, false, false,
@@ -126,7 +131,7 @@ public class GameControllerTest {
             @Override
             public void run() {
                 setUp();
-                Cursor cursor = spy(new Cursor(1, 1, 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
+                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
                 GameController.getInstance().addCursor(cursor);
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.I, false, false,
                         false, false));
@@ -141,7 +146,7 @@ public class GameControllerTest {
             @Override
             public void run() {
                 setUp();
-                Cursor cursor = spy(new Cursor(1, 1, 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
+                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
                 GameController.getInstance().addCursor(cursor);
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.Y, false, false,
                         false, false));
@@ -220,7 +225,7 @@ public class GameControllerTest {
             @Override
             public void run() {
                 setUp();
-                Cursor cursor = spy(new Cursor(1, 1, 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
+                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
                 GameController.getInstance().addCursor(cursor);
                 GameController.getInstance().getCursors().get(0).setCurrentMove(KeyCode.RIGHT);
                 gameController.getCursors().get(0).getStix().addToStix(new Point(gameController.getCursors().get(0).getX(), gameController.getCursors().get(0).getY()));
@@ -237,13 +242,13 @@ public class GameControllerTest {
             @Override
             public void run() {
                 setUp();
-        Cursor cursor = spy(new Cursor(1, 1, 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
-        GameController.getInstance().addCursor(cursor);
-        GameController.getInstance().getCursors().get(0).setCurrentMove(KeyCode.RIGHT);
-        gameController.getCursors().get(0).getStix().addToStix(new Point(gameController.getCursors().get(0).getX(), gameController.getCursors().get(0).getY()));
-        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", KeyCode.Z, false, false,
-                false, false));
-        verify(cursor, times(1)).setDrawing(false);
+                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
+                GameController.getInstance().addCursor(cursor);
+                GameController.getInstance().getCursors().get(0).setCurrentMove(KeyCode.RIGHT);
+                gameController.getCursors().get(0).getStix().addToStix(new Point(gameController.getCursors().get(0).getX(), gameController.getCursors().get(0).getY()));
+                gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", KeyCode.Z, false, false,
+                        false, false));
+                verify(cursor, times(1)).setDrawing(false);
             }
         });
     }
@@ -254,7 +259,7 @@ public class GameControllerTest {
             @Override
             public void run() {
                 setUp();
-                Cursor cursor = spy(new Cursor(1, 1, 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
+                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
                 GameController.getInstance().addCursor(cursor);
                 GameController.getInstance().getCursors().get(0).setCurrentMove(KeyCode.RIGHT);
                 gameController.getCursors().get(0).getStix().addToStix(new Point(gameController.getCursors().get(0).getX(), gameController.getCursors().get(0).getY()));
@@ -264,13 +269,6 @@ public class GameControllerTest {
             }
         });
     }
-    /*@Test
-    public void gameWon() throws Exception {
-        getScoreCounter().setTargetPercentage(1);
-        getScoreCounter().setTotalPercentage(2);
-        gameController = spy(new GameController());
-        verify(gameController,times(1)).gameWon();
-    }*/
 
     /**
      * test addUnit not to add two fuses

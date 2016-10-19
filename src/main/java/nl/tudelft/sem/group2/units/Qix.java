@@ -212,7 +212,7 @@ public class Qix extends Unit implements CollisionInterface {
                         + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
             }
             return colliderP.intersects(collideeR);
-            }
+        }
         return false;
     }
 

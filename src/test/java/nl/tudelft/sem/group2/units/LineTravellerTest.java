@@ -9,8 +9,9 @@ import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.awt.Point;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -31,7 +32,7 @@ public class LineTravellerTest {
         new JFXPanel();
         areaTracker = Mockito.mock(AreaTracker.class);
         stix = new Stix();
-        createCursor(new Cursor(2, 2, 2, 2, areaTracker, stix, Color.RED, 3));
+        createCursor(new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, Color.RED, 3));
     }
 
     public void createCursor(Cursor c) {
@@ -41,6 +42,7 @@ public class LineTravellerTest {
     /**
      * ignore because
      * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
+     *
      * @throws Exception
      */
     @Ignore
@@ -57,6 +59,7 @@ public class LineTravellerTest {
     /**
      * ignore because
      * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
+     *
      * @throws Exception
      */
     @Ignore
@@ -73,6 +76,7 @@ public class LineTravellerTest {
     /**
      * ignore because
      * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
+     *
      * @throws Exception
      */
     @Ignore
@@ -85,6 +89,7 @@ public class LineTravellerTest {
     /**
      * ignore because
      * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
+     *
      * @throws Exception
      */
     @Ignore

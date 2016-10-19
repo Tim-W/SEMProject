@@ -18,12 +18,12 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.logging.Level;
+import java.awt.Point;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -106,7 +106,7 @@ public final class GameController {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
-        cursors.add(new Cursor(Globals.CURSOR_START_X, Globals.CURSOR_START_Y, Globals.BOARD_MARGIN * 2,
+        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
         cursors.get(0).addKey(KeyCode.UP);
         cursors.get(0).addKey(KeyCode.DOWN);
@@ -117,7 +117,7 @@ public final class GameController {
 
         //second
         Stix stix2 = new Stix();
-        cursors.add(new Cursor(0, 0, Globals.BOARD_MARGIN * 2,
+        cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, 3));
         cursors.get(1).addKey(KeyCode.W);
         cursors.get(1).addKey(KeyCode.S);
@@ -155,6 +155,8 @@ public final class GameController {
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
         cursors.get(0).addKey(KeyCode.RIGHT);
+        cursorFastMoveKey.add(KeyCode.O);
+        cursorSlowMoveKey.add(KeyCode.I);
 
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
@@ -179,8 +181,10 @@ public final class GameController {
         }
     }
 
+    /*****
+     * Units.
+     *****/
 
-    /***** Units *****/
     /**
      * Add a unit.
      *
@@ -199,8 +203,6 @@ public final class GameController {
         }
         units.add(unit);
     }
-
-    /****** AnimationTime ******/
 
     /**
      * Stop animations.
@@ -254,7 +256,7 @@ public final class GameController {
         gameScene.setMessageLabel(" Game Over! ");
 
         //Plays game over sound
-        new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+
         String score = "";
         for (Cursor cursor : cursors) {
             score += cursor.getScoreCounter() + ", ";
@@ -284,6 +286,9 @@ public final class GameController {
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
     }
 
+
+    /****** Key events ******/
+
     /**
      * Setup an animation timer that runs at 300FPS.
      */
@@ -305,19 +310,20 @@ public final class GameController {
                     for (Cursor cursor : cursors) {
                         if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
                             cursor.cursorDied();
+                            new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
                             if (cursor.getLives() == 0) {
                                 gameOver();
                             }
                         }
+                    }
+                    for (Cursor cursor : cursors) {
+                        cursor.calculateArea(qix);
                     }
                 }
             }
 
         };
     }
-
-
-    /****** Key events ******/
 
     /**
      * Method that handles the action when a key is released.
@@ -329,9 +335,7 @@ public final class GameController {
         for (int i = 0; i < cursors.size(); i++) {
             Cursor cursor = cursors.get(i);
             if (keyCode.equals(cursor.getCurrentMove())) {
-
                 cursor.handleFuse();
-
                 cursor.setCurrentMove(null);
             } else if (keyCode.equals(cursorFastMoveKey.get(i)) || keyCode.equals(cursorSlowMoveKey.get(i))) {
                 cursor.setDrawing(false);

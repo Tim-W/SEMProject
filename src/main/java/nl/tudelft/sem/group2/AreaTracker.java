@@ -204,15 +204,16 @@ public class AreaTracker {
      *
      * @param pointToCheck The first point to begin checking if it has to be added to area/border
      *                     or if the qix is on that pint.
-     * @param qix          The coordinates of the qix.
+     * @param qixCoordinates          The coordinates of the qix.
      * @param chosenState  The state of points which get added to the new area.
      * @param addToArea1   Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
      * @param stix         current stix to use
      */
-    public void floodFill(Point pointToCheck, Point qix, AreaState chosenState, boolean addToArea1, Stix stix) {
+    public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState,
+                          boolean addToArea1, Stix stix) {
         visiting.push(pointToCheck);
         while (!visiting.isEmpty()) {
-            floodFill(qix, chosenState, addToArea1, stix);
+            floodFill(qixCoordinates, chosenState, addToArea1, stix);
         }
     }
 

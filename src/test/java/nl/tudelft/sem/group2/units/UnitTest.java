@@ -7,12 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.LinkedList;
-
-import static nl.tudelft.sem.group2.global.Globals.QIX_START_X;
-import static nl.tudelft.sem.group2.global.Globals.QIX_START_Y;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 /**
  * Tests Unit class.
