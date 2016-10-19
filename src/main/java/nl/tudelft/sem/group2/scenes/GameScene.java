@@ -206,7 +206,7 @@ public class GameScene extends Scene {
                 unit instanceof Cursor).map(unit -> ((Cursor) unit)).collect(Collectors.toList());
         for (Cursor cursor : cursorList) {
             if (cursor.getFuse() != null) {
-                fuse = new Point(cursor.getFuse().getX(), (cursor.getFuse().getY()));
+                fuse = new Point(cursor.getFuse().getX(), cursor.getFuse().getY());
                 foundFuse = false;
             }
             for (Point p : cursor.getStix().getStixCoordinates()) {

@@ -63,16 +63,14 @@ public class Stix implements CollisionInterface {
                     }
                 }
             }
-        } else if (unit instanceof Cursor) {
-            if (!this.isStixEmpty()) {
-                Rectangle collideeR = new Rectangle(unit.getX(), unit.getY(), 2, 2);
-                for (Point point : this.getStixCoordinates()) {
-                    if (collideeR.intersects(point.getX(), point.getY(), 1, 1)) {
+        } else if (unit instanceof Cursor && !this.isStixEmpty()) {
+            Rectangle collideeR = new Rectangle(unit.getX(), unit.getY(), 2, 2);
+            for (Point point : this.getStixCoordinates()) {
+                if (collideeR.intersects(point.getX(), point.getY(), 1, 1)) {
 
-                        LOGGER.log(Level.INFO, unit.toString() + " collided with Stix at (" + point.getX()
-                                + "," + point.getY() + ")", this.getClass());
-                        return true;
-                    }
+                    LOGGER.log(Level.INFO, unit.toString() + " collided with Stix at (" + point.getX()
+                            + "," + point.getY() + ")", this.getClass());
+                    return true;
                 }
             }
         }

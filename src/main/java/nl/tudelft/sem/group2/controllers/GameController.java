@@ -18,6 +18,7 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -32,8 +33,6 @@ public final class GameController {
 
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
-    //TODO MAKE STARTUP ARGUMENT
-    private static final int LIVES = 3;
     private static GameController gameController;
     // Animation timer properties
     private AnimationTimer animationTimer;
@@ -105,20 +104,12 @@ public final class GameController {
 
         cursors = new ArrayList<>();
         //first
-        Stix stix = new Stix();
-        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
-        cursors.get(0).addKey(KeyCode.UP);
-        cursors.get(0).addKey(KeyCode.DOWN);
-        cursors.get(0).addKey(KeyCode.LEFT);
-        cursors.get(0).addKey(KeyCode.RIGHT);
-        cursorFastMoveKey.add(KeyCode.O);
-        cursorSlowMoveKey.add(KeyCode.I);
+        createFirstCursor();
 
         //second
         Stix stix2 = new Stix();
         cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, 3));
+                Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES));
         cursors.get(1).addKey(KeyCode.W);
         cursors.get(1).addKey(KeyCode.S);
         cursors.get(1).addKey(KeyCode.A);
@@ -148,15 +139,7 @@ public final class GameController {
 
         cursors = new ArrayList<>();
         //first
-        Stix stix = new Stix();
-        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
-        cursors.get(0).addKey(KeyCode.UP);
-        cursors.get(0).addKey(KeyCode.DOWN);
-        cursors.get(0).addKey(KeyCode.LEFT);
-        cursors.get(0).addKey(KeyCode.RIGHT);
-        cursorFastMoveKey.add(KeyCode.O);
-        cursorSlowMoveKey.add(KeyCode.I);
+        createFirstCursor();
 
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
@@ -168,6 +151,21 @@ public final class GameController {
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
+    }
+
+    /**
+     * Creates first cursor to avoid code duplication.
+     */
+    private void createFirstCursor() {
+        Stix stix = new Stix();
+        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES));
+        cursors.get(0).addKey(KeyCode.UP);
+        cursors.get(0).addKey(KeyCode.DOWN);
+        cursors.get(0).addKey(KeyCode.LEFT);
+        cursors.get(0).addKey(KeyCode.RIGHT);
+        cursorFastMoveKey.add(KeyCode.O);
+        cursorSlowMoveKey.add(KeyCode.I);
     }
 
     /**
@@ -362,10 +360,8 @@ public final class GameController {
             for (int i = 0; i < cursors.size(); i++) {
                 Cursor cursor = cursors.get(i);
                 if (cursor.getArrowKeys().contains(e.getCode())) {
-                    if (cursor.isDrawing()) {
-                        if (cursor.getFuse() != null) {
-                            cursor.getFuse().setMoving(false);
-                        }
+                    if (cursor.isDrawing() && cursor.getFuse() != null) {
+                        cursor.getFuse().setMoving(false);
                     }
                     cursor.setCurrentMove(e.getCode());
                 } else if (e.getCode().equals(cursorSlowMoveKey.get(i))) {

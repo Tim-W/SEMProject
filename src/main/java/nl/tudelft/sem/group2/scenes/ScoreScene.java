@@ -151,24 +151,23 @@ public class ScoreScene extends SubScene implements Observer {
     /**
      * Update the info on the scorescene with actual info from scorecounter.
      *
-     * @param o the observable (ScoreCounter)
+     * @param o   the observable (ScoreCounter)
      * @param arg the argument
      */
     @Override
     public void update(Observable o, Object arg) {
 
-        if (o instanceof ScoreCounter) {
-            if ((int) (((ScoreCounter) o).getTotalPercentage() * 100) >= highClaimedPercentage) {
+        if (o instanceof ScoreCounter
+                && (int) (((ScoreCounter) o).getTotalPercentage() * 100) >= highClaimedPercentage) {
 
-                setScore(((ScoreCounter) o).getTotalScore());
-                setClaimedPercentage((int) (((ScoreCounter) o).getTotalPercentage() * 100));
-                /**
-                 LOGGER.log(Level.WARNING, "Score updated "
-                 + color.toString(), this.getClass());
-                 **/
-                setColor(((ScoreCounter) o).getColor());
-                setLivesLabel(((ScoreCounter) o).getLives());
-            }
+            setScore(((ScoreCounter) o).getTotalScore());
+            setClaimedPercentage((int) (((ScoreCounter) o).getTotalPercentage() * 100));
+            /**
+             LOGGER.log(Level.WARNING, "Score updated "
+             + color.toString(), this.getClass());
+             **/
+            setColor(((ScoreCounter) o).getColor());
+            setLivesLabel(((ScoreCounter) o).getLives());
         }
     }
 
