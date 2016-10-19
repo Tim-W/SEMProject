@@ -130,7 +130,7 @@ public class ScoreScene extends SubScene {
      */
     public void setClaimedPercentage(int claimedPercentageInput) {
         claimedPercentage.setText(
-                String.valueOf(claimedPercentageInput) + "% of " + String.valueOf(Globals.TARGET_PERCENTAGE * 100) + "%"
+                claimedPercentageInput + "% of " + String.valueOf(Globals.TARGET_PERCENTAGE * 100) + "%"
         );
     }
 
