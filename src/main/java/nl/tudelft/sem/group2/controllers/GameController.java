@@ -328,10 +328,10 @@ public final class GameController {
     }
 
     /**
-     * @return true if a power up is active
+     * @return true if a power up is active (player has a powerup or there is a powerup on the board)
      */
     private boolean powerUpActive() {
-        if (cursor.getCurrentPowerup() != PowerUpType.NONE) {
+        if (cursor.hasPowerUp()) {
             return true;
         }
 
