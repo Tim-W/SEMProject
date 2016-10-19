@@ -161,7 +161,7 @@ public class ScoreScene extends SubScene implements Observer {
     public void update(Observable o, Object arg) {
 
         if (o instanceof ScoreCounter) {
-            if ((int) (((ScoreCounter) o).getTotalPercentage() * 100) > highClaimedPercentage) {
+            if ((int) (((ScoreCounter) o).getTotalPercentage() * 100) >= highClaimedPercentage) {
 
                 setScore(((ScoreCounter) o).getTotalScore());
                 setClaimedPercentage((int) (((ScoreCounter) o).getTotalPercentage() * 100));
@@ -174,6 +174,7 @@ public class ScoreScene extends SubScene implements Observer {
             }
         }
     }
+
     /**
      * setter for the lives label.
      *

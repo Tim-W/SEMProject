@@ -31,7 +31,7 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param areaTracker    used for calculating areas
      * @param sparxDirection direction in which the sparx starts moving,
      *                       which is either LEFT or RIGHT
-     * @param areaTracker the AreaTracker
+     * @param areaTracker    the AreaTracker
      */
     public Sparx(int x, int y, int width, int height, AreaTracker areaTracker, SparxDirection sparxDirection) {
         super(x, y, width, height, areaTracker);

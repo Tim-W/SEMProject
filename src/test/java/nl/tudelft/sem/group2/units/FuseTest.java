@@ -54,7 +54,6 @@ public class FuseTest {
     }
 
 
-
     @Test
     public void testMoveRightLastX() {
         moveFuse(-1, 0);

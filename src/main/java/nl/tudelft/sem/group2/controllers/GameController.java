@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -22,6 +18,11 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -75,15 +76,22 @@ public final class GameController {
      */
     public static GameController getInstance() {
         //if (gameController == null) {
-            // Put lock on class since it we do not want to instantiate it twice
-            synchronized (GameController.class) {
-                // Check if logger is in the meanwhile not already instantiated.
-                if (gameController == null) {
-                    gameController = new GameController();
-                }
+        // Put lock on class since it we do not want to instantiate it twice
+        synchronized (GameController.class) {
+            // Check if logger is in the meanwhile not already instantiated.
+            if (gameController == null) {
+                gameController = new GameController();
             }
+        }
         //}
         return gameController;
+    }
+
+    /**
+     *
+     */
+    public static void deleteGameController() {
+        GameController.gameController = null;
     }
 
     /**
@@ -148,16 +156,18 @@ public final class GameController {
         addUnit(sparxLeft);
     }
 
-    public void addCursor(Cursor cursor){
-        if(cursors.size()<2){
+    public void addCursor(Cursor cursor) {
+        if (cursors.size() < 2) {
             cursors.add(cursor);
         }
     }
-    public ArrayList<Cursor> getCursors(){return cursors;}
-
 
 
     /***** Units *****/
+
+    public ArrayList<Cursor> getCursors() {
+        return cursors;
+    }
 
     /**
      * @return units of the board
@@ -165,6 +175,8 @@ public final class GameController {
     public Set<Unit> getUnits() {
         return units;
     }
+
+    /****** AnimationTime ******/
 
     /**
      * Add a unit.
@@ -184,8 +196,6 @@ public final class GameController {
         }
         units.add(unit);
     }
-
-    /****** AnimationTime ******/
 
     /**
      * Stop animations.
@@ -239,7 +249,7 @@ public final class GameController {
         gameScene.setMessageLabel(" Game Over! ");
 
         //Plays game over sound
-        new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+
         String score = "";
         for (Cursor cursor : cursors) {
             score += cursor.getScoreCounter() + ", ";
@@ -269,6 +279,9 @@ public final class GameController {
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
     }
 
+
+    /****** Key events ******/
+
     /**
      * Setup an animation timer that runs at 300FPS.
      */
@@ -290,19 +303,20 @@ public final class GameController {
                     for (Cursor cursor : cursors) {
                         if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
                             cursor.cursorDied();
+                            new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
                             if (cursor.getLives() == 0) {
                                 gameOver();
                             }
                         }
+                    }
+                    for (Cursor cursor : cursors) {
+                        cursor.calculateArea(qix);
                     }
                 }
             }
 
         };
     }
-
-
-    /****** Key events ******/
 
     /**
      * Method that handles the action when a key is released.
@@ -320,7 +334,7 @@ public final class GameController {
             cursors.get(0).setDrawing(false);
             cursors.get(0).setSpeed(2);
             cursors.get(0).handleFuse();
-        } else if(cursors.size()>1) {
+        } else if (cursors.size() > 1) {
             if (keyCode.equals(cursors.get(1).getCurrentMove())) {
 
                 cursors.get(1).handleFuse();
@@ -373,7 +387,7 @@ public final class GameController {
             cursors.get(0).setFast(true);
 
             /*** second cursor ***/
-        } else if(cursors.size()>1){
+        } else if (cursors.size() > 1) {
             if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
                 if (cursors.get(1).isDrawing()) {
                     if (cursors.get(1).getFuse() != null) {
@@ -411,7 +425,6 @@ public final class GameController {
     }
 
     /**
-     *
      * @return
      */
     public GameScene getScene() {
@@ -419,14 +432,10 @@ public final class GameController {
     }
 
     /**
-     *
      * @param scene
      */
-    public void setGameScene(GameScene scene) { this.gameScene = scene; }
-
-    /**
-     *
-     */
-    public static void deleteGameController() { GameController.gameController = null; }
+    public void setGameScene(GameScene scene) {
+        this.gameScene = scene;
+    }
 
 }

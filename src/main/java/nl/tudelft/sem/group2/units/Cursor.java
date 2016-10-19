@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -17,6 +13,11 @@ import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.sound.SoundHandler;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -351,7 +352,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void cursorDied() {
         if (scoreCounter.getLives() >= 1) {
-            scoreCounter.setLives(scoreCounter.getLives() - 1);
+            scoreCounter.subtractLive();
         }
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
         if (scoreCounter.getLives() == 0 && this.isDrawing()) {

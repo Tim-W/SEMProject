@@ -9,7 +9,6 @@ import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.mockito.Matchers.anyInt;
@@ -41,6 +40,7 @@ public class LineTravellerTest {
     /**
      * ignore because
      * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
+     *
      * @throws Exception
      */
     @Ignore
@@ -57,6 +57,7 @@ public class LineTravellerTest {
     /**
      * ignore because
      * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
+     *
      * @throws Exception
      */
     @Ignore
@@ -73,6 +74,7 @@ public class LineTravellerTest {
     /**
      * ignore because
      * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
+     *
      * @throws Exception
      */
     @Ignore
@@ -85,6 +87,7 @@ public class LineTravellerTest {
     /**
      * ignore because
      * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
+     *
      * @throws Exception
      */
     @Ignore

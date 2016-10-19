@@ -122,5 +122,12 @@ public class ScoreCounter extends Observable {
 
     public void setLives(int lives) {
         this.lives = lives;
+
+    }
+
+    public void subtractLive() {
+        this.lives = lives - 1;
+        setChanged();
+        notifyObservers();
     }
 }

@@ -8,13 +8,11 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.awt.Point;
 
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -26,8 +24,9 @@ public class GameSceneTest {
     private GameScene scene;
     private GameController gameController;
     private Cursor spyCursor;
+
     @BeforeClass
-    public static void BeforeClass(){
+    public static void BeforeClass() {
         new JFXPanel();
     }
 
@@ -56,10 +55,11 @@ public class GameSceneTest {
                 gameController.getCursors().get(0).getStix().addToStix(new Point(1, 2));
                 gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getAreaTracker(), gameController.getCursors().get(0).getStix()));
                 scene.draw();
-                verify(spyCursor,times(1)).isFast();
+                verify(spyCursor, times(1)).isFast();
             }
         });
     }
+
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
         Platform.runLater(new Runnable() {
@@ -69,7 +69,7 @@ public class GameSceneTest {
                 gameController.getCursors().get(0).getStix().addToStix(new Point(1, 3));
                 gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getAreaTracker(), gameController.getCursors().get(0).getStix()));
                 scene.draw();
-                verify(spyCursor,times(0)).isFast();
+                verify(spyCursor, times(0)).isFast();
             }
         });
     }
