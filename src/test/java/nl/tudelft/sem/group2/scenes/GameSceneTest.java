@@ -30,8 +30,8 @@ public class GameSceneTest {
         new JFXPanel();
     }
 
-    public void setUp() {
-
+    @Before
+    public void setUp() throws Exception {
         Group root = new Group();
         Scene s = new Scene(root, 300, 300, Color.BLACK);
         removeGameController();
@@ -72,5 +72,15 @@ public class GameSceneTest {
                 verify(spyCursor, times(0)).isFast();
             }
         });
+    }
+
+    //TODO check if this still works
+    @Test
+    public void testRemoveFuse() throws Exception {
+        int oldSize = gameController.getUnits().size();
+        scene.removeFuse();
+        gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
+        scene.removeFuse();
+        Assert.assertEquals(oldSize, gameController.getUnits().size());
     }
 }

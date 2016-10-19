@@ -150,5 +150,4 @@ public class FuseTest {
     public void testToString() {
         Assert.assertEquals(fuse.toString(), "Fuse");
     }
-
 }

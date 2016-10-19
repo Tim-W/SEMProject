@@ -244,8 +244,5 @@ public class CursorTest {
         Assert.assertEquals(0, cursor.getLives());
         cursor.cursorDied();
         Assert.assertEquals(0, cursor.getLives());
-
     }
-
-
 }

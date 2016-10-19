@@ -112,10 +112,77 @@ public class UnitTest {
     }
 
     @Test
+    public void intersectQixCursor() throws Exception {
+        Qix qix = spy(new Qix(areaTracker));
+        LinkedList<float[]> linkedList = new LinkedList<>();
+        linkedList.add(new float[]{QIX_START_X, QIX_START_Y});
+        qix.setOldCoordinates(linkedList);
+        qix.setOldDirections(linkedList);
+        Cursor cursor = spy(new Cursor(QIX_START_X, QIX_START_Y, 10, 10, stix, areaTracker, 1));
+        Assert.assertTrue(qix.intersect(cursor));
+    }
+
+    @Test
     public void intersectNotUnitUnit() throws Exception {
         ConcreteUnit concreteUnit = spy(new ConcreteUnit(20, 20, 5, 5, areaTracker));
         ConcreteUnit concreteUnit2 = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
         Assert.assertFalse(concreteUnit.intersect(concreteUnit2));
     }
 
+    @Test
+    public void intersectNotQixCursor() throws Exception {
+        Qix qix = spy(new Qix(areaTracker));
+        LinkedList<float[]> linkedList = new LinkedList<>();
+        linkedList.add(new float[]{1, 1});
+        qix.setOldCoordinates(linkedList);
+        qix.setOldDirections(linkedList);
+        Cursor cursor = spy(new Cursor(100, 100, 10, 10, stix, areaTracker, 1));
+        Assert.assertFalse(qix.intersect(cursor));
+    }
+
+    @Test
+    public void intersectFuseCursor() throws Exception {
+        Fuse fuse = spy(new Fuse(1, 1, 5, 5, stix, areaTracker));
+        Cursor cursor = spy(new Cursor(1, 1, 5, 5, stix, areaTracker, 1));
+        Assert.assertTrue(fuse.intersect(cursor));
+    }
+
+    @Test
+    public void intersectNotFuseCursor() throws Exception {
+        Fuse fuse = spy(new Fuse(20, 20, 5, 5, stix, areaTracker));
+        Cursor cursor = spy(new Cursor(1, 1, 5, 5, stix, areaTracker, 1));
+        Assert.assertFalse(fuse.intersect(cursor));
+    }
+
+    @Test
+    public void intersectCursorQix() throws Exception {
+        Qix qix = spy(new Qix(areaTracker));
+        LinkedList<float[]> linkedList = new LinkedList<>();
+        linkedList.add(new float[]{QIX_START_X, QIX_START_Y});
+        qix.setOldCoordinates(linkedList);
+        qix.setOldDirections(linkedList);
+        Cursor cursor = spy(new Cursor(QIX_START_X, QIX_START_Y, 10, 10, stix, areaTracker, 1));
+        Assert.assertTrue(cursor.intersect(qix));
+    }
+
+    @Test
+    public void intersectNotCursorQix() throws Exception {
+        Qix qix = spy(new Qix(areaTracker));
+        LinkedList<float[]> linkedList = new LinkedList<>();
+        linkedList.add(new float[]{1, 1});
+        qix.setOldCoordinates(linkedList);
+        qix.setOldDirections(linkedList);
+        Cursor cursor = spy(new Cursor(100, 100, 10, 10, stix, areaTracker, 1));
+        Assert.assertFalse(cursor.intersect(qix));
+    }
+
+    @Test
+    public void getAreaTracker() throws Exception {
+
+    }
+
+    @Test
+    public void setAreaTracker() throws Exception {
+
+    }
 }

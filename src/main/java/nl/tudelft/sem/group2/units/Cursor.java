@@ -14,13 +14,13 @@ import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
@@ -36,6 +36,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private boolean isDrawing = false;
     private boolean isFast = true;
     private Stix stix;
+    private int lives;
+    // 0 for nothing, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
+    private PowerUpType currentPowerup;
+    private int powerUpDuration;
+    private Image[] sprite;
+    private Image[] spriteEat;
     private Fuse fuse;
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private ScoreCounter scoreCounter;
@@ -66,11 +72,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
         sprite[0] = new Image("/images/cursor_" + colorString + ".png");
         setSprite(sprite);
+        spriteEat = new Image[1];
+        spriteEat[0] = new Image("/images/cursor-eat.png");
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
         GameController.getInstance().getScene();
         scoreCounter.addObserver(GameScene.getScoreScene());
         scoreCounter.setLives(lives);
+        this.lives = lives;
+        this.currentPowerup = PowerUpType.NONE;
     }
 
     @Override
@@ -161,7 +171,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 oldLines.removeLast();
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
-            gC.setStroke(Color.WHITE);
+            gC.setStroke(javafx.scene.paint.Color.WHITE);
             for (double[][] l : oldLines) {
                 gC.beginPath();
                 for (int i = 0; i < 4; i++) {
@@ -269,6 +279,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * @return the speed of the cursor
+     */
+    public int getSpeed() {
+        return this.speed;
+    }
+
+    /**
      * @param speed the amount of pixels the cursor moves per when moving
      */
     public void setSpeed(int speed) {
@@ -355,5 +372,95 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             this.setY((int) newStartPos.getY());
             stix.emptyStix();
         }
+    }
+
+    /**
+     * Return the quadrant the cursor is in, as follows.
+     * 12
+     * 34
+     *
+     * @return the quadrant the cursor is in
+     */
+    public int quadrant() {
+        if (this.getX() < BOARD_WIDTH / 4) {
+            if (this.getY() < BOARD_HEIGHT / 4) {
+                return 1;
+            } else {
+                return 3;
+            }
+        } else if (this.getY() < BOARD_HEIGHT / 4) {
+            return 2;
+        }
+        return 4;
+    }
+
+    /**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @return the opposite quadrant the cursor is in
+     */
+    public int oppositeQuadrant() {
+        int quadrant = this.quadrant();
+
+        switch (quadrant) {
+            case 1:
+                return 4;
+            case 2:
+                return 3;
+            case 3:
+                return 2;
+            case 4:
+                return 1;
+            default:
+                return 1;
+        }
+    }
+
+    /**
+     * Adds a life to the cursor.
+     */
+    public void addLife() {
+        lives++;
+    }
+
+
+    public PowerUpType getCurrentPowerup() {
+        return currentPowerup;
+    }
+
+    /**
+     * sets the current powerup status of the cursor.
+     *
+     * @param currentPowerup the new powerup status
+     */
+    public void setCurrentPowerup(PowerUpType currentPowerup) {
+        this.currentPowerup = currentPowerup;
+        if (this.currentPowerup == PowerUpType.EAT) {
+            setSprite(spriteEat);
+        } else {
+            setSprite(sprite);
+        }
+    }
+
+    public int getPowerUpDuration() {
+        return powerUpDuration;
+    }
+
+    public void setPowerUpDuration(int powerUpDuration) {
+        this.powerUpDuration = powerUpDuration;
+    }
+
+    /**
+     * decrements the duration of current powerup.
+     */
+    public void decrementPowerupDuration() {
+        this.powerUpDuration -= 1;
+    }
+
+    /**
+     * @return true if the cursor has a powerup active
+     */
+    public boolean hasPowerUp() {
+        return this.currentPowerup != PowerUpType.NONE;
     }
 }

@@ -74,7 +74,6 @@ public class ScoreCounter extends Observable {
 
         setChanged();
         notifyObservers();
-
     }
 
     /**
@@ -128,6 +127,7 @@ public class ScoreCounter extends Observable {
     /**
      * subtracts lives.
      */
+    //TODO rename this
     public void subtractLive() {
         this.lives = lives - 1;
         setChanged();
