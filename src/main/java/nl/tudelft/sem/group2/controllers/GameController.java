@@ -95,7 +95,7 @@ public final class GameController {
     }
 
     /**
-     *
+     * makes a 2 player game
      */
     public void makeCursors() {
 
@@ -132,6 +132,9 @@ public final class GameController {
         addUnit(sparxLeft);
     }
 
+    /**
+     * makes a single player game
+     */
     public void makeCursor() {
 
         cursors = new ArrayList<>();
@@ -156,6 +159,10 @@ public final class GameController {
         addUnit(sparxLeft);
     }
 
+    /**
+     *
+     * @param cursor the cursor to add
+     */
     public void addCursor(Cursor cursor) {
         if (cursors.size() < 2) {
             cursors.add(cursor);
@@ -163,8 +170,14 @@ public final class GameController {
     }
 
 
-    /***** Units *****/
+    /*****
+     * Units.
+     *****/
 
+    /**
+     *
+     * @return the list of cursors
+     */
     public ArrayList<Cursor> getCursors() {
         return cursors;
     }
@@ -362,7 +375,14 @@ public final class GameController {
             isRunning = true;
             gameScene.setMessageLabel("");
             /*** first cursor ***/
-        } else if (cursors.get(0).getArrowKeys().contains(e.getCode())) {
+        } else {
+            firstPlayerKeys(e);
+            secondPlayerKeys(e);
+        }
+    }
+
+    private void firstPlayerKeys(KeyEvent e) {
+        if (cursors.get(0).getArrowKeys().contains(e.getCode())) {
             if (cursors.get(0).isDrawing()) {
                 if (cursors.get(0).getFuse() != null) {
                     cursors.get(0).getFuse().setMoving(false);
@@ -370,7 +390,8 @@ public final class GameController {
             }
             cursors.get(0).setCurrentMove(e.getCode());
         } else if (e.getCode().equals(KeyCode.O)) {
-            if (cursors.get(0).getStix().getStixCoordinates() != null && !cursors.get(0).getStix().getStixCoordinates().isEmpty()) {
+            if (cursors.get(0).getStix().getStixCoordinates() != null &&
+                    !cursors.get(0).getStix().getStixCoordinates().isEmpty()) {
                 if (!cursors.get(0).isFast()) {
                     cursors.get(0).setSpeed(1);
                     cursors.get(0).setDrawing(true);
@@ -386,8 +407,12 @@ public final class GameController {
             cursors.get(0).setDrawing(true);
             cursors.get(0).setFast(true);
 
-            /*** second cursor ***/
-        } else if (cursors.size() > 1) {
+
+        }
+    }
+
+    private void secondPlayerKeys(KeyEvent e) {
+        if (cursors.size() > 1) {
             if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
                 if (cursors.get(1).isDrawing()) {
                     if (cursors.get(1).getFuse() != null) {
@@ -425,14 +450,14 @@ public final class GameController {
     }
 
     /**
-     * @return
+     * @return the game scene
      */
     public GameScene getScene() {
         return gameScene;
     }
 
     /**
-     * @param scene
+     * @param scene the game scene
      */
     public void setGameScene(GameScene scene) {
         this.gameScene = scene;

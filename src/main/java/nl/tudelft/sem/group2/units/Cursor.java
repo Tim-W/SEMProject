@@ -126,7 +126,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * @param collidee the other unit
-     * @return
+     * @return true if there is a intersect otherwise false
      */
     @Override
     public boolean intersect(Unit collidee) {

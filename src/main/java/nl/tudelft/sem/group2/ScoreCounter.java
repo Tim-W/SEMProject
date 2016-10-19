@@ -34,7 +34,7 @@ public class ScoreCounter extends Observable {
     /**
      * Default score counter constructor.
      *
-     * @param color
+     * @param color the color of the text
      */
     public ScoreCounter(Color color) {
         this.totalPercentage = 0;
@@ -125,6 +125,9 @@ public class ScoreCounter extends Observable {
 
     }
 
+    /**
+     * subtracts lives
+     */
     public void subtractLive() {
         this.lives = lives - 1;
         setChanged();
