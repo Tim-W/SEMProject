@@ -95,7 +95,7 @@ public final class GameController {
     }
 
     /**
-     * makes a 2 player game
+     * makes a 2 player game.
      */
     public void makeCursors() {
 
@@ -133,7 +133,7 @@ public final class GameController {
     }
 
     /**
-     * makes a single player game
+     * makes a single player game.
      */
     public void makeCursor() {
 
@@ -390,8 +390,8 @@ public final class GameController {
             }
             cursors.get(0).setCurrentMove(e.getCode());
         } else if (e.getCode().equals(KeyCode.O)) {
-            if (cursors.get(0).getStix().getStixCoordinates() != null &&
-                    !cursors.get(0).getStix().getStixCoordinates().isEmpty()) {
+            if (cursors.get(0).getStix().getStixCoordinates() != null
+                    && !cursors.get(0).getStix().getStixCoordinates().isEmpty()) {
                 if (!cursors.get(0).isFast()) {
                     cursors.get(0).setSpeed(1);
                     cursors.get(0).setDrawing(true);
@@ -421,7 +421,8 @@ public final class GameController {
                 }
                 cursors.get(1).setCurrentMove(e.getCode());
             } else if (e.getCode().equals(KeyCode.Z)) {
-                if (cursors.get(1).getStix().getStixCoordinates() != null && !cursors.get(1).getStix().getStixCoordinates().isEmpty()) {
+                if (cursors.get(1).getStix().getStixCoordinates() != null
+                        && !cursors.get(1).getStix().getStixCoordinates().isEmpty()) {
                     if (!cursors.get(1).isFast()) {
                         cursors.get(1).setSpeed(1);
                         cursors.get(1).setDrawing(true);

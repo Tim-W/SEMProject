@@ -126,7 +126,7 @@ public class ScoreCounter extends Observable {
     }
 
     /**
-     * subtracts lives
+     * subtracts lives.
      */
     public void subtractLive() {
         this.lives = lives - 1;
