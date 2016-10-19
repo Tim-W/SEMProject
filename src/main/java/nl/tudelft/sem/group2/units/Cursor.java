@@ -1,5 +1,10 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -8,10 +13,6 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
-
-import java.awt.Point;
-import java.util.LinkedList;
-import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -58,22 +59,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             int transX = 0;
             int transY = 0;
             if (currentMove != null) {
-                switch (currentMove) {
-                    case LEFT:
-                        transX = -1;
-                        break;
-                    case RIGHT:
-                        transX = 1;
-                        break;
-                    case UP:
-                        transY = -1;
-                        break;
-                    case DOWN:
-                        transY = 1;
-                        break;
-                    default:
-                        break;
-                }
+                // A map containing relationships between keycodes and the movement directions.
+                Map<KeyCode, CursorMovement> cursorMovementMap = new HashMap<>();
+                cursorMovementMap.put(KeyCode.LEFT, new CursorMovement(-1, 0));
+                cursorMovementMap.put(KeyCode.RIGHT, new CursorMovement(1, 0));
+                cursorMovementMap.put(KeyCode.UP, new CursorMovement(0, -1));
+                cursorMovementMap.put(KeyCode.DOWN, new CursorMovement(0, 1));
+                transX += cursorMovementMap.get(currentMove).getTransX();
+                transY += cursorMovementMap.get(currentMove).getTransY();
                 assertMove(transX, transY);
             }
         }
