@@ -166,7 +166,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 oldLines.removeLast();
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
-            gC.setStroke(javafx.scene.paint.Color.WHITE);
+            gC.setStroke(Color.WHITE);
             for (double[][] l : oldLines) {
                 gC.beginPath();
                 for (int i = 0; i < 4; i++) {

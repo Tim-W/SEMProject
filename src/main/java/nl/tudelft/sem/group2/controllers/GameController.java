@@ -33,8 +33,6 @@ public final class GameController {
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
-    //TODO MAKE STARTUP ARGUMENT
-    private static final int LIVES = 3;
     private static GameController gameController;
     // Animation timer properties
     private AnimationTimer animationTimer;
@@ -97,8 +95,10 @@ public final class GameController {
 
     /**
      * makes a 2 player game.
+     *
+     * @param multiplayer if true 2 cursors are set
      */
-    public void makeCursors() {
+    public void makeCursors(boolean multiplayer) {
 
         cursors = new ArrayList<>();
         //first
@@ -110,32 +110,32 @@ public final class GameController {
         cursors.get(0).addKey(KeyCode.LEFT);
         cursors.get(0).addKey(KeyCode.RIGHT);
 
-        //second
-        Stix stix2 = new Stix();
-        cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, 3));
-        cursors.get(1).addKey(KeyCode.W);
-        cursors.get(1).addKey(KeyCode.S);
-        cursors.get(1).addKey(KeyCode.A);
-        cursors.get(1).addKey(KeyCode.D);
-
-
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
-        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
         // Initialize and add units to units set in Gamescene
         qix = new Qix(areaTracker);
         addUnit(cursors.get(0));
-        addUnit(cursors.get(1));
         addUnit(qix);
         addUnit(sparxRight);
-        addUnit(sparxLeft);
+        if (multiplayer) {
+            //second
+            Stix stix2 = new Stix();
+            cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
+                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, 3));
+            cursors.get(1).addKey(KeyCode.W);
+            cursors.get(1).addKey(KeyCode.S);
+            cursors.get(1).addKey(KeyCode.A);
+            cursors.get(1).addKey(KeyCode.D);
+            Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                    Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
+            addUnit(cursors.get(1));
+            addUnit(sparxLeft);
+        }
     }
+/*
 
-    /**
+    *
      * makes a single player game.
-     */
     public void makeCursor() {
 
         cursors = new ArrayList<>();
@@ -159,6 +159,7 @@ public final class GameController {
         addUnit(sparxRight);
         addUnit(sparxLeft);
     }
+*/
 
     /**
      *
@@ -382,54 +383,35 @@ public final class GameController {
         }
     }
 
+    //todo firstPLauerKeys and second could be merged.
     private void firstPlayerKeys(KeyEvent e) {
         if (cursors.get(0).getArrowKeys().contains(e.getCode())) {
-            if (cursors.get(0).isDrawing()) {
-                if (cursors.get(0).getFuse() != null) {
-                    cursors.get(0).getFuse().setMoving(false);
-                }
+            if (cursors.get(0).isDrawing() && cursors.get(0).getFuse() != null) {
+                cursors.get(0).getFuse().setMoving(false);
             }
             cursors.get(0).setCurrentMove(e.getCode());
         } else if (e.getCode().equals(KeyCode.O)) {
-            if (cursors.get(0).getStix().getStixCoordinates() != null
-                    && !cursors.get(0).getStix().getStixCoordinates().isEmpty()) {
-                if (!cursors.get(0).isFast()) {
+            if (!stixNotEmpty(0) || !cursors.get(0).isFast()) {
                     cursors.get(0).setSpeed(1);
                     cursors.get(0).setDrawing(true);
                     cursors.get(0).setFast(false);
-                }
-            } else {
-                cursors.get(0).setSpeed(1);
-                cursors.get(0).setDrawing(true);
-                cursors.get(0).setFast(false);
             }
         } else if (e.getCode().equals(KeyCode.I)) {
             cursors.get(0).setSpeed(2);
             cursors.get(0).setDrawing(true);
             cursors.get(0).setFast(true);
-
-
         }
     }
 
     private void secondPlayerKeys(KeyEvent e) {
         if (cursors.size() > 1) {
             if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
-                if (cursors.get(1).isDrawing()) {
-                    if (cursors.get(1).getFuse() != null) {
-                        cursors.get(1).getFuse().setMoving(false);
-                    }
+                if (cursors.get(1).isDrawing() && cursors.get(1).getFuse() != null) {
+                    cursors.get(1).getFuse().setMoving(false);
                 }
                 cursors.get(1).setCurrentMove(e.getCode());
             } else if (e.getCode().equals(KeyCode.Z)) {
-                if (cursors.get(1).getStix().getStixCoordinates() != null
-                        && !cursors.get(1).getStix().getStixCoordinates().isEmpty()) {
-                    if (!cursors.get(1).isFast()) {
-                        cursors.get(1).setSpeed(1);
-                        cursors.get(1).setDrawing(true);
-                        cursors.get(1).setFast(false);
-                    }
-                } else {
+                if (!stixNotEmpty(1) || !cursors.get(1).isFast()) {
                     cursors.get(1).setSpeed(1);
                     cursors.get(1).setDrawing(true);
                     cursors.get(1).setFast(false);
@@ -442,6 +424,10 @@ public final class GameController {
         }
     }
 
+    private boolean stixNotEmpty(int cursorIndex) {
+        return cursors.get(cursorIndex).getStix().getStixCoordinates() != null
+                && !cursors.get(cursorIndex).getStix().getStixCoordinates().isEmpty();
+    }
     /**
      * AreaTracker.
      *

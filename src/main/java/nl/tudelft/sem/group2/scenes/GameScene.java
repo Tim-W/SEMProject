@@ -214,7 +214,7 @@ public class GameScene extends Scene {
         boolean foundFuse = true;
         Point fuse = new Point(-1, -1);
         if (cursor.getFuse() != null) {
-            fuse = new Point(cursor.getFuse().getX(), (cursor.getFuse().getY()));
+            fuse = new Point(cursor.getFuse().getX(), cursor.getFuse().getY());
             foundFuse = false;
         }
         for (Point p : cursor.getStix().getStixCoordinates()) {
