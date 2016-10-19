@@ -2,7 +2,9 @@ package nl.tudelft.sem.group2.controllers;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
@@ -16,6 +18,8 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.keyboard.KeyboardHandler;
+import nl.tudelft.sem.group2.keyboard.SpaceHandler;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -34,6 +38,8 @@ public final class GameController {
     private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
+    //TODO MAKE STARTUP ARGUMENT
+    private static final int LIVES = 3;
     private static GameController gameController;
     // Animation timer properties
     private static AnimationTimer animationTimer;
@@ -52,10 +58,6 @@ public final class GameController {
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
     private GameScene gameScene;
-
-
-    //TODO MAKE STARTUP ARGUMENT
-    private static final int LIVES = 3;
 
     /**
      * Constructor for the GameController class.
@@ -115,6 +117,7 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param gameController setter.
      */
     public static void setGameController(GameController gameController) {
@@ -196,6 +199,7 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param gameScene setter
      */
     public void setGameScene(GameScene gameScene) {
@@ -290,44 +294,33 @@ public final class GameController {
     }
 
     /**
-     * Method that handles the action when a key is pressed.
-     *
-     * @param e describes which keyevent happened.
+     * Start the game.
      */
-    public void keyPressed(KeyEvent e) {
-
-        if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
+    public void startGame() {
+        if (!isRunning) {
             new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
             gameScene.setMessageLabel("");
-        } else if (arrowKeys.contains(e.getCode())) {
-            if (cursor.isDrawing()) {
-                for (Unit unit : units) {
-                    if (unit instanceof Fuse) {
-                        ((Fuse) unit).setMoving(false);
-                    }
-                }
-            }
-            cursor.setCurrentMove(e.getCode());
-        } else if (e.getCode().equals(KeyCode.X)) {
-            if (stix.getStixCoordinates() != null && !stix.getStixCoordinates().isEmpty()) {
-                if (!cursor.isFast()) {
-                    cursor.setSpeed(1);
-                    cursor.setDrawing(true);
-                    cursor.setFast(false);
-                }
-            } else {
-                cursor.setSpeed(1);
-                cursor.setDrawing(true);
-                cursor.setFast(false);
-            }
-        } else if (e.getCode().equals(KeyCode.Z)) {
-            cursor.setSpeed(2);
-            cursor.setDrawing(true);
-            cursor.setFast(true);
         }
+    }
+
+    /**
+     * Method that handles the action when a key is pressed.
+     *
+     * @param e describes which keyevent happened.
+     */
+    public void keyPressed(KeyEvent e) {
+        Map<KeyCode, KeyboardHandler> keyMap = new HashMap<KeyCode, KeyboardHandler>();
+        keyMap.put(KeyCode.SPACE, new SpaceHandler());
+        keyMap.put(KeyCode.UP, new SpaceHandler());
+        keyMap.put(KeyCode.DOWN, new SpaceHandler());
+        keyMap.put(KeyCode.LEFT, new SpaceHandler());
+        keyMap.put(KeyCode.RIGHT, new SpaceHandler());
+
+        keyMap.get(e.getCode()).execute(e.getCode());
+        //TODO add all the other keycodes
     }
 
     /**
@@ -379,6 +372,7 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param units setter.
      */
     public static void setUnits(Set<Unit> units) {
