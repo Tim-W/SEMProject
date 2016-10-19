@@ -29,10 +29,10 @@ import nl.tudelft.sem.group2.units.Unit;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -322,8 +322,7 @@ public final class GameController {
             }
             LOGGER.log(Level.INFO, powerup.toString() + " spawned at (" + powerup.getX() + ", "
                     + powerup.getY() + ")", GameController.this.getClass());
-            //powerup = new PowerEat(coordinates[0], coordinates[1],
-            //        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
+
             addUnit(powerup);
         }
     }

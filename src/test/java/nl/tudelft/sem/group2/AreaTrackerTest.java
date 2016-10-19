@@ -212,51 +212,6 @@ public class AreaTrackerTest {
     }
 
     /**
-     * Tests if the corner gets set to innerborder when the area around it is covered.
-     */
-    @Test
-    public void testCornerBorders1() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
-        areaTracker.getBoardGrid()[1][1] = AreaState.FAST;
-        areaTracker.findPowerupLocation(1);
-        assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[0][0]);
-    }
-
-    /**
-     * Tests if the corner gets set to innerborder when the area around it is covered.
-     */
-    @Test
-    public void testCornerBorders2() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
-        areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2 - 1][1] = AreaState.FAST;
-        areaTracker.findPowerupLocation(2);
-        assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2][0]);
-    }
-
-    /**
-     * Tests if the corner gets set to innerborder when the area around it is covered.
-     */
-    @Test
-    public void testCornerBorders3() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
-        areaTracker.getBoardGrid()[1][Globals.BOARD_WIDTH / 2 - 1] = AreaState.FAST;
-        areaTracker.findPowerupLocation(3);
-        assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[0][Globals.BOARD_WIDTH / 2]);
-    }
-
-    /**
-     * Tests if the corner gets set to innerborder when the area around it is covered.
-     */
-    @Test
-    public void testCornerBorders4() {
-        AreaTracker areaTracker = new AreaTracker(new Stix());
-        areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] = AreaState.FAST;
-        areaTracker.findPowerupLocation(4);
-        assertEquals(AreaState.INNERBORDER,
-                areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2][Globals.BOARD_WIDTH / 2]);
-    }
-
-    /**
      * Tests for a false quadrant input.
      */
     @Test

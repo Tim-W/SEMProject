@@ -351,25 +351,21 @@ public class AreaTracker {
         switch (quadrant) {
             case 1:
                 if (boardGrid[1][1] != AreaState.UNCOVERED) {
-                    boardGrid[0][0] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 2:
                 if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
-                    boardGrid[Globals.BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 3:
                 if (boardGrid[1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[0][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 4:
                 if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[Globals.BOARD_WIDTH / 2][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
@@ -390,7 +386,7 @@ public class AreaTracker {
         int x = Globals.BOARD_WIDTH / 4;
         int y = Globals.BOARD_HEIGHT / 4;
 
-        if (this.cornerIsCovered(quadrant)) {
+        if (cornerIsCovered(quadrant)) {
 
             while (this.getBoardGrid()[x][y] != AreaState.OUTERBORDER) {
 
@@ -464,10 +460,6 @@ public class AreaTracker {
         int x;
         int y;
         switch (quadrant) {
-            case 1:
-                x = 0;
-                y = 0;
-                break;
             case 2:
                 x = Globals.BOARD_WIDTH / 2;
                 y = 0;
