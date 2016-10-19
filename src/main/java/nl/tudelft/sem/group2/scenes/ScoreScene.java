@@ -151,7 +151,7 @@ public class ScoreScene extends SubScene implements Observer {
     /**
      * Update the info on the scorescene with actual info from scorecounter.
      *
-     * @param o the observable (ScoreCounter)
+     * @param o   the observable (ScoreCounter)
      * @param arg the argument
      */
     @Override

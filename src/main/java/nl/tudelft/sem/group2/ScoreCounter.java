@@ -34,7 +34,7 @@ public class ScoreCounter extends Observable {
     /**
      * Default score counter constructor.
      *
-     * @param color the color of the text
+     * @param color color of the scoreCounter text should change depending on player.
      */
     public ScoreCounter(Color color) {
         this.totalPercentage = 0;

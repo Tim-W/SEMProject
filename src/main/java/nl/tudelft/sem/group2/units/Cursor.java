@@ -12,6 +12,7 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
@@ -67,7 +68,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
-        scoreCounter.addObserver(GameController.getInstance().getScene().getScoreScene());
+        GameController.getInstance().getScene();
+        scoreCounter.addObserver(GameScene.getScoreScene());
         scoreCounter.setLives(lives);
     }
 
@@ -124,20 +126,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * Method which tests if cursor intersects with other unit.
      * @param collidee the other unit
-     * @return true if there is a intersect otherwise false
+     * @return if cursor intersects with other unit
      */
     @Override
     public boolean intersect(Unit collidee) {
-        if (super.intersect(collidee)) {
-            return true;
-        } else {
-            if (fuse != null) {
-                return fuse.intersect(this);
-            } else {
-                return false;
-            }
-        }
+        return super.intersect(collidee) || fuse != null && fuse.intersect(this);
     }
 
     /**

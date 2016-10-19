@@ -64,7 +64,6 @@ public class GameControllerTest {
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.RIGHT, false, false,
                         false, false));
                 verify(GameController.getInstance().getCursors().get(0).getFuse(), times(1)).setMoving(false);
-                //verify(fuse,times(2)).getUnits();
             }
         });
     }

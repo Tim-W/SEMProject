@@ -36,8 +36,7 @@ public class CollisionHandler {
         ArrayList<Unit> unitsList = new ArrayList<>();
         unitsList.addAll(units);
         ArrayList<Cursor> cursorList = new ArrayList<>();
-        for (int i = 0; i < unitsList.size(); i++) {
-            Unit collider = unitsList.get(i);
+        for (Unit collider : unitsList) {
             if (collider instanceof Cursor) {
                 cursorList.add((Cursor) collider);
             }

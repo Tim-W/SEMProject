@@ -22,6 +22,7 @@ import nl.tudelft.sem.group2.units.Unit;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -30,7 +31,6 @@ import java.util.logging.Level;
  */
 public final class GameController {
 
-    private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
     private static GameController gameController;
@@ -47,6 +47,9 @@ public final class GameController {
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
     private GameScene gameScene;
+
+    private LinkedList<KeyCode> cursorFastMoveKey = new LinkedList<>();
+    private LinkedList<KeyCode> cursorSlowMoveKey = new LinkedList<>();
 
     /**
      * Constructor for the GameController class.
@@ -87,15 +90,15 @@ public final class GameController {
     }
 
     /**
-     *
+     * Methods which sets the current gameController to null so a new one can be instantiated.
      */
     public static void deleteGameController() {
         GameController.gameController = null;
     }
 
     /**
-     * makes a 2 player game.
-     *
+     * Method which generates a cursor, a sparx and a qix which is used for a single player match.
+     * This also binds the correct key controls to the right cursor.
      * @param multiplayer if true 2 cursors are set
      */
     public void makeCursors(boolean multiplayer) {
@@ -109,14 +112,6 @@ public final class GameController {
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
         cursors.get(0).addKey(KeyCode.RIGHT);
-
-        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
-        // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker);
-        addUnit(cursors.get(0));
-        addUnit(qix);
-        addUnit(sparxRight);
         if (multiplayer) {
             //second
             Stix stix2 = new Stix();
@@ -126,72 +121,35 @@ public final class GameController {
             cursors.get(1).addKey(KeyCode.S);
             cursors.get(1).addKey(KeyCode.A);
             cursors.get(1).addKey(KeyCode.D);
-            Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
             addUnit(cursors.get(1));
-            addUnit(sparxLeft);
         }
-    }
-/*
-
-    *
-     * makes a single player game.
-    public void makeCursor() {
-
-        cursors = new ArrayList<>();
-        //first
-        Stix stix = new Stix();
-        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, 3));
-        cursors.get(0).addKey(KeyCode.UP);
-        cursors.get(0).addKey(KeyCode.DOWN);
-        cursors.get(0).addKey(KeyCode.LEFT);
-        cursors.get(0).addKey(KeyCode.RIGHT);
-
-        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
+        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
         // Initialize and add units to units set in Gamescene
         qix = new Qix(areaTracker);
         addUnit(cursors.get(0));
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
+
     }
-*/
 
     /**
+     * Adds a cursor to the cursors array which can at most contain two cursors.
      *
-     * @param cursor the cursor to add
+     * @param cursor cursor to add to cursor array.
      */
     public void addCursor(Cursor cursor) {
-        if (cursors.size() < 2) {
+        if (cursor != null && cursors.size() < 2) {
             cursors.add(cursor);
         }
     }
 
-
     /*****
      * Units.
      *****/
-
-    /**
-     *
-     * @return the list of cursors
-     */
-    public ArrayList<Cursor> getCursors() {
-        return cursors;
-    }
-
-    /**
-     * @return units of the board
-     */
-    public Set<Unit> getUnits() {
-        return units;
-    }
-
-    /****** AnimationTime ******/
 
     /**
      * Add a unit.
@@ -304,7 +262,7 @@ public final class GameController {
         // animation timer for handling a loop
         animationTimer = new AnimationTimer() {
             public void handle(long now) {
-                if (now - previousTime > NANO_SECONDS_PER_SECOND / 3) {
+                if (now - previousTime > Globals.NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
                     // draw
                     gameScene.draw();
@@ -340,25 +298,15 @@ public final class GameController {
      */
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
-        if (keyCode.equals(cursors.get(0).getCurrentMove())) {
-
-            cursors.get(0).handleFuse();
-
-            cursors.get(0).setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.O) || keyCode.equals(KeyCode.I)) {
-            cursors.get(0).setDrawing(false);
-            cursors.get(0).setSpeed(2);
-            cursors.get(0).handleFuse();
-        } else if (cursors.size() > 1) {
-            if (keyCode.equals(cursors.get(1).getCurrentMove())) {
-
-                cursors.get(1).handleFuse();
-
-                cursors.get(1).setCurrentMove(null);
-            } else if (keyCode.equals(KeyCode.X) || keyCode.equals(KeyCode.Z)) {
-                cursors.get(1).setDrawing(false);
-                cursors.get(1).setSpeed(2);
-                cursors.get(1).handleFuse();
+        for (int i = 0; i < cursors.size(); i++) {
+            Cursor cursor = cursors.get(i);
+            if (keyCode.equals(cursor.getCurrentMove())) {
+                cursor.handleFuse();
+                cursor.setCurrentMove(null);
+            } else if (keyCode.equals(cursorFastMoveKey.get(i)) || keyCode.equals(cursorSlowMoveKey.get(i))) {
+                cursor.setDrawing(false);
+                cursor.setSpeed(2);
+                cursor.handleFuse();
             }
         }
     }
@@ -376,50 +324,26 @@ public final class GameController {
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
             gameScene.setMessageLabel("");
-            /*** first cursor ***/
         } else {
-            firstPlayerKeys(e);
-            secondPlayerKeys(e);
-        }
-    }
+            for (int i = 0; i < cursors.size(); i++) {
+                Cursor cursor = cursors.get(i);
+                if (cursor.getArrowKeys().contains(e.getCode())) {
+                    if (cursor.isDrawing() && cursor.getFuse() != null) {
+                        cursor.getFuse().setMoving(false);
+                    }
+                    cursor.setCurrentMove(e.getCode());
+                } else if (e.getCode().equals(cursorSlowMoveKey.get(i))) {
+                    if (!stixNotEmpty(i) || !cursor.isFast()) {
+                        cursor.setSpeed(1);
+                        cursor.setDrawing(true);
+                        cursor.setFast(false);
+                    }
+                } else if (e.getCode().equals(cursorFastMoveKey.get(i))) {
+                    cursor.setSpeed(2);
+                    cursor.setDrawing(true);
+                    cursor.setFast(true);
 
-    //todo firstPLauerKeys and second could be merged.
-    private void firstPlayerKeys(KeyEvent e) {
-        if (cursors.get(0).getArrowKeys().contains(e.getCode())) {
-            if (cursors.get(0).isDrawing() && cursors.get(0).getFuse() != null) {
-                cursors.get(0).getFuse().setMoving(false);
-            }
-            cursors.get(0).setCurrentMove(e.getCode());
-        } else if (e.getCode().equals(KeyCode.O)) {
-            if (!stixNotEmpty(0) || !cursors.get(0).isFast()) {
-                    cursors.get(0).setSpeed(1);
-                    cursors.get(0).setDrawing(true);
-                    cursors.get(0).setFast(false);
-            }
-        } else if (e.getCode().equals(KeyCode.I)) {
-            cursors.get(0).setSpeed(2);
-            cursors.get(0).setDrawing(true);
-            cursors.get(0).setFast(true);
-        }
-    }
-
-    private void secondPlayerKeys(KeyEvent e) {
-        if (cursors.size() > 1) {
-            if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
-                if (cursors.get(1).isDrawing() && cursors.get(1).getFuse() != null) {
-                    cursors.get(1).getFuse().setMoving(false);
                 }
-                cursors.get(1).setCurrentMove(e.getCode());
-            } else if (e.getCode().equals(KeyCode.Z)) {
-                if (!stixNotEmpty(1) || !cursors.get(1).isFast()) {
-                    cursors.get(1).setSpeed(1);
-                    cursors.get(1).setDrawing(true);
-                    cursors.get(1).setFast(false);
-                }
-            } else if (e.getCode().equals(KeyCode.X)) {
-                cursors.get(1).setSpeed(2);
-                cursors.get(1).setDrawing(true);
-                cursors.get(1).setFast(true);
             }
         }
     }
@@ -428,6 +352,8 @@ public final class GameController {
         return cursors.get(cursorIndex).getStix().getStixCoordinates() != null
                 && !cursors.get(cursorIndex).getStix().getStixCoordinates().isEmpty();
     }
+
+    //Getters
     /**
      * AreaTracker.
      *
@@ -437,18 +363,19 @@ public final class GameController {
         return areaTracker;
     }
 
-    /**
-     * @return the game scene
-     */
     public GameScene getScene() {
         return gameScene;
     }
 
-    /**
-     * @param scene the game scene
-     */
     public void setGameScene(GameScene scene) {
         this.gameScene = scene;
     }
 
+    public ArrayList<Cursor> getCursors() {
+        return cursors;
+    }
+
+    public Set<Unit> getUnits() {
+        return units;
+    }
 }
