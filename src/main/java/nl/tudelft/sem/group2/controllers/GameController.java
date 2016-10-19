@@ -297,7 +297,7 @@ public final class GameController {
      */
     private void spawnPowerup() {
         double rand = ThreadLocalRandom.current().nextDouble();
-        if (rand < Globals.POWERUP_THRESHOLD + 1 && !powerUpActive()) {
+        if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
             PowerUpType type = PowerUpType.randomType();
             int quadrant = cursor.oppositeQuadrant();
 
