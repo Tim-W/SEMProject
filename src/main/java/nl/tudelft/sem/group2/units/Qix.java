@@ -42,21 +42,12 @@ public class Qix extends Unit implements CollisionInterface {
     private LinkedList<double[]> colorArray = new LinkedList<>();
     private float[] coordinate = new float[2];
 
-//    /**
-//     * Create a new Qix.
-//     * Is by default placed on 30,30.
-//     * last parameters are for width and height but its just set to 1
-//     */
-//    public Qix() {
-//        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
-//    }
-
     /**
      * Create a new Qix.
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
      *
-     * @param areaTracker the areatracker
+     * @param areaTracker used for calculating areas
      */
     public Qix(AreaTracker areaTracker) {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
@@ -90,8 +81,8 @@ public class Qix extends Unit implements CollisionInterface {
             colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
         getColorArray().addFirst(colors);
-        getOldDirections().addFirst(new float[] {direction[0], direction[1]});
-        getOldCoordinates().addFirst(new float[] {coordinate[0], coordinate[1]});
+        getOldDirections().addFirst(new float[]{direction[0], direction[1]});
+        getOldCoordinates().addFirst(new float[]{coordinate[0], coordinate[1]});
         if (oldDirections.size() > LINESCOUNT) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();
@@ -209,20 +200,20 @@ public class Qix extends Unit implements CollisionInterface {
 
     @Override
     public boolean intersect(Unit collidee) {
-        //if (!(obj instanceof Qix) ) {
-        Polygon colliderP = this.toPolygon();
+        if (!(collidee instanceof Qix)) {
+            Polygon colliderP = this.toPolygon();
 
-        // subtract one from width&height to make collisions look more real
-        Rectangle collideeR = new Rectangle(collidee.getX(),
-                collidee.getY(), collidee.getWidth() / 2 - 1,
-                collidee.getHeight() / 2 - 1);
-        if (colliderP.intersects(collideeR)) {
-            LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
-                    + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
+            // subtract one from width&height to make collisions look more real
+            Rectangle collideeR = new Rectangle(collidee.getX(),
+                    collidee.getY(), collidee.getWidth() / 2 - 1,
+                    collidee.getHeight() / 2 - 1);
+            if (colliderP.intersects(collideeR)) {
+                LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
+                        + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
+            }
+            return colliderP.intersects(collideeR);
         }
-        return colliderP.intersects(collideeR);
-        //}
-        // return false;
+        return false;
     }
 
     /**

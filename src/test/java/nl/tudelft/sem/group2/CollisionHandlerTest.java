@@ -69,7 +69,7 @@ public class CollisionHandlerTest {
     @Test
     public void cursorSparxTest() {
         //Cursor cursor = new Cursor(0, 0, 1, 1, stix, areaTracker);
-        Sparx sparx = new Sparx(0, 0, 1, 1, SparxDirection.LEFT, areaTracker);
+        Sparx sparx = new Sparx(0, 0, 1, 1, areaTracker, SparxDirection.LEFT);
         //set.add(cursor);
         set.add(sparx);
         when(cursor.intersect(sparx)).thenReturn(true);

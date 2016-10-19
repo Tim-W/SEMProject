@@ -24,8 +24,9 @@ public class CollisionHandler {
      * Check all collisions between Units.
      * Determines what to do when two units collide.
      * This method should be called every gameframe.
+     *
      * @param units set of units in the game atm
-     * @param stix current stix
+     * @param stix  current stix
      * @return if there is a collision
      */
     public boolean collisions(Set<Unit> units, Stix stix) {
@@ -34,31 +35,33 @@ public class CollisionHandler {
         }
         ArrayList<Unit> unitsList = new ArrayList<>();
         unitsList.addAll(units);
-
-        int indexOfCursor = 0;
-        for (int i = 0; i < unitsList.size(); i++) {
-            Unit collider = unitsList.get(i);
+        ArrayList<Cursor> cursorList = new ArrayList<>();
+        for (Unit collider : unitsList) {
             if (collider instanceof Cursor) {
-                indexOfCursor = i;
-                break;
+                cursorList.add((Cursor) collider);
             }
         }
-        Unit collider = unitsList.get(indexOfCursor);
-        unitsList.remove(indexOfCursor);
+        for (Cursor cursor : cursorList) {
+            unitsList.remove(cursor);
+            for (Unit collidee : unitsList) {
 
-        for (Unit collidee : unitsList) {
+                if (collidee instanceof Qix) {
+                    if (stix != null && stix.intersect(collidee)) {
+                        return true;
+                    } else if (collidee.intersect(cursor) && cursor.uncoveredOn(cursor.getX(), cursor.getY())) {
+                        return true;
+                    }
 
-            if (collidee instanceof Qix) {
-                Cursor temp = (Cursor) collider;
-                if (stix.intersect(collidee)) {
-                    return true;
-                } else if (collidee.intersect(collider) && temp.uncoveredOn(temp.getX(), temp.getY())) {
-                    return true;
-                }
-
-            } else {
-                if (collider.intersect(collidee)) {
-                    return true;
+                } else {
+                    if (cursor.intersect(collidee)) {
+                        return true;
+                    } else if (collidee instanceof Cursor) {
+                        if (cursor.getStix().intersect(collidee)) {
+                            return true;
+                        } else if (((Cursor) collidee).getStix().intersect(cursor)) {
+                            return true;
+                        }
+                    }
                 }
             }
         }

@@ -4,12 +4,19 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -29,27 +36,41 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private boolean isDrawing = false;
     private boolean isFast = true;
     private Stix stix;
-    private int lives;
+    private Fuse fuse;
+    private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+    private ScoreCounter scoreCounter;
 
 
     /**
      * Create a cursor.
      *
-     * @param x           start x coordinate
-     * @param y           start y coordinate
+     * @param position    start position
      * @param width       width, used for collision detection
      * @param height      height, used for collision detection
+     * @param areaTracker used for calculating areas
      * @param stix        current stix to use
-     * @param areaTracker the areatracker
+     * @param color       specifies color for this cursor.
      * @param lives       the amount of lives a players starts with
      */
-    public Cursor(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker, int lives) {
-        super(x, y, width, height, areaTracker);
+    public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
+        super(position.x, position.y, width, height, areaTracker);
         Image[] sprite = new Image[1];
-        sprite[0] = new Image("/images/cursor.png");
+
+        String colorString = "red";
+        if (color.equals(Color.BLUE)) {
+            colorString = "blue";
+        } else if (color.equals(Color.YELLOW)) {
+            colorString = "yellow";
+        } else {
+            color = Color.RED;
+        }
+        sprite[0] = new Image("/images/cursor_" + colorString + ".png");
         setSprite(sprite);
         this.stix = stix;
-        this.lives = lives;
+        scoreCounter = new ScoreCounter(color);
+        GameController.getInstance().getScene();
+        scoreCounter.addObserver(GameScene.getScoreScene());
+        scoreCounter.setLives(lives);
     }
 
     @Override
@@ -57,22 +78,16 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         for (int i = 0; i < speed; i++) {
             int transX = 0;
             int transY = 0;
+
             if (currentMove != null) {
-                switch (currentMove) {
-                    case LEFT:
-                        transX = -1;
-                        break;
-                    case RIGHT:
-                        transX = 1;
-                        break;
-                    case UP:
-                        transY = -1;
-                        break;
-                    case DOWN:
-                        transY = 1;
-                        break;
-                    default:
-                        break;
+                if (currentMove.equals(arrowKeys.get(2))) {
+                    transX = -1;
+                } else if (currentMove.equals(arrowKeys.get(3))) {
+                    transX = 1;
+                } else if (currentMove.equals(arrowKeys.get(0))) {
+                    transY = -1;
+                } else if (currentMove.equals(arrowKeys.get(1))) {
+                    transY = 1;
                 }
                 assertMove(transX, transY);
             }
@@ -111,6 +126,16 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * Method which tests if cursor intersects with other unit.
+     * @param collidee the other unit
+     * @return if cursor intersects with other unit
+     */
+    @Override
+    public boolean intersect(Unit collidee) {
+        return super.intersect(collidee) || fuse != null && fuse.intersect(this);
+    }
+
+    /**
      * @return the current move direction (up/down/left/right)
      */
     public KeyCode getCurrentMove() {
@@ -136,7 +161,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 oldLines.removeLast();
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
-            gC.setStroke(javafx.scene.paint.Color.WHITE);
+            gC.setStroke(Color.WHITE);
             for (double[][] l : oldLines) {
                 gC.beginPath();
                 for (int i = 0; i < 4; i++) {
@@ -185,6 +210,50 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
+    /***** Handeling Fuse *****/
+    /**
+     * handles making fuse and makes it start moving.
+     */
+    public void handleFuse() {
+        if (this.getStix().getStixCoordinates().contains(new Point(this.getX(), this.getY()))) {
+            if (fuse == null) {
+                fuse =
+                        new Fuse((int) this.getStix().getStixCoordinates().getFirst().getX(),
+                                (int) this.getStix().getStixCoordinates().getFirst().getY(),
+                                Globals.FUSE_WIDTH,
+                                Globals.FUSE_HEIGHT, this.getAreaTracker(), this.getStix());
+            } else {
+                fuse.setMoving(true);
+            }
+            this.setCurrentMove(null);
+        }
+    }
+
+    /**
+     * If there is a Fuse on the screen, remove it.
+     */
+    public void removeFuse() {
+        fuse = null;
+    }
+
+    /**
+     * When a new area is completed, calculate the new score.
+     *
+     * @param qix the qix of the game
+     */
+    public void calculateArea(Qix qix) {
+        if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
+                && !this.getStix().getStixCoordinates().isEmpty()) {
+            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
+                    this.isFast(), getStix(), scoreCounter);
+            //Remove the Fuse from the gameView when completing an area
+            removeFuse();
+        }
+    }
+
+    /***** Getters and setters *****/
+
     /**
      * @return true if the cursor is drawing
      */
@@ -221,6 +290,41 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * @return the stix of this cursor.
+     */
+    public Stix getStix() {
+        return stix;
+    }
+
+    /**
+     * @return the fuse if there is a fuse, otherwise null.
+     */
+    public Fuse getFuse() {
+        return fuse;
+    }
+
+    /**
+     * @param keycode the key that is specific to this cursor.
+     */
+    public void addKey(KeyCode keycode) {
+        arrowKeys.add(keycode);
+    }
+
+    /**
+     * @return this cursor specific keys.
+     */
+    public ArrayList<KeyCode> getArrowKeys() {
+        return arrowKeys;
+    }
+
+    /**
+     * @return The scoreCounter of this specific cursor.
+     */
+    public ScoreCounter getScoreCounter() {
+        return scoreCounter;
+    }
+
+    /**
      * Method which log the current movement of the cursor.
      * Only gets executed when log level is on detailledLogging.
      */
@@ -234,18 +338,18 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @return amount of lives left
      */
     public int getLives() {
-        return lives;
+        return scoreCounter.getLives();
     }
 
     /**
      * Method that decreases amount of lives cursor has upon dying.
      */
     public void cursorDied() {
-        if (lives >= 1) {
-            lives = lives - 1;
+        if (scoreCounter.getLives() >= 1) {
+            scoreCounter.subtractLive();
         }
-        LOGGER.log(Level.INFO, "Player died, lives remaining: " + lives, this.getClass());
-        if (lives == 0 && this.isDrawing()) {
+        LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
+        if (scoreCounter.getLives() == 0 && this.isDrawing()) {
             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());

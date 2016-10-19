@@ -11,8 +11,8 @@ import java.util.logging.Level;
  */
 public final class Logger {
 
-    private Level level;
     private static volatile Logger logger;
+    private Level level;
 
     /**
      * Constructor for the logger.
@@ -25,6 +25,7 @@ public final class Logger {
     /**
      * Getter for the logger this is a singleton class so everywhere the logger is used it is the same instance
      * This method allows getting of that instance and instantiates it when it is not instantiated yet.
+     *
      * @return the only one instance of Logger.
      */
     public static Logger getLogger() {

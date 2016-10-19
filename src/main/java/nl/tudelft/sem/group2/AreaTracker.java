@@ -1,13 +1,14 @@
 package nl.tudelft.sem.group2;
 
+import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.units.Stix;
+
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
-import nl.tudelft.sem.group2.controllers.GameController;
-import nl.tudelft.sem.group2.units.Stix;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
@@ -21,17 +22,12 @@ public class AreaTracker {
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
-    private Stix stix;
 
     /**
      * Constructor for the AreaTracker class.
      * The constructor sets all the grid points to border and the rest to uncovered
-     *
-     * @param stix current stix to use
      */
-    public AreaTracker(Stix stix) {
-        this.stix = stix;
-
+    public AreaTracker() {
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
                 //By default, all points are uncovered
@@ -58,10 +54,8 @@ public class AreaTracker {
      *
      * @param width  width of the boardGrid
      * @param height height of the boardGrid
-     * @param stix   current stix to use
      */
-    public AreaTracker(int width, int height, Stix stix) {
-        this.stix = stix;
+    public AreaTracker(int width, int height) {
         boardGrid = new AreaState[width][height];
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
@@ -86,13 +80,16 @@ public class AreaTracker {
     }
 
     /**
+     * /**
      * Method that updates the grid when a stix is completed.
      *
      * @param qixCoordinates current qix coordinates
      * @param fastArea       tells if stix was created fast or slow (double points if slow)
+     * @param stix           current stix to use
+     * @param scoreCounter   the counter that handles the score
      */
-    public void calculateNewArea(Point qixCoordinates, boolean fastArea) {
-        setOuterBorders();
+    public void calculateNewArea(Point qixCoordinates, boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
+        setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm
         Point start = stix.getStixCoordinates().getFirst();
@@ -106,9 +103,11 @@ public class AreaTracker {
         // Initialize the set which contains the visited points for the
         // floodfill algorithm
         visited = new HashSet<>();
-        checkDirections(qixCoordinates, start, dir);
+        checkDirections(qixCoordinates, start, dir, stix);
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
+        updateScoreCounter(fastArea, stix, scoreCounter);
+
         if (fastArea) {
             Logger.getLogger().log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {
@@ -140,7 +139,7 @@ public class AreaTracker {
         area2 = new LinkedList<>();
     }
 
-    private void setOuterBorders() {
+    private void setOuterBorders(Stix stix) {
         //Set all the points from the current stix to border points on the grid
         for (Point current : stix.getStixCoordinates()) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
@@ -155,17 +154,11 @@ public class AreaTracker {
         border2 = null;
     }
 
-    /**
-     * Updates the scorecounter.
-     *
-     * @param fastArea true if the area was drawn with fast mode
-     */
-    public void updateScoreCounter(boolean fastArea) {
-        ScoreCounter scoreCounter = GameController.getInstance().getScoreCounter();
+    private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
 
         //When testing create own scoreCounter
         if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter();
+            scoreCounter = new ScoreCounter(Color.RED);
         }
 
         //Update score and percentage with newly created area,
@@ -183,7 +176,7 @@ public class AreaTracker {
         }
     }
 
-    private void checkDirections(Point qixCoordinates, Point start, Point dir) {
+    private void checkDirections(Point qixCoordinates, Point start, Point dir, Stix stix) {
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX() || start.getY() != dir.getY()) {
             //If stix was first moving in X direction get points above and under the first stix point,
@@ -197,10 +190,10 @@ public class AreaTracker {
                 beginPoint2 = new Point((int) dir.getX() + 1, (int) dir.getY());
             }
             foundQix = false;
-            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true);
+            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true, stix);
             visited.clear();
             foundQix = false;
-            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false);
+            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false, stix);
         }
     }
 
@@ -209,16 +202,18 @@ public class AreaTracker {
      * Floodfill algorithm accomodated to work for qix for more info on how floodfill algorithm works
      * please visit: https://en.wikipedia.org/wiki/Flood_fill.
      *
-     * @param pointToCheck   The first point to begin checking if it has to be added to area/border
-     *                       or if the qix is on that pint.
-     * @param qixCoordinates The coordinates of the qix.
-     * @param chosenState    The state of points which get added to the new area.
-     * @param addToArea1     Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
+     * @param pointToCheck The first point to begin checking if it has to be added to area/border
+     *                     or if the qix is on that pint.
+     * @param qixCoordinates          The coordinates of the qix.
+     * @param chosenState  The state of points which get added to the new area.
+     * @param addToArea1   Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
+     * @param stix         current stix to use
      */
-    public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState, boolean addToArea1) {
+    public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState,
+                          boolean addToArea1, Stix stix) {
         visiting.push(pointToCheck);
         while (!visiting.isEmpty()) {
-            floodFill(qixCoordinates, chosenState, addToArea1);
+            floodFill(qixCoordinates, chosenState, addToArea1, stix);
         }
     }
 
@@ -235,8 +230,9 @@ public class AreaTracker {
      *                      that gets added to the new area,
      *                      practically always AreaStates.UNCOVERED
      * @param addToArea1    boolean that keeps thrack of which temporary AreaTracker to use.
+     * @param stix          current stix to use
      */
-    public void floodFill(Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
+    public void floodFill(Point qixCoorinates, AreaState chosenState, boolean addToArea1, Stix stix) {
         Point pointToCheck = visiting.pop();
         if (foundQix) {
             return;

@@ -9,7 +9,7 @@ public final class Globals {
     public static final int BOARD_HEIGHT = 300;
     public static final int GAME_WIDTH = 340;
     public static final int GAME_HEIGHT = 420;
-    public static final double TARGET_PERCENTAGE = .65;
+    public static final double TARGET_PERCENTAGE = .20;
     public static final int CURSOR_START_X = 75;
     public static final int CURSOR_START_Y = 150;
     public static final int BOARD_MARGIN = 8;
@@ -40,6 +40,8 @@ public final class Globals {
             + " move and i and o to draw\n\nPress 1 for single player game and 2 for a 2 player game!";
     public static final int STARTSCENE_SPACING = 30;
     public static final int STARTSCENE_HELPTEXT_WRAPPING = 200;
+    public static final int NANO_SECONDS_PER_SECOND = 100000000;
+    public static final int LIVES = 3;
 
     private Globals() {
     }

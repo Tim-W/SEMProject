@@ -8,13 +8,11 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.awt.Point;
 
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -26,8 +24,9 @@ public class GameSceneTest {
     private GameScene scene;
     private GameController gameController;
     private Cursor spyCursor;
+
     @BeforeClass
-    public static void BeforeClass(){
+    public static void BeforeClass() {
         new JFXPanel();
     }
 
@@ -39,18 +38,12 @@ public class GameSceneTest {
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();
         scene = gameController.getScene();
-        spyCursor = spy(gameController.getCursor());
-        gameController.setCursor(spyCursor);
     }
 
     private void removeGameController() {
 
         gameController = GameController.getInstance();
-        gameController.setCursor(null);
-        gameController.setStix(null);
-        gameController.setGameScene(null);
-        GameController.setUnits(null);
-        GameController.setGameController(null);
+        GameController.deleteGameController();
     }
 
     @Test
@@ -58,45 +51,26 @@ public class GameSceneTest {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                setUp();
-                gameController.getStix().addToStix(new Point(1, 1));
-                gameController.getStix().addToStix(new Point(1, 2));
-                scene.removeFuse();
-                gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
+                gameController.getCursors().get(0).getStix().addToStix(new Point(1, 1));
+                gameController.getCursors().get(0).getStix().addToStix(new Point(1, 2));
+                gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getAreaTracker(), gameController.getCursors().get(0).getStix()));
                 scene.draw();
                 verify(spyCursor, times(1)).isFast();
             }
         });
     }
+
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                setUp();
-                gameController.getStix().addToStix(new Point(1, 1));
-                gameController.getStix().addToStix(new Point(1, 3));
-                scene.removeFuse();
-                gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
+                gameController.getCursors().get(0).getStix().addToStix(new Point(1, 1));
+                gameController.getCursors().get(0).getStix().addToStix(new Point(1, 3));
+                gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getAreaTracker(), gameController.getCursors().get(0).getStix()));
                 scene.draw();
                 verify(spyCursor, times(0)).isFast();
             }
         });
     }
-    @Test
-    public void testRemoveFuse() throws Exception {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                int oldSize = gameController.getUnits().size();
-                scene.removeFuse();
-                gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
-                scene.removeFuse();
-                Assert.assertEquals(oldSize, gameController.getUnits().size());
-            }
-        });
-
-    }
-
 }

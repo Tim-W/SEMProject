@@ -26,14 +26,14 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
      * @param y           y coord
      * @param width       width, used for collision
      * @param height      height, used for collision
-     * @param areaTracker the areatracker
+     * @param areaTracker used for calculating areas
      */
     Unit(int x, int y, int width, int height, AreaTracker areaTracker) {
         this.setX(x);
         this.setY(y);
         this.setWidth(width);
         this.setHeight(height);
-        this.areaTracker = areaTracker;
+        this.setAreaTracker(areaTracker);
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 
@@ -88,8 +88,9 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         if (colliderR.intersects(collideeR)) {
             LOGGER.log(Level.WARNING, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
                     + "," + this.getY() + ")", this.getClass());
+            return true;
         }
-        return colliderR.intersects(collideeR);
+        return false;
     }
 
     public AreaTracker getAreaTracker() {
