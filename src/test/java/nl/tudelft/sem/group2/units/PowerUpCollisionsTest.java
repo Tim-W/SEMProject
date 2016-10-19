@@ -8,7 +8,7 @@ import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
 import nl.tudelft.sem.group2.powerups.Powerup;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -30,11 +30,17 @@ public class PowerUpCollisionsTest {
     private Cursor cursor;
 
     /**
+     * Initializes JavaFX Panel.
+     */
+    @BeforeClass
+    public static void beforeClass() {
+        new JFXPanel();
+    }
+
+    /**
      * Sets up the mocks and variables.
      */
-    @Before
     public void setUp() {
-        new JFXPanel();
         handler = new CollisionHandler();
         set = new HashSet<>();
         cursor = mock(Cursor.class);
@@ -46,6 +52,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testEmpty() {
+        setUp();
         set.clear();
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
     }
@@ -55,6 +62,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testNull() {
+        setUp();
         Assert.assertEquals(NONE, handler.powerUpCollisions(null));
     }
 
@@ -64,6 +72,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testEat() {
         Platform.runLater(() -> {
+            setUp();
             PowerEat powerup = mock(PowerEat.class);
             set.add(powerup);
             when(cursor.intersect(powerup)).thenReturn(true);
@@ -77,6 +86,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testSpeed() {
         Platform.runLater(() -> {
+            setUp();
             PowerSpeed powerup = mock(PowerSpeed.class);
             set.add(powerup);
             when(cursor.intersect(powerup)).thenReturn(true);
@@ -90,6 +100,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testLife() {
         Platform.runLater(() -> {
+            setUp();
             PowerLife powerup = mock(PowerLife.class);
             set.add(powerup);
             when(cursor.intersect(powerup)).thenReturn(true);
@@ -102,6 +113,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testEatNoIntersection() {
+        setUp();
         PowerEat powerup = mock(PowerEat.class);
         set.add(powerup);
         when(cursor.intersect(powerup)).thenReturn(false);
@@ -114,6 +126,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testSpeedNoIntersection() {
+        setUp();
         PowerSpeed powerup = mock(PowerSpeed.class);
         set.add(powerup);
         when(cursor.intersect(powerup)).thenReturn(false);
@@ -125,6 +138,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testLifeNoIntersection() {
+        setUp();
         PowerLife powerup = mock(PowerLife.class);
         set.add(powerup);
         when(cursor.intersect(powerup)).thenReturn(false);
@@ -137,6 +151,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testNoPowerupsNoCursor() {
+        setUp();
         set.clear();
         Sparx sparx = mock(Sparx.class);
         set.add(sparx);
@@ -149,6 +164,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testNoInstanceOf() {
+        setUp();
         Powerup powerup = mock(Powerup.class);
         set.add(powerup);
         Assert.assertEquals(NONE, handler.powerUpCollisions(set));
