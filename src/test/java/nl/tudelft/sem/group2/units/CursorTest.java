@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 24-9-2016.
+ * Test for cursors
  */
 /**
  * ignore because

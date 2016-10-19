@@ -11,15 +11,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 
 /**
@@ -184,10 +185,11 @@ public class GameScene extends Scene {
 
     private void drawBorders() {
         gc.setFill(Color.WHITE);
-        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
-            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
-                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER
-                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.INNERBORDER) {
+        AreaTracker areaTracker = GameController.getInstance().getAreaTracker();
+        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
+            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
+                if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
+                        || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
@@ -200,15 +202,8 @@ public class GameScene extends Scene {
     private void drawStixAndFuse() {
         boolean foundFuse = true;
         Point fuse = new Point(-1, -1);
-
-        List<Cursor> cursorList = new ArrayList<Cursor>();
-
-
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            if (unit instanceof Cursor) {
-                cursorList.add(((Cursor) unit));
-            }
-        }
+        List<Cursor> cursorList = GameController.getInstance().getUnits().stream().filter(unit ->
+                unit instanceof Cursor).map(unit -> ((Cursor) unit)).collect(Collectors.toList());
         for (Cursor cursor : cursorList) {
             if (cursor.getFuse() != null) {
                 fuse = new Point(cursor.getFuse().getX(), (cursor.getFuse().getY()));
@@ -225,14 +220,8 @@ public class GameScene extends Scene {
                     } else {
                         if (p.equals(fuse)) {
                             foundFuse = true;
-                            if (cursor.isFast()) {
-                                gc.setFill(Color.MEDIUMBLUE);
-                            } else {
-                                gc.setFill(Color.DARKRED);
-                            }
-                        } else {
-                            gc.setFill(Color.GRAY);
                         }
+                        gc.setFill(Color.GRAY);
                     }
                     gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
                 }

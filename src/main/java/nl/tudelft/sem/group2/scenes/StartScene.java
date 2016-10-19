@@ -84,7 +84,8 @@ public class StartScene extends javafx.scene.Scene {
         singleButton.setOnMouseExited(event ->
                 singleButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
-        singleButton.setOnMouseClicked(event -> {LaunchApp.setScene(GameController.getInstance().getScene());
+        singleButton.setOnMouseClicked(event -> {
+            LaunchApp.setScene(GameController.getInstance().getScene());
             GameController.getInstance().makeCursor();
         });
 

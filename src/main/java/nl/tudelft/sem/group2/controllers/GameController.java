@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -23,12 +19,17 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.logging.Level;
+
 /**
  * Controller class for the GameScene to implement the MVC.
  */
 public final class GameController {
 
-    private static final int NANO_SECONDS_PER_SECOND = 100000000;
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
     //TODO MAKE STARTUP ARGUMENT
@@ -47,6 +48,9 @@ public final class GameController {
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
     private GameScene gameScene;
+
+    private LinkedList<KeyCode> cursorFastMoveKey = new LinkedList<>();
+    private LinkedList<KeyCode> cursorSlowMoveKey = new LinkedList<>();
 
     /**
      * Constructor for the GameController class.
@@ -75,19 +79,27 @@ public final class GameController {
      */
     public static GameController getInstance() {
         //if (gameController == null) {
-            // Put lock on class since it we do not want to instantiate it twice
-            synchronized (GameController.class) {
-                // Check if logger is in the meanwhile not already instantiated.
-                if (gameController == null) {
-                    gameController = new GameController();
-                }
+        // Put lock on class since it we do not want to instantiate it twice
+        synchronized (GameController.class) {
+            // Check if logger is in the meanwhile not already instantiated.
+            if (gameController == null) {
+                gameController = new GameController();
             }
+        }
         //}
         return gameController;
     }
 
     /**
-     *
+     * Methods which sets the current gameController to null so a new one can be instantiated.
+     */
+    public static void deleteGameController() {
+        GameController.gameController = null;
+    }
+
+    /**
+     * Method which generates two cursor, two sparx and a qix which is used for a single player match.
+     * This also binds the correct key controls to the right cursor.
      */
     public void makeCursors() {
 
@@ -100,6 +112,8 @@ public final class GameController {
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
         cursors.get(0).addKey(KeyCode.RIGHT);
+        cursorFastMoveKey.add(KeyCode.O);
+        cursorSlowMoveKey.add(KeyCode.I);
 
         //second
         Stix stix2 = new Stix();
@@ -109,6 +123,8 @@ public final class GameController {
         cursors.get(1).addKey(KeyCode.S);
         cursors.get(1).addKey(KeyCode.A);
         cursors.get(1).addKey(KeyCode.D);
+        cursorFastMoveKey.add(KeyCode.Z);
+        cursorSlowMoveKey.add(KeyCode.X);
 
 
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
@@ -124,6 +140,10 @@ public final class GameController {
         addUnit(sparxLeft);
     }
 
+    /**
+     * Method which generates one cursor, two sparx and a qix which is used for a single player match.
+     * This also binds the correct key controls to the right cursor.
+     */
     public void makeCursor() {
 
         cursors = new ArrayList<>();
@@ -148,24 +168,19 @@ public final class GameController {
         addUnit(sparxLeft);
     }
 
-    public void addCursor(Cursor cursor){
-        if(cursors.size()<2){
+    /**
+     * Adds a cursor to the cursors array which can at most contain two cursors.
+     *
+     * @param cursor cursor to add to cursor array.
+     */
+    public void addCursor(Cursor cursor) {
+        if (cursors.size() < 2 && cursor != null) {
             cursors.add(cursor);
         }
     }
-    public ArrayList<Cursor> getCursors(){return cursors;}
-
 
 
     /***** Units *****/
-
-    /**
-     * @return units of the board
-     */
-    public Set<Unit> getUnits() {
-        return units;
-    }
-
     /**
      * Add a unit.
      *
@@ -276,7 +291,7 @@ public final class GameController {
         // animation timer for handling a loop
         animationTimer = new AnimationTimer() {
             public void handle(long now) {
-                if (now - previousTime > NANO_SECONDS_PER_SECOND / 3) {
+                if (now - previousTime > Globals.NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
                     // draw
                     gameScene.draw();
@@ -311,25 +326,17 @@ public final class GameController {
      */
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
-        if (keyCode.equals(cursors.get(0).getCurrentMove())) {
+        for (int i = 0; i < cursors.size(); i++) {
+            Cursor cursor = cursors.get(i);
+            if (keyCode.equals(cursor.getCurrentMove())) {
 
-            cursors.get(0).handleFuse();
+                cursor.handleFuse();
 
-            cursors.get(0).setCurrentMove(null);
-        } else if (keyCode.equals(KeyCode.O) || keyCode.equals(KeyCode.I)) {
-            cursors.get(0).setDrawing(false);
-            cursors.get(0).setSpeed(2);
-            cursors.get(0).handleFuse();
-        } else if(cursors.size()>1) {
-            if (keyCode.equals(cursors.get(1).getCurrentMove())) {
-
-                cursors.get(1).handleFuse();
-
-                cursors.get(1).setCurrentMove(null);
-            } else if (keyCode.equals(KeyCode.X) || keyCode.equals(KeyCode.Z)) {
-                cursors.get(1).setDrawing(false);
-                cursors.get(1).setSpeed(2);
-                cursors.get(1).handleFuse();
+                cursor.setCurrentMove(null);
+            } else if (keyCode.equals(cursorFastMoveKey.get(i)) || keyCode.equals(cursorSlowMoveKey.get(i))) {
+                cursor.setDrawing(false);
+                cursor.setSpeed(2);
+                cursor.handleFuse();
             }
         }
     }
@@ -347,86 +354,58 @@ public final class GameController {
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
             gameScene.setMessageLabel("");
-            /*** first cursor ***/
-        } else if (cursors.get(0).getArrowKeys().contains(e.getCode())) {
-            if (cursors.get(0).isDrawing()) {
-                if (cursors.get(0).getFuse() != null) {
-                    cursors.get(0).getFuse().setMoving(false);
-                }
-            }
-            cursors.get(0).setCurrentMove(e.getCode());
-        } else if (e.getCode().equals(KeyCode.O)) {
-            if (cursors.get(0).getStix().getStixCoordinates() != null && !cursors.get(0).getStix().getStixCoordinates().isEmpty()) {
-                if (!cursors.get(0).isFast()) {
-                    cursors.get(0).setSpeed(1);
-                    cursors.get(0).setDrawing(true);
-                    cursors.get(0).setFast(false);
-                }
-            } else {
-                cursors.get(0).setSpeed(1);
-                cursors.get(0).setDrawing(true);
-                cursors.get(0).setFast(false);
-            }
-        } else if (e.getCode().equals(KeyCode.I)) {
-            cursors.get(0).setSpeed(2);
-            cursors.get(0).setDrawing(true);
-            cursors.get(0).setFast(true);
+        } else {
+            for (int i = 0; i < cursors.size(); i++) {
+                Cursor cursor = cursors.get(i);
+                if (cursor.getArrowKeys().contains(e.getCode())) {
+                    if (cursor.isDrawing()) {
+                        if (cursor.getFuse() != null) {
+                            cursor.getFuse().setMoving(false);
+                        }
+                    }
+                    cursor.setCurrentMove(e.getCode());
+                } else if (e.getCode().equals(cursorSlowMoveKey.get(i))) {
+                    if (cursor.getStix().getStixCoordinates() != null
+                            && !cursor.getStix().getStixCoordinates().isEmpty()) {
+                        if (!cursor.isFast()) {
+                            cursor.setSpeed(1);
+                            cursor.setDrawing(true);
+                            cursor.setFast(false);
+                        }
+                    } else {
+                        cursor.setSpeed(1);
+                        cursor.setDrawing(true);
+                        cursor.setFast(false);
+                    }
+                } else if (e.getCode().equals(cursorFastMoveKey.get(i))) {
+                    cursor.setSpeed(2);
+                    cursor.setDrawing(true);
+                    cursor.setFast(true);
 
-            /*** second cursor ***/
-        } else if(cursors.size()>1){
-            if (cursors.get(1).getArrowKeys().contains(e.getCode())) {
-                if (cursors.get(1).isDrawing()) {
-                    if (cursors.get(1).getFuse() != null) {
-                        cursors.get(1).getFuse().setMoving(false);
-                    }
                 }
-                cursors.get(1).setCurrentMove(e.getCode());
-            } else if (e.getCode().equals(KeyCode.Z)) {
-                if (cursors.get(1).getStix().getStixCoordinates() != null && !cursors.get(1).getStix().getStixCoordinates().isEmpty()) {
-                    if (!cursors.get(1).isFast()) {
-                        cursors.get(1).setSpeed(1);
-                        cursors.get(1).setDrawing(true);
-                        cursors.get(1).setFast(false);
-                    }
-                } else {
-                    cursors.get(1).setSpeed(1);
-                    cursors.get(1).setDrawing(true);
-                    cursors.get(1).setFast(false);
-                }
-            } else if (e.getCode().equals(KeyCode.X)) {
-                cursors.get(1).setSpeed(2);
-                cursors.get(1).setDrawing(true);
-                cursors.get(1).setFast(true);
             }
         }
     }
 
-    /**
-     * AreaTracker.
-     *
-     * @return the area tracker
-     */
+    //Getters
+
     public AreaTracker getAreaTracker() {
         return areaTracker;
     }
 
-    /**
-     *
-     * @return
-     */
     public GameScene getScene() {
         return gameScene;
     }
 
-    /**
-     *
-     * @param scene
-     */
-    public void setGameScene(GameScene scene) { this.gameScene = scene; }
+    public void setGameScene(GameScene scene) {
+        this.gameScene = scene;
+    }
 
-    /**
-     *
-     */
-    public static void deleteGameController() { GameController.gameController = null; }
+    public ArrayList<Cursor> getCursors() {
+        return cursors;
+    }
 
+    public Set<Unit> getUnits() {
+        return units;
+    }
 }

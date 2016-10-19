@@ -200,7 +200,7 @@ public class Qix extends Unit implements CollisionInterface {
 
     @Override
     public boolean intersect(Unit collidee) {
-        if (!(collidee instanceof Qix) ) {
+        if (!(collidee instanceof Qix)) {
             Polygon colliderP = this.toPolygon();
 
             // subtract one from width&height to make collisions look more real

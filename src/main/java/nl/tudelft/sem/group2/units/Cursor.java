@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,7 +12,13 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -67,7 +69,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
-        scoreCounter.addObserver(GameController.getInstance().getScene().getScoreScene());
+        GameController.getInstance().getScene();
+        scoreCounter.addObserver(GameScene.getScoreScene());
         scoreCounter.setLives(lives);
     }
 
@@ -124,20 +127,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * Method which tests if cursor intersects with other unit.
      * @param collidee the other unit
-     * @return
+     * @return if cursor intersects with other unit
      */
     @Override
     public boolean intersect(Unit collidee) {
-        if (super.intersect(collidee)) {
-            return true;
-        } else {
-            if (fuse != null) {
-                return fuse.intersect(this);
-            } else {
-                return false;
-            }
-        }
+        return super.intersect(collidee) || (fuse != null && fuse.intersect(this));
     }
 
     /**
@@ -355,7 +351,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
         if (scoreCounter.getLives() == 0 && this.isDrawing()) {
-            Point newStartPos = stix.getStixCoordinates().getFirst();
+             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());
             stix.emptyStix();

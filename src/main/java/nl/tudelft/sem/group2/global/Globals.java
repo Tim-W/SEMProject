@@ -40,6 +40,7 @@ public final class Globals {
             + " move and i and o to draw\n\nPress 1 for single player game and 2 for a 2 player game!";
     public static final int STARTSCENE_SPACING = 30;
     public static final int STARTSCENE_HELPTEXT_WRAPPING = 200;
+    public static final int NANO_SECONDS_PER_SECOND = 100000000;
 
     private Globals() {
     }

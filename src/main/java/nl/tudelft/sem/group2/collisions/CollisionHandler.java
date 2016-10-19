@@ -37,14 +37,11 @@ public class CollisionHandler {
         unitsList.addAll(units);
 
         ArrayList<Cursor> cursorList = new ArrayList<>();
-
-        for (int i = 0; i < unitsList.size(); i++) {
-            Unit collider = unitsList.get(i);
+        for (Unit collider : unitsList) {
             if (collider instanceof Cursor) {
                 cursorList.add((Cursor) collider);
             }
         }
-
         for (Cursor cursor : cursorList) {
             unitsList.remove(cursor);
             for (Unit collidee : unitsList) {
