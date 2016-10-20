@@ -100,7 +100,7 @@ public class GameControllerTest {
         gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.O, false,
                 false,
                 false, false));
-        verify(spyCursor, times(1)).setSpeed(2);
+        verify(spyCursor, times(2)).setSpeed(2);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class GameControllerTest {
         setUp();
         gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.Y, false, false,
                 false, false));
-        verify(spyCursor, times(0)).setSpeed(2);
+        verify(spyCursor, times(1)).setSpeed(2);
     }
 
     @Test
@@ -154,60 +154,6 @@ public class GameControllerTest {
                 false, false));
         verify(spyCursor.getFuse(), times(0)).setMoving(true);
     }
-
-/*    @Test
-    public void keyReleasedX() throws Exception {
-        
-            
-            
-                setUp();
-                spyCursor.setCurrentMove(KeyCode.RIGHT);
-                spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-                gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", KeyCode.X, false, false,
-                        false, false));
-                verify(spyCursor, times(1)).setDrawing(false);
-            }
-        };
-        
-    }
-
-    @Test
-    public void keyReleasedZ() throws Exception {
-        
-            
-            
-
-                setUp();
-                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
-                GameController.getInstance().addCursor(cursor);
-                GameController.getInstance().getCursors().get(0).setCurrentMove(KeyCode.RIGHT);
-                gameController.getCursors().get(0).getStix().addToStix(new Point(gameController.getCursors().get(0).getX(), gameController.getCursors().get(0).getY()));
-                gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", KeyCode.Z, false, false,
-                        false, false));
-                verify(cursor, times(1)).setDrawing(false);
-            }
-        };
-        
-    }
-
-    @Test
-    public void keyReleasedY() throws Exception {
-        
-            
-            
-
-                setUp();
-                Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
-                GameController.getInstance().addCursor(cursor);
-                GameController.getInstance().getCursors().get(0).setCurrentMove(KeyCode.RIGHT);
-                gameController.getCursors().get(0).getStix().addToStix(new Point(gameController.getCursors().get(0).getX(), gameController.getCursors().get(0).getY()));
-                gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", KeyCode.Y, false, false,
-                        false, false));
-                verify(cursor, times(0)).setDrawing(false);
-            }
-        };
-        
-    }*/
 
     /**
      * test addUnit not to add two fuses

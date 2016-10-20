@@ -71,7 +71,7 @@ public class CollisionHandler {
                         }
                     } else if (collidee instanceof Cursor && (cursor.getStix().intersect(collidee)
                             || ((Cursor) collidee).getStix().intersect(cursor))) {
-                            return true;
+                        return true;
                     }
                 }
             }

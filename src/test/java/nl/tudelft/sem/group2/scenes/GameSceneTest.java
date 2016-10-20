@@ -4,8 +4,6 @@ import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Fuse;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;

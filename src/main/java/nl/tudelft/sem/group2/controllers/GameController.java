@@ -564,6 +564,7 @@ public final class GameController {
     public Set<Unit> getUnits() {
         return units;
     }
+
     /**
      * only used for testing.
      *

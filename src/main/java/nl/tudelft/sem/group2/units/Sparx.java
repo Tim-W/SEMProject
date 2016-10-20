@@ -1,10 +1,11 @@
 package nl.tudelft.sem.group2.units;
 
-import java.util.logging.Level;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
