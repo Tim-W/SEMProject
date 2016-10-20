@@ -2,7 +2,6 @@
  * © 2015 isp-insoft all rights reserved.
  */
 package nl.tudelft.sem.group2;
-
 import com.sun.javafx.application.PlatformImpl;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -13,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * This runner can be used to run JUnit-Tests on the JavaFx-Thread. This class can be used as a parameter to
  * the {@link RunWith} annotation. Example: *
- * <p>
+ *
  * <pre>
  * <code>
  * &#64;RunWith( JfxTestRunner.class )
@@ -30,6 +29,7 @@ import java.util.concurrent.CountDownLatch;
  *
  * @author okr
  * @date 18.11.2015
+ *
  */
 @SuppressWarnings("restriction")
 public class JfxTestRunner extends BlockJUnit4ClassRunner {
