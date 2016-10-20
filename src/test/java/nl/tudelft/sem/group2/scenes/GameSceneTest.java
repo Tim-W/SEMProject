@@ -55,7 +55,7 @@ public class GameSceneTest {
 
     @Test
     public void testDrawStixAndFuseVerify() throws Exception {
-        Platform.runLater(new Runnable() {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -66,7 +66,9 @@ public class GameSceneTest {
                 scene.draw();
                 verify(spyCursor, times(1)).isFast();
             }
-        });
+        };
+        runnable.run();
+
     }
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
