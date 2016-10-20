@@ -2,7 +2,6 @@ package nl.tudelft.sem.group2;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -11,7 +10,7 @@ import javax.swing.SwingUtilities;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * A JUnit {@link Rule} for running tests on the JavaFX thread and performing
+ * A JUnit rule for running tests on the JavaFX thread and performing
  * JavaFX initialisation.  To include in your test case, add the following code:
  * <p>
  * <pre>
