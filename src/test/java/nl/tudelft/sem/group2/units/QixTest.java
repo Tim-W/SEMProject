@@ -7,7 +7,6 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -25,7 +24,6 @@ import static org.mockito.Mockito.when;
 /**
  * Created by gijs on 26-9-2016.
  */
-@Ignore
 public class QixTest {
     private Qix qix;
     private Canvas canvas;
