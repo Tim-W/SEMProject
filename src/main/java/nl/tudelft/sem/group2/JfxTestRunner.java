@@ -12,24 +12,6 @@ import java.util.concurrent.CountDownLatch;
 /**
  * This runner can be used to run JUnit-Tests on the JavaFx-Thread. This class can be used as a parameter to
  * the {@link RunWith} annotation. Example: *
- *
- * <pre>
- * <code>
- * &#64;RunWith( JfxTestRunner.class )
- * public class MyUnitTest
- * {
- *   &#64;Test
- *   public void testMyMethod()
- *   {
- *    //...
- *   }
- * }
- * </code>
- * </pre>
- *
- * @author okr
- * @date 18.11.2015
- *
  */
 @SuppressWarnings("restriction")
 public class JfxTestRunner extends BlockJUnit4ClassRunner {
@@ -52,8 +34,7 @@ public class JfxTestRunner extends BlockJUnit4ClassRunner {
         final CountDownLatch latch = new CountDownLatch(1);
 
         // initializes JavaFX environment
-        PlatformImpl.startup(() ->
-        {
+        PlatformImpl.startup(() -> {
       /* No need to do anything here */
         });
 
