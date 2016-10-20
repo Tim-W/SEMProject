@@ -294,7 +294,7 @@ public class GameControllerTest {
         };
         Thread thread = new Thread(runnable);
         thread.start();
-        Thread.sleep(100000);
+        Thread.sleep(1000);
 
     }
 }
