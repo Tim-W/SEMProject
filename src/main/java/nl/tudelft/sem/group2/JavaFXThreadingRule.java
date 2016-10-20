@@ -34,12 +34,15 @@ public class JavaFXThreadingRule implements TestRule {
         return new OnJFXThreadStatement(statement);
     }
 
-    private static class OnJFXThreadStatement extends Statement {
+    /**
+     *
+     */
+    private final class OnJFXThreadStatement extends Statement {
 
         private final Statement statement;
         private Throwable rethrownException = null;
 
-        public OnJFXThreadStatement(Statement aStatement) {
+        private OnJFXThreadStatement(Statement aStatement) {
             statement = aStatement;
         }
 
