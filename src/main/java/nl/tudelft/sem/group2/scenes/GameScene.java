@@ -226,7 +226,7 @@ public class GameScene extends Scene {
      * Draw current Stix and Fuse on screen.
      */
     private void drawStixAndFuse() {
-        boolean foundFuse = true;
+        boolean foundFuse = false;
         Point fuse = new Point(-1, -1);
         List<Cursor> cursorList = new ArrayList<>();
         if (GameController.getInstance().getUnits() == null) {
@@ -237,11 +237,11 @@ public class GameScene extends Scene {
         for (Cursor cursor : cursorList) {
             if (cursor.getFuse() != null) {
                 fuse = new Point(cursor.getFuse().getX(), cursor.getFuse().getY());
-                foundFuse = false;
+                foundFuse = true;
             }
             for (Point p : cursor.getStix().getStixCoordinates()) {
                 if (!p.equals(cursor.getStix().getStixCoordinates().getFirst())) {
-                    if (foundFuse) {
+                    if (!foundFuse) {
                         if (cursor.isFast()) {
                             gc.setFill(Color.MEDIUMBLUE);
                         } else {
@@ -249,7 +249,7 @@ public class GameScene extends Scene {
                         }
                     } else {
                         if (p.equals(fuse)) {
-                            foundFuse = true;
+                            foundFuse = false;
                         }
                         gc.setFill(Color.GRAY);
                     }
@@ -260,7 +260,7 @@ public class GameScene extends Scene {
                 cursor.getFuse().move();
                 cursor.getFuse().draw(canvas);
             }
-            foundFuse = true;
+            foundFuse = false;
             fuse = new Point(-1, -1);
         }
     }

@@ -583,4 +583,19 @@ public final class GameController {
         units.remove(unit);
         checkSparx();
     }
+    public LinkedList<KeyCode> getCursorFastMoveKey() {
+        return cursorFastMoveKey;
+    }
+
+    public void setCursorFastMoveKey(LinkedList<KeyCode> cursorFastMoveKey) {
+        this.cursorFastMoveKey = cursorFastMoveKey;
+    }
+
+    public LinkedList<KeyCode> getCursorSlowMoveKey() {
+        return cursorSlowMoveKey;
+    }
+
+    public void setCursorSlowMoveKey(LinkedList<KeyCode> cursorSlowMoveKey) {
+        this.cursorSlowMoveKey = cursorSlowMoveKey;
+    }
 }
