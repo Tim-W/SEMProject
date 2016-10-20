@@ -1,6 +1,6 @@
 package nl.tudelft.sem.group2.scenes;
 
-import javafx.embed.swing.JFXPanel;
+import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import org.junit.BeforeClass;
@@ -23,7 +23,14 @@ public class GameSceneTest {
 
     @BeforeClass
     public static void BeforeClass() {
-        new JFXPanel();
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LaunchApp.launch();
+            }
+        });
+        thread.start();
     }
 
     public void setUp() {
@@ -47,38 +54,22 @@ public class GameSceneTest {
 
     @Test
     public void testDrawStixAndFuseVerify() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
                 setUp();
                 spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
                 gameController.getCursors().get(0).getStix();
                 spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY() + 1));
                 scene.draw();
                 verify(spyCursor, times(1)).isFast();
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
 
     }
 
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
                 setUp();
                 spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
                 spyCursor.handleFuse();
                 scene.draw();
                 verify(spyCursor, times(0)).isFast();
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
     }
 
 }
