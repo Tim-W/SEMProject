@@ -3,12 +3,14 @@ package nl.tudelft.sem.group2.controllers;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.awt.Point;
@@ -19,6 +21,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class GameControllerTest {
+    @Rule
+    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private GameController gameController;
     private Cursor spyCursor;
 
@@ -41,19 +45,11 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedSpace() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
                 setUp();
                 boolean isRunning = gameController.isRunning();
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.SPACE, false, false,
                         false, false));
                 Assert.assertEquals(!isRunning, gameController.isRunning());
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
     }
 
     @Test
