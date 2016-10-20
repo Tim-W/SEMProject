@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.scenes;
 
+import javafx.application.Application;
 import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -27,7 +28,7 @@ public class GameSceneTest {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                LaunchApp.launch();
+                Application.launch(LaunchApp.class);
             }
         });
         thread.start();
