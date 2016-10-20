@@ -6,18 +6,21 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -95,6 +98,10 @@ public class GameScene extends Scene {
         return scoreScene;
     }
 
+    public static GraphicsContext getGc() {
+        return gc;
+    }
+
     /**
      * Initializes canvas and gc.
      */
@@ -139,7 +146,6 @@ public class GameScene extends Scene {
     private void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
-
         scoreScene.setScore(0);
         scoreScene.setClaimedPercentage(0);
     }
@@ -166,9 +172,29 @@ public class GameScene extends Scene {
         drawUncovered();
         drawBorders();
         drawStixAndFuse();
+        if (GameController.getInstance().getUnits() == null) {
+            return;
+        }
         for (Unit unit : GameController.getInstance().getUnits()) {
             unit.move();
             unit.draw(canvas);
+        }
+
+        applyEffect();
+    }
+
+    private void applyEffect() {
+        List<Cursor> cursors = GameController.getInstance().getCursors();
+        for (Cursor cursor : cursors) {
+            switch (cursor.getCurrentPowerup()) {
+                case EAT:
+                    gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
+                    break;
+                case SPEED:
+                    gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                    break;
+            }
+
         }
     }
 
@@ -202,8 +228,12 @@ public class GameScene extends Scene {
     private void drawStixAndFuse() {
         boolean foundFuse = false;
         Point fuse = new Point(-1, -1);
-        List<Cursor> cursorList = GameController.getInstance().getUnits().stream().filter(unit ->
-                unit instanceof Cursor).map(unit -> ((Cursor) unit)).collect(Collectors.toList());
+        List<Cursor> cursorList = new ArrayList<>();
+        if (GameController.getInstance().getUnits() == null) {
+            return;
+        }
+        cursorList.addAll(GameController.getInstance().getUnits().stream().
+                filter(unit -> unit instanceof Cursor).map(unit -> (Cursor) unit).collect(Collectors.toList()));
         for (Cursor cursor : cursorList) {
             if (cursor.getFuse() != null) {
                 fuse = new Point(cursor.getFuse().getX(), cursor.getFuse().getY());
@@ -251,6 +281,18 @@ public class GameScene extends Scene {
      */
     public void setMessageBoxLayoutX(int position) {
         GameScene.messageBox.setLayoutX(position);
+    }
+
+    /**
+     * Update the info on the scorescene with actual info from scorecounter.
+     *
+     * @param scoreCounter scorecounter from GameController.
+     * @param cursor       current cursor for which lives should be updated.
+     */
+    public void updateScorescene(ScoreCounter scoreCounter, Cursor cursor) {
+        scoreScene.setScore(scoreCounter.getTotalScore());
+        scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
+        scoreScene.setLivesLabel(cursor.getLives());
     }
 }
 

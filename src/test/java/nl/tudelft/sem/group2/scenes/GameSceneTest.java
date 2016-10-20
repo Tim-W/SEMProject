@@ -4,6 +4,8 @@ import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Fuse;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,9 +33,6 @@ public class GameSceneTest {
     }
 
     public void setUp() {
-
-        //Group root = new Group();
-        //Scene s = new Scene(root, 300, 300, Color.BLACK);
         removeGameController();
         gameController = GameController.getInstance();
         gameController.makeCursor();
