@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.JfxTestRunner;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
@@ -14,6 +15,7 @@ import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.awt.Point;
 
@@ -22,6 +24,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@RunWith(JfxTestRunner.class)
 public class GameControllerTest {
     private GameController gameController;
 
@@ -39,23 +42,15 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedSpace() throws Exception {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
                 setUp();
                 boolean isRunning = gameController.isRunning();
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.SPACE, false, false,
                         false, false));
                 Assert.assertEquals(!isRunning, gameController.isRunning());
-            }
-        });
     }
 
     @Test
     public void keyPressedArrow() throws Exception {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
                 setUp();
                 Cursor cursor = new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new
                         Stix(), Color.RED, 3);
@@ -64,16 +59,10 @@ public class GameControllerTest {
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.RIGHT, false, false,
                         false, false));
                 verify(GameController.getInstance().getCursors().get(0).getFuse(), times(1)).setMoving(false);
-                //verify(fuse,times(2)).getUnits();
-            }
-        });
     }
 
     @Test
     public void keyPressedX() throws Exception {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
                 setUp();
                 Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(),
                         new Stix(), Color.RED, 3));
@@ -81,15 +70,10 @@ public class GameControllerTest {
                 gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.O, false, false,
                         false, false));
                 verify(cursor, times(1)).setSpeed(1);
-            }
-        });
     }
 
     @Test
     public void keyPressedXNotFast() throws Exception {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
                 setUp();
                 Stix stix = new Stix();
                 stix.addToStix(new Point(1, 1));
@@ -101,8 +85,6 @@ public class GameControllerTest {
                         false, false));
                 //verify(cursor, times(1)).setSpeed(1);
                 verify(cursor, times(1)).setSpeed(1);
-            }
-        });
     }
 
     @Test
