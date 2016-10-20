@@ -19,12 +19,12 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.logging.Level;
-import java.awt.Point;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -407,5 +407,21 @@ public final class GameController {
 
     public Set<Unit> getUnits() {
         return units;
+    }
+
+    public LinkedList<KeyCode> getCursorFastMoveKey() {
+        return cursorFastMoveKey;
+    }
+
+    public void setCursorFastMoveKey(LinkedList<KeyCode> cursorFastMoveKey) {
+        this.cursorFastMoveKey = cursorFastMoveKey;
+    }
+
+    public LinkedList<KeyCode> getCursorSlowMoveKey() {
+        return cursorSlowMoveKey;
+    }
+
+    public void setCursorSlowMoveKey(LinkedList<KeyCode> cursorSlowMoveKey) {
+        this.cursorSlowMoveKey = cursorSlowMoveKey;
     }
 }

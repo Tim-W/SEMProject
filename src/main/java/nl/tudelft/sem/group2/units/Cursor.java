@@ -297,10 +297,28 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * only for testing.
+     *
+     * @param stix setter for stix
+     */
+    public void setStix(Stix stix) {
+        this.stix = stix;
+    }
+
+    /**
      * @return the fuse if there is a fuse, otherwise null.
      */
     public Fuse getFuse() {
         return fuse;
+    }
+
+    /**
+     * only for testing.
+     *
+     * @param fuse setter for fuse
+     */
+    public void setFuse(Fuse fuse) {
+        this.fuse = fuse;
     }
 
     /**
