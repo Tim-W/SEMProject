@@ -4,13 +4,11 @@ import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.awt.Point;
 
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -22,8 +20,9 @@ public class GameSceneTest {
     private GameScene scene;
     private GameController gameController;
     private Cursor spyCursor;
+
     @BeforeClass
-    public static void BeforeClass(){
+    public static void BeforeClass() {
         new JFXPanel();
     }
 
@@ -40,13 +39,7 @@ public class GameSceneTest {
     }
 
     private void removeGameController() {
-
-        gameController = GameController.getInstance();
-        gameController.setCursor(null);
-        gameController.setStix(null);
-        gameController.setGameScene(null);
-        GameController.setUnits(null);
-        GameController.setGameController(null);
+         GameController.deleteGameController();
     }
 
     @Test
@@ -66,6 +59,7 @@ public class GameSceneTest {
         runnable.run();
 
     }
+
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
         Runnable runnable = new Runnable() {

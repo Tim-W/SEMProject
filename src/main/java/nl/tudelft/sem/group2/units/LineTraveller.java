@@ -19,11 +19,11 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
     /**
      * Create a new LineTraveller.
      *
-     * @param x      x coord
-     * @param y      y coord
-     * @param width  width, used for collision
-     * @param height height, used for collision
-     * @param areaTracker the AreaTracker
+     * @param x           x coord
+     * @param y           y coord
+     * @param width       width, used for collision
+     * @param height      height, used for collision
+     * @param areaTracker used for calculating areas
      */
     public LineTraveller(int x, int y, int width, int height, AreaTracker areaTracker) {
         super(x, y, width, height, areaTracker);

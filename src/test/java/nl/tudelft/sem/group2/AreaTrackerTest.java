@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2;
 
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -13,6 +14,8 @@ public class AreaTrackerTest {
     private static final int TEST_MAP_WIDTH = 5;
     private static final int TEST_MAP_HEIGHT = 5;
 
+    private Stix stix;
+
     /**
      * Test method for the default constructor of AreaTracker.
      *
@@ -20,8 +23,8 @@ public class AreaTrackerTest {
      */
     @org.junit.Test
     public void testConstructor() throws Exception {
-        Stix stix = new Stix();
-        AreaTracker areaTracker = new AreaTracker(stix);
+        stix = new Stix();
+        AreaTracker areaTracker = new AreaTracker();
 
         AreaState[][] expectedGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
 
@@ -29,14 +32,11 @@ public class AreaTrackerTest {
             for (int y = 0; y < expectedGrid[x].length; y++) {
                 if (x == 0) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == expectedGrid.length - 1) {
+                } else if (x == expectedGrid.length - 1) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (y == 0 || y == expectedGrid[x].length - 1) {
+                } else if (y == 0 || y == expectedGrid[x].length - 1) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else {
+                } else {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
                 }
             }
@@ -58,7 +58,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), true);
+        areaTracker.calculateNewArea(new Point(1, 2), true, stix, new ScoreCounter(Color.RED));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
 
@@ -80,7 +80,7 @@ public class AreaTrackerTest {
     public void testCalculateNewSlowArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), false);
+        areaTracker.calculateNewArea(new Point(1, 2), false, stix, new ScoreCounter(Color.RED));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(false);
 
@@ -102,7 +102,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastAreaWithQixOnOtherSide() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(3, 2), true);
+        areaTracker.calculateNewArea(new Point(3, 2), true, stix, new ScoreCounter(Color.RED));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
 
@@ -122,31 +122,24 @@ public class AreaTrackerTest {
             for (int x = 0; x < TEST_MAP_WIDTH; x++) {
                 if (x == 0) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if ((x == 1 || x == 4) && (y == 0 || y == 4)) {
+                } else if ((x == 1 || x == 4) && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 1) {
+                } else if (x == 1) {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
-                }
-                else if (x == 2) {
+                } else if (x == 2) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3 && (y == 0 || y == 4)) {
+                } else if (x == 3 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 3 && fastArea) {
+                } else if (x == 3 && fastArea) {
                     expectedGrid[x][y] = AreaState.FAST;
-                }
-                else if (x == 3) {
+                } else if (x == 3) {
                     expectedGrid[x][y] = AreaState.SLOW;
-                }
-                else if (x == 4 && y > 0 && y < 4) {
+                } else if (x == 4 && y > 0 && y < 4) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
                 }
             }
         }
-        return  expectedGrid;
+        return expectedGrid;
     }
 
     private AreaState[][] createExpectedBoardGridQixUnderStix(boolean fastArea) {
@@ -155,43 +148,35 @@ public class AreaTrackerTest {
             for (int x = 0; x < TEST_MAP_WIDTH; x++) {
                 if (x == 0 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 0) {
+                } else if (x == 0) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 1 && (y == 0 || y == 4)) {
+                } else if (x == 1 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.INNERBORDER;
-                }
-                else if (x == 1 && fastArea) {
+                } else if (x == 1 && fastArea) {
                     expectedGrid[x][y] = AreaState.FAST;
-                }
-                else if (x == 1) {
+                } else if (x == 1) {
                     expectedGrid[x][y] = AreaState.SLOW;
-                }
-                else if (x == 2) {
+                } else if (x == 2) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3 && (y == 0 || y == 4)) {
+                } else if (x == 3 && (y == 0 || y == 4)) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
-                }
-                else if (x == 3) {
+                } else if (x == 3) {
                     expectedGrid[x][y] = AreaState.UNCOVERED;
-                }
-                else if (x == 4) {
+                } else if (x == 4) {
                     expectedGrid[x][y] = AreaState.OUTERBORDER;
                 }
             }
         }
-        return  expectedGrid;
+        return expectedGrid;
     }
 
     private AreaTracker instantiateAreaTracker() {
-        Stix stix = new Stix();
+        stix = new Stix();
         stix.addToStix(new Point(2, 0));
         stix.addToStix(new Point(2, 1));
         stix.addToStix(new Point(2, 2));
         stix.addToStix(new Point(2, 3));
         stix.addToStix(new Point(2, 4));
-        return new AreaTracker(TEST_MAP_WIDTH, TEST_MAP_HEIGHT, stix);
+        return new AreaTracker(TEST_MAP_WIDTH, TEST_MAP_HEIGHT);
     }
 }
