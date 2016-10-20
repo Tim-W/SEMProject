@@ -58,7 +58,9 @@ public class GameSceneTest {
                 verify(spyCursor, times(1)).isFast();
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
 
     }
 
@@ -74,7 +76,9 @@ public class GameSceneTest {
                 verify(spyCursor, times(0)).isFast();
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
 }

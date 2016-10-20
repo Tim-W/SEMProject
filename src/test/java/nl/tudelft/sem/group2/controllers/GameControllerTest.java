@@ -51,7 +51,9 @@ public class GameControllerTest {
                 Assert.assertEquals(!isRunning, gameController.isRunning());
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -68,7 +70,9 @@ public class GameControllerTest {
                 verify(spyCursor.getFuse(), times(1)).setMoving(false);
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -83,7 +87,9 @@ public class GameControllerTest {
                 verify(spyCursor, times(1)).setSpeed(1);
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -100,7 +106,9 @@ public class GameControllerTest {
                 verify(spyCursor, times(1)).setSpeed(1);
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -116,7 +124,9 @@ public class GameControllerTest {
                 verify(spyCursor, times(0)).setSpeed(1);
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
 
     }
 
@@ -133,7 +143,9 @@ public class GameControllerTest {
                 verify(spyCursor, times(1)).setSpeed(2);
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -147,7 +159,9 @@ public class GameControllerTest {
                 verify(spyCursor, times(0)).setSpeed(2);
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -164,7 +178,9 @@ public class GameControllerTest {
                 verify(spyCursor.getFuse(), times(1)).setMoving(true);
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -182,6 +198,9 @@ public class GameControllerTest {
             }
         };
         runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -199,6 +218,9 @@ public class GameControllerTest {
             }
         };
         runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
     @Test
@@ -215,7 +237,9 @@ public class GameControllerTest {
                 verify(spyCursor.getFuse(), times(0)).setMoving(true);
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100);
     }
 
 /*    @Test
@@ -294,7 +318,6 @@ public class GameControllerTest {
         };
         Thread thread = new Thread(runnable);
         thread.start();
-        Thread.sleep(1000);
-
+        Thread.sleep(100);
     }
 }
