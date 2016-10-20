@@ -1,10 +1,6 @@
 package nl.tudelft.sem.group2.scenes;
 
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
@@ -33,8 +29,8 @@ public class GameSceneTest {
 
     public void setUp() {
 
-        Group root = new Group();
-        Scene s = new Scene(root, 300, 300, Color.BLACK);
+        //Group root = new Group();
+        //Scene s = new Scene(root, 300, 300, Color.BLACK);
         removeGameController();
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();
@@ -72,7 +68,7 @@ public class GameSceneTest {
     }
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
-        Platform.runLater(new Runnable() {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -83,11 +79,12 @@ public class GameSceneTest {
                 scene.draw();
                 verify(spyCursor, times(0)).isFast();
             }
-        });
+        };
+        runnable.run();
     }
     @Test
     public void testRemoveFuse() throws Exception {
-        Platform.runLater(new Runnable() {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 setUp();
@@ -97,7 +94,8 @@ public class GameSceneTest {
                 scene.removeFuse();
                 Assert.assertEquals(oldSize, gameController.getUnits().size());
             }
-        });
+        };
+        runnable.run();
 
     }
 
