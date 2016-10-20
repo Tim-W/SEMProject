@@ -45,204 +45,121 @@ public class GameControllerTest {
 
     @Test
     public void keyPressedSpace() throws Exception {
-                setUp();
-                boolean isRunning = gameController.isRunning();
-                gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.SPACE, false, false,
-                        false, false));
-                Assert.assertEquals(!isRunning, gameController.isRunning());
+        setUp();
+        boolean isRunning = gameController.isRunning();
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.SPACE, false, false,
+                false, false));
+        Assert.assertEquals(!isRunning, gameController.isRunning());
     }
 
     @Test
     public void keyPressedArrow() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                spyCursor.setDrawing(true);
-                spyCursor.setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
-                spyCursor.setDrawing(true);
-                gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.RIGHT, false, false,
-                        false, false));
-                verify(spyCursor.getFuse(), times(1)).setMoving(false);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        spyCursor.setDrawing(true);
+        spyCursor.setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
+        spyCursor.setDrawing(true);
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.RIGHT, false, false,
+                false, false));
+        verify(spyCursor.getFuse(), times(1)).setMoving(false);
     }
 
     @Test
     public void keyPressedI() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.I, false,
-                        false,
-                        false, false));
-                verify(spyCursor, times(1)).setSpeed(1);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.I, false,
+                false,
+                false, false));
+        verify(spyCursor, times(1)).setSpeed(1);
     }
 
     @Test
     public void keyPressedINotFast() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                spyCursor.getStix().addToStix(new Point(1, 1));
-                spyCursor.setFast(false);
-                gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.I, false,
-                        false,
-                        false, false));
-                verify(spyCursor, times(1)).setSpeed(1);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        spyCursor.getStix().addToStix(new Point(1, 1));
+        spyCursor.setFast(false);
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.I, false,
+                false,
+                false, false));
+        verify(spyCursor, times(1)).setSpeed(1);
     }
 
     @Test
     public void keyPressedINotFastNothing() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                spyCursor.getStix().addToStix(new Point(1, 1));
-                gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.I, false,
-                        false,
-                        false, false));
-                verify(spyCursor, times(0)).setSpeed(1);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
-
+        setUp();
+        spyCursor.getStix().addToStix(new Point(1, 1));
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.I, false,
+                false,
+                false, false));
+        verify(spyCursor, times(0)).setSpeed(1);
     }
 
     @Test
     public void keyPressedO() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                spyCursor.getStix().addToStix(new Point(1, 1));
-                gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.O, false,
-                        false,
-                        false, false));
-                verify(spyCursor, times(1)).setSpeed(2);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        spyCursor.getStix().addToStix(new Point(1, 1));
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.O, false,
+                false,
+                false, false));
+        verify(spyCursor, times(1)).setSpeed(2);
     }
 
     @Test
     public void keyPressedY() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.Y, false, false,
-                        false, false));
-                verify(spyCursor, times(0)).setSpeed(2);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.Y, false, false,
+                false, false));
+        verify(spyCursor, times(0)).setSpeed(2);
     }
 
     @Test
     public void keyReleasedCurrentMove() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                spyCursor.setCurrentMove(KeyCode.RIGHT);
-                spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-                spyCursor.setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
-                gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
-                        false, false));
-                verify(spyCursor.getFuse(), times(1)).setMoving(true);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        spyCursor.setCurrentMove(KeyCode.RIGHT);
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
+        spyCursor.setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
+                false, false));
+        verify(spyCursor.getFuse(), times(1)).setMoving(true);
     }
 
     @Test
     public void testHandle() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                GameScene mock = mock(GameScene.class);
-                gameController.setGameScene(mock);
-                int previoustime = 1;
-                gameController.setPreviousTime(previoustime);
-                gameController.getAnimationTimer().handle(previoustime + 200000000);
-                verify(mock, times(1)).draw();
-            }
-        };
-        runnable.run();
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        GameScene mock = mock(GameScene.class);
+        gameController.setGameScene(mock);
+        int previoustime = 1;
+        gameController.setPreviousTime(previoustime);
+        gameController.getAnimationTimer().handle(previoustime + 200000000);
+        verify(mock, times(1)).draw();
     }
 
     @Test
     public void keyReleasedCurrentMoveCreateFuse() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                spyCursor.setStix(spy(spyCursor.getStix()));
-                spyCursor.setCurrentMove(KeyCode.RIGHT);
-                spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-                gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
-                        false, false));
-                verify(spyCursor.getStix(), times(3)).getStixCoordinates();
-            }
-        };
-        runnable.run();
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        spyCursor.setStix(spy(spyCursor.getStix()));
+        spyCursor.setCurrentMove(KeyCode.RIGHT);
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
+                false, false));
+        verify(spyCursor.getStix(), times(3)).getStixCoordinates();
     }
 
     @Test
     public void keyReleasedCurrentMoveNoCoordinates() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                spyCursor.setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
-                spyCursor.setCurrentMove(KeyCode.RIGHT);
-                spyCursor.getStix().addToStix(new Point(spyCursor.getX() + 1, spyCursor.getY()));
-                gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
-                        false, false));
-                verify(spyCursor.getFuse(), times(0)).setMoving(true);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        spyCursor.setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
+        spyCursor.setCurrentMove(KeyCode.RIGHT);
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX() + 1, spyCursor.getY()));
+        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
+                false, false));
+        verify(spyCursor.getFuse(), times(0)).setMoving(true);
     }
 
 /*    @Test
     public void keyReleasedX() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        
+            
+            
                 setUp();
                 spyCursor.setCurrentMove(KeyCode.RIGHT);
                 spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
@@ -251,14 +168,14 @@ public class GameControllerTest {
                 verify(spyCursor, times(1)).setDrawing(false);
             }
         };
-        runnable.run();
+        
     }
 
     @Test
     public void keyReleasedZ() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        
+            
+            
 
                 setUp();
                 Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
@@ -270,14 +187,14 @@ public class GameControllerTest {
                 verify(cursor, times(1)).setDrawing(false);
             }
         };
-        runnable.run();
+        
     }
 
     @Test
     public void keyReleasedY() throws Exception {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        
+            
+            
 
                 setUp();
                 Cursor cursor = spy(new Cursor(new Point(1, 1), 1, 1, GameController.getInstance().getAreaTracker(), new Stix(), Color.RED, 3));
@@ -289,7 +206,7 @@ public class GameControllerTest {
                 verify(cursor, times(0)).setDrawing(false);
             }
         };
-        runnable.run();
+        
     }*/
 
     /**
@@ -299,21 +216,12 @@ public class GameControllerTest {
      */
     @Test
     public void testAddUnit() throws Exception {
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setUp();
-                int oldLength = gameController.getUnits().size();
-                Fuse fuse = new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), new Stix());
-                gameController.getUnits().add(fuse);
-                Assert.assertTrue(gameController.getUnits().contains(fuse));
-                gameController.getUnits().add(fuse);
-                Assert.assertEquals(oldLength + 1, gameController.getUnits().size());
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(100);
+        setUp();
+        int oldLength = gameController.getUnits().size();
+        Fuse fuse = new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), new Stix());
+        gameController.getUnits().add(fuse);
+        Assert.assertTrue(gameController.getUnits().contains(fuse));
+        gameController.getUnits().add(fuse);
+        Assert.assertEquals(oldLength + 1, gameController.getUnits().size());
     }
 }

@@ -1,8 +1,7 @@
 package nl.tudelft.sem.group2.scenes;
 
-import javafx.application.Application;
+import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
-import nl.tudelft.sem.group2.LaunchApp;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import org.junit.BeforeClass;
@@ -28,14 +27,7 @@ public class GameSceneTest {
 
     @BeforeClass
     public static void BeforeClass() {
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Application.launch(LaunchApp.class);
-            }
-        });
-        thread.start();
+        new JFXPanel();
     }
 
     public void setUp() {
