@@ -279,6 +279,7 @@ public class GameControllerTest {
      */
     @Test
     public void testAddUnit() throws Exception {
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -291,6 +292,9 @@ public class GameControllerTest {
                 Assert.assertEquals(oldLength + 1, gameController.getUnits().size());
             }
         };
-        runnable.run();
+        Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(100000);
+
     }
 }
