@@ -3,7 +3,6 @@
  */
 package nl.tudelft.sem.group2;
 import com.sun.javafx.application.PlatformImpl;
-import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
@@ -11,7 +10,6 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * This runner can be used to run JUnit-Tests on the JavaFx-Thread. This class can be used as a parameter to
- * the {@link RunWith} annotation. Example: *
  */
 @SuppressWarnings("restriction")
 public class JfxTestRunner extends BlockJUnit4ClassRunner {
