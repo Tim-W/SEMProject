@@ -1,12 +1,11 @@
 package nl.tudelft.sem.group2;
 
+import java.awt.Point;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.awt.Point;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,17 +32,22 @@ public class AreaTrackerTest {
 
         for (int x = 0; x < expectedGrid.length; x++) {
             for (int y = 0; y < expectedGrid[x].length; y++) {
-                if (x == 0) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else if (x == expectedGrid.length - 1) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else if (y == 0 || y == expectedGrid[x].length - 1) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else {
-                    expectedGrid[x][y] = AreaState.UNCOVERED;
-                }
+                expectedGrid[x][y] = AreaState.UNCOVERED;
             }
         }
+
+        if (expectedGrid.length > 0) {
+            for (int i = 0; i < expectedGrid.length; i++) {
+                expectedGrid[i][0] = AreaState.OUTERBORDER;
+                expectedGrid[i][expectedGrid[0].length - 1] = AreaState.OUTERBORDER;
+            }
+
+            for (int i = 0; i < expectedGrid[0].length; i++) {
+                expectedGrid[0][i] = AreaState.OUTERBORDER;
+                expectedGrid[expectedGrid[0].length - 1][i] = AreaState.OUTERBORDER;
+            }
+        }
+
         AreaState[][] currentGrid = areaTracker.getBoardGrid();
         for (int i = 0; i < expectedGrid.length; i++) {
             for (int j = 0; j < expectedGrid[i].length; j++) {
