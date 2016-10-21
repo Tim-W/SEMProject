@@ -10,6 +10,24 @@ import org.junit.runners.model.InitializationError;
 import java.util.concurrent.CountDownLatch;
 
 /**
+ * This runner can be used to run JUnit-Tests on the JavaFx-Thread. This class can be used as a parameter to
+ * the RunWith annotation. Example: *
+ * <p>
+ * <pre>
+ * <code>
+ * &#64;RunWith( JfxTestRunner.class )
+ * public class MyUnitTest
+ * {
+ *   &#64;Test
+ *   public void testMyMethod()
+ *   {
+ *    //...
+ *   }
+ * }
+ * </code>
+ * </pre>
+ *
+ * @author okr
  */
 @SuppressWarnings("restriction")
 public class JfxTestRunner extends BlockJUnit4ClassRunner {
