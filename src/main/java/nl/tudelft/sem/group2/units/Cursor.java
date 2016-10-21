@@ -18,7 +18,9 @@ import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -86,15 +88,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             int transY = 0;
 
             if (currentMove != null) {
-                if (currentMove.equals(arrowKeys.get(2))) {
-                    transX = -1;
-                } else if (currentMove.equals(arrowKeys.get(3))) {
-                    transX = 1;
-                } else if (currentMove.equals(arrowKeys.get(0))) {
-                    transY = -1;
-                } else if (currentMove.equals(arrowKeys.get(1))) {
-                    transY = 1;
-                }
+                // A map containing relationships between keycodes and the movement directions.
+                Map<KeyCode, CursorMovement> cursorMovementMap = new HashMap<>();
+                cursorMovementMap.put(arrowKeys.get(2), new CursorMovement(-1, 0));
+                cursorMovementMap.put(arrowKeys.get(3), new CursorMovement(1, 0));
+                cursorMovementMap.put(arrowKeys.get(0), new CursorMovement(0, -1));
+                cursorMovementMap.put(arrowKeys.get(1), new CursorMovement(0, 1));
+                transX += cursorMovementMap.get(currentMove).getTransX();
+                transY += cursorMovementMap.get(currentMove).getTransY();
                 assertMove(transX, transY);
             }
         }
@@ -166,14 +167,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public int quadrant() {
         if (this.getX() < Globals.BOARD_WIDTH / 4) {
             if (this.getY() < Globals.BOARD_HEIGHT / 4) {
-                return 1;
+                return 0;
             } else {
                 return 3;
             }
         } else if (this.getY() < Globals.BOARD_HEIGHT / 4) {
-            return 2;
+            System.out.println("in quadrant 2");
+            return 1;
         }
-        return 4;
+        return 2;
     }
 
     /**
@@ -184,18 +186,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public int oppositeQuadrant() {
         int quadrant = this.quadrant();
 
-        switch (quadrant) {
-            case 1:
-                return 4;
-            case 2:
-                return 3;
-            case 3:
-                return 2;
-            case 4:
-                return 1;
-            default:
-                return 1;
-        }
+        return (quadrant + 2) % 4;
     }
 
     @Override
@@ -421,6 +412,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         if (scoreCounter.getLives() >= 1) {
             scoreCounter.subtractLife();
         }
+        this.quadrant();
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
 
         if (scoreCounter.getLives() > 0 && stix != null && !stix.isStixEmpty()) {
