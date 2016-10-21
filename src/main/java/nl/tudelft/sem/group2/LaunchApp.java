@@ -1,15 +1,14 @@
 package nl.tudelft.sem.group2;
 
-import java.awt.EventQueue;
-import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.StartScene;
+
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -23,7 +22,6 @@ public class LaunchApp extends Application {
 
     private static final Logger LOGGER = Logger.getLogger();
     private static Stage stage;
-    private static MediaView mediaView;
 
     /**
      * @return grid height - a point on the boardgrid is 2x2 pixels,
@@ -53,12 +51,7 @@ public class LaunchApp extends Application {
         } else if (args.length > 0 && args[0].equals("loggingOff")) {
             LOGGER.setLevel(Level.OFF);
         }
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Application.launch(LaunchApp.class);
-            }
-        });
+        launch(args);
     }
 
     /**
@@ -93,5 +86,7 @@ public class LaunchApp extends Application {
         //playSound("/sounds/qix.mp3", 1);
         //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
+
     }
+
 }

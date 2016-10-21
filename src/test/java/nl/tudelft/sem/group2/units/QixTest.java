@@ -151,5 +151,4 @@ public class QixTest {
         spyQix.toPolygon();
         verify(spyQix, times(6)).getOldCoordinates();
     }
-
 }

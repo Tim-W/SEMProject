@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.controllers.GameController;
+import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 /**
@@ -22,39 +24,33 @@ public class AreaTracker {
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
-    private Stix stix;
+    private ThreadLocalRandom threadLocalRandom;
 
     /**
      * Constructor for the AreaTracker class.
      * The constructor sets all the grid points to border and the rest to uncovered
-     * @param stix   current stix to use
      */
-    public AreaTracker(Stix stix) {
-        this.stix = stix;
+    public AreaTracker() {
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
-                //If the current row is the first row set all grid points border on that row
-                if (j == 0) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If the current row is the bottom row set all grid points border on that row
-                else if (j == boardGrid[i].length - 1) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If current column is the last column set the grid point on that column and the current row border
-                else if (i == 0) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If the current column is the last column set the grid point on that column and the current row border
-                else if (i == boardGrid.length - 1) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If the current point is none of the above set that point to uncovered
-                else {
-                    boardGrid[j][i] = AreaState.UNCOVERED;
-                }
+                //By default, all points are uncovered
+                boardGrid[j][i] = AreaState.UNCOVERED;
             }
         }
+        //If the current row is the first row set all grid points border on that row
+        for (int i = 0; i < boardGrid.length; i++) {
+            //If current column is the last column set the grid point on that column and the current row border
+            boardGrid[0][i] = AreaState.OUTERBORDER;
+            boardGrid[boardGrid[0].length - 1][i] = AreaState.OUTERBORDER;
+        }
+
+        for (int j = 0; j < boardGrid[0].length; j++) {
+            //If the current row is the bottom row set all grid points border on that row
+            boardGrid[j][0] = AreaState.OUTERBORDER;
+            //If the current column is the last column set the grid point on that column and the current row border
+            boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
+        }
+        threadLocalRandom = ThreadLocalRandom.current();
     }
 
     /**
@@ -62,48 +58,43 @@ public class AreaTracker {
      *
      * @param width  width of the boardGrid
      * @param height height of the boardGrid
-     * @param stix   current stix to use
      */
-    public AreaTracker(int width, int height, Stix stix) {
-        this.stix = stix;
+    public AreaTracker(int width, int height) {
         boardGrid = new AreaState[width][height];
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
-                //If the current row is the first row set all grid points border on that row
-                if (j == 0) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If the current row is the bottom row set all grid points border on that row
-                else if (j == boardGrid[i].length - 1) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If current column is the last column set the grid point on that column and the current row border
-                else {
-                    if (i == 0) {
-                        boardGrid[j][i] = AreaState.OUTERBORDER;
-                    }
-                    //If the current column is the last column,
-                    // set the grid point on that column and the current row border
-                    else if (i == boardGrid.length - 1) {
-                        boardGrid[j][i] = AreaState.OUTERBORDER;
-                    }
-                    //If the current point is none of the above set that point to uncovered
-                    else {
-                        boardGrid[j][i] = AreaState.UNCOVERED;
-                    }
-                }
+                //By default, all points are uncovered
+                boardGrid[j][i] = AreaState.UNCOVERED;
             }
         }
+
+        for (int i = 0; i < boardGrid.length; i++) {
+            //If current column is the last column set the grid point on that column and the current row border
+            boardGrid[0][i] = AreaState.OUTERBORDER;
+            boardGrid[boardGrid[0].length - 1][i] = AreaState.OUTERBORDER;
+        }
+
+        if (boardGrid.length > 0) {
+            for (int j = 0; j < boardGrid[0].length; j++) {
+                //If the current row is the bottom row set all grid points border on that row
+                boardGrid[j][0] = AreaState.OUTERBORDER;
+                boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
+            }
+        }
+        threadLocalRandom = ThreadLocalRandom.current();
     }
 
     /**
+     * /**
      * Method that updates the grid when a stix is completed.
      *
      * @param qixCoordinates current qix coordinates
      * @param fastArea       tells if stix was created fast or slow (double points if slow)
+     * @param stix           current stix to use
+     * @param scoreCounter   the counter that handles the score
      */
-    public void calculateNewArea(Point qixCoordinates, boolean fastArea) {
-        setOuterBorders();
+    public void calculateNewArea(Point qixCoordinates, boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
+        setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm
         Point start = stix.getStixCoordinates().getFirst();
@@ -117,9 +108,11 @@ public class AreaTracker {
         // Initialize the set which contains the visited points for the
         // floodfill algorithm
         visited = new HashSet<>();
-        checkDirections(qixCoordinates, start, dir);
+        checkDirections(qixCoordinates, start, dir, stix);
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
+        updateScoreCounter(fastArea, stix, scoreCounter);
+
         if (fastArea) {
             Logger.getLogger().log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {
@@ -151,7 +144,7 @@ public class AreaTracker {
         area2 = new LinkedList<>();
     }
 
-    private void setOuterBorders() {
+    private void setOuterBorders(Stix stix) {
         //Set all the points from the current stix to border points on the grid
         for (Point current : stix.getStixCoordinates()) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
@@ -166,17 +159,11 @@ public class AreaTracker {
         border2 = null;
     }
 
-    /**
-     * Updates the scorecounter.
-     *
-     * @param fastArea true if the area was drawn with fast mode
-     */
-    public void updateScoreCounter(boolean fastArea) {
-        ScoreCounter scoreCounter = GameController.getInstance().getScoreCounter();
+    private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
 
         //When testing create own scoreCounter
         if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter();
+            scoreCounter = new ScoreCounter(Color.RED);
         }
 
         //Update score and percentage with newly created area,
@@ -194,7 +181,7 @@ public class AreaTracker {
         }
     }
 
-    private void checkDirections(Point qixCoordinates, Point start, Point dir) {
+    private void checkDirections(Point qixCoordinates, Point start, Point dir, Stix stix) {
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX() || start.getY() != dir.getY()) {
             //If stix was first moving in X direction get points above and under the first stix point,
@@ -208,10 +195,10 @@ public class AreaTracker {
                 beginPoint2 = new Point((int) dir.getX() + 1, (int) dir.getY());
             }
             foundQix = false;
-            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true);
+            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true, stix);
             visited.clear();
             foundQix = false;
-            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false);
+            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false, stix);
         }
     }
 
@@ -220,16 +207,18 @@ public class AreaTracker {
      * Floodfill algorithm accomodated to work for qix for more info on how floodfill algorithm works
      * please visit: https://en.wikipedia.org/wiki/Flood_fill.
      *
-     * @param pointToCheck   The first point to begin checking if it has to be added to area/border
-     *                       or if the qix is on that pint.
-     * @param qixCoordinates The coordinates of the qix.
-     * @param chosenState    The state of points which get added to the new area.
-     * @param addToArea1     Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
+     * @param pointToCheck The first point to begin checking if it has to be added to area/border
+     *                     or if the qix is on that pint.
+     * @param qixCoordinates          The coordinates of the qix.
+     * @param chosenState  The state of points which get added to the new area.
+     * @param addToArea1   Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
+     * @param stix         current stix to use
      */
-    public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState, boolean addToArea1) {
+    public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState,
+                          boolean addToArea1, Stix stix) {
         visiting.push(pointToCheck);
         while (!visiting.isEmpty()) {
-            floodFill(qixCoordinates, chosenState, addToArea1);
+            floodFill(qixCoordinates, chosenState, addToArea1, stix);
         }
     }
 
@@ -246,8 +235,9 @@ public class AreaTracker {
      *                      that gets added to the new area,
      *                      practically always AreaStates.UNCOVERED
      * @param addToArea1    boolean that keeps thrack of which temporary AreaTracker to use.
+     * @param stix          current stix to use
      */
-    public void floodFill(Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
+    public void floodFill(Point qixCoorinates, AreaState chosenState, boolean addToArea1, Stix stix) {
         Point pointToCheck = visiting.pop();
         if (foundQix) {
             return;
@@ -273,7 +263,6 @@ public class AreaTracker {
         } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.INNERBORDER) {
             visited.add(pointToCheck);
         }
-
     }
 
     private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
@@ -345,5 +334,155 @@ public class AreaTracker {
             }
             System.out.println();
         }
+    }
+
+    /**
+     * Method that returns true if the corner is covered.
+     *
+     * @param quadrant the quadrant to be checked
+     * @return true if the corner is covered
+     */
+    private boolean cornerIsCovered(int quadrant) {
+        switch (quadrant) {
+            case 1:
+                if (boardGrid[1][1] != AreaState.UNCOVERED) {
+                    boardGrid[0][0] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 2:
+                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
+                    boardGrid[Globals.BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 3:
+                if (boardGrid[1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[0][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 4:
+                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[Globals.BOARD_WIDTH / 2][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
+
+    /**
+     * method that finds a suitable location for a new powerup drop.
+     *
+     * @param quadrant the quadrant to be working towards
+     * @return an int[] containing the coordinates of the powerup drop location
+     */
+    public int[] findPowerupLocation(int quadrant) {
+        int[] res = new int[2];
+        int x = Globals.BOARD_WIDTH / 4;
+        int y = Globals.BOARD_HEIGHT / 4;
+
+        if (this.cornerIsCovered(quadrant)) {
+
+            while (this.getBoardGrid()[x][y] != AreaState.OUTERBORDER) {
+
+                int[] newLocation = permutateLocation(x, y, quadrant);
+                x = newLocation[0];
+                y = newLocation[1];
+
+                if (x > Globals.BOARD_WIDTH / 2 || x < 0) {
+                    x = Globals.BOARD_WIDTH / 4;
+                }
+                if (y > Globals.BOARD_HEIGHT / 2 || y < 0) {
+                    y = Globals.BOARD_HEIGHT / 4;
+                }
+            }
+            res[0] = x;
+            res[1] = y;
+        } else {
+            res[0] = getCornerCoordinates(quadrant)[0];
+            res[1] = getCornerCoordinates(quadrant)[1];
+        }
+
+        return res;
+    }
+
+    /**
+     * Computes a new random location depending on the quadrant.
+     *
+     * @param x        the x of the old location
+     * @param y        the y of the new location
+     * @param quadrant the quadrant it needs to be in
+     * @return an int[] containing a new random location
+     */
+    private int[] permutateLocation(int x, int y, int quadrant) {
+        int[] res = new int[2];
+        switch (quadrant) {
+            case 1:
+                x += threadLocalRandom.nextInt(-1, 1);
+                y += threadLocalRandom.nextInt(-1, 1);
+                break;
+            case 2:
+                x += threadLocalRandom.nextInt(0, 2);
+                y += threadLocalRandom.nextInt(-1, 1);
+                break;
+            case 3:
+                x += threadLocalRandom.nextInt(-1, 1);
+                y += threadLocalRandom.nextInt(0, 2);
+                break;
+            case 4:
+                x += threadLocalRandom.nextInt(0, 2);
+                y += threadLocalRandom.nextInt(0, 2);
+                break;
+            default:
+                x += threadLocalRandom.nextInt(-1, 2);
+                y += threadLocalRandom.nextInt(-1, 2);
+                break;
+        }
+
+        res[0] = x;
+        res[1] = y;
+
+        return res;
+    }
+
+    /**
+     * Gets the coordinates of the corner of a quadrant.
+     *
+     * @param quadrant the quadrant
+     * @return an int[] containing the coordinates of the corner of the quadrant
+     */
+    private int[] getCornerCoordinates(int quadrant) {
+        int x;
+        int y;
+        switch (quadrant) {
+            case 1:
+                x = 0;
+                y = 0;
+                break;
+            case 2:
+                x = Globals.BOARD_WIDTH / 2;
+                y = 0;
+                break;
+            case 3:
+                x = 0;
+                y = Globals.BOARD_HEIGHT / 2;
+                break;
+            case 4:
+                x = Globals.BOARD_WIDTH / 2;
+                y = Globals.BOARD_HEIGHT / 2;
+                break;
+            default:
+                x = 0;
+                y = 0;
+                break;
+        }
+        int[] res = new int[2];
+        res[0] = x;
+        res[1] = y;
+        return res;
     }
 }
