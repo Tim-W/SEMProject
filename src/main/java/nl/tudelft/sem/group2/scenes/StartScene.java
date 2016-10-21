@@ -148,6 +148,8 @@ public class StartScene extends javafx.scene.Scene {
             } else if (event.getCode() == KeyCode.DIGIT2) {
                 LaunchApp.setScene(GameController.getInstance().getScene());
                 GameController.getInstance().makeCursors(true);
+            } else if (event.getCode() == KeyCode.H) {
+                helpTextWrapper.setVisible(true);
             }
         });
     }

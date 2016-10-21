@@ -93,8 +93,8 @@ public class ScoreScene extends SubScene implements Observer {
 
     private void displayClaimedPercentage() {
         claimedPercentage = new Label();
-        claimedPercentage.setTextFill(color);
-        claimedPercentage.setStyle("-fx-font-size:14;");
+        claimedPercentage.setTextFill(Color.YELLOW);
+        claimedPercentage.setStyle("-fx-font-size:12;");
     }
 
     private void createScoreLabel() {
@@ -104,14 +104,14 @@ public class ScoreScene extends SubScene implements Observer {
     }
 
     private void setClaimedText() {
-        claimed.setTextFill(color);
-        claimed.setStyle("-fx-font-size:14;");
+        claimed.setTextFill(Color.YELLOW);
+        claimed.setStyle("-fx-font-size:12;");
     }
 
     private void createLivesLabel() {
         livesLabel = new Label();
         livesLabel.setTextFill(Color.YELLOW);
-        livesLabel.setStyle("-fx-font-size:14;");
+        livesLabel.setStyle("-fx-font-size:12;");
     }
 
     private void createTitlePane() {
@@ -176,7 +176,7 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param lives the amount of lives the player has left
      */
-    private void setLivesLabel(int lives) {
+    public void setLivesLabel(int lives) {
         livesLabel.setText("Lives: " + lives);
     }
 }

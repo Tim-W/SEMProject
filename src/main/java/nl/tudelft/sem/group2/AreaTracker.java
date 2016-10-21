@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 /**
@@ -22,6 +24,7 @@ public class AreaTracker {
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
+    private ThreadLocalRandom threadLocalRandom;
 
     /**
      * Constructor for the AreaTracker class.
@@ -47,6 +50,7 @@ public class AreaTracker {
             //If the current column is the last column set the grid point on that column and the current row border
             boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
         }
+        threadLocalRandom = ThreadLocalRandom.current();
     }
 
     /**
@@ -77,6 +81,7 @@ public class AreaTracker {
                 boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
             }
         }
+        threadLocalRandom = ThreadLocalRandom.current();
     }
 
     /**
@@ -258,7 +263,6 @@ public class AreaTracker {
         } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.INNERBORDER) {
             visited.add(pointToCheck);
         }
-
     }
 
     private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
@@ -330,5 +334,155 @@ public class AreaTracker {
             }
             System.out.println();
         }
+    }
+
+    /**
+     * Method that returns true if the corner is covered.
+     *
+     * @param quadrant the quadrant to be checked
+     * @return true if the corner is covered
+     */
+    private boolean cornerIsCovered(int quadrant) {
+        switch (quadrant) {
+            case 1:
+                if (boardGrid[1][1] != AreaState.UNCOVERED) {
+                    boardGrid[0][0] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 2:
+                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
+                    boardGrid[Globals.BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 3:
+                if (boardGrid[1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[0][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 4:
+                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[Globals.BOARD_WIDTH / 2][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
+
+    /**
+     * method that finds a suitable location for a new powerup drop.
+     *
+     * @param quadrant the quadrant to be working towards
+     * @return an int[] containing the coordinates of the powerup drop location
+     */
+    public int[] findPowerupLocation(int quadrant) {
+        int[] res = new int[2];
+        int x = Globals.BOARD_WIDTH / 4;
+        int y = Globals.BOARD_HEIGHT / 4;
+
+        if (this.cornerIsCovered(quadrant)) {
+
+            while (this.getBoardGrid()[x][y] != AreaState.OUTERBORDER) {
+
+                int[] newLocation = permutateLocation(x, y, quadrant);
+                x = newLocation[0];
+                y = newLocation[1];
+
+                if (x > Globals.BOARD_WIDTH / 2 || x < 0) {
+                    x = Globals.BOARD_WIDTH / 4;
+                }
+                if (y > Globals.BOARD_HEIGHT / 2 || y < 0) {
+                    y = Globals.BOARD_HEIGHT / 4;
+                }
+            }
+            res[0] = x;
+            res[1] = y;
+        } else {
+            res[0] = getCornerCoordinates(quadrant)[0];
+            res[1] = getCornerCoordinates(quadrant)[1];
+        }
+
+        return res;
+    }
+
+    /**
+     * Computes a new random location depending on the quadrant.
+     *
+     * @param x        the x of the old location
+     * @param y        the y of the new location
+     * @param quadrant the quadrant it needs to be in
+     * @return an int[] containing a new random location
+     */
+    private int[] permutateLocation(int x, int y, int quadrant) {
+        int[] res = new int[2];
+        switch (quadrant) {
+            case 1:
+                x += threadLocalRandom.nextInt(-1, 1);
+                y += threadLocalRandom.nextInt(-1, 1);
+                break;
+            case 2:
+                x += threadLocalRandom.nextInt(0, 2);
+                y += threadLocalRandom.nextInt(-1, 1);
+                break;
+            case 3:
+                x += threadLocalRandom.nextInt(-1, 1);
+                y += threadLocalRandom.nextInt(0, 2);
+                break;
+            case 4:
+                x += threadLocalRandom.nextInt(0, 2);
+                y += threadLocalRandom.nextInt(0, 2);
+                break;
+            default:
+                x += threadLocalRandom.nextInt(-1, 2);
+                y += threadLocalRandom.nextInt(-1, 2);
+                break;
+        }
+
+        res[0] = x;
+        res[1] = y;
+
+        return res;
+    }
+
+    /**
+     * Gets the coordinates of the corner of a quadrant.
+     *
+     * @param quadrant the quadrant
+     * @return an int[] containing the coordinates of the corner of the quadrant
+     */
+    private int[] getCornerCoordinates(int quadrant) {
+        int x;
+        int y;
+        switch (quadrant) {
+            case 1:
+                x = 0;
+                y = 0;
+                break;
+            case 2:
+                x = Globals.BOARD_WIDTH / 2;
+                y = 0;
+                break;
+            case 3:
+                x = 0;
+                y = Globals.BOARD_HEIGHT / 2;
+                break;
+            case 4:
+                x = Globals.BOARD_WIDTH / 2;
+                y = Globals.BOARD_HEIGHT / 2;
+                break;
+            default:
+                x = 0;
+                y = 0;
+                break;
+        }
+        int[] res = new int[2];
+        res[0] = x;
+        res[1] = y;
+        return res;
     }
 }
