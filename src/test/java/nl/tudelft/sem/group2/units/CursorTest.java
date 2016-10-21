@@ -14,7 +14,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.awt.Point;
-import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -39,7 +38,6 @@ public class CursorTest {
     private AreaTracker areaTracker;
     private GameController gameController;
     private Stix stix;
-    private LinkedList<Point> stixCoordinates;
     private int x;
     private int y;
 
@@ -51,7 +49,6 @@ public class CursorTest {
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();
         areaTracker = gameController.getAreaTracker();
-        stixCoordinates = new LinkedList<>();
     }
 
     public void createCursor() {
@@ -177,7 +174,7 @@ public class CursorTest {
         createCursor();
         cursor.setDrawing(true);
         cursor.setX(cursor.getX() - 1);
-        stixCoordinates.add(new Point(x + 1, y));
+        //stixCoordinates.add(new Point(x + 1, y));
         //areaTracker.getBoardGrid()[x][y] = AreaState.UNCOVERED;
         moveCursor(KeyCode.RIGHT, x, y, false);
         Assert.assertEquals(x, cursor.getX());
