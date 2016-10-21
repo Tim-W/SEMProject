@@ -452,27 +452,18 @@ public class AreaTracker {
     private int[] getCornerCoordinates(int quadrant) {
         int x;
         int y;
-        switch (quadrant) {
-            case 1:
-                x = 0;
-                y = 0;
-                break;
-            case 2:
-                x = Globals.BOARD_WIDTH / 2;
-                y = 0;
-                break;
-            case 3:
-                x = 0;
-                y = Globals.BOARD_HEIGHT / 2;
-                break;
-            case 4:
-                x = Globals.BOARD_WIDTH / 2;
-                y = Globals.BOARD_HEIGHT / 2;
-                break;
-            default:
-                x = 0;
-                y = 0;
-                break;
+        Map<Integer, List<Integer>> quadrantCornerMap = new HashMap<>();
+        quadrantCornerMap.put(1, Arrays.asList(0, 0));
+        quadrantCornerMap.put(2, Arrays.asList(Globals.BOARD_WIDTH / 2, 0));
+        quadrantCornerMap.put(3, Arrays.asList(0, Globals.BOARD_HEIGHT / 2));
+        quadrantCornerMap.put(4, Arrays.asList(Globals.BOARD_WIDTH / 2, Globals.BOARD_HEIGHT / 2));
+        List<Integer> integers = quadrantCornerMap.get(quadrant);
+        if (integers != null) {
+            x = integers.get(0);
+            y = integers.get(1);
+        } else {
+            x = 0;
+            y = 0;
         }
         int[] res = new int[2];
         res[0] = x;
