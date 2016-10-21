@@ -5,8 +5,10 @@ import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
@@ -310,27 +312,16 @@ public class AreaTracker {
      * Shows a log which visualise the current board grid state.
      */
     public void printBoardGrid() {
+        // A map representing the relations between AreaStates and their String visualizations.
+        Map<AreaState, String> areaStateVisualisation = new HashMap<AreaState, String>();
+        areaStateVisualisation.put(AreaState.OUTERBORDER, "[X]");
+        areaStateVisualisation.put(AreaState.INNERBORDER, "[*]");
+        areaStateVisualisation.put(AreaState.UNCOVERED, "[ ]");
+        areaStateVisualisation.put(AreaState.FAST, "[F]");
+        areaStateVisualisation.put(AreaState.SLOW, "[S]");
         for (AreaState[] column : boardGrid) {
             for (AreaState state : column) {
-                switch (state) {
-                    case OUTERBORDER:
-                        System.out.print("[X]");
-                        break;
-                    case INNERBORDER:
-                        System.out.print("[*]");
-                        break;
-                    case UNCOVERED:
-                        System.out.print("[ ]");
-                        break;
-                    case FAST:
-                        System.out.print("[F]");
-                        break;
-                    case SLOW:
-                        System.out.print("[S]");
-                        break;
-                    default:
-                        break;
-                }
+                System.out.print(areaStateVisualisation.get(state));
             }
             System.out.println();
         }
