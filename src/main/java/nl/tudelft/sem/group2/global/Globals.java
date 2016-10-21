@@ -9,7 +9,7 @@ public final class Globals {
     public static final int BOARD_HEIGHT = 300;
     public static final int GAME_WIDTH = 340;
     public static final int GAME_HEIGHT = 420;
-    public static final double TARGET_PERCENTAGE = .65;
+    public static final double TARGET_PERCENTAGE = .20;
     public static final int CURSOR_START_X = 75;
     public static final int CURSOR_START_Y = 150;
     public static final int BOARD_MARGIN = 8;
@@ -37,9 +37,20 @@ public final class Globals {
     public static final int STARTSCENE_BUTTON_WIDTH = 120;
     public static final String HELP_SCREEN_MESSAGE = "1 player: \nUse arrow-keys to move. Use z and x to draw fast "
             + "and slow.\n\n2 players: \nfirst player uses the regular controls. Second player uses wasd-keys to"
-            + " move and i and o to draw\n\nPress 1 for single player game and 2 for a 2 player game!";
+            + " move and i and o to draw\n\n"
+            + "There are 3 powerups in the game:\n- Speed - Gives you extra speed\n- Life - Gives you an extra life"
+            + "\n- Hungry - Lets you eat Sparx\n\nPress 1 for single player game and 2 for a 2 player game!";
     public static final int STARTSCENE_SPACING = 30;
+    public static final double POWERUP_THRESHOLD = 0.003;
+    public static final int POWERUP_LIFETIME = 200;
+    public static final int POWERUP_SPEED_DURATION = 75;
+    public static final int POWERUP_EAT_DURATION = 100;
+    public static final int CURSOR_FAST = 2;
+    public static final int CURSOR_SLOW = 1;
+    public static final double HALF = 0.5;
     public static final int STARTSCENE_HELPTEXT_WRAPPING = 200;
+    public static final int NANO_SECONDS_PER_SECOND = 100000000;
+    public static final int LIVES = 3;
 
     private Globals() {
     }
