@@ -307,7 +307,7 @@ public class AreaTracker {
      * @return the boardGrid
      */
     public AreaState[][] getBoardGrid() {
-        return boardGrid;
+        return boardGrid.clone();
     }
 
     /**

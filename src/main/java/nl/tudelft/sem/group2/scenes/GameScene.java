@@ -34,12 +34,14 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
-    private static Label messageLabel;
-    private static VBox messageBox;
+    // Initialize label in middle of screen to display start message
+    private static Label messageLabel = new Label("Press SPACE to begin!");
+    private static VBox messageBox  = new VBox(Globals.MESSAGEBOXSPACING);
     private static ScoreScene scoreScene;
-    private static Canvas canvas;
-    private static GraphicsContext gc;
-    private static Image image;
+    private static Canvas canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
+            Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
+    private static GraphicsContext gc = canvas.getGraphicsContext2D();
+    private Image image;
 
     /**
      * Create a new GameScene.
@@ -54,10 +56,6 @@ public class GameScene extends Scene {
         // Temporary until CollisionHandler is merged into this
 
         initializeCanvas();
-        // Initialize label in middle of screen to display start message
-        messageLabel = new Label("Press SPACE to begin!");
-        final int messageBoxSpacing = 10;
-        messageBox = new VBox(messageBoxSpacing);
         addMessageBox();
         // Hacky way to create black bottom border
         Canvas bottomBorder = new Canvas(Globals.BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
@@ -107,13 +105,8 @@ public class GameScene extends Scene {
      */
     public void initializeCanvas() {
         // Initialize canvas
-        canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
-                Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         canvas.setLayoutX(Globals.GAME_OFFSET_X);
         canvas.setLayoutY(Globals.GAME_OFFSET_Y);
-
-        // Obtain GraphicsContext2d from canvas
-        gc = canvas.getGraphicsContext2D();
         // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
         gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
@@ -192,6 +185,8 @@ public class GameScene extends Scene {
                     break;
                 case SPEED:
                     gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                    break;
+                default:
                     break;
             }
 
