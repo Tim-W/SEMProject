@@ -33,7 +33,7 @@ public class GameSceneTest {
     public void setUp() {
         removeGameController();
         gameController = GameController.getInstance();
-        gameController.makeCursor();
+        gameController.makeCursors(false);
         gameController.getAnimationTimer().stop();
         scene = gameController.getScene();
         spyCursor = spy(gameController.getCursors().get(0));
