@@ -1,35 +1,33 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
-import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
-import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
+import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
+import java.awt.EventQueue;
 import java.util.HashSet;
 
 import static nl.tudelft.sem.group2.powerups.PowerUpType.EAT;
 import static nl.tudelft.sem.group2.powerups.PowerUpType.LIFE;
 import static nl.tudelft.sem.group2.powerups.PowerUpType.SPEED;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Class that test the powerUpCollisions method of CollisionsHandler.
  */
 public class PowerUpCollisionsTest {
 
-    @Rule
-    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private CollisionHandler handler;
     private HashSet<Unit> set;
     private Cursor cursor;
-    private GameController gameController;
 
     /**
      * Sets up the mocks and variables.
@@ -39,10 +37,10 @@ public class PowerUpCollisionsTest {
         new JFXPanel();
         handler = new CollisionHandler();
         set = new HashSet<>();
-        gameController = GameController.getInstance();
-        gameController.makeCursors(false);
-        cursor = gameController.getCursors().get(0);
+        cursor = mock(Cursor.class);
         set.add(cursor);
+        //gameController = GameController.getInstance();
+        //gameController.addCursor(cursor);
     }
 
     /**
@@ -67,10 +65,13 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testEat() {
-        PowerEat powerup = new PowerEat(cursor.getX(), cursor.getY(), 1, 1, gameController.getAreaTracker());
-        set.add(powerup);
-        PowerupEvent event = new PowerupEvent(cursor, EAT);
-        Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set).getClass());
+        EventQueue.invokeLater(() -> {
+            PowerEat powerup = mock(PowerEat.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(true);
+            PowerupEvent event = new PowerupEvent(cursor, EAT);
+            Assert.assertEquals(event, handler.powerUpCollisions(set));
+        });
     }
 
     /**
@@ -78,10 +79,13 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testSpeed() {
-        PowerSpeed powerup = new PowerSpeed(cursor.getX(), cursor.getY(), 1, 1, gameController.getAreaTracker());
-        set.add(powerup);
-        PowerupEvent event = new PowerupEvent(cursor, SPEED);
-        Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set).getClass());
+        EventQueue.invokeLater(() -> {
+            PowerSpeed powerup = mock(PowerSpeed.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(true);
+            PowerupEvent event = new PowerupEvent(cursor, SPEED);
+            Assert.assertEquals(event, handler.powerUpCollisions(set));
+        });
     }
 
     /**
@@ -89,10 +93,13 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testLife() {
-        PowerLife powerup = new PowerLife(cursor.getX(), cursor.getY(), 1, 1, gameController.getAreaTracker());
-        set.add(powerup);
-        PowerupEvent event = new PowerupEvent(cursor, LIFE);
-        Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set).getClass());
+        EventQueue.invokeLater(() -> {
+            PowerLife powerup = mock(PowerLife.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(true);
+            PowerupEvent event = new PowerupEvent(cursor, LIFE);
+            Assert.assertEquals(event, handler.powerUpCollisions(set));
+        });
     }
 
     /**
@@ -100,9 +107,12 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testEatNoIntersection() {
-        PowerEat powerup = new PowerEat(cursor.getX() + 20, cursor.getY() + 20, 1, 1, gameController.getAreaTracker());
-        set.add(powerup);
-        Assert.assertEquals(null, handler.powerUpCollisions(set));
+        EventQueue.invokeLater(() -> {
+            PowerEat powerup = mock(PowerEat.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(false);
+            Assert.assertEquals(null, handler.powerUpCollisions(set));
+        });
     }
 
 
@@ -111,9 +121,12 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testSpeedNoIntersection() {
-        PowerSpeed powerup = new PowerSpeed(cursor.getX() + 20, cursor.getY() + 20, 1, 1, gameController.getAreaTracker());
-        set.add(powerup);
-        Assert.assertEquals(null, handler.powerUpCollisions(set));
+        EventQueue.invokeLater(() -> {
+            PowerSpeed powerup = mock(PowerSpeed.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(false);
+            Assert.assertEquals(null, handler.powerUpCollisions(set));
+        });
     }
 
     /**
@@ -121,9 +134,12 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testLifeNoIntersection() {
-        PowerLife powerup = new PowerLife(cursor.getX() + 20, cursor.getY() + 20, 1, 1, gameController.getAreaTracker());
-        set.add(powerup);
-        Assert.assertEquals(null, handler.powerUpCollisions(set));
+        EventQueue.invokeLater(() -> {
+            PowerLife powerup = mock(PowerLife.class);
+            set.add(powerup);
+            when(cursor.intersect(powerup)).thenReturn(false);
+            Assert.assertEquals(null, handler.powerUpCollisions(set));
+        });
     }
 
 
@@ -133,7 +149,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testNoPowerupsNoCursor() {
         set.clear();
-        Sparx sparx = new Sparx(cursor.getX(), cursor.getY(), 1, 1, gameController.getAreaTracker(), SparxDirection.RIGHT);
+        Sparx sparx = mock(Sparx.class);
         set.add(sparx);
         Assert.assertEquals(null, handler.powerUpCollisions(set));
     }
@@ -144,8 +160,10 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testNoInstanceOf() {
-        PowerLife powerup = new PowerLife(cursor.getX() + 20, cursor.getY() + 20, 1, 1, gameController.getAreaTracker());
-        set.add(powerup);
-        Assert.assertEquals(null, handler.powerUpCollisions(set));
+        EventQueue.invokeLater(() -> {
+            Powerup powerup = mock(Powerup.class);
+            set.add(powerup);
+            Assert.assertEquals(null, handler.powerUpCollisions(set));
+        });
     }
 }

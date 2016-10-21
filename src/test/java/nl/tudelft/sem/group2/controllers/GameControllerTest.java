@@ -35,7 +35,7 @@ public class GameControllerTest {
         GameController.deleteGameController();
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();
-        gameController.makeCursors(false);
+        gameController.makeCursor();
         spyCursor = spy(gameController.getCursors().get(0));
         gameController.getCursors().set(0, spyCursor);
         gameController.getUnits().clear();
