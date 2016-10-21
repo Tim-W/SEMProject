@@ -5,6 +5,7 @@ import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
@@ -48,16 +49,26 @@ public class Stix implements CollisionInterface {
      * @return if they intersect
      */
     public boolean intersect(Unit unit) {
-        if (!(unit instanceof Qix)) {
-            return false;
-        }
-        Qix qix = (Qix) unit;
-        if (!this.isStixEmpty()) {
+        if (unit instanceof Qix) {
 
-            Polygon qixP = qix.toPolygon();
+            Qix qix = (Qix) unit;
+            if (!this.isStixEmpty()) {
+
+                Polygon qixP = qix.toPolygon();
+                for (Point point : this.getStixCoordinates()) {
+                    if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
+                        LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
+                                + "," + point.getY() + ")", this.getClass());
+                        return true;
+                    }
+                }
+            }
+        } else if (unit instanceof Cursor && !this.isStixEmpty()) {
+            Rectangle collideeR = new Rectangle(unit.getX(), unit.getY(), 2, 2);
             for (Point point : this.getStixCoordinates()) {
-                if (qixP.intersects(point.getX(), point.getY(), 1, 1)) {
-                    LOGGER.log(Level.INFO, qix.toString() + " collided with Stix at (" + point.getX()
+                if (collideeR.intersects(point.getX(), point.getY(), 1, 1)) {
+
+                    LOGGER.log(Level.INFO, unit.toString() + " collided with Stix at (" + point.getX()
                             + "," + point.getY() + ")", this.getClass());
                     return true;
                 }

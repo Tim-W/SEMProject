@@ -84,7 +84,12 @@ public class StartScene extends javafx.scene.Scene {
         singleButton.setOnMouseExited(event ->
                 singleButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
-        singleButton.setOnMouseClicked(event -> LaunchApp.setScene(GameController.getInstance().getScene()));
+        singleButton.setOnMouseClicked(event -> {
+            LaunchApp.setScene(GameController.getInstance().getScene());
+            GameController.getInstance().makeCursor();
+        });
+
+
     }
 
     private void handleMultiPlayerButton() {
@@ -99,7 +104,8 @@ public class StartScene extends javafx.scene.Scene {
                 multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
         multiButton.setOnMouseClicked(event -> {
-            //TODO code for multiplayer
+            LaunchApp.setScene(GameController.getInstance().getScene());
+            GameController.getInstance().makeCursors();
         });
     }
 
@@ -138,9 +144,12 @@ public class StartScene extends javafx.scene.Scene {
         this.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DIGIT1) {
                 LaunchApp.setScene(GameController.getInstance().getScene());
+                GameController.getInstance().makeCursor();
             } else if (event.getCode() == KeyCode.DIGIT2) {
-                //TODO change to multiplayer code
                 LaunchApp.setScene(GameController.getInstance().getScene());
+                GameController.getInstance().makeCursors();
+            } else if (event.getCode() == KeyCode.H) {
+                helpTextWrapper.setVisible(true);
             }
         });
     }
