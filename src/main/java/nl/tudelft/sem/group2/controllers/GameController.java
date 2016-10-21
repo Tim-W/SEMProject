@@ -556,6 +556,7 @@ public final class GameController {
         units.remove(unit);
         checkSparx();
     }
+
     public LinkedList<KeyCode> getCursorFastMoveKey() {
         return cursorFastMoveKey;
     }
