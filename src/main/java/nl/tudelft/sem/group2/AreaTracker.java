@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2;
 
+import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.units.Stix;
+
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,9 +15,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
-import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.units.Stix;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
@@ -314,7 +315,7 @@ public class AreaTracker {
      */
     public void printBoardGrid() {
         // A map representing the relations between AreaStates and their String visualizations.
-        Map<AreaState, String> areaStateVisualisation = new HashMap<AreaState, String>();
+        Map<AreaState, String> areaStateVisualisation = new HashMap<>();
         areaStateVisualisation.put(AreaState.OUTERBORDER, "[X]");
         areaStateVisualisation.put(AreaState.INNERBORDER, "[*]");
         areaStateVisualisation.put(AreaState.UNCOVERED, "[ ]");
@@ -336,27 +337,27 @@ public class AreaTracker {
      */
     private boolean cornerIsCovered(int quadrant) {
         switch (quadrant) {
-            case 1:
+            case 0:
                 if (boardGrid[1][1] != AreaState.UNCOVERED) {
                     boardGrid[0][0] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
-            case 2:
+            case 1:
                 if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
                     boardGrid[Globals.BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
+                    return true;
+                }
+                break;
+            case 2:
+                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[Globals.BOARD_WIDTH / 2][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 3:
                 if (boardGrid[1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
                     boardGrid[0][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
-                    return true;
-                }
-                break;
-            case 4:
-                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[Globals.BOARD_WIDTH / 2][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
@@ -414,10 +415,10 @@ public class AreaTracker {
         int[] res = new int[2];
 
         Map<Integer, List<Integer>> locationMap = new HashMap<>();
-        locationMap.put(1, Arrays.asList(-1, 1, -1, 1));
-        locationMap.put(2, Arrays.asList(0, 2, -1, 1));
+        locationMap.put(0, Arrays.asList(-1, 1, -1, 1));
+        locationMap.put(1, Arrays.asList(0, 2, -1, 1));
+        locationMap.put(2, Arrays.asList(0, 2, 0, 2));
         locationMap.put(3, Arrays.asList(-1, 1, 0, 2));
-        locationMap.put(4, Arrays.asList(0, 2, 0, 2));
         List<Integer> locations = locationMap.get(quadrant);
         if (locations != null) {
             x += threadLocalRandom.nextInt(locations.get(0), locations.get(1));
@@ -442,10 +443,10 @@ public class AreaTracker {
         int x;
         int y;
         Map<Integer, List<Integer>> quadrantCornerMap = new HashMap<>();
-        quadrantCornerMap.put(1, Arrays.asList(0, 0));
-        quadrantCornerMap.put(2, Arrays.asList(Globals.BOARD_WIDTH / 2, 0));
+        quadrantCornerMap.put(0, Arrays.asList(0, 0));
+        quadrantCornerMap.put(1, Arrays.asList(Globals.BOARD_WIDTH / 2, 0));
+        quadrantCornerMap.put(2, Arrays.asList(Globals.BOARD_WIDTH / 2, Globals.BOARD_HEIGHT / 2));
         quadrantCornerMap.put(3, Arrays.asList(0, Globals.BOARD_HEIGHT / 2));
-        quadrantCornerMap.put(4, Arrays.asList(Globals.BOARD_WIDTH / 2, Globals.BOARD_HEIGHT / 2));
         List<Integer> integers = quadrantCornerMap.get(quadrant);
         if (integers != null) {
             x = integers.get(0);

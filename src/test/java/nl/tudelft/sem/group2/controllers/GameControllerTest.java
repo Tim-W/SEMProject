@@ -20,6 +20,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+
 public class GameControllerTest {
     @Rule
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();

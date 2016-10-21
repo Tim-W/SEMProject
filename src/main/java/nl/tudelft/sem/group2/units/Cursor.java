@@ -1,11 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -21,6 +15,13 @@ import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -166,14 +167,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public int quadrant() {
         if (this.getX() < Globals.BOARD_WIDTH / 4) {
             if (this.getY() < Globals.BOARD_HEIGHT / 4) {
-                return 1;
+                return 0;
             } else {
                 return 3;
             }
         } else if (this.getY() < Globals.BOARD_HEIGHT / 4) {
-            return 2;
+            System.out.println("in quadrant 2");
+            return 1;
         }
-        return 4;
+        return 2;
     }
 
     /**
@@ -184,18 +186,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public int oppositeQuadrant() {
         int quadrant = this.quadrant();
 
-        switch (quadrant) {
-            case 1:
-                return 4;
-            case 2:
-                return 3;
-            case 3:
-                return 2;
-            case 4:
-                return 1;
-            default:
-                return 1;
-        }
+        return (quadrant + 2) % 4;
     }
 
     @Override
@@ -421,6 +412,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         if (scoreCounter.getLives() >= 1) {
             scoreCounter.subtractLife();
         }
+        this.quadrant();
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
 
         if (scoreCounter.getLives() > 0 && stix != null && !stix.isStixEmpty()) {
