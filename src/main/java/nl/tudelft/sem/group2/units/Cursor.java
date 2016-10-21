@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -20,12 +21,6 @@ import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
-
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
