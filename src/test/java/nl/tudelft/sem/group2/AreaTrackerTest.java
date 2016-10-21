@@ -1,7 +1,11 @@
 package nl.tudelft.sem.group2;
 
 import java.awt.Point;
+import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
+import org.junit.Assert;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
