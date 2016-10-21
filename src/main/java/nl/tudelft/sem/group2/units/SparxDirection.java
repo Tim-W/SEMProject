@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -17,12 +19,13 @@ public enum SparxDirection {
      */
     public static SparxDirection randomDirection() {
         int rand = ThreadLocalRandom.current().nextInt(2);
-        switch (rand) {
-            case 0:
-                return LEFT;
-            case 1:
-                return RIGHT;
+        Map<Integer, SparxDirection> sparxDirectionMap = new HashMap<>();
+        sparxDirectionMap.put(0, LEFT);
+        sparxDirectionMap.put(1, RIGHT);
+        SparxDirection sparxDirection = sparxDirectionMap.get(rand);
+        if (sparxDirection == null) {
+            return LEFT;
         }
-        return LEFT;
+        return sparxDirection;
     }
 }

@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2.powerups;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -15,15 +17,14 @@ public enum PowerUpType {
      */
     public static PowerUpType randomType() {
         int rand = ThreadLocalRandom.current().nextInt(3);
-        switch (rand) {
-            case 0:
-                return EAT;
-            case 1:
-                return LIFE;
-            case 2:
-                return SPEED;
-            default:
-                return NONE;
+        Map<Integer, PowerUpType> powerUpTypeMap = new HashMap<>();
+        powerUpTypeMap.put(0, EAT);
+        powerUpTypeMap.put(1, LIFE);
+        powerUpTypeMap.put(2, SPEED);
+        PowerUpType powerUpType = powerUpTypeMap.get(rand);
+        if (powerUpType == null) {
+            return NONE;
         }
+        return powerUpType;
     }
 }
