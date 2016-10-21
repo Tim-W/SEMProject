@@ -34,13 +34,11 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
-    // Initialize label in middle of screen to display start message
-    private static Label messageLabel = new Label("Press SPACE to begin!");
-    private static VBox messageBox  = new VBox(Globals.MESSAGEBOXSPACING);
+    private Label messageLabel;
+    private VBox messageBox;
     private static ScoreScene scoreScene;
-    private static Canvas canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
-            Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
-    private static GraphicsContext gc = canvas.getGraphicsContext2D();
+    private Canvas canvas;
+    private GraphicsContext gc;
     private Image image;
 
     /**
@@ -54,6 +52,10 @@ public class GameScene extends Scene {
         super(root, color);
         // Initialize units set because it's necessary in GameController
         // Temporary until CollisionHandler is merged into this
+
+        // Initialize label in middle of screen to display start message
+        messageLabel = new Label("Press SPACE to begin!");
+        messageBox = new VBox(Globals.MESSAGEBOXSPACING);
 
         initializeCanvas();
         addMessageBox();
@@ -96,7 +98,7 @@ public class GameScene extends Scene {
         return scoreScene;
     }
 
-    public static GraphicsContext getGc() {
+    public GraphicsContext getGc() {
         return gc;
     }
 
@@ -105,9 +107,12 @@ public class GameScene extends Scene {
      */
     public void initializeCanvas() {
         // Initialize canvas
+        canvas = new Canvas(Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
+                Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         canvas.setLayoutX(Globals.GAME_OFFSET_X);
         canvas.setLayoutY(Globals.GAME_OFFSET_Y);
         // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
+        gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
     }
@@ -266,7 +271,7 @@ public class GameScene extends Scene {
      * @param string string which the label should be
      */
     public void setMessageLabel(String string) {
-        GameScene.messageLabel.setText(string);
+        messageLabel.setText(string);
     }
 
     /**
@@ -275,7 +280,7 @@ public class GameScene extends Scene {
      * @param position new x-position
      */
     public void setMessageBoxLayoutX(int position) {
-        GameScene.messageBox.setLayoutX(position);
+        messageBox.setLayoutX(position);
     }
 
     /**
