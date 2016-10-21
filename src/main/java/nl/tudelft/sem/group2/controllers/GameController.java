@@ -72,7 +72,6 @@ public final class GameController {
         Group group = new Group();
         gameScene = new GameScene(group, Color.BLACK);
 
-
         collisionHandler = new CollisionHandler();
 
         //Animation timer initialization
@@ -107,66 +106,14 @@ public final class GameController {
     }
 
     /**
-     * Method which generates two cursor, two sparx and a qix which is used for a single player match.
+     * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
+     * @param multiplayer if true 2 cursors are set
      */
-    public void makeCursors() {
+    public void makeCursors(boolean multiplayer) {
 
         cursors = new ArrayList<>();
         //first
-        createFirstCursor();
-
-        //second
-        Stix stix2 = new Stix();
-        cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES));
-        cursors.get(1).addKey(KeyCode.W);
-        cursors.get(1).addKey(KeyCode.S);
-        cursors.get(1).addKey(KeyCode.A);
-        cursors.get(1).addKey(KeyCode.D);
-        cursorFastMoveKey.add(KeyCode.Z);
-        cursorSlowMoveKey.add(KeyCode.X);
-
-
-        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
-        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
-        // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker);
-        addUnit(cursors.get(0));
-        addUnit(cursors.get(1));
-        addUnit(qix);
-        addUnit(sparxRight);
-        addUnit(sparxLeft);
-    }
-
-    /**
-     * Method which generates one cursor, two sparx and a qix which is used for a single player match.
-     * This also binds the correct key controls to the right cursor.
-     */
-    public void makeCursor() {
-
-        cursors = new ArrayList<>();
-        //first
-        createFirstCursor();
-
-        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
-        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
-        // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker);
-        addUnit(cursors.get(0));
-        addUnit(qix);
-        addUnit(sparxRight);
-        addUnit(sparxLeft);
-    }
-
-    /**
-     * Creates first cursor to avoid code duplication.
-     */
-    private void createFirstCursor() {
         Stix stix = new Stix();
         cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES));
@@ -176,6 +123,30 @@ public final class GameController {
         cursors.get(0).addKey(KeyCode.RIGHT);
         cursorFastMoveKey.add(KeyCode.O);
         cursorSlowMoveKey.add(KeyCode.I);
+        if (multiplayer) {
+            //second
+            Stix stix2 = new Stix();
+            cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
+                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES));
+            cursors.get(1).addKey(KeyCode.W);
+            cursors.get(1).addKey(KeyCode.S);
+            cursors.get(1).addKey(KeyCode.A);
+            cursors.get(1).addKey(KeyCode.D);
+            cursorFastMoveKey.add(KeyCode.Z);
+            cursorSlowMoveKey.add(KeyCode.X);
+            addUnit(cursors.get(1));
+        }
+        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
+        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
+        // Initialize and add units to units set in Gamescene
+        qix = new Qix(areaTracker);
+        addUnit(cursors.get(0));
+        addUnit(qix);
+        addUnit(sparxRight);
+        addUnit(sparxLeft);
+
     }
 
     /**
@@ -184,7 +155,7 @@ public final class GameController {
      * @param cursor cursor to add to cursor array.
      */
     public void addCursor(Cursor cursor) {
-        if (cursors.size() < 2 && cursor != null) {
+        if (cursor != null && cursors.size() < 2) {
             cursors.add(cursor);
         }
     }
@@ -500,14 +471,7 @@ public final class GameController {
                     }
                     cursor.setCurrentMove(e.getCode());
                 } else if (e.getCode().equals(cursorSlowMoveKey.get(i))) {
-                    if (cursor.getStix().getStixCoordinates() != null
-                            && !cursor.getStix().getStixCoordinates().isEmpty()) {
-                        if (!cursor.isFast()) {
-                            cursor.setSpeed(1);
-                            cursor.setDrawing(true);
-                            cursor.setFast(false);
-                        }
-                    } else {
+                    if (!stixNotEmpty(i) || !cursor.isFast()) {
                         cursor.setSpeed(1);
                         cursor.setDrawing(true);
                         cursor.setFast(false);
@@ -543,8 +507,17 @@ public final class GameController {
         return isRunning;
     }
 
-    //Getters
+    private boolean stixNotEmpty(int cursorIndex) {
+        return cursors.get(cursorIndex).getStix().getStixCoordinates() != null
+                && !cursors.get(cursorIndex).getStix().getStixCoordinates().isEmpty();
+    }
 
+    //Getters
+    /**
+     * AreaTracker.
+     *
+     * @return the area tracker
+     */
     public AreaTracker getAreaTracker() {
         return areaTracker;
     }
@@ -583,6 +556,7 @@ public final class GameController {
         units.remove(unit);
         checkSparx();
     }
+
     public LinkedList<KeyCode> getCursorFastMoveKey() {
         return cursorFastMoveKey;
     }
