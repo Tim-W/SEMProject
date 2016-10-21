@@ -6,9 +6,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.awt.Point;
@@ -30,12 +32,13 @@ import static org.mockito.Mockito.verify;
  */
 public class CursorTest {
 
+    @Rule
+    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
 
     private Cursor cursor;
     private AreaTracker areaTracker;
     private GameController gameController;
     private Stix stix;
-    //private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
     private LinkedList<Point> stixCoordinates;
     private int x;
     private int y;
@@ -59,8 +62,6 @@ public class CursorTest {
             cursor = gameController.getCursors().get(0);
         }
         cursor.setSpeed(1);
-        //stixCoordinates = new LinkedList<>();
-        //when(stix.getStixCoordinates()).thenReturn(stixCoordinates);
         x = cursor.getX();
         y = cursor.getY();
         cursor.setStix(stix);
