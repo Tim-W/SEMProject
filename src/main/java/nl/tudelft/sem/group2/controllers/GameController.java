@@ -1,5 +1,15 @@
 package nl.tudelft.sem.group2.controllers;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -24,15 +34,6 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
-
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -391,21 +392,16 @@ public final class GameController {
 
                 int[] coordinates = areaTracker.findPowerupLocation(quadrant);
                 Powerup powerup = null;
-                switch (PowerUpType.randomType()) {
-                    case EAT:
-                        powerup = new PowerEat(coordinates[0], coordinates[1],
-                                Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
-                        break;
-                    case LIFE:
-                        powerup = new PowerLife(coordinates[0], coordinates[1],
-                                Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
-                        break;
-                    case SPEED:
-                        powerup = new PowerSpeed(coordinates[0], coordinates[1],
-                                Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker);
-                        break;
-                    case NONE:
-                        return;
+                Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
+                powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerupMap.put(PowerUpType.LIFE, new PowerLife(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerupMap.put(PowerUpType.SPEED, new PowerSpeed(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerup = powerupMap.get(PowerUpType.randomType());
+                if (powerup == null) {
+                    return;
                 }
                 addUnit(powerup);
             }
