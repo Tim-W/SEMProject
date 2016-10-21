@@ -20,6 +20,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+
 public class GameControllerTest {
     @Rule
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
@@ -35,7 +36,7 @@ public class GameControllerTest {
         GameController.deleteGameController();
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();
-        gameController.makeCursor();
+        gameController.makeCursors(false);
         spyCursor = spy(gameController.getCursors().get(0));
         gameController.getCursors().set(0, spyCursor);
         gameController.getUnits().clear();
