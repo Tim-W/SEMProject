@@ -48,7 +48,7 @@ public class JavaFXThreadingRule implements TestRule {
         @Override
         public void evaluate() throws Throwable {
             String osName = System.getProperty("os.name");
-            if (osName.contains("OS X")) {
+            if (!osName.contains("OS X")) {
                 if (!jfxIsSetup) {
                     setupJavaFX();
 
