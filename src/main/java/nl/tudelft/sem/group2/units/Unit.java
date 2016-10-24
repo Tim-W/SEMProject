@@ -42,7 +42,7 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         return this.x;
     }
 
-    public void setX(int x) {
+    protected void setX(int x) {
         this.x = x;
     }
 
@@ -50,23 +50,23 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         return this.y;
     }
 
-    public void setY(int y) {
+    protected void setY(int y) {
         this.y = y;
     }
 
-    public int getWidth() {
+    protected int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    protected void setWidth(int width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    protected int getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    protected void setHeight(int height) {
         this.height = height;
     }
 
@@ -93,11 +93,11 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         return false;
     }
 
-    public AreaTracker getAreaTracker() {
+    protected AreaTracker getAreaTracker() {
         return areaTracker;
     }
 
-    public void setAreaTracker(AreaTracker areaTracker) {
+    protected void setAreaTracker(AreaTracker areaTracker) {
         this.areaTracker = areaTracker;
     }
 }
