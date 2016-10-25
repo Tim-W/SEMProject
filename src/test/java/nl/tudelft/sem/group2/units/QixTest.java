@@ -4,7 +4,6 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;

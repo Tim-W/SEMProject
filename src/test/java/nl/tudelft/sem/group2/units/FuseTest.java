@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 23-9-2016.
+ * Fuse test class,
  */
 public class FuseTest {
     private Fuse fuse;
