@@ -93,7 +93,7 @@ public class ScoreScene extends SubScene implements Observer {
 
     private void displayClaimedPercentage() {
         claimedPercentage = new Label();
-        claimedPercentage.setTextFill(Color.YELLOW);
+        claimedPercentage.setTextFill(color);
         claimedPercentage.setStyle("-fx-font-size:12;");
     }
 
@@ -104,13 +104,13 @@ public class ScoreScene extends SubScene implements Observer {
     }
 
     private void setClaimedText() {
-        claimed.setTextFill(Color.YELLOW);
+        claimed.setTextFill(color);
         claimed.setStyle("-fx-font-size:12;");
     }
 
     private void createLivesLabel() {
         livesLabel = new Label();
-        livesLabel.setTextFill(Color.YELLOW);
+        livesLabel.setTextFill(color);
         livesLabel.setStyle("-fx-font-size:12;");
     }
 
@@ -146,6 +146,7 @@ public class ScoreScene extends SubScene implements Observer {
         claimedPercentage.setTextFill(color);
         score.setTextFill(color);
         claimed.setTextFill(color);
+        livesLabel.setTextFill(color);
     }
 
     /**

@@ -6,9 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.awt.Point;
@@ -23,13 +26,19 @@ import static org.mockito.Mockito.when;
  * Created by gijs on 25-9-2016.
  */
 public class LineTravellerTest {
+    @Rule
+    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
+
     private Cursor cursor;
     private Stix stix;
     private AreaTracker areaTracker;
 
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
         areaTracker = Mockito.mock(AreaTracker.class);
         stix = new Stix();
         createCursor(new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, Color.RED, 3));
@@ -40,12 +49,10 @@ public class LineTravellerTest {
     }
 
     /**
-     * ignore because
-     * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
      *
      * @throws Exception
      */
-    @Ignore
+    @Test
     public void innerBorderOn() throws Exception {
         AreaTracker areaTracker = mock(AreaTracker.class);
         AreaState[][] boardGrid = new AreaState[1][1];
@@ -56,12 +63,10 @@ public class LineTravellerTest {
     }
 
     /**
-     * ignore because
-     * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
      *
      * @throws Exception
      */
-    @Ignore
+    @Test
     public void setSpriteIndex() throws Exception {
         cursor.setSpriteIndex(1);
         Assert.assertEquals(1, cursor.getSpriteIndex());
@@ -73,12 +78,10 @@ public class LineTravellerTest {
      * and there are no mockable objects.
      */
     /**
-     * ignore because
-     * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
      *
      * @throws Exception
      */
-    @Ignore
+    @Test
     public void incrementSpriteIndex() throws Exception {
         Fuse spyFuse = spy(new Fuse(2, 2, 2, 2, areaTracker, stix));
         spyFuse.draw(new Canvas(1, 1));
@@ -86,12 +89,10 @@ public class LineTravellerTest {
     }
 
     /**
-     * ignore because
-     * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
      *
      * @throws Exception
      */
-    @Ignore
+    @Test
     public void getSpriteImage() throws Exception {
         Fuse fuse = new Fuse(2, 2, 2, 2, areaTracker, stix);
         Image[] sprite = new Image[1];

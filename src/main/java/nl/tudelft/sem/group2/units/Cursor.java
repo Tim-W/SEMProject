@@ -44,6 +44,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private int powerUpDuration;
     private Fuse fuse;
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+    private KeyCode fastMoveKey, slowMoveKey;
     private ScoreCounter scoreCounter;
 
 
@@ -106,16 +107,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         if (getX() + transX >= 0 && getX() + transX <= Globals.BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
                 + transY <= Globals.BOARD_WIDTH / 2) {
             if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
+
                 if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
                         && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
                         getY() + transY * 2))
-                        && getAreaTracker().getBoardGrid()[getX() + transX + transY]
-                        [getY() + transY + transX].equals(AreaState
-                        .UNCOVERED)
+                        && (getX() + transX + transY > Globals.BOARD_WIDTH / 2 || getAreaTracker().getBoardGrid()[
+                        getX() + transX + transY][getY() + transY].equals(AreaState.UNCOVERED))
                         && getAreaTracker().getBoardGrid()[getX() + transX - transY]
-                        [getY() + transY - transX].equals(AreaState
-                        .UNCOVERED)) {
-
+                        [getY() + transY - transX].equals(AreaState.UNCOVERED)) {
                     if (outerBorderOn(getX(), getY())) {
                         stix.addToStix(new Point(getX(), getY()));
                     }
@@ -466,6 +465,22 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         lives++;
         scoreCounter.addLife();
         LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
+    }
+
+    public KeyCode getFastMoveKey() {
+        return fastMoveKey;
+    }
+
+    public void setFastMoveKey(KeyCode fastMoveKey) {
+        this.fastMoveKey = fastMoveKey;
+    }
+
+    public KeyCode getSlowMoveKey() {
+        return slowMoveKey;
+    }
+
+    public void setSlowMoveKey(KeyCode slowMoveKey) {
+        this.slowMoveKey = slowMoveKey;
     }
 
     /**

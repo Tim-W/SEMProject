@@ -10,6 +10,7 @@ import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -37,14 +38,16 @@ public class CursorTest {
     private Cursor cursor;
     private AreaTracker areaTracker;
     private GameController gameController;
-    private Stix stix;
+    private Stix stix = mock(Stix.class);
     private int x;
     private int y;
 
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
-        stix = mock(Stix.class);
         GameController.deleteGameController();
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();
