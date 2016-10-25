@@ -141,7 +141,7 @@ public class GameScene extends Scene {
         setOnKeyPressed((KeyEvent e) -> GameController.getInstance().keyPressed(e));
     }
 
-    private void createScoreScene() {
+    private static void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
         scoreScene.setScore(0);

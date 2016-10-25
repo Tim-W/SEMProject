@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
@@ -15,7 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 24-9-2016.
+ * Test class for the sparx.
  */
 public class SparxTest {
     /*@Test
@@ -34,14 +33,12 @@ public class SparxTest {
     }*/
     private Sparx sparx;
     private AreaTracker areaTracker;
-    private Canvas canvas;
     private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 2][LaunchApp.getGridHeight() + 2];
 
 
     @Before
     public void setUp() throws Exception {
         new JFXPanel();
-        canvas = new Canvas(50, 50);
         areaTracker = mock(AreaTracker.class);
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         for (int i = 0; i < boardGrid.length; i++) {

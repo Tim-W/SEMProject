@@ -1,8 +1,10 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.scenes.GameScene;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +41,9 @@ public class UnitTest {
         unit.setWidth(2);
         unit.setHeight(2);
         unit.setAreaTracker(areaTracker);
+        //Initialize a new gamescene so when a new cursor gets created it can obtain the scorescene
+        Group group = new Group();
+        GameScene gameScene = new GameScene(group, Color.BLACK);
     }
 
     /**
