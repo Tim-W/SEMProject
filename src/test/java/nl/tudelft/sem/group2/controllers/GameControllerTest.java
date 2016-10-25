@@ -24,11 +24,12 @@ import static org.mockito.Mockito.verify;
 public class GameControllerTest {
     @Rule
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
+
     private GameController gameController;
     private Cursor spyCursor;
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 

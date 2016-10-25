@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 25-9-2016.
+ * LineTraveller test class
  */
 public class LineTravellerTest {
     @Rule

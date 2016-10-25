@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 26-9-2016.
+ * QixTest
  */
 public class QixTest {
     private Qix qix;
@@ -140,13 +140,13 @@ public class QixTest {
 
     @Test
     public void toPolygon() throws Exception {
-        when(spyQix.getOldCoordinates()).thenReturn(new LinkedList<float[]>());
+        when(spyQix.getOldCoordinates()).thenReturn(new LinkedList<>());
         Assert.assertEquals(0, spyQix.toPolygon().npoints);
     }
 
     @Test
     public void toPolygon2() throws Exception {
-        LinkedList<float[]> linkedlist = new LinkedList<float[]>();
+        LinkedList<float[]> linkedlist = new LinkedList<>();
         linkedlist.add(new float[] {1, 1});
         spyQix.setOldDirections(linkedlist);
         spyQix.setOldCoordinates(linkedlist);

@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 24-9-2016.
+ * Test class for the sparx.
  */
 public class SparxTest {
     private Sparx sparx;

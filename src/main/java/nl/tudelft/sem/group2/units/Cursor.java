@@ -10,7 +10,6 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
-import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.scenes.GameScene;
@@ -75,7 +74,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
-        GameController.getInstance().getScene();
         scoreCounter.addObserver(GameScene.getScoreScene());
         scoreCounter.setLives(lives);
         this.lives = lives;

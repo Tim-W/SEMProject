@@ -34,12 +34,12 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
-    private static Label messageLabel;
-    private static VBox messageBox;
+    private Label messageLabel;
+    private VBox messageBox;
     private static ScoreScene scoreScene;
-    private static Canvas canvas;
-    private static GraphicsContext gc;
-    private static Image image;
+    private Canvas canvas;
+    private GraphicsContext gc;
+    private Image image;
 
     /**
      * Create a new GameScene.
@@ -53,11 +53,11 @@ public class GameScene extends Scene {
         // Initialize units set because it's necessary in GameController
         // Temporary until CollisionHandler is merged into this
 
-        initializeCanvas();
         // Initialize label in middle of screen to display start message
         messageLabel = new Label("Press SPACE to begin!");
-        final int messageBoxSpacing = 10;
-        messageBox = new VBox(messageBoxSpacing);
+        messageBox = new VBox(Globals.MESSAGEBOXSPACING);
+
+        initializeCanvas();
         addMessageBox();
         // Hacky way to create black bottom border
         Canvas bottomBorder = new Canvas(Globals.BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
@@ -98,7 +98,7 @@ public class GameScene extends Scene {
         return scoreScene;
     }
 
-    public static GraphicsContext getGc() {
+    public GraphicsContext getGc() {
         return gc;
     }
 
@@ -111,10 +111,8 @@ public class GameScene extends Scene {
                 Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         canvas.setLayoutX(Globals.GAME_OFFSET_X);
         canvas.setLayoutY(Globals.GAME_OFFSET_Y);
-
-        // Obtain GraphicsContext2d from canvas
-        gc = canvas.getGraphicsContext2D();
         // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
+        gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
     }
@@ -143,7 +141,7 @@ public class GameScene extends Scene {
         setOnKeyPressed((KeyEvent e) -> GameController.getInstance().keyPressed(e));
     }
 
-    private void createScoreScene() {
+    private static void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
         scoreScene.setScore(0);
@@ -192,6 +190,8 @@ public class GameScene extends Scene {
                     break;
                 case SPEED:
                     gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                    break;
+                default:
                     break;
             }
 
@@ -271,7 +271,7 @@ public class GameScene extends Scene {
      * @param string string which the label should be
      */
     public void setMessageLabel(String string) {
-        GameScene.messageLabel.setText(string);
+        messageLabel.setText(string);
     }
 
     /**
@@ -280,7 +280,7 @@ public class GameScene extends Scene {
      * @param position new x-position
      */
     public void setMessageBoxLayoutX(int position) {
-        GameScene.messageBox.setLayoutX(position);
+        messageBox.setLayoutX(position);
     }
 
     /**

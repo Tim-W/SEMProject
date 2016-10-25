@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 
 
 /**
- * Created by gijs on 30-9-2016.
+ * Test class for GameScene.
  */
 public class GameSceneTest {
     @Rule
@@ -26,7 +26,7 @@ public class GameSceneTest {
     private Cursor spyCursor;
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
@@ -46,7 +46,6 @@ public class GameSceneTest {
     public void testDrawStixAndFuseVerify() throws Exception {
         setUp();
         spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-        gameController.getCursors().get(0).getStix();
         spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY() + 1));
         scene.draw();
         verify(spyCursor, times(1)).isFast();

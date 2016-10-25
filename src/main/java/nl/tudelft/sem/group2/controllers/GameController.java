@@ -362,7 +362,7 @@ public final class GameController {
                 int quadrant = cursor.oppositeQuadrant();
 
                 int[] coordinates = areaTracker.findPowerupLocation(quadrant);
-                Powerup powerup = null;
+                Powerup powerup;
                 Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
                 powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
                         Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
