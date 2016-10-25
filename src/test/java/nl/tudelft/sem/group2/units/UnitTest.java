@@ -13,6 +13,7 @@ import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_X;
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_Y;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 /**
@@ -33,7 +34,7 @@ public class UnitTest {
         new JFXPanel();
         stix = new Stix();
         areaTracker = new AreaTracker(0, 0);
-        unit = Mockito.mock(Unit.class, Mockito.CALLS_REAL_METHODS);
+        unit = mock(Unit.class, Mockito.CALLS_REAL_METHODS);
         unit.setX(1);
         unit.setY(1);
         unit.setWidth(2);
@@ -112,8 +113,10 @@ public class UnitTest {
 
     @Test
     public void intersectUnitUnit() throws Exception {
-        ConcreteUnit concreteUnit = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
-        ConcreteUnit concreteUnit2 = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
+        Cursor concreteUnit = new Cursor(new Point(1, 1), 5, 5, areaTracker, mock(Stix.class), Color.ALICEBLUE,
+                3);
+        Cursor concreteUnit2 = new Cursor(new Point(1, 1), 5, 5, areaTracker, mock(Stix.class), Color.ALICEBLUE,
+                3);
         Assert.assertTrue(concreteUnit.intersect(concreteUnit2));
     }
 
@@ -130,8 +133,10 @@ public class UnitTest {
 
     @Test
     public void intersectNotUnitUnit() throws Exception {
-        ConcreteUnit concreteUnit = spy(new ConcreteUnit(20, 20, 5, 5, areaTracker));
-        ConcreteUnit concreteUnit2 = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
+        Cursor concreteUnit = new Cursor(new Point(1, 1), 5, 5, areaTracker, mock(Stix.class), Color.ALICEBLUE,
+                3);
+        Cursor concreteUnit2 = new Cursor(new Point(20, 20), 5, 5, areaTracker, mock(Stix.class), Color.ALICEBLUE,
+                3);
         Assert.assertFalse(concreteUnit.intersect(concreteUnit2));
     }
 
