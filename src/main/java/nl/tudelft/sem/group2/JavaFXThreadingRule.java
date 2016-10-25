@@ -36,7 +36,7 @@ public class JavaFXThreadingRule implements TestRule {
     /**
      *
      */
-    private final class OnJFXThreadStatement extends Statement {
+    private static final class OnJFXThreadStatement extends Statement {
 
         private final Statement statement;
         private Throwable rethrownException = null;
