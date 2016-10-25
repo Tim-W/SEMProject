@@ -6,6 +6,7 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
@@ -17,28 +18,16 @@ import static org.mockito.Mockito.when;
  * Test class for the sparx.
  */
 public class SparxTest {
-    /*@Test
-    public void move() throws Exception {
-
-    }
-
-    @Test
-    public void toString() throws Exception {
-
-    }
-
-    @Test
-    public void logCurrentMove() throws Exception {
-
-    }*/
     private Sparx sparx;
     private AreaTracker areaTracker;
     private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 2][LaunchApp.getGridHeight() + 2];
 
-
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
         areaTracker = mock(AreaTracker.class);
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         for (int i = 0; i < boardGrid.length; i++) {

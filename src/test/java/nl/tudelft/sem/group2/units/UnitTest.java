@@ -9,6 +9,8 @@ import nl.tudelft.sem.group2.scenes.GameScene;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -17,6 +19,7 @@ import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_X;
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_Y;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 /**
@@ -29,6 +32,10 @@ public class UnitTest {
     private Stix stix;
     private AreaTracker areaTracker;
 
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     /**
      * Setup test unit.
      *
@@ -36,10 +43,9 @@ public class UnitTest {
      */
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
         stix = new Stix();
         areaTracker = new AreaTracker(0, 0);
-        unit = Mockito.mock(Unit.class, Mockito.CALLS_REAL_METHODS);
+        unit = mock(Unit.class, Mockito.CALLS_REAL_METHODS);
         unit.setX(1);
         unit.setY(1);
         unit.setWidth(2);
@@ -121,8 +127,10 @@ public class UnitTest {
 
     @Test
     public void intersectUnitUnit() throws Exception {
-        ConcreteUnit concreteUnit = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
-        ConcreteUnit concreteUnit2 = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
+        Cursor concreteUnit = new Cursor(new Point(1, 1), 5, 5, areaTracker, mock(Stix.class), Color.ALICEBLUE,
+                3);
+        Cursor concreteUnit2 = new Cursor(new Point(1, 1), 5, 5, areaTracker, mock(Stix.class), Color.ALICEBLUE,
+                3);
         Assert.assertTrue(concreteUnit.intersect(concreteUnit2));
     }
 
@@ -139,8 +147,10 @@ public class UnitTest {
 
     @Test
     public void intersectNotUnitUnit() throws Exception {
-        ConcreteUnit concreteUnit = spy(new ConcreteUnit(20, 20, 5, 5, areaTracker));
-        ConcreteUnit concreteUnit2 = spy(new ConcreteUnit(1, 1, 5, 5, areaTracker));
+        Cursor concreteUnit = new Cursor(new Point(1, 1), 5, 5, areaTracker, mock(Stix.class), Color.ALICEBLUE,
+                3);
+        Cursor concreteUnit2 = new Cursor(new Point(20, 20), 5, 5, areaTracker, mock(Stix.class), Color.ALICEBLUE,
+                3);
         Assert.assertFalse(concreteUnit.intersect(concreteUnit2));
     }
 
@@ -189,15 +199,5 @@ public class UnitTest {
         qix.setOldDirections(linkedList);
         Cursor cursor = spy(new Cursor(new Point(100, 100), 10, 10, areaTracker, stix, Color.RED, 1));
         Assert.assertFalse(cursor.intersect(qix));
-    }
-
-    @Test
-    public void getAreaTracker() throws Exception {
-
-    }
-
-    @Test
-    public void setAreaTracker() throws Exception {
-
     }
 }

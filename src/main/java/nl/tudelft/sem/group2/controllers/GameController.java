@@ -1,15 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -35,6 +25,16 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+
 /**
  * Controller class for the GameScene to implement the MVC.
  */
@@ -57,9 +57,6 @@ public final class GameController {
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
     private GameScene gameScene;
-
-    private LinkedList<KeyCode> cursorFastMoveKey = new LinkedList<>();
-    private LinkedList<KeyCode> cursorSlowMoveKey = new LinkedList<>();
 
     /**
      * Constructor for the GameController class.
@@ -109,6 +106,7 @@ public final class GameController {
     /**
      * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
+     *
      * @param multiplayer if true 2 cursors are set
      */
     public void makeCursors(boolean multiplayer) {
@@ -116,25 +114,27 @@ public final class GameController {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
-        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES));
-        cursors.get(0).addKey(KeyCode.UP);
-        cursors.get(0).addKey(KeyCode.DOWN);
-        cursors.get(0).addKey(KeyCode.LEFT);
-        cursors.get(0).addKey(KeyCode.RIGHT);
-        cursorFastMoveKey.add(KeyCode.O);
-        cursorSlowMoveKey.add(KeyCode.I);
+        Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES);
+        cursors.add(cursor1);
+        cursor1.addKey(KeyCode.UP);
+        cursor1.addKey(KeyCode.DOWN);
+        cursor1.addKey(KeyCode.LEFT);
+        cursor1.addKey(KeyCode.RIGHT);
+        cursor1.setFastMoveKey(KeyCode.O);
+        cursor1.setSlowMoveKey(KeyCode.I);
         if (multiplayer) {
             //second
             Stix stix2 = new Stix();
-            cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES));
-            cursors.get(1).addKey(KeyCode.W);
-            cursors.get(1).addKey(KeyCode.S);
-            cursors.get(1).addKey(KeyCode.A);
-            cursors.get(1).addKey(KeyCode.D);
-            cursorFastMoveKey.add(KeyCode.Z);
-            cursorSlowMoveKey.add(KeyCode.X);
+            Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
+                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES);
+            cursors.add(cursor2);
+            cursor2.addKey(KeyCode.W);
+            cursor2.addKey(KeyCode.S);
+            cursor2.addKey(KeyCode.A);
+            cursor2.addKey(KeyCode.D);
+            cursor2.setFastMoveKey(KeyCode.Z);
+            cursor2.setSlowMoveKey(KeyCode.X);
             addUnit(cursors.get(1));
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
@@ -409,22 +409,6 @@ public final class GameController {
         }
     }
 
-
-//    /**
-//     * When a new area is completed, calculate the new score.
-//     */
-//    private void calculateArea() {
-//        if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
-//                && !stix.getStixCoordinates().isEmpty()) {
-//            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
-//            areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
-//                    cursor.isFast());
-//            areaTracker.updateScoreCounter(cursor.isFast());
-//            //Remove the Fuse from the gameView when completing an area
-//            gameScene.removeFuse();
-//        }
-//    }
-
     /**
      * Method that handles the action when a key is released.
      *
@@ -432,12 +416,11 @@ public final class GameController {
      */
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
-        for (int i = 0; i < cursors.size(); i++) {
-            Cursor cursor = cursors.get(i);
+        for (Cursor cursor : cursors) {
             if (keyCode.equals(cursor.getCurrentMove())) {
                 cursor.handleFuse();
                 cursor.setCurrentMove(null);
-            } else if (keyCode.equals(cursorFastMoveKey.get(i)) || keyCode.equals(cursorSlowMoveKey.get(i))) {
+            } else if (keyCode.equals(cursor.getFastMoveKey()) || keyCode.equals(cursor.getSlowMoveKey())) {
                 cursor.setDrawing(false);
                 cursor.setSpeed(2);
                 cursor.handleFuse();
@@ -459,20 +442,19 @@ public final class GameController {
             isRunning = true;
             gameScene.setMessageLabel("");
         } else {
-            for (int i = 0; i < cursors.size(); i++) {
-                Cursor cursor = cursors.get(i);
+            for (Cursor cursor : cursors) {
                 if (cursor.getArrowKeys().contains(e.getCode())) {
                     if (cursor.isDrawing() && cursor.getFuse() != null) {
                         cursor.getFuse().setMoving(false);
                     }
                     cursor.setCurrentMove(e.getCode());
-                } else if (e.getCode().equals(cursorSlowMoveKey.get(i))) {
-                    if (!stixNotEmpty(i) || !cursor.isFast()) {
+                } else if (e.getCode().equals(cursor.getSlowMoveKey())) {
+                    if (!stixNotEmpty(cursor) || !cursor.isFast()) {
                         cursor.setSpeed(1);
                         cursor.setDrawing(true);
                         cursor.setFast(false);
                     }
-                } else if (e.getCode().equals(cursorFastMoveKey.get(i))) {
+                } else if (e.getCode().equals(cursor.getFastMoveKey())) {
                     cursor.setSpeed(2);
                     cursor.setDrawing(true);
                     cursor.setFast(true);
@@ -503,12 +485,13 @@ public final class GameController {
         return isRunning;
     }
 
-    private boolean stixNotEmpty(int cursorIndex) {
-        return cursors.get(cursorIndex).getStix().getStixCoordinates() != null
-                && !cursors.get(cursorIndex).getStix().getStixCoordinates().isEmpty();
+    private boolean stixNotEmpty(Cursor cursor) {
+        return cursor.getStix().getStixCoordinates() != null
+                && !cursor.getStix().getStixCoordinates().isEmpty();
     }
 
     //Getters
+
     /**
      * AreaTracker.
      *
@@ -551,21 +534,5 @@ public final class GameController {
     public void removeUnit(Unit unit) {
         units.remove(unit);
         checkSparx();
-    }
-
-    public LinkedList<KeyCode> getCursorFastMoveKey() {
-        return cursorFastMoveKey;
-    }
-
-    public void setCursorFastMoveKey(LinkedList<KeyCode> cursorFastMoveKey) {
-        this.cursorFastMoveKey = cursorFastMoveKey;
-    }
-
-    public LinkedList<KeyCode> getCursorSlowMoveKey() {
-        return cursorSlowMoveKey;
-    }
-
-    public void setCursorSlowMoveKey(LinkedList<KeyCode> cursorSlowMoveKey) {
-        this.cursorSlowMoveKey = cursorSlowMoveKey;
     }
 }

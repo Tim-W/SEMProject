@@ -31,7 +31,7 @@ public class GameSceneTest {
     }
 
     public void setUp() {
-        removeGameController();
+        GameController.deleteGameController();
         gameController = GameController.getInstance();
         gameController.makeCursors(false);
         gameController.getAnimationTimer().stop();
@@ -40,10 +40,6 @@ public class GameSceneTest {
         gameController.getCursors().set(0, spyCursor);
         gameController.getUnits().clear();
         gameController.getUnits().add(spyCursor);
-    }
-
-    private void removeGameController() {
-        GameController.deleteGameController();
     }
 
     @Test
