@@ -4,9 +4,11 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -24,6 +26,9 @@ public class UnitTest {
     private Unit unit;
     private Stix stix;
     private AreaTracker areaTracker;
+
+    @Rule
+    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
 
     /**
      * Setup test unit.
