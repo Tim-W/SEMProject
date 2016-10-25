@@ -469,6 +469,22 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
     }
 
+    public KeyCode getFastMoveKey() {
+        return fastMoveKey;
+    }
+
+    public void setFastMoveKey(KeyCode fastMoveKey) {
+        this.fastMoveKey = fastMoveKey;
+    }
+
+    public KeyCode getSlowMoveKey() {
+        return slowMoveKey;
+    }
+
+    public void setSlowMoveKey(KeyCode slowMoveKey) {
+        this.slowMoveKey = slowMoveKey;
+    }
+
     /**
      * @return String format of cursor.
      */
