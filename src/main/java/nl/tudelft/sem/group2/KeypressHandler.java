@@ -6,16 +6,32 @@ import nl.tudelft.sem.group2.units.Cursor;
 import java.awt.Point;
 
 /**
- * Created by dennis on 25-10-16.
+ * Class for handling the results of keypresses.
  */
-public class KeypressHandler {
+public final class KeypressHandler {
 
 
+    /**
+     * Basic cosntructor for collision handler class.
+     */
+    private KeypressHandler() {
+
+    }
+
+    /**
+     * Handles the results of the key presses and sets the new move.
+     *
+     * @param cursor the Cursor to be moved
+     * @param transX the translation in X direction
+     * @param transY the translation in Y direction
+     */
     public static void cursorAssertMove(Cursor cursor, int transX, int transY) {
-        if (cursor.getX() + transX >= 0 && cursor.getX() + transX <= Globals.BOARD_WIDTH / 2 && cursor.getY() + transY >= 0 && cursor.getY()
+        if (cursor.getX() + transX >= 0 && cursor.getX() + transX <= Globals.BOARD_WIDTH / 2
+                && cursor.getY() + transY >= 0 && cursor.getY()
                 + transY <= Globals.BOARD_WIDTH / 2) {
             if (cursor.uncoveredOn(cursor.getX() + transX, cursor.getY() + transY) && cursor.isDrawing()) {
-                if (!cursor.getStix().getStixCoordinates().contains(new Point(cursor.getX() + transX, cursor.getY() + transY))
+                if (!cursor.getStix().getStixCoordinates()
+                        .contains(new Point(cursor.getX() + transX, cursor.getY() + transY))
                         && !cursor.getStix().getStixCoordinates().contains(new Point(cursor.getX() + transX * 2,
                         cursor.getY() + transY * 2))
                         && cursor.getAreaTracker().getBoardGrid()[cursor.getX() + transX + transY]
