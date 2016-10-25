@@ -4,7 +4,6 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,7 +30,7 @@ public class QixTest {
     private Canvas canvas = new Canvas(1, 1);
     private Qix spyQix;
     private AreaTracker areaTracker = mock(AreaTracker.class);
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private AreaState[][] boardGrid = new AreaState[1][1];
 
     @BeforeClass
     public static void BeforeClass() {
