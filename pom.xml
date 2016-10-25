@@ -13,7 +13,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -41,11 +40,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.9.5</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
         </dependency>
     </dependencies>
 
@@ -88,20 +82,24 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.6</version>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
                 <executions>
                     <execution>
-                        &lt;!&ndash;<failsOnError>true</failsOnError>&ndash;&gt;
-                        &lt;!&ndash;<violationSeverity>warning</violationSeverity>&ndash;&gt;
                         <goals>
                             <goal>check</goal>
                         </goals>
+                        <configuration>
+                            <threshold>low</threshold>
+                            <xmlOutput>true</xmlOutput>
+                            <includeTests>false</includeTests>
+                        </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -148,6 +146,7 @@
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
                 <configuration>
+                    <quiet>true</quiet>
                     <check>
                         <branchRate>80</branchRate>
                     </check>
