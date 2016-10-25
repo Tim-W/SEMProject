@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import nl.tudelft.sem.group2.LaunchApp;
+import javafx.stage.Stage;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 
@@ -23,6 +23,7 @@ public class StartScene extends javafx.scene.Scene {
     private Button multiButton;
     private Button helpButton;
     private FlowPane helpTextWrapper;
+    private Stage stage;
 
 
     /**
@@ -32,9 +33,12 @@ public class StartScene extends javafx.scene.Scene {
      * @param width           width of the scene
      * @param height          height of the scene
      * @param backgroundColor the background color of the scene
+     * @param stage           primary stage where new scenes should be added to
      */
-    public StartScene(Group root, double width, double height, Color backgroundColor) {
+    public StartScene(Group root, double width, double height, Color backgroundColor, Stage stage) {
         super(root, width, height, backgroundColor);
+
+        this.stage = stage;
 
         VBox vBox = new VBox(Globals.STARTSCENE_SPACING);
         vBox.setPrefWidth(width);
@@ -85,7 +89,7 @@ public class StartScene extends javafx.scene.Scene {
                 singleButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
         singleButton.setOnMouseClicked(event -> {
-            LaunchApp.setScene(GameController.getInstance().getScene());
+            stage.setScene(GameController.getInstance().getScene());
             GameController.getInstance().makeCursors(false);
         });
 
@@ -104,7 +108,7 @@ public class StartScene extends javafx.scene.Scene {
                 multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
         multiButton.setOnMouseClicked(event -> {
-            LaunchApp.setScene(GameController.getInstance().getScene());
+            stage.setScene(GameController.getInstance().getScene());
             GameController.getInstance().makeCursors(true);
         });
     }
@@ -143,10 +147,10 @@ public class StartScene extends javafx.scene.Scene {
     private void handleKeyPresses() {
         this.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DIGIT1) {
-                LaunchApp.setScene(GameController.getInstance().getScene());
+                stage.setScene(GameController.getInstance().getScene());
                 GameController.getInstance().makeCursors(false);
             } else if (event.getCode() == KeyCode.DIGIT2) {
-                LaunchApp.setScene(GameController.getInstance().getScene());
+                stage.setScene(GameController.getInstance().getScene());
                 GameController.getInstance().makeCursors(true);
             } else if (event.getCode() == KeyCode.H) {
                 helpTextWrapper.setVisible(true);
