@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.KeypressHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
@@ -101,37 +102,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
 
     private void assertMove(int transX, int transY) {
-        if (getX() + transX >= 0 && getX() + transX <= Globals.BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
-                + transY <= Globals.BOARD_WIDTH / 2) {
-            if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
-                if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
-                        && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
-                        getY() + transY * 2))
-                        && getAreaTracker().getBoardGrid()[getX() + transX + transY]
-                        [getY() + transY + transX].equals(AreaState
-                        .UNCOVERED)
-                        && getAreaTracker().getBoardGrid()[getX() + transX - transY]
-                        [getY() + transY - transX].equals(AreaState
-                        .UNCOVERED)) {
-
-                    if (outerBorderOn(getX(), getY())) {
-                        stix.addToStix(new Point(getX(), getY()));
-                    }
-                    setX(getX() + transX);
-                    setY(getY() + transY);
-                    logCurrentMove();
-                    stix.addToStix(new Point(getX(), getY()));
-                }
-            } else if (outerBorderOn(getX() + transX, getY() + transY)) {
-                setX(getX() + transX);
-                setY(getY() + transY);
-                logCurrentMove();
-            }
-        }
+        KeypressHandler.cursorAssertMove(this, transX, transY);
     }
 
     /**
      * Method which tests if cursor intersects with other unit.
+     *
      * @param collidee the other unit
      * @return if cursor intersects with other unit
      */
@@ -390,7 +366,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * Method which log the current movement of the cursor.
      * Only gets executed when log level is on detailledLogging.
      */
-    private void logCurrentMove() {
+    public void logCurrentMove() {
         LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
     }
 
@@ -413,7 +389,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.quadrant();
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
 
-        if (scoreCounter.getLives() > 0 && stix != null && !stix.isStixEmpty()) {
+        if (scoreCounter.getLives() > 0 && stixDrawn()) {
             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());
@@ -433,6 +409,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void setCurrentPowerup(PowerUpType currentPowerup) {
         this.currentPowerup = currentPowerup;
+    }
+
+    /**
+     * @return true if the cursor has drawn stix
+     */
+    private boolean stixDrawn() {
+        return stix != null && !stix.isStixEmpty();
     }
 
     public int getPowerUpDuration() {
