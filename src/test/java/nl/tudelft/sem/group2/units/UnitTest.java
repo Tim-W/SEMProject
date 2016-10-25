@@ -6,6 +6,7 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -28,6 +29,10 @@ public class UnitTest {
     private Stix stix;
     private AreaTracker areaTracker;
 
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     /**
      * Setup test unit.
      *
@@ -35,7 +40,6 @@ public class UnitTest {
      */
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
         stix = new Stix();
         areaTracker = new AreaTracker(0, 0);
         unit = mock(Unit.class, Mockito.CALLS_REAL_METHODS);

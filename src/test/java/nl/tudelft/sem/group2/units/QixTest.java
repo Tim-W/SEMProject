@@ -7,9 +7,9 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.LaunchApp;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.LinkedList;
 
@@ -17,6 +17,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyFloat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,17 +28,19 @@ import static org.mockito.Mockito.when;
  */
 public class QixTest {
     private Qix qix;
-    private Canvas canvas;
+    private Canvas canvas = new Canvas(1, 1);
     private Qix spyQix;
-    private AreaTracker areaTracker;
+    private AreaTracker areaTracker = mock(AreaTracker.class);
     private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
 
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
-        canvas = new Canvas(1, 1);
         qix = new Qix(areaTracker);
-        areaTracker = Mockito.mock(AreaTracker.class);
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         qix.setAreaTracker(areaTracker);
         spyQix = spy(qix);
@@ -52,7 +55,6 @@ public class QixTest {
 
     @Test
     public void draw2() throws Exception {
-        Qix spyQix = spy(qix);
         for (int i = 0; i < 2; i++) {
             double[] colors = new double[3];
             for (int j = 0; j < colors.length; j++) {
@@ -127,8 +129,7 @@ public class QixTest {
 
     @Test
     public void moveOldDirectionSize() throws Exception {
-
-        LinkedList<float[]> linkedList = new LinkedList<float[]>();
+        LinkedList<float[]> linkedList = new LinkedList<>();
         for (int i = 0; i < Qix.getLINESCOUNT() + 1; i++) {
             linkedList.add(new float[0]);
         }

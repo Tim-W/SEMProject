@@ -10,6 +10,7 @@ import nl.tudelft.sem.group2.powerups.PowerSpeed;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -31,12 +32,15 @@ public class PowerUpCollisionsTest {
     private Cursor cursor;
     private GameController gameController;
 
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     /**
      * Sets up the mocks and variables.
      */
     @Before
     public void setUp() {
-        new JFXPanel();
         handler = new CollisionHandler();
         set = new HashSet<>();
         gameController = GameController.getInstance();
