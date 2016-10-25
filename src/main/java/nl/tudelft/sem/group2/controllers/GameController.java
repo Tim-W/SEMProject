@@ -1,5 +1,15 @@
 package nl.tudelft.sem.group2.controllers;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -9,6 +19,12 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.powerups.PowerEat;
+import nl.tudelft.sem.group2.powerups.PowerLife;
+import nl.tudelft.sem.group2.powerups.PowerSpeed;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
+import nl.tudelft.sem.group2.powerups.Powerup;
+import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -32,6 +48,7 @@ public final class GameController {
 
     // Logger
     private static final Logger LOGGER = Logger.getLogger();
+    //TODO MAKE STARTUP ARGUMENT
     private static GameController gameController;
     // Animation timer properties
     private AnimationTimer animationTimer;
@@ -86,73 +103,21 @@ public final class GameController {
     }
 
     /**
-     * Methods which sets the current gameController to null so a new one can be instantiated.
+     * only used for testing.
      */
     public static void deleteGameController() {
         GameController.gameController = null;
     }
 
     /**
-     * Method which generates two cursor, two sparx and a qix which is used for a single player match.
+     * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
+     * @param multiplayer if true 2 cursors are set
      */
-    public void makeCursors() {
+    public void makeCursors(boolean multiplayer) {
 
         cursors = new ArrayList<>();
         //first
-        createFirstCursor();
-
-        //second
-        Stix stix2 = new Stix();
-        cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES));
-        cursors.get(1).addKey(KeyCode.W);
-        cursors.get(1).addKey(KeyCode.S);
-        cursors.get(1).addKey(KeyCode.A);
-        cursors.get(1).addKey(KeyCode.D);
-        cursors.get(1).setFastMoveKey(KeyCode.Z);
-        cursors.get(1).setSlowMoveKey(KeyCode.X);
-
-
-        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
-        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
-        // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker);
-        addUnit(cursors.get(0));
-        addUnit(cursors.get(1));
-        addUnit(qix);
-        addUnit(sparxRight);
-        addUnit(sparxLeft);
-    }
-
-    /**
-     * Method which generates one cursor, two sparx and a qix which is used for a single player match.
-     * This also binds the correct key controls to the right cursor.
-     */
-    public void makeCursor() {
-
-        cursors = new ArrayList<>();
-        //first
-        createFirstCursor();
-
-        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
-        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
-        // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker);
-        addUnit(cursors.get(0));
-        addUnit(qix);
-        addUnit(sparxRight);
-        addUnit(sparxLeft);
-    }
-
-    /**
-     * Creates first cursor to avoid code duplication.
-     */
-    private void createFirstCursor() {
         Stix stix = new Stix();
         cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES));
@@ -160,8 +125,32 @@ public final class GameController {
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
         cursors.get(0).addKey(KeyCode.RIGHT);
-        cursors.get(0).setFastMoveKey(KeyCode.O);
-        cursors.get(0).setSlowMoveKey(KeyCode.I);
+        cursorFastMoveKey.add(KeyCode.O);
+        cursorSlowMoveKey.add(KeyCode.I);
+        if (multiplayer) {
+            //second
+            Stix stix2 = new Stix();
+            cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
+                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES));
+            cursors.get(1).addKey(KeyCode.W);
+            cursors.get(1).addKey(KeyCode.S);
+            cursors.get(1).addKey(KeyCode.A);
+            cursors.get(1).addKey(KeyCode.D);
+            cursorFastMoveKey.add(KeyCode.Z);
+            cursorSlowMoveKey.add(KeyCode.X);
+            addUnit(cursors.get(1));
+        }
+        Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
+        Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
+        // Initialize and add units to units set in Gamescene
+        qix = new Qix(areaTracker);
+        addUnit(cursors.get(0));
+        addUnit(qix);
+        addUnit(sparxRight);
+        addUnit(sparxLeft);
+
     }
 
     /**
@@ -170,7 +159,7 @@ public final class GameController {
      * @param cursor cursor to add to cursor array.
      */
     public void addCursor(Cursor cursor) {
-        if (cursors.size() < 2 && cursor != null) {
+        if (cursor != null && cursors.size() < 2) {
             cursors.add(cursor);
         }
     }
@@ -210,15 +199,6 @@ public final class GameController {
      */
     public void animationTimerStart() {
         animationTimer.start();
-    }
-
-    /**
-     * getter for testing.
-     *
-     * @return boolean isRunning
-     */
-    public boolean isRunning() {
-        return isRunning;
     }
 
     /**
@@ -280,9 +260,6 @@ public final class GameController {
         LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
     }
 
-
-    /****** Key events ******/
-
     /**
      * Setup an animation timer that runs at 300FPS.
      */
@@ -313,11 +290,143 @@ public final class GameController {
                     for (Cursor cursor : cursors) {
                         cursor.calculateArea(qix);
                     }
+
+                    handlePowerups();
+                    spawnPowerup();
                 }
             }
-
         };
     }
+
+    private void checkSparx() {
+        int nSparx = 0;
+        for (Unit u : units) {
+            if (u instanceof Sparx) {
+                nSparx++;
+            }
+        }
+
+        while (nSparx < 2) {
+            for (Cursor cursor : cursors) {
+                int[] coordinates = areaTracker.findPowerupLocation(cursor.oppositeQuadrant());
+                Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
+                        Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.randomDirection());
+                addUnit(sparx);
+                nSparx++;
+            }
+        }
+    }
+
+    private void handlePowerups() {
+        applyPowerups();
+
+        Iterator<Unit> iter = units.iterator();
+        //code to remove powerups from the board after a certain amount of time
+        while (iter.hasNext()) {
+            Unit unit = iter.next();
+            if (unit instanceof Powerup) {
+                Powerup powerup = (Powerup) unit;
+                powerup.decreaseDuration();
+                if (powerup.getDuration() <= 0) {
+                    iter.remove();
+                }
+            }
+        }
+
+        PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units);
+        if (powerupEvent != null) {
+            Cursor cursor = powerupEvent.getCursor();
+            switch (powerupEvent.getPowerUpType()) {
+                case NONE:
+                    return;
+                case LIFE:
+                    cursor.addLife();
+                    return;
+                case EAT:
+                    cursor.setCurrentPowerup(PowerUpType.EAT);
+                    cursor.setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
+                    return;
+                case SPEED:
+                    cursor.setCurrentPowerup(PowerUpType.SPEED);
+                    cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
+            }
+        }
+    }
+
+    /**
+     * Spawns a new powerup at random and when none is active yet.
+     */
+    private void spawnPowerup() {
+        double rand = ThreadLocalRandom.current().nextDouble();
+        if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
+
+            for (Cursor cursor : cursors) {
+
+                int quadrant = cursor.oppositeQuadrant();
+
+                int[] coordinates = areaTracker.findPowerupLocation(quadrant);
+                Powerup powerup = null;
+                Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
+                powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerupMap.put(PowerUpType.LIFE, new PowerLife(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerupMap.put(PowerUpType.SPEED, new PowerSpeed(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerup = powerupMap.get(PowerUpType.randomType());
+                if (powerup == null) {
+                    return;
+                }
+                addUnit(powerup);
+            }
+        }
+    }
+
+    /**
+     * @return true if a power up is active
+     */
+    private boolean powerUpActive() {
+        for (Cursor cursor : cursors) {
+            if (cursor.hasPowerUp()) {
+                return true;
+            }
+        }
+
+        for (Unit u : units) {
+            if (u instanceof Powerup) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void applyPowerups() {
+        for (Cursor cursor : cursors) {
+            if (cursor.hasPowerUp() && cursor.getPowerUpDuration() <= 0) {
+                cursor.setCurrentPowerup(PowerUpType.NONE);
+            }
+
+            if (cursor.hasPowerUp() && cursor.getPowerUpDuration() > 0) {
+                cursor.decrementPowerupDuration();
+            }
+        }
+    }
+
+
+//    /**
+//     * When a new area is completed, calculate the new score.
+//     */
+//    private void calculateArea() {
+//        if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
+//                && !stix.getStixCoordinates().isEmpty()) {
+//            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+//            areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
+//                    cursor.isFast());
+//            areaTracker.updateScoreCounter(cursor.isFast());
+//            //Remove the Fuse from the gameView when completing an area
+//            gameScene.removeFuse();
+//        }
+//    }
 
     /**
      * Method that handles the action when a key is released.
@@ -344,7 +453,7 @@ public final class GameController {
      * @param e describes which keyevent happened.
      */
     public void keyPressed(KeyEvent e) {
-
+        initializeCursorSpeed();
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
             new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
@@ -359,14 +468,7 @@ public final class GameController {
                     }
                     cursor.setCurrentMove(e.getCode());
                 } else if (e.getCode().equals(cursor.getSlowMoveKey())) {
-                    if (cursor.getStix().getStixCoordinates() != null
-                            && !cursor.getStix().getStixCoordinates().isEmpty()) {
-                        if (!cursor.isFast()) {
-                            cursor.setSpeed(1);
-                            cursor.setDrawing(true);
-                            cursor.setFast(false);
-                        }
-                    } else {
+                    if (!stixNotEmpty(cursor) || !cursor.isFast()) {
                         cursor.setSpeed(1);
                         cursor.setDrawing(true);
                         cursor.setFast(false);
@@ -375,14 +477,44 @@ public final class GameController {
                     cursor.setSpeed(2);
                     cursor.setDrawing(true);
                     cursor.setFast(true);
-
+                }
+                if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
+                    cursor.setSpeed(cursor.getSpeed() + 1);
                 }
             }
         }
     }
 
-    //Getters
+    private void initializeCursorSpeed() {
+        for (Cursor cursor : cursors) {
+            if (cursor.isFast() || !cursor.isDrawing()) {
+                cursor.setSpeed(Globals.CURSOR_FAST);
+            } else {
+                cursor.setSpeed(Globals.CURSOR_SLOW);
+            }
+        }
+    }
 
+    /**
+     * getter for testing.
+     *
+     * @return boolean isRunning
+     */
+    boolean isRunning() {
+        return isRunning;
+    }
+
+    private boolean stixNotEmpty(Cursor cursor) {
+        return cursor.getStix().getStixCoordinates() != null
+                && !cursor.getStix().getStixCoordinates().isEmpty();
+    }
+
+    //Getters
+    /**
+     * AreaTracker.
+     *
+     * @return the area tracker
+     */
     public AreaTracker getAreaTracker() {
         return areaTracker;
     }
@@ -401,5 +533,40 @@ public final class GameController {
 
     public Set<Unit> getUnits() {
         return units;
+    }
+
+    /**
+     * only used for testing.
+     *
+     * @param units setter.
+     */
+    public static void setUnits(Set<Unit> units) {
+        getInstance().units = units;
+    }
+
+    /**
+     * removes a unit of the list of units.
+     *
+     * @param unit the unit to be removed
+     */
+    public void removeUnit(Unit unit) {
+        units.remove(unit);
+        checkSparx();
+    }
+
+    public LinkedList<KeyCode> getCursorFastMoveKey() {
+        return cursorFastMoveKey;
+    }
+
+    public void setCursorFastMoveKey(LinkedList<KeyCode> cursorFastMoveKey) {
+        this.cursorFastMoveKey = cursorFastMoveKey;
+    }
+
+    public LinkedList<KeyCode> getCursorSlowMoveKey() {
+        return cursorSlowMoveKey;
+    }
+
+    public void setCursorSlowMoveKey(LinkedList<KeyCode> cursorSlowMoveKey) {
+        this.cursorSlowMoveKey = cursorSlowMoveKey;
     }
 }

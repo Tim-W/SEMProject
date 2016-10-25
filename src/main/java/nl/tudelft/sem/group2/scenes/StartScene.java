@@ -86,7 +86,7 @@ public class StartScene extends javafx.scene.Scene {
 
         singleButton.setOnMouseClicked(event -> {
             LaunchApp.setScene(GameController.getInstance().getScene());
-            GameController.getInstance().makeCursor();
+            GameController.getInstance().makeCursors(false);
         });
 
 
@@ -105,7 +105,7 @@ public class StartScene extends javafx.scene.Scene {
 
         multiButton.setOnMouseClicked(event -> {
             LaunchApp.setScene(GameController.getInstance().getScene());
-            GameController.getInstance().makeCursors();
+            GameController.getInstance().makeCursors(true);
         });
     }
 
@@ -144,10 +144,12 @@ public class StartScene extends javafx.scene.Scene {
         this.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DIGIT1) {
                 LaunchApp.setScene(GameController.getInstance().getScene());
-                GameController.getInstance().makeCursor();
+                GameController.getInstance().makeCursors(false);
             } else if (event.getCode() == KeyCode.DIGIT2) {
                 LaunchApp.setScene(GameController.getInstance().getScene());
-                GameController.getInstance().makeCursors();
+                GameController.getInstance().makeCursors(true);
+            } else if (event.getCode() == KeyCode.H) {
+                helpTextWrapper.setVisible(true);
             }
         });
     }
