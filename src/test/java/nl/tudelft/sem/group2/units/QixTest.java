@@ -4,9 +4,11 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.LaunchApp;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -22,9 +24,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 26-9-2016.
+ * QixTest
  */
 public class QixTest {
+    @Rule
+    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private Qix qix;
     private Canvas canvas;
     private Qix spyQix;
@@ -126,7 +130,7 @@ public class QixTest {
     @Test
     public void moveOldDirectionSize() throws Exception {
 
-        LinkedList<float[]> linkedList = new LinkedList<float[]>();
+        LinkedList<float[]> linkedList = new LinkedList<>();
         for (int i = 0; i < Qix.getLINESCOUNT() + 1; i++) {
             linkedList.add(new float[0]);
         }
@@ -138,13 +142,13 @@ public class QixTest {
 
     @Test
     public void toPolygon() throws Exception {
-        when(spyQix.getOldCoordinates()).thenReturn(new LinkedList<float[]>());
+        when(spyQix.getOldCoordinates()).thenReturn(new LinkedList<>());
         Assert.assertEquals(0, spyQix.toPolygon().npoints);
     }
 
     @Test
     public void toPolygon2() throws Exception {
-        LinkedList<float[]> linkedlist = new LinkedList<float[]>();
+        LinkedList<float[]> linkedlist = new LinkedList<>();
         linkedlist.add(new float[] {1, 1});
         spyQix.setOldDirections(linkedlist);
         spyQix.setOldCoordinates(linkedlist);

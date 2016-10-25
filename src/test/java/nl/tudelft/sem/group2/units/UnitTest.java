@@ -23,12 +23,11 @@ import static org.mockito.Mockito.spy;
  * Tests Unit class.
  */
 public class UnitTest {
+    @Rule
+    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private Unit unit;
     private Stix stix;
     private AreaTracker areaTracker;
-
-    @Rule
-    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
 
     /**
      * Setup test unit.
