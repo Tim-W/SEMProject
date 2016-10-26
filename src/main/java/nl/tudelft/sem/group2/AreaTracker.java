@@ -111,6 +111,8 @@ public class AreaTracker {
     /**
      * Gives the opposite quadrant the cursor is in.
      *
+     * @param x the x coordinate
+     * @param y the y coordinate
      * @return the opposite quadrant the cursor is in
      */
     public static int oppositeQuadrant(int x, int y) {

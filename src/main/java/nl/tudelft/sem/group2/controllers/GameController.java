@@ -305,7 +305,8 @@ public final class GameController {
 
         while (nSparx < 2) {
             for (Cursor cursor : cursors) {
-                int[] coordinates = areaTracker.findPowerupLocation(AreaTracker.oppositeQuadrant(cursor.getX(), cursor.getY()));
+                int[] coordinates = areaTracker.findPowerupLocation(
+                        AreaTracker.oppositeQuadrant(cursor.getX(), cursor.getY()));
                 Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
                         Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.randomDirection());
                 addUnit(sparx);
