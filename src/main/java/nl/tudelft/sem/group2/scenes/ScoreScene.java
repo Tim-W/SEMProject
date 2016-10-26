@@ -96,6 +96,7 @@ public class ScoreScene extends SubScene implements Observer {
 
     private void displayClaimedPercentage() {
         claimedPercentage = new Label();
+        setClaimedPercentage(0);
         claimedPercentage.setTextFill(color);
         claimedPercentage.setStyle("-fx-font-size:12;");
     }
@@ -138,7 +139,7 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param claimedPercentageInput the claimed percentage in XX%, so no decimals
      */
-    public void setClaimedPercentage(double claimedPercentageInput) {
+    private void setClaimedPercentage(double claimedPercentageInput) {
         claimedPercentage.setText(
                 Math.round(claimedPercentageInput) + "% of " + GameController.getInstance()
                         .getLevelHandler().getLevel().getPercentage() + "%"
@@ -175,6 +176,10 @@ public class ScoreScene extends SubScene implements Observer {
         }
     }
 
+    public void reset() {
+        highClaimedPercentage = 0;
+        setClaimedPercentage(0);
+    }
     /**
      * setter for the lives label.
      *

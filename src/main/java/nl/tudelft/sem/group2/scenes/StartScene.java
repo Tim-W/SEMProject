@@ -90,7 +90,7 @@ public class StartScene extends javafx.scene.Scene {
 
         singleButton.setOnMouseClicked(event -> {
             GameController.getInstance().initializeSinglePlayer();
-            stage.setScene(GameController.getInstance().getScene());
+            stage.setScene(GameController.getInstance().getGameScene());
         });
 
 
@@ -109,7 +109,7 @@ public class StartScene extends javafx.scene.Scene {
 
         multiButton.setOnMouseClicked(event -> {
             GameController.getInstance().initializeMultiPlayer();
-            stage.setScene(GameController.getInstance().getScene());
+            stage.setScene(GameController.getInstance().getGameScene());
         });
     }
 
@@ -148,10 +148,10 @@ public class StartScene extends javafx.scene.Scene {
         this.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DIGIT1) {
                 GameController.getInstance().initializeSinglePlayer();
-                stage.setScene(GameController.getInstance().getScene());
+                stage.setScene(GameController.getInstance().getGameScene());
             } else if (event.getCode() == KeyCode.DIGIT2) {
                 GameController.getInstance().initializeSinglePlayer();
-                stage.setScene(GameController.getInstance().getScene());
+                stage.setScene(GameController.getInstance().getGameScene());
             } else if (event.getCode() == KeyCode.H) {
                 helpTextWrapper.setVisible(true);
             }

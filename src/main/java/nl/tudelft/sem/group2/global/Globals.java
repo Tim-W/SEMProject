@@ -53,7 +53,7 @@ public final class Globals {
     public static final int STARTSCENE_HELPTEXT_WRAPPING = 200;
     public static final int NANO_SECONDS_PER_SECOND = 100000000;
     public static final int LIVES = 3;
-
+    public static final int LEVELS = 3;
     private Globals() {
     }
 }

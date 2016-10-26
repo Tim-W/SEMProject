@@ -35,7 +35,7 @@ public class mainSceneTest {
         gameController = GameController.getInstance();
         gameController.initializeSinglePlayer();
         gameController.getAnimationTimer().stop();
-        scene = gameController.getScene();
+        scene = gameController.getGameScene();
         spyCursor = spy(gameController.getCursors().get(0));
         gameController.getCursors().set(0, spyCursor);
         gameController.getUnits().clear();

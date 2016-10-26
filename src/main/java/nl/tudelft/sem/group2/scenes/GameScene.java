@@ -33,7 +33,7 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
-    private static ScoreScene scoreScene;
+    private ScoreScene scoreScene;
     private Label messageLabel;
     private VBox messageBox;
     private Canvas canvas;
@@ -93,7 +93,7 @@ public class GameScene extends Scene {
     /**
      * @return the scorescene
      */
-    public static ScoreScene getScoreScene() {
+    public ScoreScene getScoreScene() {
         return scoreScene;
     }
 
@@ -141,8 +141,6 @@ public class GameScene extends Scene {
     private void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
-        scoreScene.setScore(0);
-        scoreScene.setClaimedPercentage(0);
     }
 
     private void addMessageBox() {
@@ -275,7 +273,7 @@ public class GameScene extends Scene {
      *
      * @param string string which the label should be
      */
-    public void setMessageLabel(String string) {
+    public void setMessage(String string) {
         messageLabel.setText(string);
     }
 

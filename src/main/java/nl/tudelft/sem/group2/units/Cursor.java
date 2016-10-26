@@ -10,9 +10,9 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
-import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
@@ -74,7 +74,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         scoreCounter = new ScoreCounter(color);
-        scoreCounter.addObserver(GameScene.getScoreScene());
+        scoreCounter.addObserver(GameController.getInstance().getGameScene().getScoreScene());
         scoreCounter.setLives(lives);
         this.lives = lives;
         this.currentPowerup = PowerUpType.NONE;
@@ -119,11 +119,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                     setY(getY() + transY);
                     logCurrentMove();
                     stix.addToStix(new Point(getX(), getY()));
+                } else {
+                    System.out.println("wer");
                 }
             } else if (outerBorderOn(getX() + transX, getY() + transY)) {
                 setX(getX() + transX);
                 setY(getY() + transY);
                 logCurrentMove();
+            } else {
+                System.out.println("wer");
             }
         }
     }
