@@ -55,7 +55,7 @@ public class CursorTest {
     }
 
     public void createCursor() {
-        gameController.makeCursors(false);
+        gameController.initializeSinglePlayer();
         if (cursor != null) {
             gameController.getCursors().set(0, cursor);
         } else {

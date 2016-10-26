@@ -9,7 +9,6 @@ public final class Globals {
     public static final int BOARD_HEIGHT = 300;
     public static final int GAME_WIDTH = 340;
     public static final int GAME_HEIGHT = 420;
-    public static final double TARGET_PERCENTAGE = .20;
     public static final int CURSOR_START_X = 75;
     public static final int CURSOR_START_Y = 150;
     public static final int BOARD_MARGIN = 8;

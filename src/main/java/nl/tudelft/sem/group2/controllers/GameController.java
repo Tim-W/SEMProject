@@ -9,6 +9,7 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
@@ -33,7 +34,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -53,9 +53,8 @@ public final class GameController {
     private Set<Unit> units;
 
     private long previousTime;
-    // Boolean that states if the game is running
-    private boolean isRunning = false;
     private CollisionHandler collisionHandler;
+    private LevelHandler levelHandler;
     private GameScene gameScene;
 
     /**
@@ -63,19 +62,14 @@ public final class GameController {
      */
     private GameController() {
         // Initialize models for scoretracking.
-
         areaTracker = new AreaTracker();
-
-
-        Group group = new Group();
-        gameScene = new GameScene(group, Color.BLACK);
-
+        levelHandler = new LevelHandler();
+        levelHandler.nextLevel();
         collisionHandler = new CollisionHandler();
 
         //Animation timer initialization
         previousTime = System.nanoTime();
         createAnimationTimer();
-
     }
 
     /**
@@ -84,7 +78,6 @@ public final class GameController {
      * @return the only GameController
      */
     public static GameController getInstance() {
-        //if (gameController == null) {
         // Put lock on class since it we do not want to instantiate it twice
         synchronized (GameController.class) {
             // Check if logger is in the meanwhile not already instantiated.
@@ -92,7 +85,6 @@ public final class GameController {
                 gameController = new GameController();
             }
         }
-        //}
         return gameController;
     }
 
@@ -104,31 +96,47 @@ public final class GameController {
     }
 
     /**
+     * initialize gameController with one player.
+     */
+    public void initializeSinglePlayer() {
+        gameScene = new GameScene(new Group(), Color.BLACK);
+        makeCursors(1);
+    }
+
+    /**
+     * initialize gameController with multiple players.
+     */
+    public void initializeMultiPlayer() {
+        gameScene = new GameScene(new Group(), Color.BLACK);
+        makeCursors(2);
+    }
+
+    /**
      * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
      *
-     * @param multiplayer if true 2 cursors are set
+     * @param amount of cursors
      */
-    public void makeCursors(boolean multiplayer) {
+    private void makeCursors(int amount) {
 
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES);
-        cursors.add(cursor1);
+        addCursor(cursor1);
         cursor1.addKey(KeyCode.UP);
         cursor1.addKey(KeyCode.DOWN);
         cursor1.addKey(KeyCode.LEFT);
         cursor1.addKey(KeyCode.RIGHT);
         cursor1.setFastMoveKey(KeyCode.O);
         cursor1.setSlowMoveKey(KeyCode.I);
-        if (multiplayer) {
+        if (amount == 2) {
             //second
             Stix stix2 = new Stix();
             Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
                     Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES);
-            cursors.add(cursor2);
+            addCursor(cursor2);
             cursor2.addKey(KeyCode.W);
             cursor2.addKey(KeyCode.S);
             cursor2.addKey(KeyCode.A);
@@ -160,7 +168,6 @@ public final class GameController {
             cursors.add(cursor);
         }
     }
-
     /*****
      * Units.
      *****/
@@ -231,7 +238,7 @@ public final class GameController {
         String score = "";
         for (Cursor cursor : cursors) {
             score += cursor.getScoreCounter() + ", ";
-            LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+            LOGGER.log(java.util.logging.Level.INFO, "Game Over, player died with a score of "
                     + cursor.getScoreCounter().getTotalScore(), GameController.class);
         }
     }
@@ -254,7 +261,7 @@ public final class GameController {
                 score = cursor.getScoreCounter().getTotalScore();
             }
         }
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
+        LOGGER.log(java.util.logging.Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
     }
 
     /**
@@ -267,8 +274,10 @@ public final class GameController {
                 if (now - previousTime > Globals.NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
                     // draw
+                    if (levelHandler.getLevel().isRunning()) {
+                        gameScene.move();
+                    }
                     gameScene.draw();
-
                     for (Cursor cursor : cursors) {
                         if (cursor.getScoreCounter().hasWon()) {
                             gameWon();
@@ -435,11 +444,11 @@ public final class GameController {
      */
     public void keyPressed(KeyEvent e) {
         initializeCursorSpeed();
-        if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
+        if (e.getCode().equals(KeyCode.SPACE) && !levelHandler.getLevel().isRunning()) {
             new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
-            LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
-            isRunning = true;
+            LOGGER.log(java.util.logging.Level.INFO, "Game started succesfully", this.getClass());
+            levelHandler.getLevel().start();
             gameScene.setMessageLabel("");
         } else {
             for (Cursor cursor : cursors) {
@@ -474,15 +483,6 @@ public final class GameController {
                 cursor.setSpeed(Globals.CURSOR_SLOW);
             }
         }
-    }
-
-    /**
-     * getter for testing.
-     *
-     * @return boolean isRunning
-     */
-    boolean isRunning() {
-        return isRunning;
     }
 
     private boolean stixNotEmpty(Cursor cursor) {
@@ -524,6 +524,10 @@ public final class GameController {
      */
     public static void setUnits(Set<Unit> units) {
         getInstance().units = units;
+    }
+
+    public LevelHandler getLevelHandler() {
+        return levelHandler;
     }
 
     /**

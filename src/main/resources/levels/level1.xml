@@ -1,0 +1,28 @@
+<level>
+    <id>1</id>
+    <!--<objects>
+        <ball>
+            <position>
+                <x>100</x>
+                <y>100</y>
+            </position>
+            <direction>LEFT_MOVEMENT</direction>
+            <size>2</size>
+            <color>red</color>
+        </ball>
+        <player>
+            <position>
+                <x>300</x>
+                <y>475</y>
+            </position>
+        </player>
+        <player>
+            <position>
+                <x>350</x>
+                <y>475</y>
+            </position>
+        </player>
+        <time>120</time>
+    </objects>-->
+    <percentage>30</percentage>
+</level>

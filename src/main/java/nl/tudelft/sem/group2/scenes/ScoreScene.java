@@ -10,7 +10,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.controllers.GameController;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -137,7 +137,8 @@ public class ScoreScene extends SubScene implements Observer {
      */
     public void setClaimedPercentage(int claimedPercentageInput) {
         claimedPercentage.setText(
-                String.valueOf(claimedPercentageInput) + "% of " + String.valueOf(Globals.TARGET_PERCENTAGE * 100) + "%"
+                String.valueOf(claimedPercentageInput) + "% of " + String.valueOf(GameController.getInstance()
+                        .getLevelHandler().getLevel().getPercentage()) + "%"
         );
     }
 
@@ -164,7 +165,7 @@ public class ScoreScene extends SubScene implements Observer {
             setScore(((ScoreCounter) o).getTotalScore());
             setClaimedPercentage((int) (((ScoreCounter) o).getTotalPercentage() * 100));
             /**
-             LOGGER.log(Level.WARNING, "Score updated "
+             LOGGER.log(level.WARNING, "Score updated "
              + color.toString(), this.getClass());
              **/
             setColor(((ScoreCounter) o).getColor());

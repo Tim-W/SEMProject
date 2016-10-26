@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 /**
  * Created by gijs on 30-9-2016.
  */
-public class GameSceneTest {
+public class mainSceneTest {
     @Rule
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private GameScene scene;
@@ -33,7 +33,7 @@ public class GameSceneTest {
     public void setUp() {
         GameController.deleteGameController();
         gameController = GameController.getInstance();
-        gameController.makeCursors(false);
+        gameController.initializeSinglePlayer();
         gameController.getAnimationTimer().stop();
         scene = gameController.getScene();
         spyCursor = spy(gameController.getCursors().get(0));

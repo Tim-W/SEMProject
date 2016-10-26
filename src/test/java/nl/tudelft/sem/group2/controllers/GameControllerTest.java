@@ -36,7 +36,7 @@ public class GameControllerTest {
         GameController.deleteGameController();
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();
-        gameController.makeCursors(false);
+        gameController.initializeSinglePlayer();
         spyCursor = spy(gameController.getCursors().get(0));
         gameController.getCursors().set(0, spyCursor);
         gameController.getUnits().clear();
@@ -47,10 +47,10 @@ public class GameControllerTest {
     @Test
     public void keyPressedSpace() throws Exception {
         setUp();
-        boolean isRunning = gameController.isRunning();
+        boolean isRunning = gameController.getLevelHandler().getLevel().isRunning();
         gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.SPACE, false, false,
                 false, false));
-        Assert.assertEquals(!isRunning, gameController.isRunning());
+        Assert.assertEquals(!isRunning, gameController.getLevelHandler().getLevel().isRunning());
     }
 
     @Test

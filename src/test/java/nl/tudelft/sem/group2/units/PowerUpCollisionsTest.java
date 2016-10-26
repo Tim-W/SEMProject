@@ -44,7 +44,7 @@ public class PowerUpCollisionsTest {
         handler = new CollisionHandler();
         set = new HashSet<>();
         gameController = GameController.getInstance();
-        gameController.makeCursors(false);
+        gameController.initializeSinglePlayer();
         cursor = gameController.getCursors().get(0);
         set.add(cursor);
     }

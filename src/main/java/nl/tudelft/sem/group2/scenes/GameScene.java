@@ -33,9 +33,9 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
+    private static ScoreScene scoreScene;
     private Label messageLabel;
     private VBox messageBox;
-    private static ScoreScene scoreScene;
     private Canvas canvas;
     private GraphicsContext gc;
     private Image image;
@@ -166,16 +166,24 @@ public class GameScene extends Scene {
         gc.setFill(Color.WHITE);
         drawUncovered();
         drawBorders();
-        drawStixAndFuse();
-        if (GameController.getInstance().getUnits() == null) {
-            return;
+        if (GameController.getInstance().getUnits() != null) {
+            drawStixAndFuse();
+            for (Unit unit : GameController.getInstance().getUnits()) {
+                unit.draw(canvas);
+            }
+            applyEffect();
         }
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            unit.move();
-            unit.draw(canvas);
-        }
+    }
 
-        applyEffect();
+    /**
+     * move all units.
+     */
+    public void move() {
+        if (GameController.getInstance().getUnits() != null) {
+            for (Unit unit : GameController.getInstance().getUnits()) {
+                unit.move();
+            }
+        }
     }
 
     private void applyEffect() {

@@ -1,13 +1,13 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.controllers.GameController;
 
 import java.util.Observable;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.FAST_AREA_MULTIPLIER;
 import static nl.tudelft.sem.group2.global.Globals.SLOW_AREA_MULTIPLIER;
-import static nl.tudelft.sem.group2.global.Globals.TARGET_PERCENTAGE;
 
 /**
  * Class which keeps track of the current score of the player.
@@ -39,7 +39,7 @@ public class ScoreCounter extends Observable {
     public ScoreCounter(Color color) {
         this.totalPercentage = 0;
         this.totalScore = 0;
-        this.targetPercentage = TARGET_PERCENTAGE;
+        this.targetPercentage = GameController.getInstance().getLevelHandler().getLevel().getPercentage();
         this.color = color;
 
     }
