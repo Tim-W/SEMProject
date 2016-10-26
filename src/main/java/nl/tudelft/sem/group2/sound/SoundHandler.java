@@ -9,25 +9,27 @@ import javafx.scene.media.MediaView;
  */
 public final class SoundHandler {
 
+    private static MediaView mediaView = new MediaView();
+
     /**
      * Creates a new SoundHandler. Needs a mediaView.
      */
     private SoundHandler() {
         throw new AssertionError("Instantiating utility class...");
     }
+
     /**
      * Plays a sound file.
      *
      * @param string - the path to the sound file
      * @param volume - the volume in decibels
      */
-    public static void playSound(final String string, final double volume) {
+    public static synchronized void playSound(final String string, final double volume) {
         new Thread(new Runnable() {
             // The wrapper thread is unnecessary, unless it blocks on the
             // Clip finishing; see comments.
             public void run() {
                 try {
-                    MediaView mediaView = new MediaView();
                     Media hit = new Media(getClass().getResource(string).toString());
                     MediaPlayer mediaPlayer = new MediaPlayer(hit);
                     mediaPlayer.setVolume(volume);
