@@ -150,7 +150,8 @@ public final class GameController {
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
         // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker);
+        qix = new Qix(areaTracker, levelHandler.getLevel().getQixSize());
+        areaTracker.addObserver(qix);
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
@@ -272,32 +273,27 @@ public final class GameController {
             public void handle(long now) {
                 if (now - previousTime > Globals.NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
-                    // draw
+
                     if (levelHandler.getLevel().isRunning()) {
                         gameScene.move();
-                    }
-                    gameScene.draw();
-                    for (Cursor cursor : cursors) {
-                        if (cursor.getScoreCounter().hasWon()) {
-                            gameWon();
-                        }
-                    }
-
-                    for (Cursor cursor : cursors) {
-                        if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
-                            cursor.cursorDied();
-                            new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
-                            if (cursor.getLives() == 0) {
-                                gameOver();
+                        for (Cursor cursor : cursors) {
+                            if (cursor.getScoreCounter().hasWon()) {
+                                gameWon();
                             }
+                            if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
+                                cursor.cursorDied();
+                                new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+                                if (cursor.getLives() == 0) {
+                                    gameOver();
+                                }
+                            }
+                            cursor.calculateArea(qix);
                         }
+                        handlePowerups();
+                        spawnPowerup();
                     }
-                    for (Cursor cursor : cursors) {
-                        cursor.calculateArea(qix);
-                    }
-
-                    handlePowerups();
-                    spawnPowerup();
+                    // draw
+                    gameScene.draw();
                 }
             }
         };

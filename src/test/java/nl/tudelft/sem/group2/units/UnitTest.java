@@ -130,7 +130,7 @@ public class UnitTest {
 
     @Test
     public void intersectQixCursor() throws Exception {
-        Qix qix = spy(new Qix(areaTracker));
+        Qix qix = spy(new Qix(areaTracker, 5));
         LinkedList<float[]> linkedList = new LinkedList<>();
         linkedList.add(new float[] {QIX_START_X, QIX_START_Y});
         qix.setOldCoordinates(linkedList);
@@ -150,7 +150,7 @@ public class UnitTest {
 
     @Test
     public void intersectNotQixCursor() throws Exception {
-        Qix qix = spy(new Qix(areaTracker));
+        Qix qix = spy(new Qix(areaTracker, 5));
         LinkedList<float[]> linkedList = new LinkedList<>();
         linkedList.add(new float[] {1, 1});
         qix.setOldCoordinates(linkedList);
@@ -175,7 +175,7 @@ public class UnitTest {
 
     @Test
     public void intersectCursorQix() throws Exception {
-        Qix qix = spy(new Qix(areaTracker));
+        Qix qix = spy(new Qix(areaTracker, 5));
         LinkedList<float[]> linkedList = new LinkedList<>();
         linkedList.add(new float[] {QIX_START_X, QIX_START_Y});
         qix.setOldCoordinates(linkedList);
@@ -186,7 +186,7 @@ public class UnitTest {
 
     @Test
     public void intersectNotCursorQix() throws Exception {
-        Qix qix = spy(new Qix(areaTracker));
+        Qix qix = spy(new Qix(areaTracker, 5));
         LinkedList<float[]> linkedList = new LinkedList<>();
         linkedList.add(new float[] {1, 1});
         qix.setOldCoordinates(linkedList);

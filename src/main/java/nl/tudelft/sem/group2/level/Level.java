@@ -6,6 +6,7 @@ package nl.tudelft.sem.group2.level;
 public class Level {
     private int percentage;
     private int id;
+    private int qixSize;
     // Boolean that states if the game is running
     private boolean isRunning = false;
 
@@ -14,10 +15,12 @@ public class Level {
      *
      * @param percentage of level
      * @param id         of level
+     * @param qixSize    of qix
      */
-    public Level(int percentage, int id) {
+    public Level(int percentage, int id, int qixSize) {
         this.percentage = percentage;
         this.id = id;
+        this.qixSize = qixSize;
     }
 
     /**
@@ -59,5 +62,14 @@ public class Level {
      */
     public boolean isRunning() {
         return isRunning;
+    }
+
+    /**
+     * get the linesize of the qix.
+     *
+     * @return int in linesize of qix
+     */
+    public int getQixSize() {
+        return qixSize;
     }
 }

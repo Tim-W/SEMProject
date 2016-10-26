@@ -46,6 +46,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private KeyCode fastMoveKey, slowMoveKey;
     private ScoreCounter scoreCounter;
+    private Color color;
 
 
     /**
@@ -62,14 +63,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
         super(position.x, position.y, width, height, areaTracker);
         Image[] sprite = new Image[1];
-
+        this.color = color;
         String colorString = "red";
         if (color.equals(Color.BLUE)) {
             colorString = "blue";
         } else if (color.equals(Color.YELLOW)) {
             colorString = "yellow";
-        } else {
-            color = Color.RED;
         }
         sprite[0] = new Image("/images/cursor_" + colorString + ".png");
         setSprite(sprite);
@@ -86,7 +85,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         for (int i = 0; i < speed; i++) {
             int transX = 0;
             int transY = 0;
-
             if (currentMove != null) {
                 // A map containing relationships between keycodes and the movement directions.
                 Map<KeyCode, CursorMovement> cursorMovementMap = new HashMap<>();
@@ -132,6 +130,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * Method which tests if cursor intersects with other unit.
+     *
      * @param collidee the other unit
      * @return if cursor intersects with other unit
      */
@@ -154,6 +153,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.currentMove = currentMove;
     }
 
+    /**
+     * get the color of the cursor.
+     *
+     * @return Color of the cursor
+     */
+    public Color getColor() {
+        return color;
+    }
 
     /**
      * Return the quadrant the cursor is in, as follows.
@@ -247,7 +254,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
-    /***** Handeling Fuse *****/
     /**
      * handles making fuse and makes it start moving.
      */
@@ -265,6 +271,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             this.setCurrentMove(null);
         }
     }
+
+    /***** Handeling Fuse *****/
 
     /**
      * If there is a Fuse on the screen, remove it.
@@ -289,14 +297,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
-    /***** Getters and setters *****/
-
     /**
      * @return true if the cursor is drawing
      */
     public boolean isDrawing() {
         return isDrawing;
     }
+
+    /***** Getters and setters *****/
 
     /**
      * @param drawing if cursor is moving while user has key X or Z down
@@ -391,6 +399,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public ScoreCounter getScoreCounter() {
         return scoreCounter;
+    }
+
+    /**
+     * set the scorecounter of the cursor.
+     *
+     * @param scoreCounter of the cursor
+     */
+    public void setScoreCounter(ScoreCounter scoreCounter) {
+        this.scoreCounter = scoreCounter;
     }
 
     /**

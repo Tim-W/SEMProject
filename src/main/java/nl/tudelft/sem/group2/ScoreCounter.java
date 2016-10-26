@@ -7,6 +7,7 @@ import java.util.Observable;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.FAST_AREA_MULTIPLIER;
+import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
 import static nl.tudelft.sem.group2.global.Globals.SLOW_AREA_MULTIPLIER;
 
 /**
@@ -27,7 +28,7 @@ public class ScoreCounter extends Observable {
     // Percentage which player needs to achieve to win the level.
     private double targetPercentage;
 
-    private Color color = Color.RED;
+    private Color color;
 
     private int lives;
 
@@ -54,13 +55,8 @@ public class ScoreCounter extends Observable {
      *                      or fast (normal points)
      */
     public void updateScore(int completedArea, boolean fastArea) {
-        int totalArea = LaunchApp.getGridWidth() * LaunchApp.getGridHeight();
-        double percentageIncrease = (double) completedArea / totalArea * 100;
+        double percentageIncrease = (double) completedArea / GRID_SURFACE * 100;
         totalPercentage += percentageIncrease;
-        System.out.println(completedArea);
-        System.out.println(percentageIncrease);
-        System.out.println(totalArea);
-        System.out.println(totalPercentage);
         LOGGER.log(Level.INFO, "Percentage increased with "
                 + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "
                 + Math.round(totalPercentage * FAST_AREA_MULTIPLIER) / 100.0, this.getClass());
@@ -71,7 +67,7 @@ public class ScoreCounter extends Observable {
                     + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER), this.getClass());
         } else {
             totalScore += percentageIncrease * SLOW_AREA_MULTIPLIER;
-            LOGGER.log(Level.INFO, "Score updated with "
+            LOGGER.log(Level.INFO, "Score increased with "
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
 

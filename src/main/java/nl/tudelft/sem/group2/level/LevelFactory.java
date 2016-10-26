@@ -33,7 +33,8 @@ public final class LevelFactory {
         if (xml != null) {
             int percentage = Integer.parseInt(xml.getElementsByTagName("percentage").item(0).getTextContent());
             int id = Integer.parseInt(xml.getElementsByTagName("id").item(0).getTextContent());
-            level = new Level(percentage, id);
+            int qixSize = Integer.parseInt(xml.getElementsByTagName("qixSize").item(0).getTextContent());
+            level = new Level(percentage, id, qixSize);
         }
         return level;
     }
