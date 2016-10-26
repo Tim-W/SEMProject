@@ -41,11 +41,7 @@ public class LineTravellerTest {
     public void setUp() throws Exception {
         areaTracker = Mockito.mock(AreaTracker.class);
         stix = new Stix();
-        createCursor(new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, Color.RED, 3));
-    }
-
-    public void createCursor(Cursor c) {
-        cursor = c;
+        cursor = new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, Color.RED, 3);
     }
 
     /**

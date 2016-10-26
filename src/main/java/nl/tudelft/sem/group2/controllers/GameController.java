@@ -7,6 +7,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerEat;
@@ -110,7 +111,6 @@ public final class GameController {
      * @param multiplayer if true 2 cursors are set
      */
     public void makeCursors(boolean multiplayer) {
-
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
@@ -123,6 +123,7 @@ public final class GameController {
         cursor1.addKey(KeyCode.RIGHT);
         cursor1.setFastMoveKey(KeyCode.O);
         cursor1.setSlowMoveKey(KeyCode.I);
+        setScoreCounterInCursor(cursor1);
         if (multiplayer) {
             //second
             Stix stix2 = new Stix();
@@ -135,7 +136,8 @@ public final class GameController {
             cursor2.addKey(KeyCode.D);
             cursor2.setFastMoveKey(KeyCode.Z);
             cursor2.setSlowMoveKey(KeyCode.X);
-            addUnit(cursors.get(1));
+            addUnit(cursor2);
+            setScoreCounterInCursor(cursor2);
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
@@ -147,7 +149,12 @@ public final class GameController {
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
+    }
 
+    private void setScoreCounterInCursor(Cursor cursor) {
+        ScoreCounter scoreCounter = new ScoreCounter(cursor.getColor());
+        scoreCounter.addObserver(gameScene.getScoreScene());
+        cursor.setScoreCounter(scoreCounter);
     }
 
     /**
