@@ -223,11 +223,11 @@ public class Qix extends Unit implements CollisionInterface {
         return "Qix";
     }
 
-    public LinkedList<float[]> getOldCoordinates() {
+    LinkedList<float[]> getOldCoordinates() {
         return oldCoordinates;
     }
 
-    public void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
+    void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
         this.oldCoordinates = oldCoordinates;
     }
 
@@ -237,7 +237,7 @@ public class Qix extends Unit implements CollisionInterface {
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
-    public float[] getOldCoordinate(int i) {
+    float[] getOldCoordinate(int i) {
         return oldCoordinates.get(i);
     }
 
@@ -247,19 +247,19 @@ public class Qix extends Unit implements CollisionInterface {
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
-    public float getCoordinate(int i) {
+    float getCoordinate(int i) {
         return coordinate[i];
     }
 
-    public void setAnimationLoops(int animationLoops) {
+    void setAnimationLoops(int animationLoops) {
         this.animationLoops = animationLoops;
     }
 
-    public LinkedList<float[]> getOldDirections() {
+    LinkedList<float[]> getOldDirections() {
         return oldDirections;
     }
 
-    public void setOldDirections(LinkedList<float[]> oldDirections) {
+    void setOldDirections(LinkedList<float[]> oldDirections) {
         this.oldDirections = oldDirections;
     }
 
@@ -269,7 +269,7 @@ public class Qix extends Unit implements CollisionInterface {
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
-    public float[] getOldDirection(int i) {
+    float[] getOldDirection(int i) {
         return oldDirections.get(i);
     }
 
@@ -279,7 +279,7 @@ public class Qix extends Unit implements CollisionInterface {
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
-    public float getDirection(int i) {
+    float getDirection(int i) {
         return direction[i];
     }
 
@@ -289,11 +289,11 @@ public class Qix extends Unit implements CollisionInterface {
      * @param direction the new direction
      * @param i         at which place
      */
-    public void setDirection(float direction, int i) {
+    void setDirection(float direction, int i) {
         this.direction[i] = direction;
     }
 
-    public LinkedList<double[]> getColorArray() {
+    LinkedList<double[]> getColorArray() {
         return colorArray;
     }
 
@@ -301,7 +301,7 @@ public class Qix extends Unit implements CollisionInterface {
      * Method which logs the current movement of the qix.
      * Only gets executed when log level is on detailledLogging.
      */
-    public void logCurrentMove() {
+    private void logCurrentMove() {
         LOGGER.log(Level.FINE, "Qix moved to (" + getX() + "," + getY() + ")", this.getClass());
     }
 }
