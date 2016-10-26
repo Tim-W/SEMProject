@@ -243,7 +243,7 @@ public final class GameController {
      */
     private void gameWon() {
         animationTimerStop();
-        new SoundHandler().playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
+        SoundHandler.playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
         gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
         gameScene.setMessageLabel(" You Won! ");
 
@@ -278,7 +278,7 @@ public final class GameController {
                     for (Cursor cursor : cursors) {
                         if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
                             cursor.cursorDied();
-                            new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+                            SoundHandler.playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
                             if (cursor.getLives() == 0) {
                                 gameOver();
                             }
@@ -436,7 +436,7 @@ public final class GameController {
     public void keyPressed(KeyEvent e) {
         initializeCursorSpeed();
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
-            new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
+            SoundHandler.playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;
