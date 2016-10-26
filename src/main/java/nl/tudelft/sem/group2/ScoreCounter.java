@@ -55,9 +55,12 @@ public class ScoreCounter extends Observable {
      */
     public void updateScore(int completedArea, boolean fastArea) {
         int totalArea = LaunchApp.getGridWidth() * LaunchApp.getGridHeight();
-        double percentageIncrease = (double) completedArea / ((double) totalArea * 2);
+        double percentageIncrease = (double) completedArea / totalArea * 100;
         totalPercentage += percentageIncrease;
-
+        System.out.println(completedArea);
+        System.out.println(percentageIncrease);
+        System.out.println(totalArea);
+        System.out.println(totalPercentage);
         LOGGER.log(Level.INFO, "Percentage increased with "
                 + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "
                 + Math.round(totalPercentage * FAST_AREA_MULTIPLIER) / 100.0, this.getClass());
@@ -95,7 +98,7 @@ public class ScoreCounter extends Observable {
         return totalPercentage;
     }
 
-    public void setTotalPercentage(double totalPercentage) {
+    public void setTotalPercentage(int totalPercentage) {
         this.totalPercentage = totalPercentage;
     }
 
@@ -111,7 +114,7 @@ public class ScoreCounter extends Observable {
         return targetPercentage;
     }
 
-    public void setTargetPercentage(double targetPercentage) {
+    public void setTargetPercentage(int targetPercentage) {
         this.targetPercentage = targetPercentage;
     }
 

@@ -35,6 +35,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static edu.emory.mathcs.backport.java.util.Arrays.asList;
+
 /**
  * Controller class for the GameScene to implement the MVC.
  */
@@ -100,7 +102,7 @@ public final class GameController {
      */
     public void initializeSinglePlayer() {
         gameScene = new GameScene(new Group(), Color.BLACK);
-        makeCursors(1);
+        makeCursors(false);
     }
 
     /**
@@ -108,42 +110,40 @@ public final class GameController {
      */
     public void initializeMultiPlayer() {
         gameScene = new GameScene(new Group(), Color.BLACK);
-        makeCursors(2);
+        makeCursors(true);
     }
 
     /**
      * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
      *
-     * @param amount of cursors
+     * @param twoPlayers if true there are two players.
      */
-    private void makeCursors(int amount) {
-
+    private void makeCursors(boolean twoPlayers) {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES);
-        addCursor(cursor1);
         cursor1.addKey(KeyCode.UP);
         cursor1.addKey(KeyCode.DOWN);
         cursor1.addKey(KeyCode.LEFT);
         cursor1.addKey(KeyCode.RIGHT);
         cursor1.setFastMoveKey(KeyCode.O);
         cursor1.setSlowMoveKey(KeyCode.I);
-        if (amount == 2) {
+        addCursor(cursor1);
+        addUnit(cursor1);
+        if (twoPlayers) {
             //second
             Stix stix2 = new Stix();
             Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
                     Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES);
-            addCursor(cursor2);
-            cursor2.addKey(KeyCode.W);
-            cursor2.addKey(KeyCode.S);
-            cursor2.addKey(KeyCode.A);
-            cursor2.addKey(KeyCode.D);
+            KeyCode[] keys = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D};
+            cursor2.addKeys(asList(keys));
             cursor2.setFastMoveKey(KeyCode.Z);
             cursor2.setSlowMoveKey(KeyCode.X);
-            addUnit(cursors.get(1));
+            addCursor(cursor2);
+            addUnit(cursor2);
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
@@ -151,7 +151,6 @@ public final class GameController {
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
         // Initialize and add units to units set in Gamescene
         qix = new Qix(areaTracker);
-        addUnit(cursors.get(0));
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
@@ -191,12 +190,12 @@ public final class GameController {
         units.add(unit);
     }
 
-    /**
-     * Stop animations.
-     */
-    private void animationTimerStop() {
+    ///**
+    //* Stop animations.
+    //*/
+    /*private void animationTimerStop() {
         animationTimer.stop();
-    }
+    }*/
 
     /**
      * Start animations.
@@ -229,7 +228,7 @@ public final class GameController {
      * stop the animations.
      */
     private void gameOver() {
-        animationTimerStop();
+        levelHandler.getLevel().pause();
         gameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
         gameScene.setMessageLabel(" Game Over! ");
 
@@ -249,7 +248,7 @@ public final class GameController {
      * show that the player has won
      */
     private void gameWon() {
-        animationTimerStop();
+        levelHandler.getLevel().pause();
         new SoundHandler().playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
         gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
         gameScene.setMessageLabel(" You Won! ");

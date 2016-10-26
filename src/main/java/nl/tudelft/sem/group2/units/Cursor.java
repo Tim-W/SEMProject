@@ -17,6 +17,7 @@ import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -369,6 +370,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void addKey(KeyCode keycode) {
         arrowKeys.add(keycode);
+    }
+
+    /**
+     * @param keycodes the keys that are specific to this cursor.
+     */
+    public void addKeys(Collection<KeyCode> keycodes) {
+        arrowKeys.addAll(keycodes);
     }
 
     /**

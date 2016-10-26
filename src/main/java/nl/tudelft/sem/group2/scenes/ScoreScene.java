@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -135,11 +137,14 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param claimedPercentageInput the claimed percentage in XX%, so no decimals
      */
-    public void setClaimedPercentage(int claimedPercentageInput) {
+    public void setClaimedPercentage(double claimedPercentageInput) {
+        DecimalFormat df = new DecimalFormat("#.#");
+        df.setRoundingMode(RoundingMode.HALF_UP);
         claimedPercentage.setText(
-                String.valueOf(claimedPercentageInput) + "% of " + String.valueOf(GameController.getInstance()
-                        .getLevelHandler().getLevel().getPercentage()) + "%"
+                df.format(claimedPercentageInput) + "% of " + GameController.getInstance()
+                        .getLevelHandler().getLevel().getPercentage() + "%"
         );
+        //highClaimedPercentage = claimedPercentageInput;
     }
 
     private void setColor(Color color) {
@@ -159,17 +164,18 @@ public class ScoreScene extends SubScene implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        if (o instanceof ScoreCounter
-                && (int) (((ScoreCounter) o).getTotalPercentage() * 100) >= highClaimedPercentage) {
-
-            setScore(((ScoreCounter) o).getTotalScore());
-            setClaimedPercentage((int) (((ScoreCounter) o).getTotalPercentage() * 100));
-            /**
-             LOGGER.log(level.WARNING, "Score updated "
-             + color.toString(), this.getClass());
-             **/
-            setColor(((ScoreCounter) o).getColor());
-            setLivesLabel(((ScoreCounter) o).getLives());
+        if (o instanceof ScoreCounter) {
+            ScoreCounter scoreCounter = (ScoreCounter) o;
+            if (scoreCounter.getTotalPercentage() >= highClaimedPercentage) {
+                setScore(scoreCounter.getTotalScore());
+                setClaimedPercentage(scoreCounter.getTotalPercentage());
+                /**
+                 LOGGER.log(level.WARNING, "Score updated "
+                 + color.toString(), this.getClass());
+                 **/
+                setColor(scoreCounter.getColor());
+                setLivesLabel(scoreCounter.getLives());
+            }
         }
     }
 

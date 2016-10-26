@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 
@@ -164,12 +163,6 @@ public class AreaTracker {
     }
 
     private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
-
-        //When testing create own scoreCounter
-        if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter(Color.RED);
-        }
-
         //Update score and percentage with newly created area,
         // therefore it's needed to know the stix was created fast or slow
         scoreCounter.updateScore(newArea.size() + stix.getStixCoordinates().size(), fastArea);
