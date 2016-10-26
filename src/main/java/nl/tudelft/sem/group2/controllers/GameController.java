@@ -1,15 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -34,6 +24,17 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -78,7 +79,6 @@ public final class GameController {
         //Animation timer initialization
         previousTime = System.nanoTime();
         createAnimationTimer();
-
     }
 
     /**
@@ -109,6 +109,7 @@ public final class GameController {
     /**
      * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
+     *
      * @param multiplayer if true 2 cursors are set
      */
     public void makeCursors(boolean multiplayer) {
@@ -147,7 +148,6 @@ public final class GameController {
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
-
     }
 
     /**
@@ -305,7 +305,7 @@ public final class GameController {
 
         while (nSparx < 2) {
             for (Cursor cursor : cursors) {
-                int[] coordinates = areaTracker.findPowerupLocation(cursor.oppositeQuadrant());
+                int[] coordinates = areaTracker.findPowerupLocation(AreaTracker.oppositeQuadrant(cursor.getX(), cursor.getY()));
                 Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
                         Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.randomDirection());
                 addUnit(sparx);
@@ -359,7 +359,7 @@ public final class GameController {
 
             for (Cursor cursor : cursors) {
 
-                int quadrant = cursor.oppositeQuadrant();
+                int quadrant = AreaTracker.oppositeQuadrant(cursor.getX(), cursor.getY());
 
                 int[] coordinates = areaTracker.findPowerupLocation(quadrant);
                 Powerup powerup = null;
@@ -509,6 +509,7 @@ public final class GameController {
     }
 
     //Getters
+
     /**
      * AreaTracker.
      *

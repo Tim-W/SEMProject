@@ -131,38 +131,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
 
-    /**
-     * Return the quadrant the cursor is in, as follows.
-     * 12
-     * 34
-     *
-     * @return the quadrant the cursor is in
-     */
-    public int quadrant() {
-        if (this.getX() < Globals.BOARD_WIDTH / 4) {
-            if (this.getY() < Globals.BOARD_HEIGHT / 4) {
-                return 0;
-            } else {
-                return 3;
-            }
-        } else if (this.getY() < Globals.BOARD_HEIGHT / 4) {
-            System.out.println("in quadrant 2");
-            return 1;
-        }
-        return 2;
-    }
-
-    /**
-     * Gives the opposite quadrant the cursor is in.
-     *
-     * @return the opposite quadrant the cursor is in
-     */
-    public int oppositeQuadrant() {
-        int quadrant = this.quadrant();
-
-        return (quadrant + 2) % 4;
-    }
-
     @Override
     public void draw(Canvas canvas) {
         int drawX = gridToCanvas(getX());
@@ -386,10 +354,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         if (scoreCounter.getLives() >= 1) {
             scoreCounter.subtractLife();
         }
-        this.quadrant();
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
 
-        if (scoreCounter.getLives() > 0 && stixDrawn()) {
+        if (stixDrawn()) {
             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());

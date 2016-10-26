@@ -89,6 +89,37 @@ public class AreaTracker {
     }
 
     /**
+     * Return the quadrant the cursor is in, as follows.
+     * 12
+     * 34
+     *
+     * @return the quadrant the cursor is in
+     */
+    private static int quadrant(int x, int y) {
+        if (x < Globals.BOARD_WIDTH / 4) {
+            if (y < Globals.BOARD_HEIGHT / 4) {
+                return 0;
+            } else {
+                return 3;
+            }
+        } else if (y < Globals.BOARD_HEIGHT / 4) {
+            return 1;
+        }
+        return 2;
+    }
+
+    /**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @return the opposite quadrant the cursor is in
+     */
+    public static int oppositeQuadrant(int x, int y) {
+        int quadrant = quadrant(x, y);
+
+        return (quadrant + 2) % 4;
+    }
+
+    /**
      * /**
      * Method that updates the grid when a stix is completed.
      *

@@ -107,7 +107,7 @@ public class ScoreCounter extends Observable {
         this.totalScore = totalScore;
     }
 
-    public double getTargetPercentage() {
+    private double getTargetPercentage() {
         return targetPercentage;
     }
 
