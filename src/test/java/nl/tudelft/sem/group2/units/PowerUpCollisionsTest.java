@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.controllers.GameController;
@@ -10,7 +9,6 @@ import nl.tudelft.sem.group2.powerups.PowerSpeed;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -32,10 +30,6 @@ public class PowerUpCollisionsTest {
     private Cursor cursor;
     private GameController gameController;
 
-    @BeforeClass
-    public static void BeforeClass() {
-        new JFXPanel();
-    }
     /**
      * Sets up the mocks and variables.
      */
