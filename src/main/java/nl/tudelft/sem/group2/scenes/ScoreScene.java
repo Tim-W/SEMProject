@@ -177,7 +177,7 @@ public class ScoreScene extends SubScene implements Observer {
     }
 
     /**
-     * resets the percentage
+     * resets the percentage.
      */
     public void reset() {
         highClaimedPercentage = 0;
