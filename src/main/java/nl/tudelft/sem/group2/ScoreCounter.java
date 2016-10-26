@@ -55,7 +55,7 @@ public class ScoreCounter extends Observable {
      *                      or fast (normal points)
      */
     public void updateScore(int completedArea, boolean fastArea) {
-        double percentageIncrease = (double) completedArea / GRID_SURFACE * 100;
+        double percentageIncrease = (double) completedArea / GRID_SURFACE * 100 / 2;
         totalPercentage += percentageIncrease;
         LOGGER.log(Level.INFO, "Percentage increased with "
                 + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "

@@ -12,10 +12,11 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+
+import static edu.umd.cs.findbugs.FindBugs.LOGGER;
 
 /**
  * Displays info about the current score and gained percentage.
@@ -36,7 +37,7 @@ public class ScoreScene extends SubScene implements Observer {
     private ImageView title;
     private Label claimed = new Label("Claimed");
     private Color color = Color.YELLOW;
-    private int highClaimedPercentage = 0;
+    private double highClaimedPercentage = 0;
 
     /**
      * Create a new ScoreScene.
@@ -138,13 +139,11 @@ public class ScoreScene extends SubScene implements Observer {
      * @param claimedPercentageInput the claimed percentage in XX%, so no decimals
      */
     public void setClaimedPercentage(double claimedPercentageInput) {
-        DecimalFormat df = new DecimalFormat("#.#");
-        df.setRoundingMode(RoundingMode.HALF_UP);
         claimedPercentage.setText(
-                df.format(claimedPercentageInput) + "% of " + GameController.getInstance()
+                Math.round(claimedPercentageInput) + "% of " + GameController.getInstance()
                         .getLevelHandler().getLevel().getPercentage() + "%"
         );
-        //highClaimedPercentage = claimedPercentageInput;
+        highClaimedPercentage = claimedPercentageInput;
     }
 
     private void setColor(Color color) {
@@ -163,16 +162,13 @@ public class ScoreScene extends SubScene implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-
         if (o instanceof ScoreCounter) {
             ScoreCounter scoreCounter = (ScoreCounter) o;
             if (scoreCounter.getTotalPercentage() >= highClaimedPercentage) {
                 setScore(scoreCounter.getTotalScore());
                 setClaimedPercentage(scoreCounter.getTotalPercentage());
-                /**
-                 LOGGER.log(level.WARNING, "Score updated "
+                LOGGER.log(Level.WARNING, "Score updated "
                  + color.toString(), this.getClass());
-                 **/
                 setColor(scoreCounter.getColor());
                 setLivesLabel(scoreCounter.getLives());
             }

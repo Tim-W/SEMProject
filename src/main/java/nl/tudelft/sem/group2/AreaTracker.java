@@ -16,7 +16,9 @@ import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
@@ -25,7 +27,7 @@ public class AreaTracker extends Observable {
 
     private static final Logger LOGGER = Logger.getLogger();
 
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private AreaState[][] boardGrid = new AreaState[GRID_WIDTH + 1][GRID_HEIGHT + 1];
     private Stack<Point> visiting = new Stack<>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;

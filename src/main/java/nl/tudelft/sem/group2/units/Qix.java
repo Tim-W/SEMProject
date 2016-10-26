@@ -37,10 +37,12 @@ public class Qix extends Unit implements CollisionInterface, Observer {
     private static final int RANDOMNESSPOSITIONLENGTH = 4;
     private static final int RANDOMNESSLINELENGTH = 2;
     private static final int COLLISIONSIZE = 10;
-    private static final double DECREASELINESIZE = 1.3;
+    private static final double DECREASELINESIZE = 0.1;
+    private static final double DIVIDESTARTLINELENGTH = 8;
+    private static final double MULTIPLIER = 1.5;
     private static final Logger LOGGER = Logger.getLogger();
     private int startLineLength;
-    private double lineLength = startLineLength;
+    private double lineLength;
     private int animationLoops = 0;
     private float[] direction = new float[2];
     private LinkedList<float[]> oldDirections = new LinkedList<>();
@@ -53,12 +55,13 @@ public class Qix extends Unit implements CollisionInterface, Observer {
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
      *
-     * @param areaTracker used for calculating areas
+     * @param areaTracker     used for calculating areas
      * @param startLineLength the start line length of the qix
      */
     public Qix(AreaTracker areaTracker, int startLineLength) {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
         this.startLineLength = startLineLength;
+        lineLength = startLineLength;
         LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
                 + Globals.QIX_START_Y + ")", this.getClass());
     }
@@ -321,8 +324,8 @@ public class Qix extends Unit implements CollisionInterface, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof AreaTracker) {
-            //int input = (int)arg;
-            double multiplier = Math.pow(((double) arg) / GRID_SURFACE, DECREASELINESIZE) * 2;
+            double multiplier = Math.pow(((double) arg) / GRID_SURFACE,
+                    DECREASELINESIZE + startLineLength / DIVIDESTARTLINELENGTH) * MULTIPLIER;
             if (multiplier < 1) {
                 lineLength = startLineLength * multiplier;
             }

@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import java.awt.Point;
 
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -29,7 +31,7 @@ public class AreaTrackerTest {
         stix = new Stix();
         AreaTracker areaTracker = new AreaTracker();
 
-        AreaState[][] expectedGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+        AreaState[][] expectedGrid = new AreaState[GRID_WIDTH + 1][GRID_HEIGHT + 1];
 
         for (int x = 0; x < expectedGrid.length; x++) {
             for (int y = 0; y < expectedGrid[x].length; y++) {
