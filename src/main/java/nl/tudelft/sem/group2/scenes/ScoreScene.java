@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.util.Observable;
+import java.util.Observer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -11,9 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.global.Globals;
-
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Displays info about the current score and gained percentage.
@@ -66,9 +65,6 @@ public class ScoreScene extends SubScene implements Observer {
         createLivesLabel();
 
         displayTitle();
-        //TODO Fix font
-        //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
-        //title.setFont(f);
 
         left.getChildren().add(title);
         center.getChildren().add(claimed);
