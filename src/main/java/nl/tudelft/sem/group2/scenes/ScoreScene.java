@@ -19,6 +19,8 @@ import java.util.logging.Level;
 
 import static edu.umd.cs.findbugs.FindBugs.LOGGER;
 
+import static nl.tudelft.sem.group2.global.Globals.LIVES;
+
 /**
  * Displays info about the current score and gained percentage.
  */
@@ -75,12 +77,12 @@ public class ScoreScene extends SubScene implements Observer {
         colors = new ArrayList<>();
         colors.add(Color.BLUE);
         addPlayerScore(0);
-        setLivesLabel(0, 0);
+        setLivesLabel(LIVES, 0);
         if (GameController.getInstance().isTwoPlayers()) {
             colors.add(Color.RED);
             highClaimedPercentages.add(0.0);
             addPlayerScore(1);
-            setLivesLabel(0, 1);
+            setLivesLabel(LIVES, 1);
         }
         createScoreLabel();
         displayClaimedPercentage();
@@ -185,13 +187,16 @@ public class ScoreScene extends SubScene implements Observer {
     public void update(Observable o, Object arg) {
         if (o instanceof ScoreCounter) {
             ScoreCounter scoreCounter = (ScoreCounter) o;
-            int ID = (int) arg;
+            int ID = scoreCounter.getid;
             if (scoreCounter.getTotalPercentage() >= highClaimedPercentages.get(ID)) {
                 setScore(scoreCounter.getTotalScore(), ID);
                 setClaimedPercentage(scoreCounter.getTotalPercentage(), ID);
                 LOGGER.log(Level.WARNING, "Score updated "
                         + ID, this.getClass());
                 setLivesLabel(scoreCounter.getLives(), ID);
+                if (arg instanceof Integer) {
+                    setLivesLabel((int) arg);
+                }
             }
         }
     }

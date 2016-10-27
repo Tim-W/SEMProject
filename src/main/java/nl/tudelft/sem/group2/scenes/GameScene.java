@@ -33,7 +33,7 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
-    private ScoreScene scoreScene;
+    private static ScoreScene scoreScene;
     private Label messageLabel;
     private VBox messageBox;
     private Canvas canvas;

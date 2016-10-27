@@ -2,11 +2,9 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -22,8 +20,6 @@ import static org.mockito.Mockito.spy;
  * Tests Unit class.
  */
 public class UnitTest {
-    @Rule
-    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private Unit unit;
     private Stix stix;
     private AreaTracker areaTracker;

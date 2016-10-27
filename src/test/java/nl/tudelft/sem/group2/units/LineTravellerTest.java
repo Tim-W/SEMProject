@@ -5,15 +5,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.awt.Point;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -25,10 +21,7 @@ import static org.mockito.Mockito.when;
  * Created by gijs on 25-9-2016.
  */
 public class LineTravellerTest {
-    @Rule
-    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
-
-    private Cursor cursor;
+    private Fuse fuse;
     private Stix stix;
     private AreaTracker areaTracker;
 
@@ -40,11 +33,7 @@ public class LineTravellerTest {
     public void setUp() throws Exception {
         areaTracker = Mockito.mock(AreaTracker.class);
         stix = new Stix();
-        createCursor(new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, 3, 1));
-    }
-
-    public void createCursor(Cursor c) {
-        cursor = c;
+        fuse = new Fuse(2, 2, 2, 2, areaTracker, stix);
     }
 
     /**
@@ -57,8 +46,8 @@ public class LineTravellerTest {
         AreaState[][] boardGrid = new AreaState[1][1];
         boardGrid[0][0] = AreaState.INNERBORDER;
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
-        cursor.setAreaTracker(areaTracker);
-        Assert.assertTrue(cursor.innerBorderOn(0, 0));
+        fuse.setAreaTracker(areaTracker);
+        Assert.assertTrue(fuse.innerBorderOn(0, 0));
     }
 
     /**
@@ -67,8 +56,8 @@ public class LineTravellerTest {
      */
     @Test
     public void setSpriteIndex() throws Exception {
-        cursor.setSpriteIndex(1);
-        Assert.assertEquals(1, cursor.getSpriteIndex());
+        fuse.setSpriteIndex(1);
+        Assert.assertEquals(1, fuse.getSpriteIndex());
     }
 
     /**

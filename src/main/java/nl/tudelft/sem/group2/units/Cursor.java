@@ -73,12 +73,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         sprite[0] = new Image("/images/cursor_" + colorString + ".png");
         setSprite(sprite);
         this.stix = stix;
-        scoreCounter = new ScoreCounter(ID);
-        scoreCounter.addObserver(
-                GameController.getInstance().
-                        getGameScene().
-                        getScoreScene());
-        scoreCounter.setLives(lives);
         this.lives = lives;
         this.currentPowerup = PowerUpType.NONE;
     }
@@ -122,22 +116,17 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                     setY(getY() + transY);
                     logCurrentMove();
                     stix.addToStix(new Point(getX(), getY()));
-                } else {
-                    System.out.println("wer");
                 }
             } else if (outerBorderOn(getX() + transX, getY() + transY)) {
                 setX(getX() + transX);
                 setY(getY() + transY);
                 logCurrentMove();
-            } else {
-                System.out.println("wer");
             }
         }
     }
 
     /**
      * Method which tests if cursor intersects with other unit.
-     *
      * @param collidee the other unit
      * @return if cursor intersects with other unit
      */
@@ -270,8 +259,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
-    /***** Handeling Fuse *****/
-
     /**
      * If there is a Fuse on the screen, remove it.
      */
@@ -287,7 +274,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void calculateArea(Qix qix) {
         if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
                 && !this.getStix().getStixCoordinates().isEmpty()) {
-            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            SoundHandler.playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
                     this.isFast(), getStix(), scoreCounter);
             //Remove the Fuse from the gameView when completing an area
@@ -422,20 +409,20 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @return amount of lives left
      */
     public int getLives() {
-        return scoreCounter.getLives();
+        return lives;
     }
 
     /**
      * Method that decreases amount of lives cursor has upon dying.
      */
     public void cursorDied() {
-        if (scoreCounter.getLives() >= 1) {
-            scoreCounter.subtractLife();
+        if (lives >= 1) {
+            subtractLife();
         }
         this.quadrant();
-        LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
+        LOGGER.log(Level.INFO, "Player died, lives remaining: " + lives, this.getClass());
 
-        if (scoreCounter.getLives() > 0 && stix != null && !stix.isStixEmpty()) {
+        if (lives > 0 && stix != null && !stix.isStixEmpty()) {
             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());
@@ -484,8 +471,18 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void addLife() {
         lives++;
-        scoreCounter.addLife();
+        scoreCounter.notifyLife(lives);
+        //scoreCounter.addLife();
         LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
+    }
+
+    /**
+     * decrement a life to the cursor.
+     */
+    public void subtractLife() {
+        lives--;
+        scoreCounter.notifyLife(lives);
+        LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
     }
 
     public KeyCode getFastMoveKey() {

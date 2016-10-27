@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.AreaState;
@@ -9,7 +8,6 @@ import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -41,10 +39,6 @@ public class CursorTest {
     private int x;
     private int y;
 
-    @BeforeClass
-    public static void BeforeClass() {
-        new JFXPanel();
-    }
     @Before
     public void setUp() throws Exception {
         GameController.deleteGameController();

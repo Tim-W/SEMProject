@@ -131,22 +131,11 @@ public class ScoreCounter extends Observable {
     }
 
     /**
-     * subtracts lives.
+     * notify life changed.
+     * @param lives of cursor
      */
-    //TODO rename this
-    public void subtractLife() {
-        this.lives = lives - 1;
+    public void notifyLife(int lives) {
         setChanged();
-        notifyObservers();
-    }
-
-    /**
-     * subtracts lives.
-     */
-    //TODO rename this
-    public void addLife() {
-        this.lives = lives + 1;
-        setChanged();
-        notifyObservers();
+        notifyObservers(lives);
     }
 }
