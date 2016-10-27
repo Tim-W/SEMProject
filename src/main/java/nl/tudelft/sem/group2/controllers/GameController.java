@@ -425,14 +425,7 @@ public final class GameController {
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
         for (Cursor cursor : cursors) {
-            if (keyCode.equals(cursor.getCurrentMove())) {
-                cursor.handleFuse();
-                cursor.setCurrentMove(null);
-            } else if (keyCode.equals(cursor.getFastMoveKey()) || keyCode.equals(cursor.getSlowMoveKey())) {
-                cursor.setDrawing(false);
-                cursor.setSpeed(2);
-                cursor.handleFuse();
-            }
+            cursor.keyReleased(keyCode);
         }
     }
 
@@ -451,25 +444,7 @@ public final class GameController {
             gameScene.setMessageLabel("");
         } else {
             for (Cursor cursor : cursors) {
-                if (cursor.getArrowKeys().contains(e.getCode())) {
-                    if (cursor.isDrawing() && cursor.getFuse() != null) {
-                        cursor.getFuse().setMoving(false);
-                    }
-                    cursor.setCurrentMove(e.getCode());
-                } else if (e.getCode().equals(cursor.getSlowMoveKey())) {
-                    if (!stixNotEmpty(cursor) || !cursor.isFast()) {
-                        cursor.setSpeed(1);
-                        cursor.setDrawing(true);
-                        cursor.setFast(false);
-                    }
-                } else if (e.getCode().equals(cursor.getFastMoveKey())) {
-                    cursor.setSpeed(2);
-                    cursor.setDrawing(true);
-                    cursor.setFast(true);
-                }
-                if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
-                    cursor.setSpeed(cursor.getSpeed() + 1);
-                }
+                cursor.keyPressed(e);
             }
         }
     }
@@ -493,10 +468,6 @@ public final class GameController {
         return isRunning;
     }
 
-    private boolean stixNotEmpty(Cursor cursor) {
-        return cursor.getStix().getStixCoordinates() != null
-                && !cursor.getStix().getStixCoordinates().isEmpty();
-    }
 
     //Getters
 

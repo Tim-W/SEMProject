@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
@@ -95,6 +96,48 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
+    /**
+     * Handles a key press for the cursor.
+     *
+     * @param e the keyEvent of the key pressed
+     */
+    public void keyPressed(KeyEvent e) {
+        if (getArrowKeys().contains(e.getCode())) {
+            if (isDrawing() && getFuse() != null) {
+                getFuse().setMoving(false);
+            }
+            setCurrentMove(e.getCode());
+        } else if (e.getCode().equals(getSlowMoveKey())) {
+            if (!stixDrawn() || !isFast()) {
+                setSpeed(1);
+                setDrawing(true);
+                setFast(false);
+            }
+        } else if (e.getCode().equals(getFastMoveKey())) {
+            setSpeed(2);
+            setDrawing(true);
+            setFast(true);
+        }
+        if (getCurrentPowerup() == PowerUpType.SPEED) {
+            setSpeed(getSpeed() + 1);
+        }
+    }
+
+    /**
+     * Handles a key being released.
+     *
+     * @param keyCode the key being released
+     */
+    public void keyReleased(KeyCode keyCode) {
+        if (keyCode.equals(getCurrentMove())) {
+            handleFuse();
+            setCurrentMove(null);
+        } else if (keyCode.equals(getFastMoveKey()) || keyCode.equals(getSlowMoveKey())) {
+            setDrawing(false);
+            setSpeed(2);
+            handleFuse();
+        }
+    }
 
     private void assertMove(int transX, int transY) {
         KeypressHandler.cursorAssertMove(this, transX, transY);
@@ -439,6 +482,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void setSlowMoveKey(KeyCode slowMoveKey) {
         this.slowMoveKey = slowMoveKey;
     }
+
 
     /**
      * @return String format of cursor.
