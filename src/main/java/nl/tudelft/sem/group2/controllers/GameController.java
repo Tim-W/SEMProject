@@ -1,14 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -16,6 +7,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerEat;
@@ -33,6 +25,16 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -109,7 +111,6 @@ public final class GameController {
      * @param multiplayer if true 2 cursors are set
      */
     public void makeCursors(boolean multiplayer) {
-
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
@@ -122,6 +123,7 @@ public final class GameController {
         cursor1.addKey(KeyCode.RIGHT);
         cursor1.setFastMoveKey(KeyCode.O);
         cursor1.setSlowMoveKey(KeyCode.I);
+        setScoreCounterInCursor(cursor1);
         if (multiplayer) {
             //second
             Stix stix2 = new Stix();
@@ -134,7 +136,8 @@ public final class GameController {
             cursor2.addKey(KeyCode.D);
             cursor2.setFastMoveKey(KeyCode.Z);
             cursor2.setSlowMoveKey(KeyCode.X);
-            addUnit(cursors.get(1));
+            addUnit(cursor2);
+            setScoreCounterInCursor(cursor2);
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
@@ -146,7 +149,12 @@ public final class GameController {
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
+    }
 
+    private void setScoreCounterInCursor(Cursor cursor) {
+        ScoreCounter scoreCounter = new ScoreCounter(cursor.getColor());
+        scoreCounter.addObserver(gameScene.getScoreScene());
+        cursor.setScoreCounter(scoreCounter);
     }
 
     /**
@@ -242,7 +250,7 @@ public final class GameController {
      */
     private void gameWon() {
         animationTimerStop();
-        new SoundHandler().playSound("/sounds/qix-success.mp3", Globals.GAME_START_SOUND_VOLUME);
+        SoundHandler.playSound("/sounds/qix-success.mp3", Globals.GAME_START_SOUND_VOLUME);
         gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
         gameScene.setMessageLabel(" You Won! ");
 
@@ -277,7 +285,7 @@ public final class GameController {
                     for (Cursor cursor : cursors) {
                         if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
                             cursor.cursorDied();
-                            new SoundHandler().playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+                            SoundHandler.playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
                             if (cursor.getLives() == 0) {
                                 gameOver();
                             }
@@ -435,7 +443,7 @@ public final class GameController {
     public void keyPressed(KeyEvent e) {
         initializeCursorSpeed();
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
-            new SoundHandler().playSound("/sounds/qix-new-life.mp3", Globals.GAME_START_SOUND_VOLUME);
+            SoundHandler.playSound("/sounds/qix-new-life.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;

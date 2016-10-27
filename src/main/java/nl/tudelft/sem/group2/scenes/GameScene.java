@@ -96,7 +96,7 @@ public class GameScene extends Scene {
     /**
      * @return the scorescene
      */
-    public static ScoreScene getScoreScene() {
+    public ScoreScene getScoreScene() {
         return scoreScene;
     }
 

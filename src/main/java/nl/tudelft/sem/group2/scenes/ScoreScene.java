@@ -1,7 +1,5 @@
 package nl.tudelft.sem.group2.scenes;
 
-import java.util.Observable;
-import java.util.Observer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -13,6 +11,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.global.Globals;
+
+import java.util.Observable;
+import java.util.Observer;
+
+import static nl.tudelft.sem.group2.global.Globals.LIVES;
 
 /**
  * Displays info about the current score and gained percentage.
@@ -78,7 +81,7 @@ public class ScoreScene extends SubScene implements Observer {
 
 
         root.getChildren().add(tilePane);
-        setLivesLabel(0);
+        setLivesLabel(LIVES);
     }
 
     private void displayTitle() {
@@ -159,12 +162,14 @@ public class ScoreScene extends SubScene implements Observer {
 
             setScore(((ScoreCounter) o).getTotalScore());
             setClaimedPercentage((int) (((ScoreCounter) o).getTotalPercentage() * 100));
-            /**
+            /*
              LOGGER.log(Level.WARNING, "Score updated "
              + color.toString(), this.getClass());
              **/
             setColor(((ScoreCounter) o).getColor());
-            setLivesLabel(((ScoreCounter) o).getLives());
+            if (arg instanceof Integer) {
+                setLivesLabel((int) arg);
+            }
         }
     }
 

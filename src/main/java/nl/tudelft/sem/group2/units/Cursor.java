@@ -1,11 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.logging.Level;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -18,8 +12,14 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
-import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
@@ -44,6 +44,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private KeyCode fastMoveKey, slowMoveKey;
     private ScoreCounter scoreCounter;
+    private Color color;
 
 
     /**
@@ -60,21 +61,16 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
         super(position.x, position.y, width, height, areaTracker);
         Image[] sprite = new Image[1];
-
+        this.color = color;
         String colorString = "red";
         if (color.equals(Color.BLUE)) {
             colorString = "blue";
         } else if (color.equals(Color.YELLOW)) {
             colorString = "yellow";
-        } else {
-            color = Color.RED;
         }
         sprite[0] = new Image("/images/cursor-" + colorString + ".png");
         setSprite(sprite);
         this.stix = stix;
-        scoreCounter = new ScoreCounter(color);
-        scoreCounter.addObserver(GameScene.getScoreScene());
-        scoreCounter.setLives(lives);
         this.lives = lives;
         this.currentPowerup = PowerUpType.NONE;
     }
@@ -152,6 +148,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.currentMove = currentMove;
     }
 
+    /**
+     * get the color of the cursor.
+     *
+     * @return Color of the cursor
+     */
+    public Color getColor() {
+        return color;
+    }
 
     /**
      * Return the quadrant the cursor is in, as follows.
@@ -245,7 +249,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
-    /***** Handeling Fuse *****/
     /**
      * handles making fuse and makes it start moving.
      */
@@ -264,6 +267,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
+    /***** Handling Fuse *****/
+
     /**
      * If there is a Fuse on the screen, remove it.
      */
@@ -279,7 +284,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void calculateArea(Qix qix) {
         if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
                 && !this.getStix().getStixCoordinates().isEmpty()) {
-            new SoundHandler().playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
                     this.isFast(), getStix(), scoreCounter);
             //Remove the Fuse from the gameView when completing an area
@@ -287,14 +292,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
-    /***** Getters and setters *****/
-
     /**
      * @return true if the cursor is drawing
      */
     public boolean isDrawing() {
         return isDrawing;
     }
+
+    /***** Getters and setters *****/
 
     /**
      * @param drawing if cursor is moving while user has key X or Z down
@@ -385,6 +390,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * set the scorecounter of the cursor.
+     *
+     * @param scoreCounter of the cursor
+     */
+    public void setScoreCounter(ScoreCounter scoreCounter) {
+        this.scoreCounter = scoreCounter;
+    }
+
+    /**
      * Method which log the current movement of the cursor.
      * Only gets executed when log level is on detailledLogging.
      */
@@ -398,20 +412,20 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @return amount of lives left
      */
     public int getLives() {
-        return scoreCounter.getLives();
+        return lives;
     }
 
     /**
      * Method that decreases amount of lives cursor has upon dying.
      */
     public void cursorDied() {
-        if (scoreCounter.getLives() >= 1) {
-            scoreCounter.subtractLife();
+        if (lives >= 1) {
+            subtractLife();
         }
         this.quadrant();
-        LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
+        LOGGER.log(Level.INFO, "Player died, lives remaining: " + lives, this.getClass());
 
-        if (scoreCounter.getLives() > 0 && stix != null && !stix.isStixEmpty()) {
+        if (lives > 0 && stix != null && !stix.isStixEmpty()) {
             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());
@@ -460,8 +474,18 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void addLife() {
         lives++;
-        scoreCounter.addLife();
+        scoreCounter.notifyLife(lives);
+        //scoreCounter.addLife();
         LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
+    }
+
+    /**
+     * decrement a life to the cursor.
+     */
+    public void subtractLife() {
+        lives--;
+        scoreCounter.notifyLife(lives);
+        LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
     }
 
     public KeyCode getFastMoveKey() {
