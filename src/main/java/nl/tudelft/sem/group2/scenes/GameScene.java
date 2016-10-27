@@ -33,9 +33,9 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
+    private static ScoreScene scoreScene;
     private Label messageLabel;
     private VBox messageBox;
-    private static ScoreScene scoreScene;
     private Canvas canvas;
     private GraphicsContext gc;
     private Image image;
@@ -93,7 +93,7 @@ public class GameScene extends Scene {
     /**
      * @return the scorescene
      */
-    public static ScoreScene getScoreScene() {
+    public ScoreScene getScoreScene() {
         return scoreScene;
     }
 
