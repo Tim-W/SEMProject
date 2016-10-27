@@ -1,13 +1,12 @@
 package nl.tudelft.sem.group2;
 
+import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.StartScene;
-
-import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -69,7 +68,7 @@ public class LaunchApp extends Application {
         primaryStage.show();
 
         //Comment to mute empty sound
-        //playSound("/sounds/qix.mp3", 1);
+        //playSound("/sounds/Background_Music.mp3", 1);
         //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 
