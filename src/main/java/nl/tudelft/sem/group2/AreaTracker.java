@@ -2,6 +2,7 @@ package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -169,6 +170,7 @@ public class AreaTracker {
         }
         resetAreaTracker();
         stix.emptyStix();
+        new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
     }
 
     private void resetBorders() {

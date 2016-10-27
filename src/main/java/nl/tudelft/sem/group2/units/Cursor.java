@@ -14,7 +14,6 @@ import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.scenes.GameScene;
-import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -213,7 +212,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /**
      * If there is a Fuse on the screen, remove it.
      */
-    public void removeFuse() {
+    private void removeFuse() {
         fuse = null;
     }
 
@@ -225,7 +224,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void calculateArea(Qix qix) {
         if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
                 && !this.getStix().getStixCoordinates().isEmpty()) {
-            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
                     this.isFast(), getStix(), scoreCounter);
             //Remove the Fuse from the gameView when completing an area
@@ -391,20 +389,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     public void setPowerUpDuration(int powerUpDuration) {
         this.powerUpDuration = powerUpDuration;
-    }
-
-    /**
-     * decrements the duration of current powerup.
-     */
-    public void decrementPowerupDuration() {
-        this.powerUpDuration -= 1;
-    }
-
-    /**
-     * @return true if the cursor has a powerup active
-     */
-    public boolean hasPowerUp() {
-        return this.currentPowerup != PowerUpType.NONE;
     }
 
     /**
