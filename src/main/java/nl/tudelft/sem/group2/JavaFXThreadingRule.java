@@ -6,7 +6,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -77,7 +77,7 @@ public class JavaFXThreadingRule implements TestRule {
             }
         }
 
-        protected void setupJavaFX() throws InterruptedException {
+        void setupJavaFX() throws InterruptedException {
 
             long timeMillis = System.currentTimeMillis();
 

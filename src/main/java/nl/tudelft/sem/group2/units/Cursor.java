@@ -91,7 +91,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 cursorMovementMap.put(arrowKeys.get(1), new CursorMovement(0, 1));
                 transX += cursorMovementMap.get(currentMove).getTransX();
                 transY += cursorMovementMap.get(currentMove).getTransY();
-                assertMove(transX, transY);
+                KeypressHandler.cursorAssertMove(this, transX, transY);
             }
         }
     }
@@ -104,7 +104,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void keyPressed(KeyEvent e) {
         if (getArrowKeys().contains(e.getCode())) {
             if (isDrawing() && getFuse() != null) {
-                getFuse().setMoving(false);
+                fuse.setMoving(false);
             }
             setCurrentMove(e.getCode());
         } else if (e.getCode().equals(getSlowMoveKey())) {
@@ -137,10 +137,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             setSpeed(2);
             handleFuse();
         }
-    }
-
-    private void assertMove(int transX, int transY) {
-        KeypressHandler.cursorAssertMove(this, transX, transY);
     }
 
     /**
