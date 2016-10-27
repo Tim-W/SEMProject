@@ -67,7 +67,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), true, stix, new ScoreCounter(1));
+        areaTracker.calculateNewArea(new Point(1, 2), true, stix, new ScoreCounter(1, 30));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
 
@@ -88,7 +88,7 @@ public class AreaTrackerTest {
     public void testCalculateNewSlowArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), false, stix, new ScoreCounter(1));
+        areaTracker.calculateNewArea(new Point(1, 2), false, stix, new ScoreCounter(1, 30));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(false);
 
@@ -109,7 +109,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastAreaWithQixOnOtherSide() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(3, 2), true, stix, new ScoreCounter(1));
+        areaTracker.calculateNewArea(new Point(3, 2), true, stix, new ScoreCounter(1, 30));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
 

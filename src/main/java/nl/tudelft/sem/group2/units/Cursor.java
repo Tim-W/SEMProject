@@ -10,7 +10,6 @@ import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
-import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.sound.SoundHandler;
@@ -67,7 +66,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.ID = ID;
         String colorString = "blue";
         //if player 2
-        if (ID == 2) {
+        if (ID == 1) {
             colorString = "red";
         }
         sprite[0] = new Image("/images/cursor_" + colorString + ".png");
@@ -310,6 +309,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    /**
+     * Get ID of the cursor.
+     *
+     * @return int ID
+     */
+    public int getID() {
+        return ID;
     }
 
     /**

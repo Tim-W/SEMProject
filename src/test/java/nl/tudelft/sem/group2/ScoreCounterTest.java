@@ -14,7 +14,7 @@ public class ScoreCounterTest {
 
     @Before
     public void setUp() throws Exception {
-        scoreCounter = new ScoreCounter(1);
+        scoreCounter = new ScoreCounter(1, 30);
     }
 
     @Test

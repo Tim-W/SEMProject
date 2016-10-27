@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.controllers.GameController;
 
 import java.util.Observable;
 import java.util.logging.Level;
@@ -30,8 +29,6 @@ public class ScoreCounter extends Observable {
 
     private Color color;
 
-    private int lives;
-
     private int ID;
 
     /**
@@ -39,14 +36,14 @@ public class ScoreCounter extends Observable {
      *
      * @param ID specifying the cursor.
      */
-    public ScoreCounter(int ID) {
+    public ScoreCounter(int ID, int targetPercentage) {
         this.totalPercentage = 0;
         this.totalScore = 0;
-        this.targetPercentage = GameController.getInstance().getLevelHandler().getLevel().getPercentage();
+        this.targetPercentage = targetPercentage;
         this.ID = ID;
         color = Color.BLUE;
         //if player 2
-        if (ID == 2) {
+        if (ID == 1) {
             color = Color.RED;
         }
 
@@ -121,13 +118,13 @@ public class ScoreCounter extends Observable {
         this.targetPercentage = targetPercentage;
     }
 
-    public int getLives() {
-        return lives;
-    }
-
-    public void setLives(int lives) {
-        this.lives = lives;
-
+    /**
+     * get id of the cursor.
+     *
+     * @return int ID
+     */
+    public int getID() {
+        return ID;
     }
 
     /**

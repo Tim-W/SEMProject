@@ -62,18 +62,14 @@ public final class GameController {
     private GameScene gameScene;
     private int score = 0;
     private boolean twoPlayers;
-    private ArrayList<Color> colors;
 
     /**
      * Constructor for the GameController class.
      */
     private GameController() {
         // Initialize models for scoretracking.
-        //colors = new ArrayList<>();
-        //colors.add(Color.BLUE);
         areaTracker = new AreaTracker();
         levelHandler = new LevelHandler();
-        levelHandler.nextLevel();
         collisionHandler = new CollisionHandler();
         score = 0;
         //Animation timer initialization
@@ -108,32 +104,32 @@ public final class GameController {
      * initialize gameController with one player.
      */
     public void initializeSinglePlayer() {
+        twoPlayers = false;
+        levelHandler.nextLevel(twoPlayers);
         gameScene = new GameScene(new Group(), Color.BLACK);
-        makeUnits(false);
+        makeUnits();
     }
 
     /**
      * initialize gameController with multiple players.
      */
     public void initializeMultiPlayer() {
-        //colors.add(Color.RED);
+        twoPlayers = true;
+        levelHandler.nextLevel(twoPlayers);
         gameScene = new GameScene(new Group(), Color.BLACK);
-        makeUnits(true);
+        makeUnits();
     }
 
     /**
      * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
-     *
-     * @param twoPlayers if true there are two players.
      */
-    private void makeUnits(boolean twoPlayers) {
-        this.twoPlayers = twoPlayers;
+    private void makeUnits() {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Globals.LIVES, 1);
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Globals.LIVES, 0);
         KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
         cursor1.addKeys(asList(keys));
         cursor1.setFastMoveKey(KeyCode.O);
@@ -145,7 +141,7 @@ public final class GameController {
             //second
             Stix stix2 = new Stix();
             Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Globals.LIVES, 2);
+                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Globals.LIVES, 1);
             keys = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D};
             cursor2.addKeys(asList(keys));
             cursor2.setFastMoveKey(KeyCode.Z);
@@ -167,7 +163,7 @@ public final class GameController {
     }
 
     private void setScoreCounterInCursor(Cursor cursor) {
-        ScoreCounter scoreCounter = new ScoreCounter(cursor.getColor());
+        ScoreCounter scoreCounter = new ScoreCounter(cursor.getID(), levelHandler.getLevel().getPercentage());
         scoreCounter.addObserver(gameScene.getScoreScene());
         cursor.setScoreCounter(scoreCounter);
     }
@@ -176,7 +172,7 @@ public final class GameController {
         units.clear();
         areaTracker = new AreaTracker();
         collisionHandler = new CollisionHandler();
-        makeUnits(twoPlayers);
+        makeUnits();
         gameScene.getScoreScene().reset();
     }
     /**
@@ -277,7 +273,7 @@ public final class GameController {
         } else {
             gameScene.setMessageBoxLayoutX(Globals.MESSAGEBOX_POSITION_X);
             gameScene.setMessage("Press SPACE to go to the next level!");
-            levelHandler.nextLevel();
+            levelHandler.nextLevel(twoPlayers);
             resetLevel();
         }
 
@@ -360,7 +356,7 @@ public final class GameController {
             }
         }
 
-        PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units);
+        PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units, cursors);
         if (powerupEvent != null) {
             Cursor cursor = powerupEvent.getCursor();
             switch (powerupEvent.getPowerUpType()) {

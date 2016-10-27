@@ -13,7 +13,7 @@ public class LevelFactoryTest {
     @Test
     public void testCreateFromXml() throws Exception {
         int id = 1;
-        Level level = createFromXml(id);
+        Level level = createFromXml(id, false);
         Assert.assertEquals(level.getID(), id);
     }
 

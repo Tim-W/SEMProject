@@ -11,7 +11,6 @@ import java.io.IOException;
 public class LevelHandler {
     private int levelID;
     private Level level;
-
     /**
      * Basic contructor for collision handler class.
      */
@@ -22,10 +21,10 @@ public class LevelHandler {
     /**
      * iterates to next level.
      */
-    public void nextLevel() {
+    public void nextLevel(boolean twoPlayer) {
         levelID++;
         try {
-            level = LevelFactory.createFromXml(levelID);
+            level = LevelFactory.createFromXml(levelID, twoPlayer);
         } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }

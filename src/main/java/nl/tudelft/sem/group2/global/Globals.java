@@ -16,7 +16,7 @@ public final class Globals {
     public static final int CURSOR_START_Y = 150;
     public static final int BOARD_MARGIN = 8;
     public static final int GAME_OFFSET_X = 15;
-    public static final int GAME_OFFSET_Y = 75;
+    public static final int GAME_OFFSET_Y = 100;
     public static final int BORDER_BOTTOM_HEIGHT = 20;
     public static final int BORDER_BOTTOM_POSITION_Y = 380;
     public static final int MESSAGEBOX_POSITION_X = 50;

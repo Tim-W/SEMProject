@@ -25,9 +25,13 @@ public final class LevelFactory {
      * @param levelNumber - number of the level.
      * @return - returns a level.
      */
-    public static Level createFromXml(int levelNumber)
+    public static Level createFromXml(int levelNumber, boolean twoPlayer)
             throws IOException, ParserConfigurationException, SAXException {
-        String xmlPath = "/levels/level" + levelNumber + ".xml";
+        String player = "singlePlayer";
+        if (twoPlayer) {
+            player = "twoPlayers";
+        }
+        String xmlPath = "/levels/" + player + "/level" + levelNumber + ".xml";
         Document xml = getFileReader(xmlPath);
         Level level = null;
         if (xml != null) {
