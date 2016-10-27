@@ -139,8 +139,7 @@ public class AreaTracker {
         Point dir = stix.getStixCoordinates().get(1);
         // Instantiate the two temporary area trackers, these linkedlists
         // accumulate all the points on one side of the stix
-        // When the floodfill algorithm finds a qix however the linkedlist is
-        // set to null
+        // When the floodfill algorithm finds a qix however the linkedlist is set to null
         resetAreas();
         resetBorders();
         // Initialize the set which contains the visited points for the
