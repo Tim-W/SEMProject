@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_X;
 import static nl.tudelft.sem.group2.global.Globals.QIX_START_Y;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests Unit class.
@@ -36,9 +37,9 @@ public class UnitTest {
         unit = Mockito.mock(Unit.class, Mockito.CALLS_REAL_METHODS);
         unit.setX(1);
         unit.setY(1);
-        unit.setWidth(2);
-        unit.setHeight(2);
-        unit.setAreaTracker(areaTracker);
+        when(unit.getWidth()).thenReturn(2);
+        when(unit.getHeight()).thenReturn(2);
+        when(unit.getAreaTracker()).thenReturn(areaTracker);
     }
 
     /**
@@ -84,14 +85,6 @@ public class UnitTest {
         Assert.assertEquals(unit.getWidth(), 2);
     }
 
-    /**
-     * @throws Exception
-     */
-    @Test
-    public void setWidth() throws Exception {
-        unit.setWidth(1);
-        Assert.assertEquals(unit.getWidth(), 1);
-    }
 
     /**
      * @throws Exception
@@ -101,14 +94,6 @@ public class UnitTest {
         Assert.assertEquals(unit.getHeight(), 2);
     }
 
-    /**
-     * @throws Exception
-     */
-    @Test
-    public void setHeight() throws Exception {
-        unit.setHeight(1);
-        Assert.assertEquals(unit.getHeight(), 1);
-    }
 
     @Test
     public void intersectUnitUnit() throws Exception {

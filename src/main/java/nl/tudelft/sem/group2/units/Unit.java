@@ -31,9 +31,9 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
     public Unit(int x, int y, int width, int height, AreaTracker areaTracker) {
         this.setX(x);
         this.setY(y);
-        this.setWidth(width);
-        this.setHeight(height);
-        this.setAreaTracker(areaTracker);
+        this.height = height;
+        this.width = width;
+        this.areaTracker = areaTracker;
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 
@@ -58,16 +58,8 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         return width;
     }
 
-    protected void setWidth(int width) {
-        this.width = width;
-    }
-
     protected int getHeight() {
         return height;
-    }
-
-    protected void setHeight(int height) {
-        this.height = height;
     }
 
     /**
