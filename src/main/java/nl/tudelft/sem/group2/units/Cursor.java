@@ -68,7 +68,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         } else if (color.equals(Color.YELLOW)) {
             colorString = "yellow";
         }
-        sprite[0] = new Image("/images/cursor_" + colorString + ".png");
+        sprite[0] = new Image("/images/cursor-" + colorString + ".png");
         setSprite(sprite);
         this.stix = stix;
         this.lives = lives;
@@ -267,7 +267,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
-    /***** Handeling Fuse *****/
+    /***** Handling Fuse *****/
 
     /**
      * If there is a Fuse on the screen, remove it.
@@ -284,7 +284,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void calculateArea(Qix qix) {
         if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
                 && !this.getStix().getStixCoordinates().isEmpty()) {
-            SoundHandler.playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
             this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
                     this.isFast(), getStix(), scoreCounter);
             //Remove the Fuse from the gameView when completing an area

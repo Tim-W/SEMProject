@@ -68,9 +68,6 @@ public class ScoreScene extends SubScene implements Observer {
         createLivesLabel();
 
         displayTitle();
-        //TODO Fix font
-        //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
-        //title.setFont(f);
 
         left.getChildren().add(title);
         center.getChildren().add(claimed);
