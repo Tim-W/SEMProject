@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
@@ -9,7 +8,6 @@ import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -26,12 +24,6 @@ public class GameControllerTest {
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private GameController gameController;
     private Cursor spyCursor;
-
-    @BeforeClass
-    public static void BeforeClass() {
-        new JFXPanel();
-    }
-
     public void setUp() {
         GameController.deleteGameController();
         gameController = GameController.getInstance();

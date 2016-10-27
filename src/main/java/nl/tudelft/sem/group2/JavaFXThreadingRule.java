@@ -36,7 +36,7 @@ public class JavaFXThreadingRule implements TestRule {
     /**
      *
      */
-    private final class OnJFXThreadStatement extends Statement {
+    private static final class OnJFXThreadStatement extends Statement {
 
         private final Statement statement;
         private Throwable rethrownException = null;
@@ -47,33 +47,33 @@ public class JavaFXThreadingRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
+            String osName = System.getProperty("os.name");
+            if (!osName.contains("OS X")) {
 
-            if (!jfxIsSetup) {
-                setupJavaFX();
+                if (!jfxIsSetup) {
+                    setupJavaFX();
 
-                jfxIsSetup = true;
-            }
+                    jfxIsSetup = true;
+                }
 
-            final CountDownLatch countDownLatch = new CountDownLatch(1);
+                final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
+                Platform.runLater(() -> {
                     try {
                         statement.evaluate();
                     } catch (Throwable e) {
                         rethrownException = e;
                     }
                     countDownLatch.countDown();
+                });
+
+                countDownLatch.await();
+
+                // if an exception was thrown by the statement during evaluation,
+                // then re-throw it to fail the test
+                if (rethrownException != null) {
+                    throw rethrownException;
                 }
-            });
-
-            countDownLatch.await();
-
-            // if an exception was thrown by the statement during evaluation,
-            // then re-throw it to fail the test
-            if (rethrownException != null) {
-                throw rethrownException;
             }
         }
 
@@ -83,13 +83,11 @@ public class JavaFXThreadingRule implements TestRule {
 
             final CountDownLatch latch = new CountDownLatch(1);
 
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    // initializes JavaFX environment
-                    new JFXPanel();
+            SwingUtilities.invokeLater(() -> {
+                // initializes JavaFX environment
+                new JFXPanel();
 
-                    latch.countDown();
-                }
+                latch.countDown();
             });
 
             System.out.println("javafx initialising...");

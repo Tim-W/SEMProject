@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.controllers.GameController;
@@ -36,7 +35,6 @@ public class PowerUpCollisionsTest {
      */
     @Before
     public void setUp() {
-        new JFXPanel();
         handler = new CollisionHandler();
         set = new HashSet<>();
         gameController = GameController.getInstance();

@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -37,14 +36,12 @@ public class CursorTest {
     private Cursor cursor;
     private AreaTracker areaTracker;
     private GameController gameController;
-    private Stix stix;
+    private Stix stix = mock(Stix.class);
     private int x;
     private int y;
 
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
-        stix = mock(Stix.class);
         GameController.deleteGameController();
         gameController = GameController.getInstance();
         gameController.getAnimationTimer().stop();

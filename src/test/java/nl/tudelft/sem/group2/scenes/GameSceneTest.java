@@ -1,10 +1,8 @@
 package nl.tudelft.sem.group2.scenes;
 
-import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -25,13 +23,8 @@ public class GameSceneTest {
     private GameController gameController;
     private Cursor spyCursor;
 
-    @BeforeClass
-    public static void BeforeClass() {
-        new JFXPanel();
-    }
-
     public void setUp() {
-        removeGameController();
+        GameController.deleteGameController();
         gameController = GameController.getInstance();
         gameController.makeCursors(false);
         gameController.getAnimationTimer().stop();
@@ -40,10 +33,6 @@ public class GameSceneTest {
         gameController.getCursors().set(0, spyCursor);
         gameController.getUnits().clear();
         gameController.getUnits().add(spyCursor);
-    }
-
-    private void removeGameController() {
-        GameController.deleteGameController();
     }
 
     @Test

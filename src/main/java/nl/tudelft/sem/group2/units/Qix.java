@@ -14,6 +14,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -106,7 +107,8 @@ public class Qix extends Unit implements CollisionInterface {
         float scale = (POSITION_LENGTH + random) / length;
         direction[0] *= scale;
         direction[1] *= scale;
-        animationLoops += (int) (Math.random() * LINESCOUNT);
+        Random rng = new Random();
+        animationLoops += rng.nextInt(LINESCOUNT);
     }
 
     /**

@@ -29,8 +29,6 @@ public class ScoreCounter extends Observable {
 
     private Color color = Color.RED;
 
-    private int lives;
-
     /**
      * Default score counter constructor.
      *
@@ -115,32 +113,12 @@ public class ScoreCounter extends Observable {
         this.targetPercentage = targetPercentage;
     }
 
-    public int getLives() {
-        return lives;
-    }
-
-    public void setLives(int lives) {
-        this.lives = lives;
-
-    }
-
     /**
-     * subtracts lives.
+     * notify life changed.
+     * @param lives of cursor
      */
-    //TODO rename this
-    public void subtractLife() {
-        this.lives = lives - 1;
+    public void notifyLife(int lives) {
         setChanged();
-        notifyObservers();
-    }
-
-    /**
-     * subtracts lives.
-     */
-    //TODO rename this
-    public void addLife() {
-        this.lives = lives + 1;
-        setChanged();
-        notifyObservers();
+        notifyObservers(lives);
     }
 }

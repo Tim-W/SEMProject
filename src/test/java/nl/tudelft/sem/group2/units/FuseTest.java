@@ -4,6 +4,7 @@ import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -21,20 +22,20 @@ import static org.mockito.Mockito.when;
 public class FuseTest {
     private Fuse fuse;
     private LinkedList<Point> linkedList;
-    private Stix stix;
-    private AreaTracker areaTracker;
+    private Stix stix = mock(Stix.class);
+    private AreaTracker areaTracker = Mockito.mock(AreaTracker.class);
 
-
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
-        stix = mock(Stix.class);
-        areaTracker = Mockito.mock(AreaTracker.class);
         createFuse(new Fuse(3, 3, 3, 4, areaTracker, stix));
         fuse.setDelay(0);
     }
 
-    public void createFuse(Fuse f) {
+    private void createFuse(Fuse f) {
         fuse = f;
     }
 
