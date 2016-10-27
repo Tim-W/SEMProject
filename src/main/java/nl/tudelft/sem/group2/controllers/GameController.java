@@ -1,5 +1,14 @@
 package nl.tudelft.sem.group2.controllers;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -24,16 +33,6 @@ import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
-
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -243,7 +242,7 @@ public final class GameController {
      */
     private void gameWon() {
         animationTimerStop();
-        new SoundHandler().playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
+        new SoundHandler().playSound("/sounds/qix-success.mp3", Globals.GAME_START_SOUND_VOLUME);
         gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
         gameScene.setMessageLabel(" You Won! ");
 
@@ -278,7 +277,7 @@ public final class GameController {
                     for (Cursor cursor : cursors) {
                         if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
                             cursor.cursorDied();
-                            new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+                            new SoundHandler().playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
                             if (cursor.getLives() == 0) {
                                 gameOver();
                             }
@@ -436,7 +435,7 @@ public final class GameController {
     public void keyPressed(KeyEvent e) {
         initializeCursorSpeed();
         if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
-            new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
+            new SoundHandler().playSound("/sounds/qix-new-life.mp3", Globals.GAME_START_SOUND_VOLUME);
             animationTimerStart();
             LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
             isRunning = true;

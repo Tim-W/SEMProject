@@ -58,7 +58,7 @@ public class LaunchApp extends Application {
         primaryStage.setTitle("Qix");
         primaryStage.setWidth(GAME_WIDTH);
         primaryStage.setHeight(GAME_HEIGHT);
-        primaryStage.getIcons().add(new Image("/images/stageIcon.png"));
+        primaryStage.getIcons().add(new Image("/images/stage-icon.png"));
         LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
         LOGGER.log(Level.INFO, "GameScene created succesfully", this.getClass());
@@ -68,7 +68,7 @@ public class LaunchApp extends Application {
         primaryStage.show();
 
         //Comment to mute empty sound
-        //playSound("/sounds/Background_Music.mp3", 1);
+        //playSound("/sounds/background-music.mp3", 1);
         //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 

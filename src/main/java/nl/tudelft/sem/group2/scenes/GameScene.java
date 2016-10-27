@@ -1,5 +1,10 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,12 +23,6 @@ import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 
 /**
  * GameScene contains all the information about the current game.
@@ -33,9 +32,9 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
+    private static ScoreScene scoreScene;
     private Label messageLabel;
     private VBox messageBox;
-    private static ScoreScene scoreScene;
     private Canvas canvas;
     private GraphicsContext gc;
     private Image image;
@@ -70,7 +69,11 @@ public class GameScene extends Scene {
         Random random = new Random();
         //Choose random image
         int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
-        setImage(new Image("/images/" + image + ".png", Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, false, false));
+        setImage(new Image(
+                "/images/background-image-" + image + ".png",
+                Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT,
+                false,
+                false));
         //Draw black rectangle over image to avoid spoilers
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
