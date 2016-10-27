@@ -96,7 +96,7 @@ public class CollisionHandler {
      * @param units the list of units
      * @return 0 if no collision, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
      */
-    public PowerupEvent powerUpCollisions(Set<Unit> units) {
+    public PowerupEvent powerUpCollisions(Set<Unit> units, ArrayList<Cursor> cursors) {
         if (units == null || units.isEmpty()) {
             return null;
         }
@@ -110,22 +110,16 @@ public class CollisionHandler {
             return null;
         }
 
-        for (Cursor cursor : GameController.getInstance().getCursors()) {
+        for (Cursor cursor : cursors) {
             for (Unit collidee : unitsList) {
                 if (collidee instanceof PowerLife && cursor.intersect(collidee)) {
-                    synchronized (GameController.class) {
-                        GameController.getInstance().removeUnit(collidee);
-                    }
+                    units.remove(collidee);
                     return new PowerupEvent(cursor, LIFE);
                 } else if (collidee instanceof PowerEat && cursor.intersect(collidee)) {
-                    synchronized (GameController.class) {
-                        GameController.getInstance().removeUnit(collidee);
-                    }
+                    units.remove(collidee);
                     return new PowerupEvent(cursor, EAT);
                 } else if (collidee instanceof PowerSpeed && cursor.intersect(collidee)) {
-                    synchronized (GameController.class) {
-                        GameController.getInstance().removeUnit(collidee);
-                    }
+                    units.remove(collidee);
                     return new PowerupEvent(cursor, SPEED);
                 }
             }
