@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -31,13 +32,15 @@ public class ScoreScene extends SubScene implements Observer {
     private static final int TITLE_PADDING = 20;
     private static final int TITLE_VGAP = 10;
     private TilePane tilePane;
-    private Label score;
-    private Label claimedPercentage;
-    private Label livesLabel;
+    private ArrayList<Label> scores;
+    private ArrayList<Label> claimedPercentages;
+    private ArrayList<Label> livesLabels;
     private ImageView title;
-    private Label claimed = new Label("Claimed");
-    private Color color = Color.YELLOW;
-    private double highClaimedPercentage = 0;
+    private ArrayList<Color> colors;
+    private ArrayList<Double> highClaimedPercentages;
+    private VBox left;
+    private VBox center;
+    private VBox right;
 
     /**
      * Create a new ScoreScene.
@@ -51,43 +54,61 @@ public class ScoreScene extends SubScene implements Observer {
      */
     public ScoreScene(Group root, double width, double height) {
         super(root, width, height);
-
-        setClaimedText();
         createTitlePane();
-
-        VBox left = new VBox();
-        VBox center = new VBox();
-
+        left = new VBox();
+        center = new VBox();
+        right = new VBox();
         center.setSpacing(CENTER_SPACING);
-        VBox right = new VBox();
         right.setAlignment(Pos.CENTER_LEFT);
 
-        createScoreLabel();
-
-        displayClaimedPercentage();
-
-        createLivesLabel();
-
-        displayTitle();
         //TODO Fix font
         //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
         //title.setFont(f);
+        scores = new ArrayList<>();
+        highClaimedPercentages = new ArrayList<>();
+        highClaimedPercentages.add(0.0);
+        claimedPercentages = new ArrayList<>();
+        livesLabels = new ArrayList<>();
 
+        displayTitle();
         left.getChildren().add(title);
-        center.getChildren().add(claimed);
-        center.getChildren().add(claimedPercentage);
-        center.getChildren().add(livesLabel);
-        right.getChildren().add(score);
-
+        colors = new ArrayList<>();
+        colors.add(Color.BLUE);
+        addPlayerScore(0);
+        setLivesLabel(0, 0);
+        if (GameController.getInstance().isTwoPlayers()) {
+            colors.add(Color.RED);
+            highClaimedPercentages.add(0.0);
+            addPlayerScore(1);
+            setLivesLabel(0, 1);
+        }
+        createScoreLabel();
+        displayClaimedPercentage();
+        createLivesLabel();
         tilePane.getChildren().add(left);
         tilePane.getChildren().add(center);
         tilePane.getChildren().add(right);
 
 
         root.getChildren().add(tilePane);
-        setLivesLabel(0);
     }
 
+    private void addPlayerScore(int ID) {
+        center.getChildren().add(new Label("Player " + ID + 1));
+
+        Label claimedPercentage = new Label();
+        claimedPercentages.add(claimedPercentage);
+        center.getChildren().add(claimedPercentage);
+
+        Label livesLabel = new Label();
+        livesLabels.add(livesLabel);
+        center.getChildren().add(livesLabel);
+
+        Label score = new Label("0");
+        scores.add(score);
+        right.getChildren().add(score);
+
+    }
     private void displayTitle() {
         title = new ImageView("/images/logo.png");
         title.setFitWidth(TITLE_FIT_WIDTH);
@@ -95,27 +116,34 @@ public class ScoreScene extends SubScene implements Observer {
     }
 
     private void displayClaimedPercentage() {
-        claimedPercentage = new Label();
-        setClaimedPercentage(0);
-        claimedPercentage.setTextFill(color);
-        claimedPercentage.setStyle("-fx-font-size:12;");
+        for (int i = 0; i < claimedPercentages.size(); i++) {
+            Label label = claimedPercentages.get(i);
+            setClaimedPercentage(0, i);
+            label.setTextFill(colors.get(i));
+            label.setStyle("-fx-font-size:12;");
+        }
     }
 
     private void createScoreLabel() {
-        score = new Label("0");
-        score.setTextFill(color);
-        score.setStyle("-fx-font-size:24;");
-    }
+        for (int i = 0; i < scores.size(); i++) {
+            Label label = scores.get(i);
+            label.setTextFill(colors.get(i));
+            label.setStyle("-fx-font-size:24;");
+        }
+    }/*
 
     private void setClaimedText() {
+
         claimed.setTextFill(color);
         claimed.setStyle("-fx-font-size:12;");
-    }
+    }*/
 
     private void createLivesLabel() {
-        livesLabel = new Label();
-        livesLabel.setTextFill(color);
-        livesLabel.setStyle("-fx-font-size:12;");
+        for (int i = 0; i < livesLabels.size(); i++) {
+            Label label = livesLabels.get(i);
+            label.setTextFill(colors.get(i));
+            label.setStyle("-fx-font-size:12;");
+        }
     }
 
     private void createTitlePane() {
@@ -130,8 +158,8 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param scoreInput the score to be shown - is displayed as-is
      */
-    public void setScore(int scoreInput) {
-        score.setText(String.valueOf(scoreInput));
+    public void setScore(int scoreInput, int ID) {
+        scores.get(ID).setText(String.valueOf(scoreInput));
     }
 
     /**
@@ -139,39 +167,31 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param claimedPercentageInput the claimed percentage in XX%, so no decimals
      */
-    private void setClaimedPercentage(double claimedPercentageInput) {
-        claimedPercentage.setText(
+    private void setClaimedPercentage(double claimedPercentageInput, int ID) {
+        claimedPercentages.get(ID).setText(
                 Math.round(claimedPercentageInput) + "% of " + GameController.getInstance()
                         .getLevelHandler().getLevel().getPercentage() + "%"
         );
-        highClaimedPercentage = claimedPercentageInput;
-    }
-
-    private void setColor(Color color) {
-        this.color = color;
-        claimedPercentage.setTextFill(color);
-        score.setTextFill(color);
-        claimed.setTextFill(color);
-        livesLabel.setTextFill(color);
+        highClaimedPercentages.set(ID, claimedPercentageInput);
     }
 
     /**
      * Update the info on the scorescene with actual info from scorecounter.
      *
      * @param o   the observable (ScoreCounter)
-     * @param arg the argument
+     * @param arg the argument in ID
      */
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof ScoreCounter) {
             ScoreCounter scoreCounter = (ScoreCounter) o;
-            if (scoreCounter.getTotalPercentage() >= highClaimedPercentage) {
-                setScore(scoreCounter.getTotalScore());
-                setClaimedPercentage(scoreCounter.getTotalPercentage());
+            int ID = (int) arg;
+            if (scoreCounter.getTotalPercentage() >= highClaimedPercentages.get(ID)) {
+                setScore(scoreCounter.getTotalScore(), ID);
+                setClaimedPercentage(scoreCounter.getTotalPercentage(), ID);
                 LOGGER.log(Level.WARNING, "Score updated "
-                 + color.toString(), this.getClass());
-                setColor(scoreCounter.getColor());
-                setLivesLabel(scoreCounter.getLives());
+                        + ID, this.getClass());
+                setLivesLabel(scoreCounter.getLives(), ID);
             }
         }
     }
@@ -180,15 +200,15 @@ public class ScoreScene extends SubScene implements Observer {
      * resets the percentage.
      */
     public void reset() {
-        highClaimedPercentage = 0;
-        setClaimedPercentage(0);
+        setClaimedPercentage(0, 0);
+        setClaimedPercentage(0, 1);
     }
     /**
      * setter for the lives label.
      *
      * @param lives the amount of lives the player has left
      */
-    public void setLivesLabel(int lives) {
-        livesLabel.setText("Lives: " + lives);
+    public void setLivesLabel(int lives, int ID) {
+        livesLabels.get(ID).setText("Lives: " + lives);
     }
 }

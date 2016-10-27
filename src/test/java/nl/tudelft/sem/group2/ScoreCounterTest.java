@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import javafx.scene.paint.Color;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +14,7 @@ public class ScoreCounterTest {
 
     @Before
     public void setUp() throws Exception {
-        scoreCounter = new ScoreCounter(Color.BLACK);
+        scoreCounter = new ScoreCounter(1);
     }
 
     @Test
@@ -23,7 +22,7 @@ public class ScoreCounterTest {
         double percentage = scoreCounter.getTotalPercentage();
         int completedArea = 10;
         scoreCounter.updateScore(completedArea, true);
-        Assert.assertEquals(percentage + (double) completedArea / GRID_SURFACE * 100, scoreCounter.getTotalPercentage
+        Assert.assertEquals(percentage + (double) completedArea / GRID_SURFACE * 100 / 2, scoreCounter.getTotalPercentage
                 (), 0.01);
     }
 

@@ -46,7 +46,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private KeyCode fastMoveKey, slowMoveKey;
     private ScoreCounter scoreCounter;
-    private Color color;
+    private int ID;
 
 
     /**
@@ -57,24 +57,27 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param height      height, used for collision detection
      * @param areaTracker used for calculating areas
      * @param stix        current stix to use
-     * @param color       specifies color for this cursor.
+     * @param ID          identifies the cursor.
      * @param lives       the amount of lives a players starts with
      */
-    public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
+    public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, int lives,
+                  int ID) {
         super(position.x, position.y, width, height, areaTracker);
         Image[] sprite = new Image[1];
-        this.color = color;
-        String colorString = "red";
-        if (color.equals(Color.BLUE)) {
-            colorString = "blue";
-        } else if (color.equals(Color.YELLOW)) {
-            colorString = "yellow";
+        this.ID = ID;
+        String colorString = "blue";
+        //if player 2
+        if (ID == 2) {
+            colorString = "red";
         }
         sprite[0] = new Image("/images/cursor_" + colorString + ".png");
         setSprite(sprite);
         this.stix = stix;
-        scoreCounter = new ScoreCounter(color);
-        scoreCounter.addObserver(GameController.getInstance().getGameScene().getScoreScene());
+        scoreCounter = new ScoreCounter(ID);
+        scoreCounter.addObserver(
+                GameController.getInstance().
+                        getGameScene().
+                        getScoreScene());
         scoreCounter.setLives(lives);
         this.lives = lives;
         this.currentPowerup = PowerUpType.NONE;
@@ -155,15 +158,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void setCurrentMove(KeyCode currentMove) {
         this.currentMove = currentMove;
-    }
-
-    /**
-     * get the color of the cursor.
-     *
-     * @return Color of the cursor
-     */
-    public Color getColor() {
-        return color;
     }
 
     /**

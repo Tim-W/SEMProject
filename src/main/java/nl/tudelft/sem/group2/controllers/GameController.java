@@ -61,12 +61,15 @@ public final class GameController {
     private GameScene gameScene;
     private int score = 0;
     private boolean twoPlayers;
+    private ArrayList<Color> colors;
 
     /**
      * Constructor for the GameController class.
      */
     private GameController() {
         // Initialize models for scoretracking.
+        //colors = new ArrayList<>();
+        //colors.add(Color.BLUE);
         areaTracker = new AreaTracker();
         levelHandler = new LevelHandler();
         levelHandler.nextLevel();
@@ -112,6 +115,7 @@ public final class GameController {
      * initialize gameController with multiple players.
      */
     public void initializeMultiPlayer() {
+        //colors.add(Color.RED);
         gameScene = new GameScene(new Group(), Color.BLACK);
         makeUnits(true);
     }
@@ -128,7 +132,7 @@ public final class GameController {
         //first
         Stix stix = new Stix();
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES);
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Globals.LIVES, 1);
         KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
         cursor1.addKeys(asList(keys));
         cursor1.setFastMoveKey(KeyCode.O);
@@ -139,7 +143,7 @@ public final class GameController {
             //second
             Stix stix2 = new Stix();
             Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES);
+                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Globals.LIVES, 2);
             keys = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D};
             cursor2.addKeys(asList(keys));
             cursor2.setFastMoveKey(KeyCode.Z);
@@ -425,6 +429,15 @@ public final class GameController {
                 cursor.decrementPowerupDuration();
             }
         }
+    }
+
+    /**
+     * check if game is multiplayer.
+     *
+     * @return boolean true if multiplayer
+     */
+    public boolean isTwoPlayers() {
+        return twoPlayers;
     }
 
     /**

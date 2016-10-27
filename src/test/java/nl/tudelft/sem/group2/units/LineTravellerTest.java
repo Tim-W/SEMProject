@@ -3,7 +3,6 @@ package nl.tudelft.sem.group2.units;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
@@ -41,7 +40,7 @@ public class LineTravellerTest {
     public void setUp() throws Exception {
         areaTracker = Mockito.mock(AreaTracker.class);
         stix = new Stix();
-        createCursor(new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, Color.RED, 3));
+        createCursor(new Cursor(new Point(2, 2), 2, 2, areaTracker, stix, 3, 1));
     }
 
     public void createCursor(Cursor c) {

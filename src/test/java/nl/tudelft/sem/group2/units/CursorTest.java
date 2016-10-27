@@ -3,7 +3,6 @@ package nl.tudelft.sem.group2.units;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
@@ -243,7 +242,7 @@ public class CursorTest {
 
     @Test
     public void draw() throws Exception {
-        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, Color.RED, 3));
+        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 3, 1));
         spy.draw(new Canvas(1, 1));
         verify(spy).getSpriteIndex();
     }

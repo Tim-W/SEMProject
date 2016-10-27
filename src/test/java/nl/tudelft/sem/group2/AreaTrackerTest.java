@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
@@ -68,7 +67,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), true, stix, new ScoreCounter(Color.RED));
+        areaTracker.calculateNewArea(new Point(1, 2), true, stix, new ScoreCounter(1));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
 
@@ -89,7 +88,7 @@ public class AreaTrackerTest {
     public void testCalculateNewSlowArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), false, stix, new ScoreCounter(Color.RED));
+        areaTracker.calculateNewArea(new Point(1, 2), false, stix, new ScoreCounter(1));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(false);
 
@@ -110,7 +109,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastAreaWithQixOnOtherSide() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(3, 2), true, stix, new ScoreCounter(Color.RED));
+        areaTracker.calculateNewArea(new Point(3, 2), true, stix, new ScoreCounter(1));
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
 

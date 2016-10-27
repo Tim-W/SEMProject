@@ -32,16 +32,23 @@ public class ScoreCounter extends Observable {
 
     private int lives;
 
+    private int ID;
+
     /**
      * Default score counter constructor.
      *
-     * @param color color of the scoreCounter text should change depending on player.
+     * @param ID specifying the cursor.
      */
-    public ScoreCounter(Color color) {
+    public ScoreCounter(int ID) {
         this.totalPercentage = 0;
         this.totalScore = 0;
         this.targetPercentage = GameController.getInstance().getLevelHandler().getLevel().getPercentage();
-        this.color = color;
+        this.ID = ID;
+        color = Color.BLUE;
+        //if player 2
+        if (ID == 2) {
+            color = Color.RED;
+        }
 
     }
 
