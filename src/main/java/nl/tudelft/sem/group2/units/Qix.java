@@ -49,10 +49,9 @@ public class Qix extends Unit implements CollisionInterface {
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
      *
-     * @param grid used for calculating areas
      */
-    public Qix(BoardGrid grid) {
-        super(new Coordinate(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1), grid);
+    public Qix() {
+        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
         LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
                 + Globals.QIX_START_Y + ")", this.getClass());
     }

@@ -5,11 +5,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.controllers.GameController;
@@ -32,21 +30,23 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
  */
 public class Cursor extends LineTraveller implements CollisionInterface {
     private static final Logger LOGGER = Logger.getLogger();
-    private final int animationSpeed = 30;
-    private KeyCode currentMove = null;
+
+    private static final int ANIMATION_SPEED = 30;
     private int loops = 0;
-    private int speed = 2;
+
     private LinkedList<double[][]> oldLines = new LinkedList<>();
-    private boolean isDrawing = false;
-    private boolean isFast = true;
+
     private Stix stix;
-    private int lives;
-    // 0 for nothing, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
-    private PowerUpType currentPowerup;
-    private int powerUpDuration;
     private Fuse fuse;
-    private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+
     private ScoreCounter scoreCounter;
+    private PowerUpType currentPowerup;
+
+    private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+    private KeyCode currentMove = null;
+    private boolean isDrawing = false;
+    private int speed = Globals.CURSOR_FAST;
+
 
 
     /**
@@ -55,13 +55,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param position    start position
      * @param width       width, used for collision detection
      * @param height      height, used for collision detection
-     * @param grid        used for calculating areas
      * @param stix        current stix to use
      * @param color       specifies color for this cursor.
      * @param lives       the amount of lives a players starts with
      */
-    public Cursor(Point position, int width, int height, BoardGrid grid, Stix stix, Color color, int lives) {
-        super(position.x, position.y, width, height, grid);
+    public Cursor(Point position, int width, int height, Stix stix, Color color, int lives) {
+        super(position.x, position.y, width, height);
         Image[] sprite = new Image[1];
 
         String colorString = "red";
@@ -78,8 +77,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         scoreCounter = new ScoreCounter(color);
         GameController.getInstance().getScene();
         scoreCounter.addObserver(GameScene.getScoreScene());
-        scoreCounter.setLives(lives);
-        this.lives = lives;
+        this.scoreCounter.setLives(lives);
         this.currentPowerup = PowerUpType.NONE;
     }
 
@@ -191,9 +189,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         int drawX = gridToCanvas(getIntX());
         int drawY = gridToCanvas(getIntY());
         final int lineCount = 10;
-        if (loops < animationSpeed + lineCount) {
+        if (loops < ANIMATION_SPEED + lineCount) {
             calculateLineCoordinates(drawX, drawY, canvas);
-            if (oldLines.size() > lineCount || oldLines.size() > animationSpeed - loops) {
+            if (oldLines.size() > lineCount || oldLines.size() > ANIMATION_SPEED - loops) {
                 oldLines.removeLast();
             }
             GraphicsContext gC = canvas.getGraphicsContext2D();
@@ -218,13 +216,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
-        if (loops < animationSpeed) {
+        if (loops < ANIMATION_SPEED) {
             double height = canvas.getHeight();
-            double heightVar = height / animationSpeed * loops;
+            double heightVar = height / ANIMATION_SPEED * loops;
             double width = canvas.getWidth();
-            double widthVar = width / animationSpeed * loops;
+            double widthVar = width / ANIMATION_SPEED * loops;
             final double lineSize = 80.0;
-            double lineSizeVar = (lineSize / animationSpeed) * loops;
+            double lineSizeVar = (lineSize / ANIMATION_SPEED) * loops;
             double[][] line = new double[4][4];
             line[0][0] = width - widthVar + drawX - (lineSize - lineSizeVar);
             line[0][1] = -(height - heightVar) + drawY;
@@ -251,13 +249,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * handles making fuse and makes it start moving.
      */
     public void handleFuse() {
-        if (this.getStix().getStixCoordinates().contains(new Point(this.getIntX(), this.getIntY()))) {
+        if (this.getStix().contains(new Point(this.getIntX(), this.getIntY()))) {
             if (fuse == null) {
                 fuse =
                         new Fuse((int) this.getStix().getStixCoordinates().getFirst().getX(),
                                 (int) this.getStix().getStixCoordinates().getFirst().getY(),
                                 Globals.FUSE_WIDTH,
-                                Globals.FUSE_HEIGHT, this.grid, this.getStix());
+                                Globals.FUSE_HEIGHT, this.getStix());
             } else {
                 fuse.moving();
             }
@@ -278,11 +276,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param qix the qix of the game
      */
     public void calculateArea(Qix qix) {
-        if (this.grid.isOuterborder(this.getIntX(), this.getIntY())
-                && !this.getStix().getStixCoordinates().isEmpty()) {
+        if (this.grid.isOuterborder(this.getIntX(), this.getIntY()) && !this.getStix().isEmpty()) {
+
             new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+
             AreaTracker.getInstance().calculateNewArea(new Coordinate(qix.getIntX(), qix.getIntY()),
-                    this.isFast(), getStix(), grid, scoreCounter);
+                    this.isFast(), getStix(), scoreCounter);
+
             //Remove the Fuse from the gameView when completing an area
             removeFuse();
         }
@@ -322,14 +322,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @return whether the cursor is moving fast or slow
      */
     public boolean isFast() {
-        return isFast;
-    }
-
-    /**
-     * @param isFast whether the cursor is moving fast or slow
-     */
-    public void setFast(boolean isFast) {
-        this.isFast = isFast;
+        return (speed != Globals.CURSOR_SLOW);
     }
 
     /**
@@ -434,20 +427,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.currentPowerup = currentPowerup;
     }
 
-    public int getPowerUpDuration() {
-        return powerUpDuration;
-    }
-
-    public void setPowerUpDuration(int powerUpDuration) {
-        this.powerUpDuration = powerUpDuration;
-    }
-
-    /**
-     * decrements the duration of current powerup.
-     */
-    public void decrementPowerupDuration() {
-        this.powerUpDuration -= 1;
-    }
 
     /**
      * @return true if the cursor has a powerup active
@@ -460,9 +439,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * Adds a life to the cursor.
      */
     public void addLife() {
-        lives++;
         scoreCounter.addLife();
-        LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
+        LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + scoreCounter.getLives(), Cursor.class);
     }
 
     /**

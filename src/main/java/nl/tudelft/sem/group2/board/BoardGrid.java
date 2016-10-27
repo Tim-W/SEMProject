@@ -12,6 +12,8 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  */
 public class BoardGrid {
 
+    private static volatile BoardGrid instance;
+
     private AreaState[][] boardGrid;
     private int width;
     private int height;
@@ -20,7 +22,7 @@ public class BoardGrid {
      * Constructor for the BoardGrid class.
      * The constructor sets all the grid points to border and the rest to uncovered
      */
-    public BoardGrid() {
+    private BoardGrid() {
         this(getGridWidth() + 1, getGridHeight() + 1);
 
     }
@@ -32,7 +34,7 @@ public class BoardGrid {
      * @param gridWidth the gridWidth
      * @param gridHeight the gridHeight
      */
-    public BoardGrid(int gridWidth, int gridHeight) {
+    private BoardGrid(int gridWidth, int gridHeight) {
 
         if (gridWidth > 1 && gridHeight > 1) {
             width = gridWidth;
@@ -63,6 +65,32 @@ public class BoardGrid {
             //If the current column is the last column set the grid point on that column and the current row border
             boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
         }
+    }
+
+    /**
+     * Getter for the BoardGrid this is a singleton class so everywhere the BoardGrid is used it is the same instance
+     * This method allows getting of that instance and instantiates it when it is not instantiated yet.
+     *
+     * @return the only one instance of BoardGrid.
+     */
+    public static BoardGrid getInstance() {
+        if (instance == null) {
+            // Put lock on class since it we do not want to instantiate it twice
+            synchronized (BoardGrid.class) {
+                // Check if logger is in the meanwhile not already instantiated.
+                if (instance == null) {
+                    instance = new BoardGrid();
+                }
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Resets the instance of the BoardGrid to null
+     */
+    public static void resetBoardGrid() {
+        instance = null;
     }
 
     /**

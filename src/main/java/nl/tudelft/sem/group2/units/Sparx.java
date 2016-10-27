@@ -29,12 +29,11 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param y              y coord to start at
      * @param width          width, used for collision
      * @param height         height, used for collision
-     * @param grid    the AreaTracker
      * @param sparxDirection direction in which the sparx starts moving,
      *                       which is either LEFT or RIGHT
      */
-    public Sparx(int x, int y, int width, int height, BoardGrid grid, SparxDirection sparxDirection) {
-        super(x, y, width, height, grid);
+    public Sparx(int x, int y, int width, int height, SparxDirection sparxDirection) {
+        super(x, y, width, height);
         lastX = x;
         lastY = y;
         Image[] sprite = new Image[2];

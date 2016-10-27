@@ -31,11 +31,10 @@ public class Fuse extends LineTraveller implements CollisionInterface {
      * @param y           the start y coord
      * @param width       width of the fuse (used for collision detection)
      * @param height      height of the fuse (used for collision detection)
-     * @param grid used for calculating areas
      * @param stix        current stix to use
      */
-    public Fuse(int x, int y, int width, int height, BoardGrid grid, Stix stix) {
-        super(x, y, width, height, grid);
+    public Fuse(int x, int y, int width, int height, Stix stix) {
+        super(x, y, width, height);
         Image[] sprite = new Image[2];
         lastX = x;
         lastY = y;

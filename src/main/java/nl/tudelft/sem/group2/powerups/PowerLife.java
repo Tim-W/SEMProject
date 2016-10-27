@@ -18,7 +18,7 @@ public class PowerLife extends Powerup {
      * @param areaTracker the AreaTracker
      */
     public PowerLife(int x, int y, int width, int height, AreaTracker areaTracker) {
-        super(x, y, width, height, areaTracker);
+        super(x, y, width, height);
         Image[] sprite = new Image[4];
         sprite[0] = new Image("/images/heart.png");
         sprite[1] = new Image("/images/heart.png");

@@ -25,10 +25,9 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
      * @param y           y coord
      * @param width       width, used for collision
      * @param height      height, used for collision
-     * @param grid used for calculating areas
      */
-    public LineTraveller(int x, int y, int width, int height, BoardGrid grid) {
-        super(new Coordinate(x, y, width, height), grid);
+    public LineTraveller(int x, int y, int width, int height) {
+        super(x, y, width, height);
     }
 
     /**

@@ -31,8 +31,7 @@ public class AreaTracker {
      * Constructor for the AreaTracker class.
      * The constructor sets all the grid points to border and the rest to uncovered
      */
-    public AreaTracker() {
-
+    private AreaTracker() {
     }
 
     /**
@@ -41,14 +40,14 @@ public class AreaTracker {
      * @param width  width of the boardGrid
      * @param height height of the boardGrid
      */
-    public AreaTracker(int width, int height) {
+    private AreaTracker(int width, int height) {
     }
 
     /**
-     * Getter for the logger this is a singleton class so everywhere the logger is used it is the same instance
+     * Getter for the AreaTracker this is a singleton class so everywhere the AreaTracker is used it is the same instance
      * This method allows getting of that instance and instantiates it when it is not instantiated yet.
      *
-     * @return the only one instance of Logger.
+     * @return the only one instance of BoardGrid.
      */
     public static AreaTracker getInstance() {
         if (instance == null) {
@@ -72,8 +71,8 @@ public class AreaTracker {
      * @param stix           current stix to use
      * @param scoreCounter   the counter that handles the score
      */
-    public synchronized void calculateNewArea(Coordinate qixCoordinates, boolean fastArea, Stix stix, BoardGrid grid, ScoreCounter scoreCounter) {
-        this.grid = grid;
+    public synchronized void calculateNewArea(Coordinate qixCoordinates, boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
+        this.grid = BoardGrid.getInstance();
         setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm

@@ -201,9 +201,9 @@ public class GameScene extends Scene {
 
     private void drawUncovered() {
         gc.setFill(Color.BLACK);
-        for (int i = 0; i < GameController.getInstance().getGrid().getWidth(); i++) {
-            for (int j = 0; j < GameController.getInstance().getGrid().getHeight(); j++) {
-                if (GameController.getInstance().getGrid().isUncovered(i, j)) {
+        for (int i = 0; i < BoardGrid.getInstance().getWidth(); i++) {
+            for (int j = 0; j < BoardGrid.getInstance().getHeight(); j++) {
+                if (BoardGrid.getInstance().isUncovered(i, j)) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
@@ -212,7 +212,7 @@ public class GameScene extends Scene {
 
     private void drawBorders() {
         gc.setFill(Color.WHITE);
-        BoardGrid grid = GameController.getInstance().getGrid();
+        BoardGrid grid = BoardGrid.getInstance();
         for (int i = 0; i < grid.getWidth(); i++) {
             for (int j = 0; j < grid.getHeight(); j++) {
                 if (grid.isOuterborder(i, j) || grid.isInnerborder(i, j)) {

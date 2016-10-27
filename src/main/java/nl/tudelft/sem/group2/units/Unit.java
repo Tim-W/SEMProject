@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
@@ -14,18 +13,24 @@ import java.util.logging.Level;
  * Supports intersection checking between two units.
  */
 public abstract class Unit extends Coordinate implements Draw, Movable, CollisionInterface {
+
     private static final Logger LOGGER = Logger.getLogger();
+    /**
+     * The grid instance that holds the states of the coordinates of the board.
+     */
     protected BoardGrid grid;
 
     /**
      * Create a Unit at (x,y) position.
      *
-     * @param coordinate  x coord
-     * @param grid used for calculating areas
+     * @param x
+     * @param y
+     * @param width
+     * @param height
      */
-    public Unit(Coordinate coordinate, BoardGrid grid) {
-        super(coordinate.getIntX(), coordinate.getIntX(), coordinate.getWidth(), coordinate.getHeight());
-        this.grid = grid;
+    public Unit(int x, int y, int width, int height) {
+        super(x, y, width, height);
+        this.grid = BoardGrid.getInstance();
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 
@@ -43,16 +48,23 @@ public abstract class Unit extends Coordinate implements Draw, Movable, Collisio
         Rectangle colliderR = this.toRectangle();
         // subtract one from width&height to make collisions look more real
         Rectangle collideeR = collidee.toRectangle();
+
         if (colliderR.intersects(collideeR)) {
+
             LOGGER.log(Level.WARNING, this.toString() + " collided with " + collidee.toString() + " at (" + this.getX()
                     + "," + this.getY() + ")", this.getClass());
+
             return true;
         }
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public Rectangle toRectangle() {
-        return new Rectangle(this.x, this.y, this.getWidth(), this.getHeight());
+        return new Rectangle(this.x, this.y, 1, 1 );
     }
 
 }

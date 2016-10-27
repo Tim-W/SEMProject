@@ -13,13 +13,13 @@ import java.util.Map;
  */
 public class PowerUpFactory {
 
-
+/*
     /**
      * Method that returns true if the corner is covered.
      *
      * @param quadrant the quadrant to be checked
      * @return true if the corner is covered
-     */
+     *//*
     private boolean cornerIsCovered(int quadrant) {
         switch (quadrant) {
             case 0:
@@ -58,7 +58,7 @@ public class PowerUpFactory {
      *
      * @param quadrant the quadrant to be working towards
      * @return an int[] containing the coordinates of the powerup drop location
-     */
+     *//*
     public int[] findPowerupLocation(int quadrant) {
         int[] res = new int[2];
         int x = Globals.BOARD_WIDTH / 4;
@@ -96,7 +96,7 @@ public class PowerUpFactory {
      * @param y        the y of the new location
      * @param quadrant the quadrant it needs to be in
      * @return an int[] containing a new random location
-     */
+     *//*i
     private int[] permutateLocation(int x, int y, int quadrant) {
         int[] res = new int[2];
 
@@ -124,7 +124,7 @@ public class PowerUpFactory {
      *
      * @param quadrant the quadrant
      * @return an int[] containing the coordinates of the corner of the quadrant
-     */
+     *//*
     private int[] getCornerCoordinates(int quadrant) {
         int x;
         int y;
@@ -146,6 +146,6 @@ public class PowerUpFactory {
         res[1] = y;
         return res;
     }
-
+*/
 
 }

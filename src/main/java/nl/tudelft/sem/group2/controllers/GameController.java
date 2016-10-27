@@ -50,8 +50,6 @@ public final class GameController {
     // Units
     private ArrayList<Cursor> cursors;
     private Qix qix;
-    //private AreaTracker areaTracker;
-    private BoardGrid grid;
     private Set<Unit> units;
 
     private long previousTime;
@@ -68,8 +66,6 @@ public final class GameController {
      */
     private GameController() {
         // Initialize models for scoretracking.
-
-        grid = new BoardGrid();
 
         Group group = new Group();
         gameScene = new GameScene(group, Color.BLACK);
@@ -118,7 +114,7 @@ public final class GameController {
         //first
         Stix stix = new Stix();
         cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, grid, stix, Color.YELLOW, Globals.LIVES));
+                Globals.BOARD_MARGIN * 2, stix, Color.YELLOW, Globals.LIVES));
         cursors.get(0).addKey(KeyCode.UP);
         cursors.get(0).addKey(KeyCode.DOWN);
         cursors.get(0).addKey(KeyCode.LEFT);
@@ -129,7 +125,7 @@ public final class GameController {
             //second
             Stix stix2 = new Stix();
             cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, grid, stix2, Color.RED, Globals.LIVES));
+                    Globals.BOARD_MARGIN * 2, stix2, Color.RED, Globals.LIVES));
             cursors.get(1).addKey(KeyCode.W);
             cursors.get(1).addKey(KeyCode.S);
             cursors.get(1).addKey(KeyCode.A);
@@ -139,11 +135,11 @@ public final class GameController {
             addUnit(cursors.get(1));
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, grid, SparxDirection.LEFT);
+                Globals.BOARD_MARGIN * 2, SparxDirection.LEFT);
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, grid, SparxDirection.RIGHT);
+                Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
         // Initialize and add units to units set in Gamescene
-        qix = new Qix(grid);
+        qix = new Qix();
         addUnit(cursors.get(0));
         addUnit(qix);
         addUnit(sparxRight);
@@ -288,144 +284,10 @@ public final class GameController {
                     for (Cursor cursor : cursors) {
                         cursor.calculateArea(qix);
                     }
-
-                    //handlePowerups();
-                    //spawnPowerup();
                 }
             }
         };
     }
-
-    /*
-    private void checkSparx() {
-        int nSparx = 0;
-        for (Unit u : units) {
-            if (u instanceof Sparx) {
-                nSparx++;
-            }
-        }
-
-        while (nSparx < 2) {
-            for (Cursor cursor : cursors) {
-                int[] coordinates = areaTracker.findPowerupLocation(cursor.oppositeQuadrant());
-                Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
-                        Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.randomDirection());
-                addUnit(sparx);
-                nSparx++;
-            }
-        }
-    }
-
-    private void handlePowerups() {
-        applyPowerups();
-
-        Iterator<Unit> iter = units.iterator();
-        //code to remove powerups from the board after a certain amount of time
-        while (iter.hasNext()) {
-            Unit unit = iter.next();
-            if (unit instanceof Powerup) {
-                Powerup powerup = (Powerup) unit;
-                powerup.decreaseDuration();
-                if (powerup.getDuration() <= 0) {
-                    iter.remove();
-                }
-            }
-        }
-
-        PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units);
-        if (powerupEvent != null) {
-            Cursor cursor = powerupEvent.getCursor();
-            switch (powerupEvent.getPowerUpType()) {
-                case NONE:
-                    return;
-                case LIFE:
-                    cursor.addLife();
-                    return;
-                case EAT:
-                    cursor.setCurrentPowerup(PowerUpType.EAT);
-                    cursor.setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
-                    return;
-                case SPEED:
-                    cursor.setCurrentPowerup(PowerUpType.SPEED);
-                    cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
-            }
-        }
-    }
-
-    /**
-     * Spawns a new powerup at random and when none is active yet.
-     *//*
-    private void spawnPowerup() {
-        double rand = ThreadLocalRandom.current().nextDouble();
-        if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
-
-            for (Cursor cursor : cursors) {
-
-                int quadrant = cursor.oppositeQuadrant();
-
-                int[] coordinates = areaTracker.findPowerupLocation(quadrant);
-                Powerup powerup = null;
-                Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
-                powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
-                powerupMap.put(PowerUpType.LIFE, new PowerLife(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
-                powerupMap.put(PowerUpType.SPEED, new PowerSpeed(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
-                powerup = powerupMap.get(PowerUpType.randomType());
-                if (powerup == null) {
-                    return;
-                }
-                addUnit(powerup);
-            }
-        }
-    }
-
-    /**
-     * @return true if a power up is active
-     *//*
-    private boolean powerUpActive() {
-        for (Cursor cursor : cursors) {
-            if (cursor.hasPowerUp()) {
-                return true;
-            }
-        }
-
-        for (Unit u : units) {
-            if (u instanceof Powerup) {
-                return true;
-            }
-        }
-        return false;
-    }
-/*
-    private void applyPowerups() {
-        for (Cursor cursor : cursors) {
-            if (cursor.hasPowerUp() && cursor.getPowerUpDuration() <= 0) {
-                cursor.setCurrentPowerup(PowerUpType.NONE);
-            }
-
-            if (cursor.hasPowerUp() && cursor.getPowerUpDuration() > 0) {
-                cursor.decrementPowerupDuration();
-            }
-        }
-    }
-
-
-//    /**
-//     * When a new area is completed, calculate the new score.
-//     */
-//    private void calculateArea() {
-//        if (areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] == AreaState.OUTERBORDER
-//                && !stix.getStixCoordinates().isEmpty()) {
-//            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
-//            areaTracker.calculateNewArea(new Point(qix.getX(), qix.getY()),
-//                    cursor.isFast());
-//            areaTracker.updateScoreCounter(cursor.isFast());
-//            //Remove the Fuse from the gameView when completing an area
-//            gameScene.removeFuse();
-//        }
-//    }
 
     /**
      * Method that handles the action when a key is released.
@@ -472,12 +334,10 @@ public final class GameController {
                     if (!stixNotEmpty(i) || !cursor.isFast()) {
                         cursor.setSpeed(1);
                         cursor.setDrawing(true);
-                        cursor.setFast(false);
                     }
                 } else if (e.getCode().equals(cursorFastMoveKey.get(i))) {
                     cursor.setSpeed(2);
                     cursor.setDrawing(true);
-                    cursor.setFast(true);
                 }
                 if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
                     cursor.setSpeed(cursor.getSpeed() + 1);
@@ -525,10 +385,6 @@ public final class GameController {
 
     public Set<Unit> getUnits() {
         return units;
-    }
-
-    public BoardGrid getGrid() {
-        return grid;
     }
 
     /**
