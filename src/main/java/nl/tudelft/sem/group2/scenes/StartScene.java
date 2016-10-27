@@ -92,8 +92,6 @@ public class StartScene extends javafx.scene.Scene {
             stage.setScene(GameController.getInstance().getScene());
             GameController.getInstance().makeCursors(false);
         });
-
-
     }
 
     private void handleMultiPlayerButton() {

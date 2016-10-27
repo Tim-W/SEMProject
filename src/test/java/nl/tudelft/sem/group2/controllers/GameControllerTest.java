@@ -24,6 +24,7 @@ public class GameControllerTest {
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private GameController gameController;
     private Cursor spyCursor;
+
     public void setUp() {
         GameController.deleteGameController();
         gameController = GameController.getInstance();
@@ -33,7 +34,6 @@ public class GameControllerTest {
         gameController.getCursors().set(0, spyCursor);
         gameController.getUnits().clear();
         gameController.getUnits().add(spyCursor);
-
     }
 
     @Test

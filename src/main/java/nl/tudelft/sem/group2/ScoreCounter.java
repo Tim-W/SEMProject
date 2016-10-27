@@ -39,7 +39,6 @@ public class ScoreCounter extends Observable {
         this.totalScore = 0;
         this.targetPercentage = TARGET_PERCENTAGE;
         this.color = color;
-
     }
 
 
@@ -115,6 +114,7 @@ public class ScoreCounter extends Observable {
 
     /**
      * notify life changed.
+     *
      * @param lives of cursor
      */
     public void notifyLife(int lives) {

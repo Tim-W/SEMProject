@@ -13,8 +13,6 @@ import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
-import nl.tudelft.sem.group2.scenes.GameScene;
-import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
 import java.util.ArrayList;

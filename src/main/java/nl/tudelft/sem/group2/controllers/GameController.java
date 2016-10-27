@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -414,7 +413,6 @@ public final class GameController {
             if (cursor.getCurrentPowerup() != PowerUpType.NONE && cursor.getPowerUpDuration() > 0) {
                 int duration = cursor.getPowerUpDuration();
                 cursor.setPowerUpDuration(duration - 1);
-                System.out.println(duration);
             }
         }
     }

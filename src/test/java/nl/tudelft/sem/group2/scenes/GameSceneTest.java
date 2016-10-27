@@ -43,7 +43,6 @@ public class GameSceneTest {
         spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY() + 1));
         scene.draw();
         verify(spyCursor, times(1)).isFast();
-
     }
 
     @Test
@@ -54,5 +53,4 @@ public class GameSceneTest {
         scene.draw();
         verify(spyCursor, times(0)).isFast();
     }
-
 }

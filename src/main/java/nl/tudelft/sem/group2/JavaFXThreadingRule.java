@@ -6,7 +6,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -94,6 +94,5 @@ public class JavaFXThreadingRule implements TestRule {
             latch.await();
             System.out.println("javafx is initialised in " + (System.currentTimeMillis() - timeMillis) + "ms");
         }
-
     }
 }

@@ -29,6 +29,7 @@ public class LineTravellerTest {
     public static void BeforeClass() {
         new JFXPanel();
     }
+
     @Before
     public void setUp() throws Exception {
         areaTracker = Mockito.mock(AreaTracker.class);
@@ -37,7 +38,6 @@ public class LineTravellerTest {
     }
 
     /**
-     *
      * @throws Exception
      */
     @Test
@@ -51,7 +51,6 @@ public class LineTravellerTest {
     }
 
     /**
-     *
      * @throws Exception
      */
     @Test
@@ -66,7 +65,6 @@ public class LineTravellerTest {
      * and there are no mockable objects.
      */
     /**
-     *
      * @throws Exception
      */
     @Test
@@ -77,7 +75,6 @@ public class LineTravellerTest {
     }
 
     /**
-     *
      * @throws Exception
      */
     @Test

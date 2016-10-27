@@ -30,6 +30,7 @@ public class UnitTest {
     public static void BeforeClass() {
         new JFXPanel();
     }
+
     /**
      * Setup test unit.
      *
@@ -113,7 +114,7 @@ public class UnitTest {
     public void intersectQixCursor() throws Exception {
         Qix qix = spy(new Qix(areaTracker));
         LinkedList<float[]> linkedList = new LinkedList<>();
-        linkedList.add(new float[] {QIX_START_X, QIX_START_Y});
+        linkedList.add(new float[]{QIX_START_X, QIX_START_Y});
         qix.setOldCoordinates(linkedList);
         qix.setOldDirections(linkedList);
         Cursor cursor = spy(new Cursor(new Point(QIX_START_X, QIX_START_Y), 10, 10, areaTracker, stix, Color.RED, 1));
@@ -133,7 +134,7 @@ public class UnitTest {
     public void intersectNotQixCursor() throws Exception {
         Qix qix = spy(new Qix(areaTracker));
         LinkedList<float[]> linkedList = new LinkedList<>();
-        linkedList.add(new float[] {1, 1});
+        linkedList.add(new float[]{1, 1});
         qix.setOldCoordinates(linkedList);
         qix.setOldDirections(linkedList);
         Cursor cursor = spy(new Cursor(new Point(100, 100), 10, 10, areaTracker, stix, Color.RED, 1));
@@ -158,7 +159,7 @@ public class UnitTest {
     public void intersectCursorQix() throws Exception {
         Qix qix = spy(new Qix(areaTracker));
         LinkedList<float[]> linkedList = new LinkedList<>();
-        linkedList.add(new float[] {QIX_START_X, QIX_START_Y});
+        linkedList.add(new float[]{QIX_START_X, QIX_START_Y});
         qix.setOldCoordinates(linkedList);
         qix.setOldDirections(linkedList);
         Cursor cursor = spy(new Cursor(new Point(QIX_START_X, QIX_START_Y), 10, 10, areaTracker, stix, Color.BLACK, 1));
@@ -169,7 +170,7 @@ public class UnitTest {
     public void intersectNotCursorQix() throws Exception {
         Qix qix = spy(new Qix(areaTracker));
         LinkedList<float[]> linkedList = new LinkedList<>();
-        linkedList.add(new float[] {1, 1});
+        linkedList.add(new float[]{1, 1});
         qix.setOldCoordinates(linkedList);
         qix.setOldDirections(linkedList);
         Cursor cursor = spy(new Cursor(new Point(100, 100), 10, 10, areaTracker, stix, Color.RED, 1));
