@@ -38,9 +38,12 @@ public class ScoreScene extends SubScene implements Observer {
     private ArrayList<Label> livesLabels;
     private ArrayList<Color> colors;
     private ArrayList<Double> highClaimedPercentages;
-    private Label totalClaimedPercentage;
+    private Label totalClaimedPercentageLabel;
+    private Label totalScoreLabel;
     private VBox left;
     private ArrayList<VBox> playerBoxes;
+    private int totalScore;
+    private int totalPercentage;
 
     /**
      * Create a new ScoreScene.
@@ -56,6 +59,8 @@ public class ScoreScene extends SubScene implements Observer {
         super(root, width, height);
         InitializeLabelsAndBoxes();
         createTitlePane();
+        totalScore = 0;
+        totalPercentage = 0;
         //TODO Fix font
         //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
         //title.setFont(f);
@@ -74,8 +79,9 @@ public class ScoreScene extends SubScene implements Observer {
     }
 
     private void InitializeLabelsAndBoxes() {
+        totalClaimedPercentageLabel = new Label();
+        totalScoreLabel = new Label();
         left = new VBox();
-
         left.setAlignment(Pos.TOP_CENTER);
         playerBoxes = new ArrayList<>();
         scores = new ArrayList<>();
@@ -123,11 +129,10 @@ public class ScoreScene extends SubScene implements Observer {
     }
 
     private void setClaimedPercentages() {
-        totalClaimedPercentage = new Label();
-        setTotalClaimedPercentage(0);
-        totalClaimedPercentage.setTextFill(Color.WHITE);
-        totalClaimedPercentage.setStyle("-fx-font-size:12;");
-        left.getChildren().add(totalClaimedPercentage);
+        setTotalClaimedPercentageLabel(0);
+        totalClaimedPercentageLabel.setTextFill(Color.WHITE);
+        totalClaimedPercentageLabel.setStyle("-fx-font-size:12;");
+        left.getChildren().add(totalClaimedPercentageLabel);
         for (int i = 0; i < claimedPercentages.size(); i++) {
             Label label = claimedPercentages.get(i);
             setClaimedPercentage(0, i);
@@ -137,6 +142,10 @@ public class ScoreScene extends SubScene implements Observer {
     }
 
     private void setScoreLabels() {
+        setTotalScore(0);
+        totalScoreLabel.setTextFill(Color.WHITE);
+        totalScoreLabel.setStyle("-fx-font-size:12;");
+        left.getChildren().add(totalScoreLabel);
         for (int i = 0; i < scores.size(); i++) {
             Label label = scores.get(i);
             label.setTextFill(colors.get(i));
@@ -173,7 +182,18 @@ public class ScoreScene extends SubScene implements Observer {
      * @param scoreInput the score to be shown - is displayed as-is
      */
     public void setScore(int scoreInput, int ID) {
+        totalScore += scoreInput;
+        setTotalScore(totalScore);
         scores.get(ID).setText(String.valueOf(scoreInput));
+    }
+    /**
+     * Set the current score amount.
+     *
+     * @param scoreInput the score to be shown - is displayed as-is
+     */
+    public void setTotalScore(int scoreInput) {
+        setTotalClaimedPercentageLabel(totalPercentage);
+        totalScoreLabel.setText("Score: " + String.valueOf(scoreInput));
     }
 
     /**
@@ -182,6 +202,8 @@ public class ScoreScene extends SubScene implements Observer {
      * @param claimedPercentageInput the claimed percentage in XX%, so no decimals
      */
     private void setClaimedPercentage(double claimedPercentageInput, int ID) {
+        totalPercentage += claimedPercentageInput;
+        setTotalClaimedPercentageLabel(totalPercentage);
         claimedPercentages.get(ID).setText(Math.round(claimedPercentageInput) + "%");
         highClaimedPercentages.set(ID, claimedPercentageInput);
     }
@@ -191,8 +213,8 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param claimedTotalPercentageInput the total claimed percentage in XX%, so no decimals
      */
-    private void setTotalClaimedPercentage(double claimedTotalPercentageInput) {
-        totalClaimedPercentage.setText("Claimed: " + Math.round(claimedTotalPercentageInput) +
+    private void setTotalClaimedPercentageLabel(double claimedTotalPercentageInput) {
+        totalClaimedPercentageLabel.setText("Claimed: " + Math.round(claimedTotalPercentageInput) +
                 "% of " + GameController.getInstance()
                 .getLevelHandler().getLevel().getPercentage() + "%"
         );
