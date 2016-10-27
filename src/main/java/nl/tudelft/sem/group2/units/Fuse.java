@@ -1,7 +1,8 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaTracker;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Point;
@@ -30,11 +31,11 @@ public class Fuse extends LineTraveller implements CollisionInterface {
      * @param y           the start y coord
      * @param width       width of the fuse (used for collision detection)
      * @param height      height of the fuse (used for collision detection)
-     * @param areaTracker used for calculating areas
+     * @param grid used for calculating areas
      * @param stix        current stix to use
      */
-    public Fuse(int x, int y, int width, int height, AreaTracker areaTracker, Stix stix) {
-        super(x, y, width, height, areaTracker);
+    public Fuse(int x, int y, int width, int height, BoardGrid grid, Stix stix) {
+        super(x, y, width, height, grid);
         Image[] sprite = new Image[2];
         lastX = x;
         lastY = y;
@@ -53,24 +54,24 @@ public class Fuse extends LineTraveller implements CollisionInterface {
             for (int i = 0; i < speed; i++) {
                 if (getX() < BOARD_WIDTH / 2
                         && !(getX() + 1 == lastX)
-                        && stix.getStixCoordinates().contains(new Point(getX() + 1, getY()))) {
-                    setLastCoordinates(getX(), getY());
-                    setX(getX() + 1);
+                        && stix.getStixCoordinates().contains(new Point(getIntX() + 1, getIntY()))) {
+                    setLastCoordinates(getIntX(), getIntY());
+                    setX(getIntX() + 1);
                 } else if (getY() < BOARD_HEIGHT / 2
                         && !(lastY == getY() + 1)
-                        && stix.getStixCoordinates().contains(new Point(getX(), getY() + 1))) {
-                    setLastCoordinates(getX(), getY());
-                    setY(getY() + 1);
+                        && stix.getStixCoordinates().contains(new Point(getIntX(), getIntY() + 1))) {
+                    setLastCoordinates(getIntX(), getIntY());
+                    setY(getIntY() + 1);
                 } else if (getX() > 0
                         && !(lastX == getX() - 1)
-                        && stix.getStixCoordinates().contains(new Point(getX() - 1, getY()))) {
-                    setLastCoordinates(getX(), getY());
-                    setX(getX() - 1);
+                        && stix.getStixCoordinates().contains(new Point(getIntX() - 1, getIntY()))) {
+                    setLastCoordinates(getIntX(), getIntY());
+                    setX(getIntX() - 1);
                 } else if (getY() > 0
                         && !(lastY == getY() - 1)
-                        && stix.getStixCoordinates().contains(new Point(getX(), getY() - 1))) {
-                    setLastCoordinates(getX(), getY());
-                    setY(getY() - 1);
+                        && stix.getStixCoordinates().contains(new Point(getIntX(), getIntY() - 1))) {
+                    setLastCoordinates(getIntX(), getIntY());
+                    setY(getIntY() - 1);
                 }
             }
         }
@@ -96,11 +97,11 @@ public class Fuse extends LineTraveller implements CollisionInterface {
         this.lastY = lastY;
     }
 
-    /**
-     * @param moving if the fuse is moving
-     */
-    public void setMoving(boolean moving) {
-        this.moving = moving;
+    public void moving() {
+        this.moving = true;
+    }
+    public void notMoving() {
+        this.moving = false;
     }
 
     /**

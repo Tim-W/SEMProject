@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.board.BoardGrid;
 
 import java.util.Observable;
 import java.util.logging.Level;
@@ -54,7 +55,7 @@ public class ScoreCounter extends Observable {
      *                      or fast (normal points)
      */
     public void updateScore(int completedArea, boolean fastArea) {
-        int totalArea = LaunchApp.getGridWidth() * LaunchApp.getGridHeight();
+        int totalArea = BoardGrid.getGridWidth() * BoardGrid.getGridHeight();
         double percentageIncrease = (double) completedArea / ((double) totalArea * 2);
         totalPercentage += percentageIncrease;
 

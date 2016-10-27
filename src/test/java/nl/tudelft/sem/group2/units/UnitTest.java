@@ -2,7 +2,7 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

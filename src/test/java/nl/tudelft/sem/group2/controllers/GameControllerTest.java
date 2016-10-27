@@ -3,7 +3,6 @@ package nl.tudelft.sem.group2.controllers;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;

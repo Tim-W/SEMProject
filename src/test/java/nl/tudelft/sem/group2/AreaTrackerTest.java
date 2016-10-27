@@ -2,6 +2,8 @@ package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.board.AreaState;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
 import org.junit.Test;

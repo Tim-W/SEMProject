@@ -3,9 +3,11 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaState;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
 
@@ -47,10 +49,10 @@ public class Qix extends Unit implements CollisionInterface {
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
      *
-     * @param areaTracker used for calculating areas
+     * @param grid used for calculating areas
      */
-    public Qix(AreaTracker areaTracker) {
-        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
+    public Qix(BoardGrid grid) {
+        super(new Coordinate(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1), grid);
         LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
                 + Globals.QIX_START_Y + ")", this.getClass());
     }
@@ -61,16 +63,16 @@ public class Qix extends Unit implements CollisionInterface {
 
     @Override
     public void move() {
-        coordinate[0] = getX();
-        coordinate[1] = getY();
+        coordinate[0] = getIntX();
+        coordinate[1] = getIntY();
         if (animationLoops <= 0) {
             changeDirection();
         }
         checkLineCollision();
         this.setX((int) (coordinate[0] + direction[0]));
         this.setY((int) (coordinate[1] + direction[1]));
-        coordinate[0] = getX();
-        coordinate[1] = getY();
+        coordinate[0] = getIntX();
+        coordinate[1] = getIntY();
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         float random = (float) Math.random() * RANDOMNESSLINELENGTH - RANDOMNESSLINELENGTH / 2;
         float scale = (LINE_LENGTH + random) / length;
@@ -138,13 +140,11 @@ public class Qix extends Unit implements CollisionInterface {
      * Functions reverts the direction of the qix if there is a innerborder or outerborder close to the qix.
      */
     private void checkLineCollision() {
-        int gridLength = getAreaTracker().getBoardGrid().length;
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         //loop through the grid
-        for (int i = 0; i < gridLength; i++) {
-            for (int j = 0; j < gridLength; j++) {
-                if (getAreaTracker().getBoardGrid()[i][j] == AreaState.INNERBORDER
-                        || getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER) {
+        for (int i = 0; i < grid.getWidth(); i++) {
+            for (int j = 0; j < grid.getHeight(); j++) {
+                if (grid.isInnerborder(i, j) || grid.isOuterborder(i, j)) {
                     float dx = getCoordinate(0) - i;
                     float dy = getCoordinate(1) - j;
                     float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);
@@ -204,9 +204,7 @@ public class Qix extends Unit implements CollisionInterface {
             Polygon colliderP = this.toPolygon();
 
             // subtract one from width&height to make collisions look more real
-            Rectangle collideeR = new Rectangle(collidee.getX(),
-                    collidee.getY(), collidee.getWidth() / 2 - 1,
-                    collidee.getHeight() / 2 - 1);
+            Rectangle collideeR = collidee.toRectangle();
             if (colliderP.intersects(collideeR)) {
                 LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
                         + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());

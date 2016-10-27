@@ -2,6 +2,7 @@ package nl.tudelft.sem.group2.units;
 
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.board.Coordinate;
 
 import java.awt.Point;
 import java.awt.Polygon;
@@ -15,7 +16,7 @@ import java.util.logging.Level;
 public class Stix implements CollisionInterface {
 
     private static final Logger LOGGER = Logger.getLogger();
-    private LinkedList<Point> stixCoordinates;
+    private LinkedList<Coordinate> stixCoordinates;
 
     /**
      * Constructor for stix class.
@@ -64,7 +65,7 @@ public class Stix implements CollisionInterface {
                 }
             }
         } else if (unit instanceof Cursor && !this.isStixEmpty()) {
-            Rectangle collideeR = new Rectangle(unit.getX(), unit.getY(), 2, 2);
+            Rectangle collideeR = unit.toRectangle();
             for (Point point : this.getStixCoordinates()) {
                 if (collideeR.intersects(point.getX(), point.getY(), 1, 1)) {
 
@@ -83,7 +84,24 @@ public class Stix implements CollisionInterface {
      * @param coordinates point that gets added to the stix
      */
     public void addToStix(Point coordinates) {
-        stixCoordinates.add(coordinates);
+        stixCoordinates.add(new Coordinate(coordinates.x, coordinates.y));
+    }
+
+    /**
+     *
+     * @param point
+     * @return
+     */
+    public boolean contains(Point point) {
+        return stixCoordinates.contains(point);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isEmpty() {
+        return stixCoordinates == null || stixCoordinates.isEmpty();
     }
 
     /**
@@ -91,7 +109,7 @@ public class Stix implements CollisionInterface {
      *
      * @return the current stix
      */
-    public LinkedList<Point> getStixCoordinates() {
+    public LinkedList<Coordinate> getStixCoordinates() {
         return stixCoordinates;
     }
 }

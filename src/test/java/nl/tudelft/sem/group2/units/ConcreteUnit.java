@@ -1,7 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaTracker;
 
 /**
  * Created by Erik on 17-10-2016.

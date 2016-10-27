@@ -5,10 +5,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaState;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
@@ -53,13 +55,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param position    start position
      * @param width       width, used for collision detection
      * @param height      height, used for collision detection
-     * @param areaTracker used for calculating areas
+     * @param grid        used for calculating areas
      * @param stix        current stix to use
      * @param color       specifies color for this cursor.
      * @param lives       the amount of lives a players starts with
      */
-    public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
-        super(position.x, position.y, width, height, areaTracker);
+    public Cursor(Point position, int width, int height, BoardGrid grid, Stix stix, Color color, int lives) {
+        super(position.x, position.y, width, height, grid);
         Image[] sprite = new Image[1];
 
         String colorString = "red";
@@ -105,28 +107,23 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private void assertMove(int transX, int transY) {
         if (getX() + transX >= 0 && getX() + transX <= Globals.BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
                 + transY <= Globals.BOARD_WIDTH / 2) {
-            if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
-                if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
-                        && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
-                        getY() + transY * 2))
-                        && getAreaTracker().getBoardGrid()[getX() + transX + transY]
-                        [getY() + transY + transX].equals(AreaState
-                        .UNCOVERED)
-                        && getAreaTracker().getBoardGrid()[getX() + transX - transY]
-                        [getY() + transY - transX].equals(AreaState
-                        .UNCOVERED)) {
+            if (grid.isUncovered(getIntX() + transX, getIntY() + transY) && isDrawing) {
+                if (!stix.contains(new Point(getIntX() + transX, getIntY() + transY))
+                        && !stix.contains(new Point(getIntX() + transX * 2, getIntY() + transY * 2))
+                        && grid.isUncovered(getIntX() + transX + transY, getIntY() + transY + transX)
+                        && grid.isUncovered(getIntX() + transX - transY, getIntY() + transY - transX)) {
 
-                    if (outerBorderOn(getX(), getY())) {
-                        stix.addToStix(new Point(getX(), getY()));
+                    if (grid.isOuterborder(getIntX(), getIntY())) {
+                        stix.addToStix(new Point(getIntX(), getIntY()));
                     }
-                    setX(getX() + transX);
-                    setY(getY() + transY);
+                    setX(getIntX() + transX);
+                    setY(getIntY() + transY);
                     logCurrentMove();
-                    stix.addToStix(new Point(getX(), getY()));
+                    stix.addToStix(new Point(getIntX(), getIntY()));
                 }
-            } else if (outerBorderOn(getX() + transX, getY() + transY)) {
-                setX(getX() + transX);
-                setY(getY() + transY);
+            } else if (grid.isOuterborder(getIntX() + transX, getIntY() + transY)) {
+                setX(getIntX() + transX);
+                setY(getIntY() + transY);
                 logCurrentMove();
             }
         }
@@ -191,8 +188,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     @Override
     public void draw(Canvas canvas) {
-        int drawX = gridToCanvas(getX());
-        int drawY = gridToCanvas(getY());
+        int drawX = gridToCanvas(getIntX());
+        int drawY = gridToCanvas(getIntY());
         final int lineCount = 10;
         if (loops < animationSpeed + lineCount) {
             calculateLineCoordinates(drawX, drawY, canvas);
@@ -254,15 +251,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * handles making fuse and makes it start moving.
      */
     public void handleFuse() {
-        if (this.getStix().getStixCoordinates().contains(new Point(this.getX(), this.getY()))) {
+        if (this.getStix().getStixCoordinates().contains(new Point(this.getIntX(), this.getIntY()))) {
             if (fuse == null) {
                 fuse =
                         new Fuse((int) this.getStix().getStixCoordinates().getFirst().getX(),
                                 (int) this.getStix().getStixCoordinates().getFirst().getY(),
                                 Globals.FUSE_WIDTH,
-                                Globals.FUSE_HEIGHT, this.getAreaTracker(), this.getStix());
+                                Globals.FUSE_HEIGHT, this.grid, this.getStix());
             } else {
-                fuse.setMoving(true);
+                fuse.moving();
             }
             this.setCurrentMove(null);
         }
@@ -281,11 +278,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param qix the qix of the game
      */
     public void calculateArea(Qix qix) {
-        if (this.getAreaTracker().getBoardGrid()[this.getX()][this.getY()] == AreaState.OUTERBORDER
+        if (this.grid.isOuterborder(this.getIntX(), this.getIntY())
                 && !this.getStix().getStixCoordinates().isEmpty()) {
             new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
-            this.getAreaTracker().calculateNewArea(new Point(qix.getX(), qix.getY()),
-                    this.isFast(), getStix(), scoreCounter);
+            AreaTracker.getInstance().calculateNewArea(new Coordinate(qix.getIntX(), qix.getIntY()),
+                    this.isFast(), getStix(), grid, scoreCounter);
             //Remove the Fuse from the gameView when completing an area
             removeFuse();
         }

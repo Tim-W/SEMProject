@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2.scenes;
 
 import javafx.embed.swing.JFXPanel;
-import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import org.junit.BeforeClass;

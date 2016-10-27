@@ -2,6 +2,8 @@ package nl.tudelft.sem.group2;
 
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
+import nl.tudelft.sem.group2.board.AreaState;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.units.Cursor;

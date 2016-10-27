@@ -11,9 +11,10 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaState;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -200,9 +201,9 @@ public class GameScene extends Scene {
 
     private void drawUncovered() {
         gc.setFill(Color.BLACK);
-        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
-            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
-                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.UNCOVERED) {
+        for (int i = 0; i < GameController.getInstance().getGrid().getWidth(); i++) {
+            for (int j = 0; j < GameController.getInstance().getGrid().getHeight(); j++) {
+                if (GameController.getInstance().getGrid().isUncovered(i, j)) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
@@ -211,11 +212,10 @@ public class GameScene extends Scene {
 
     private void drawBorders() {
         gc.setFill(Color.WHITE);
-        AreaTracker areaTracker = GameController.getInstance().getAreaTracker();
-        for (int i = 0; i < areaTracker.getBoardGrid().length; i++) {
-            for (int j = 0; j < areaTracker.getBoardGrid()[i].length; j++) {
-                if (areaTracker.getBoardGrid()[i][j] == AreaState.OUTERBORDER
-                        || areaTracker.getBoardGrid()[i][j] == AreaState.INNERBORDER) {
+        BoardGrid grid = GameController.getInstance().getGrid();
+        for (int i = 0; i < grid.getWidth(); i++) {
+            for (int j = 0; j < grid.getHeight(); j++) {
+                if (grid.isOuterborder(i, j) || grid.isInnerborder(i, j)) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
@@ -236,7 +236,7 @@ public class GameScene extends Scene {
                 filter(unit -> unit instanceof Cursor).map(unit -> (Cursor) unit).collect(Collectors.toList()));
         for (Cursor cursor : cursorList) {
             if (cursor.getFuse() != null) {
-                fuse = new Point(cursor.getFuse().getX(), cursor.getFuse().getY());
+                fuse = new Point(cursor.getFuse().getIntX(), cursor.getFuse().getIntY());
                 foundFuse = true;
             }
             for (Point p : cursor.getStix().getStixCoordinates()) {

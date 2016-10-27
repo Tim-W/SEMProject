@@ -1,6 +1,6 @@
 package nl.tudelft.sem.group2.powerups;
 
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.LineTraveller;
 

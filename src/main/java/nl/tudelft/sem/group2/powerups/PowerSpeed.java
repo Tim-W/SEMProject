@@ -1,7 +1,7 @@
 package nl.tudelft.sem.group2.powerups;
 
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaTracker;
 
 /**
  * Speed Powerup.

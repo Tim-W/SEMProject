@@ -1,8 +1,9 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.util.logging.Level;
@@ -28,12 +29,12 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param y              y coord to start at
      * @param width          width, used for collision
      * @param height         height, used for collision
-     * @param areaTracker    the AreaTracker
+     * @param grid    the AreaTracker
      * @param sparxDirection direction in which the sparx starts moving,
      *                       which is either LEFT or RIGHT
      */
-    public Sparx(int x, int y, int width, int height, AreaTracker areaTracker, SparxDirection sparxDirection) {
-        super(x, y, width, height, areaTracker);
+    public Sparx(int x, int y, int width, int height, BoardGrid grid, SparxDirection sparxDirection) {
+        super(x, y, width, height, grid);
         lastX = x;
         lastY = y;
         Image[] sprite = new Image[2];
@@ -71,22 +72,22 @@ public class Sparx extends LineTraveller implements CollisionInterface {
             left2 = false;
             offset = 1;
         }
-        if (checkX(left1) && outerBorderOn(getX() + offset, getY())) {
-            setXAndLastX(getX() + offset);
-        } else if (checkY(left1) && outerBorderOn(getX(), getY() + offset)) {
-            setYAndLastY(getY() + offset);
-        } else if (checkX(left2) && outerBorderOn(getX() - offset, getY())) {
-            setXAndLastX(getX() - offset);
-        } else if (checkY(left2) && outerBorderOn(getX(), getY() - offset)) {
-            setYAndLastY(getY() - offset);
-        } else if (checkX(left1) && innerBorderOn(getX() + offset, getY())) {
-            setXAndLastX(getX() + offset);
-        } else if (checkY(left1) && innerBorderOn(getX(), getY() + offset)) {
-            setYAndLastY(getY() + offset);
-        } else if (checkX(left2) && innerBorderOn(getX() - offset, getY())) {
-            setXAndLastX(getX() - offset);
-        } else if (checkY(left2) && innerBorderOn(getX(), getY() - offset)) {
-            setYAndLastY(getY() - offset);
+        if (checkX(left1) && grid.isOuterborder(getIntX() + offset, getIntY())) {
+            setXAndLastX(getIntX() + offset);
+        } else if (checkY(left1) && grid.isOuterborder(getIntX(), getIntY() + offset)) {
+            setYAndLastY(getIntY() + offset);
+        } else if (checkX(left2) && grid.isOuterborder(getIntX() - offset, getIntY())) {
+            setXAndLastX(getIntX() - offset);
+        } else if (checkY(left2) && grid.isOuterborder(getIntX(), getIntY() - offset)) {
+            setYAndLastY(getIntY() - offset);
+        } else if (checkX(left1) && grid.isInnerborder(getIntX() + offset, getIntY())) {
+            setXAndLastX(getIntX() + offset);
+        } else if (checkY(left1) && grid.isInnerborder(getIntX(), getIntY() + offset)) {
+            setYAndLastY(getIntY() + offset);
+        } else if (checkX(left2) && grid.isInnerborder(getIntX() - offset, getIntY())) {
+            setXAndLastX(getIntX() - offset);
+        } else if (checkY(left2) && grid.isInnerborder(getIntX(), getIntY() - offset)) {
+            setYAndLastY(getIntY() - offset);
         }
     }
 
@@ -115,7 +116,7 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param x new x value
      */
     public void setXAndLastX(int x) {
-        setLastCoordinates(getX(), getY());
+        setLastCoordinates(getIntX(), getIntY());
         setX(x);
     }
 
@@ -125,7 +126,7 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param y new y value
      */
     public void setYAndLastY(int y) {
-        setLastCoordinates(getX(), getY());
+        setLastCoordinates(getIntX(), getIntY());
         setY(y);
     }
 

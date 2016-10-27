@@ -57,7 +57,7 @@ public class CollisionHandler {
                 } else if (collidee instanceof Qix) {
                     if (stix != null && stix.intersect(collidee)) {
                         return true;
-                    } else if (collidee.intersect(cursor) && cursor.uncoveredOn(cursor.getX(), cursor.getY())) {
+                    } else if (collidee.intersect(cursor) && cursor.uncoveredOn()) {
                         return true;
                     }
                 } else {

@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
-import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.powerups.PowerEat;
