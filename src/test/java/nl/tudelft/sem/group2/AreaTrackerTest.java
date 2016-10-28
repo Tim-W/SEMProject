@@ -10,6 +10,7 @@ import java.awt.Point;
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * Test class for the AreaTracker class.
@@ -19,6 +20,7 @@ public class AreaTrackerTest {
     private static final int TEST_MAP_HEIGHT = 5;
 
     private Stix stix;
+    private ScoreCounter scoreCounter = mock(ScoreCounter.class);
 
     /**
      * Test method for the default constructor of AreaTracker.
@@ -67,7 +69,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), true, stix, new ScoreCounter(1, 30));
+        areaTracker.calculateNewArea(new Point(1, 2), true, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
 
@@ -88,7 +90,7 @@ public class AreaTrackerTest {
     public void testCalculateNewSlowArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), false, stix, new ScoreCounter(1, 30));
+        areaTracker.calculateNewArea(new Point(1, 2), false, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(false);
 
@@ -109,7 +111,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastAreaWithQixOnOtherSide() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(3, 2), true, stix, new ScoreCounter(1, 30));
+        areaTracker.calculateNewArea(new Point(3, 2), true, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
 
