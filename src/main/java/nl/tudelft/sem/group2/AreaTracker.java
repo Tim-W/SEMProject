@@ -169,7 +169,7 @@ public class AreaTracker {
         }
         resetAreaTracker();
         stix.emptyStix();
-        SoundHandler.playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+        SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
     }
 
     private void resetBorders() {
