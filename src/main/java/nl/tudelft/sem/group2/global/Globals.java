@@ -37,7 +37,7 @@ public final class Globals {
     public static final int STARTSCENE_VBOX_LAYOUT_Y = 80;
     public static final int STARTSCENE_HBOX_SPACING = 20;
     public static final int STARTSCENE_BUTTON_WIDTH = 120;
-    public static final String HELP_SCREEN_MESSAGE = "1 player: \nUse arrow-keys to move. Use o to draw fast "
+    public static final String HELP_SCREEN_MESSAGE = "\n1 player: \nUse arrow-keys to move. Use o to draw fast "
             + "and i to draw slow.\n\n2 players: \nfirst player uses the regular controls."
             + "Second player uses wasd-keys to move and z and x to draw\n\n"
             + "There are 3 powerups in the game:\n- Speed - Gives you extra speed\n- Life - Gives you an extra life"
