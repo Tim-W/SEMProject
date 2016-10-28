@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Created by dennis on 28-10-16.
+ * Test suite for the powerupHandler test.
  */
 public class PowerupHandlerTest {
 
