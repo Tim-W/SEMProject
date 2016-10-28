@@ -97,16 +97,20 @@ public class Fuse extends LineTraveller implements CollisionInterface {
     }
 
     /**
-     * @param moving if the fuse is moving
-     */
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    /**
      * @param delay The value of the new delay
      */
     public void setDelay(int delay) {
         this.delay = delay;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    /**
+     * @param moving if the fuse is moving
+     */
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 }
