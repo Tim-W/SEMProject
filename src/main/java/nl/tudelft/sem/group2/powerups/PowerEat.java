@@ -4,9 +4,9 @@ import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 
 /**
- * Eat Powerup.
+ * Eat PowerupUnit.
  */
-public class PowerEat extends Powerup {
+public class PowerEat extends PowerupUnit {
 
     /**
      * Creates a new Eat powerup.
@@ -25,6 +25,7 @@ public class PowerEat extends Powerup {
         sprite[2] = new Image("/images/eat-1.png");
         sprite[3] = new Image("/images/eat-1.png");
         setSprite(sprite);
+        this.type = PowerUpType.EAT;
     }
 
     /**

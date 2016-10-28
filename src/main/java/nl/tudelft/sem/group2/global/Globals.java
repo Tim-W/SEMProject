@@ -42,14 +42,15 @@ public final class Globals {
             + "\n- Hungry - Lets you eat Sparx\n\nPress 1 for single player game and 2 for a 2 player game!";
     public static final int STARTSCENE_SPACING = 30;
     public static final double POWERUP_THRESHOLD = 0.003;
-    public static final int POWERUP_LIFETIME = 200;
-    public static final int POWERUP_SPEED_DURATION = 75;
-    public static final int POWERUP_EAT_DURATION = 100;
+    public static final int POWERUP_LIFETIME = 15;
+    public static final int POWERUP_SPEED_DURATION = 3;
+    public static final int POWERUP_EAT_DURATION = 4;
     public static final int CURSOR_FAST = 2;
     public static final int CURSOR_SLOW = 1;
     public static final double HALF = 0.5;
     public static final int STARTSCENE_HELPTEXT_WRAPPING = 200;
     public static final int NANO_SECONDS_PER_SECOND = 100000000;
+    public static final int MILLI_SECONDS_PER_SECOND = 1000;
     public static final int LIVES = 3;
 
     private Globals() {

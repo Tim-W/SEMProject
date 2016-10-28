@@ -4,7 +4,7 @@ import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
-import nl.tudelft.sem.group2.powerups.Powerup;
+import nl.tudelft.sem.group2.powerups.PowerupUnit;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
@@ -52,7 +52,7 @@ public class CollisionHandler {
         for (Cursor cursor : cursorList) {
             unitsList.remove(cursor);
             for (Unit collidee : unitsList) {
-                if (collidee instanceof Powerup) {
+                if (collidee instanceof PowerupUnit) {
                     continue;
                 } else if (collidee instanceof Qix) {
                     if (stix != null && stix.intersect(collidee)) {
@@ -102,7 +102,7 @@ public class CollisionHandler {
         }
         ArrayList<Unit> unitsList = new ArrayList<>();
         for (Unit unit : units) {
-            if (unit instanceof Powerup || unit instanceof Cursor) {
+            if (unit instanceof PowerupUnit || unit instanceof Cursor) {
                 unitsList.add(unit);
             }
         }

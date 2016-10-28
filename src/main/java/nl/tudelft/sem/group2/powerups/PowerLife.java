@@ -4,9 +4,9 @@ import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 
 /**
- * Life Powerup.
+ * Life PowerupUnit.
  */
-public class PowerLife extends Powerup {
+public class PowerLife extends PowerupUnit {
 
     /**
      * Creates a new Life powerup.
@@ -25,6 +25,7 @@ public class PowerLife extends Powerup {
         sprite[2] = new Image("/images/heart-1.png");
         sprite[3] = new Image("/images/heart-1.png");
         setSprite(sprite);
+        this.type = PowerUpType.LIFE;
     }
 
     /**

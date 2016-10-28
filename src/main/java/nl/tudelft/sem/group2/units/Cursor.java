@@ -11,6 +11,7 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.powerups.PowerUp;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 
@@ -38,8 +39,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private Stix stix;
     private int lives;
     // 0 for nothing, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
-    private PowerUpType currentPowerup;
-    private int powerUpDuration;
+    private PowerUp<PowerUpType> powerUp;
     private Fuse fuse;
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private KeyCode fastMoveKey, slowMoveKey;
@@ -72,7 +72,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         this.lives = lives;
-        this.currentPowerup = PowerUpType.NONE;
+        this.powerUp = new PowerUp<PowerUpType>(PowerUpType.NONE);
     }
 
     @Override
@@ -435,7 +435,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     public PowerUpType getCurrentPowerup() {
-        return currentPowerup;
+        return powerUp.getState();
     }
 
     /**
@@ -444,29 +444,18 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param currentPowerup the new powerup status
      */
     public void setCurrentPowerup(PowerUpType currentPowerup) {
-        this.currentPowerup = currentPowerup;
-    }
-
-    public int getPowerUpDuration() {
-        return powerUpDuration;
+        powerUp.setState(currentPowerup);
     }
 
     public void setPowerUpDuration(int powerUpDuration) {
-        this.powerUpDuration = powerUpDuration;
-    }
-
-    /**
-     * decrements the duration of current powerup.
-     */
-    public void decrementPowerupDuration() {
-        this.powerUpDuration -= 1;
+        powerUp.setDuration(powerUpDuration);
     }
 
     /**
      * @return true if the cursor has a powerup active
      */
     public boolean hasPowerUp() {
-        return this.currentPowerup != PowerUpType.NONE;
+        return this.powerUp.notStandard();
     }
 
     /**

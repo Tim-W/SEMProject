@@ -14,7 +14,7 @@ import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
-import nl.tudelft.sem.group2.powerups.Powerup;
+import nl.tudelft.sem.group2.powerups.PowerupUnit;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
@@ -182,13 +183,37 @@ public final class GameController {
             units = new HashSet<>();
         }
         if (unit instanceof Fuse) {
-            for (Unit unit1 : units) {
-                if (unit1 instanceof Fuse) {
-                    return;
+            return;
+        }
+        units.add(unit);
+    }
+
+    /**
+     * removes a unit of the list of units.
+     *
+     * @param unit the unit to be removed
+     */
+    public void removeUnit(Unit unit) {
+        units.remove(unit);
+        checkSparx();
+    }
+
+    /**
+     *
+     * @param e
+     */
+    public void removePowerUp(PowerUpType e) {
+        Iterator<Unit> iter = units.iterator();
+        //code to remove powerups from the board after a certain amount of time
+        while (iter.hasNext()) {
+            Unit unit = iter.next();
+            if (unit instanceof PowerupUnit) {
+                if(((PowerupUnit) unit).getType().equals(e)) {
+                    iter.remove();
+                    break;
                 }
             }
         }
-        units.add(unit);
     }
 
     /**
@@ -322,20 +347,6 @@ public final class GameController {
     }
 
     private void handlePowerups() {
-        applyPowerups();
-
-        Iterator<Unit> iter = units.iterator();
-        //code to remove powerups from the board after a certain amount of time
-        while (iter.hasNext()) {
-            Unit unit = iter.next();
-            if (unit instanceof Powerup) {
-                Powerup powerup = (Powerup) unit;
-                powerup.decreaseDuration();
-                if (powerup.getDuration() <= 0) {
-                    iter.remove();
-                }
-            }
-        }
 
         PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units);
         if (powerupEvent != null) {
@@ -347,12 +358,13 @@ public final class GameController {
                     cursor.addLife();
                     return;
                 case EAT:
-                    cursor.setCurrentPowerup(PowerUpType.EAT);
                     cursor.setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
+                    cursor.setCurrentPowerup(PowerUpType.EAT);
                     return;
                 case SPEED:
-                    cursor.setCurrentPowerup(PowerUpType.SPEED);
                     cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
+                    cursor.setCurrentPowerup(PowerUpType.SPEED);
+
             }
         }
     }
@@ -369,19 +381,27 @@ public final class GameController {
                 int quadrant = cursor.oppositeQuadrant();
 
                 int[] coordinates = areaTracker.findPowerupLocation(quadrant);
-                Powerup powerup = null;
-                Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
+                PowerupUnit powerupUnit = null;
+                Map<PowerUpType, PowerupUnit> powerupMap = new HashMap<>();
                 powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
                         Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
                 powerupMap.put(PowerUpType.LIFE, new PowerLife(coordinates[0], coordinates[1],
                         Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
                 powerupMap.put(PowerUpType.SPEED, new PowerSpeed(coordinates[0], coordinates[1],
                         Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
-                powerup = powerupMap.get(PowerUpType.randomType());
-                if (powerup == null) {
+                powerupUnit = powerupMap.get(PowerUpType.randomType());
+                if (powerupUnit == null) {
                     return;
                 }
-                addUnit(powerup);
+                PowerUpType type = powerupUnit.getType();
+                powerupUnit.setTimerTask(new TimerTask() {
+                    @Override
+                    public void run() {
+                        removePowerUp(type);
+                    }
+                });
+                addUnit(powerupUnit);
+                powerupUnit.startDuration();
             }
         }
     }
@@ -397,23 +417,11 @@ public final class GameController {
         }
 
         for (Unit u : units) {
-            if (u instanceof Powerup) {
+            if (u instanceof PowerupUnit) {
                 return true;
             }
         }
         return false;
-    }
-
-    private void applyPowerups() {
-        for (Cursor cursor : cursors) {
-            if (cursor.hasPowerUp() && cursor.getPowerUpDuration() <= 0) {
-                cursor.setCurrentPowerup(PowerUpType.NONE);
-            }
-
-            if (cursor.hasPowerUp() && cursor.getPowerUpDuration() > 0) {
-                cursor.decrementPowerupDuration();
-            }
-        }
     }
 
     /**
@@ -533,13 +541,4 @@ public final class GameController {
         getInstance().units = units;
     }
 
-    /**
-     * removes a unit of the list of units.
-     *
-     * @param unit the unit to be removed
-     */
-    public void removeUnit(Unit unit) {
-        units.remove(unit);
-        checkSparx();
-    }
 }

@@ -25,6 +25,6 @@ public enum PowerUpType {
         if (powerUpType == null) {
             return NONE;
         }
-        return powerUpType;
+        return EAT;
     }
 }

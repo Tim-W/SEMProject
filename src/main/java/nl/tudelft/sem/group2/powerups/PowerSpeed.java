@@ -4,9 +4,9 @@ import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaTracker;
 
 /**
- * Speed Powerup.
+ * Speed PowerupUnit.
  */
-public class PowerSpeed extends Powerup {
+public class PowerSpeed extends PowerupUnit {
 
     /**
      * Creates a new Speed powerup.
@@ -25,6 +25,7 @@ public class PowerSpeed extends Powerup {
         sprite[2] = new Image("/images/speed-2.png");
         sprite[3] = new Image("/images/speed-2.png");
         setSprite(sprite);
+        this.type = PowerUpType.SPEED;
     }
 
     /**
