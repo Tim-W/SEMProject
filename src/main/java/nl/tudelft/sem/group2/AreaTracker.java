@@ -1,8 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.units.Stix;
-
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,7 +12,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 
@@ -146,6 +142,9 @@ public class AreaTracker extends Observable {
         stix.emptyStix();
     }
 
+    /**
+     * Sets the border and area lists to empty.
+     */
     private void resetBordersAndAreas() {
         border1 = new LinkedList<>();
         border2 = new LinkedList<>();
@@ -202,10 +201,11 @@ public class AreaTracker extends Observable {
 
     /**
      * Checks the direction in which the stix started to move and calls the flood fill algorithm.
+     *
      * @param qixCoordinates the spot which the qix is at.
-     * @param start starting point of the stix.
-     * @param dir direction if the stix.
-     * @param stix the stix of which the directions are being checked.
+     * @param start          starting point of the stix.
+     * @param dir            direction if the stix.
+     * @param stix           the stix of which the directions are being checked.
      */
     private void checkDirections(Point qixCoordinates, Point start, Point dir, Stix stix) {
         //Check in which direction the stix first started to move
@@ -293,7 +293,8 @@ public class AreaTracker extends Observable {
 
     /**
      * Add a point for the area tracker to handle.
-     * @param addToArea1 whether the point lies in area1 or not.
+     *
+     * @param addToArea1   whether the point lies in area1 or not.
      * @param pointToCheck the point to add.
      */
     private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
@@ -319,6 +320,7 @@ public class AreaTracker extends Observable {
     /**
      * If the point that hit the qix was the coordinate of the qix set,
      * the temporary area tracker that is currently in use to null.
+     *
      * @param addToArea1 whether to add it to area1. Otherwise to area2.
      */
     private void hitQix(boolean addToArea1) {
