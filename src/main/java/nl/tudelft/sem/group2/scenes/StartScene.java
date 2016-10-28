@@ -92,8 +92,6 @@ public class StartScene extends javafx.scene.Scene {
             stage.setScene(GameController.getInstance().getScene());
             GameController.getInstance().makeCursors(false);
         });
-
-
     }
 
     private void handleMultiPlayerButton() {
@@ -154,6 +152,12 @@ public class StartScene extends javafx.scene.Scene {
                 GameController.getInstance().makeCursors(true);
             } else if (event.getCode() == KeyCode.H) {
                 helpTextWrapper.setVisible(true);
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                if (helpTextWrapper.isVisible()) {
+                    helpTextWrapper.setVisible(false);
+                } else {
+                    System.exit(0);
+                }
             }
         });
     }
