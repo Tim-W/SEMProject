@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2;
 
+import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.sound.SoundHandler;
+import nl.tudelft.sem.group2.units.Stix;
+
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -93,6 +97,39 @@ public class AreaTracker extends Observable {
     }
 
     /**
+     * Return the quadrant the cursor is in, as follows.
+     * 12
+     * 34
+     *
+     * @return the quadrant the cursor is in
+     */
+    private static int quadrant(int x, int y) {
+        if (x < Globals.BOARD_WIDTH / 4) {
+            if (y < Globals.BOARD_HEIGHT / 4) {
+                return 0;
+            } else {
+                return 3;
+            }
+        } else if (y < Globals.BOARD_HEIGHT / 4) {
+            return 1;
+        }
+        return 2;
+    }
+
+    /**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the opposite quadrant the cursor is in
+     */
+    public static int oppositeQuadrant(int x, int y) {
+        int quadrant = quadrant(x, y);
+
+        return (quadrant + 2) % 4;
+    }
+
+    /**
      * /**
      * Method that updates the grid when a stix is completed.
      *
@@ -117,7 +154,6 @@ public class AreaTracker extends Observable {
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
         updateScoreCounter(fastArea, stix, scoreCounter);
-        //notify the qix
         areaLeft -= newArea.size();
         setChanged();
         notifyObservers((double) areaLeft);
@@ -140,6 +176,7 @@ public class AreaTracker extends Observable {
         }
         resetAreaTracker();
         stix.emptyStix();
+        SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
     }
 
     /**

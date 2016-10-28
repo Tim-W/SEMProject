@@ -4,6 +4,7 @@ import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.Powerup;
+import nl.tudelft.sem.group2.powerups.PowerupHandler;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
@@ -34,6 +35,7 @@ public class CollisionHandlerTest {
     private AreaTracker areaTracker;
     private AreaState[][] boardGrid = new AreaState[GRID_WIDTH + 1][GRID_HEIGHT + 1];
     private Cursor cursor;
+    private PowerupHandler powerupHandler;
 
     /**
      * Sets up the mocks and variables.
@@ -47,7 +49,9 @@ public class CollisionHandlerTest {
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         set = new HashSet<>();
         cursor = mock(Cursor.class);
-        when(cursor.getCurrentPowerup()).thenReturn(PowerUpType.NONE);
+        powerupHandler = mock(PowerupHandler.class);
+        when(powerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.NONE);
+        when(cursor.getPowerupHandler()).thenReturn(powerupHandler);
         set.add(cursor);
     }
 
@@ -73,11 +77,10 @@ public class CollisionHandlerTest {
      */
     @Test
     public void cursorSparxTest() {
-        //Cursor cursor = new Cursor(0, 0, 1, 1, stix, areaTracker);
         Sparx sparx = new Sparx(0, 0, 1, 1, areaTracker, SparxDirection.LEFT);
-        //set.add(cursor);
         set.add(sparx);
         when(cursor.intersect(sparx)).thenReturn(true);
+        when(powerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.NONE);
         Assert.assertTrue(handler.collisions(set, stix));
     }
 
@@ -134,7 +137,7 @@ public class CollisionHandlerTest {
         Sparx sparx = mock(Sparx.class);
         set.add(sparx);
         when(cursor.intersect(sparx)).thenReturn(false);
-        when(cursor.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
+        when(powerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
         Assert.assertFalse(handler.collisions(set, stix));
     }
 

@@ -53,7 +53,5 @@ public class LaunchApp extends Application {
         //playSound("/sounds/background-music.mp3", 1);
         //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
-
     }
-
 }

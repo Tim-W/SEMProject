@@ -27,6 +27,7 @@ public class SparxTest {
     public static void BeforeClass() {
         new JFXPanel();
     }
+
     @Before
     public void setUp() throws Exception {
         areaTracker = mock(AreaTracker.class);
