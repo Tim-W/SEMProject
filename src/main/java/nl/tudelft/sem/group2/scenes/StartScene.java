@@ -3,6 +3,7 @@ package nl.tudelft.sem.group2.scenes;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
@@ -13,6 +14,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * StartScene that lets you pick single or multiplayer game.
@@ -132,12 +138,26 @@ public class StartScene extends javafx.scene.Scene {
         helpText.setWrappingWidth(Globals.STARTSCENE_HELPTEXT_WRAPPING);
         helpText.setStyle("-fx-font-size: 16px");
 
+        Hyperlink hyperlink = new Hyperlink("Click here to read more!");
+        hyperlink.setOnMouseClicked(event -> {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().browse(new URI("http://strategywiki.org/wiki/Qix"));
+                }
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
+        });
+        //hyperlink.setTextFill(Color.WHITE);
+        hyperlink.setLayoutX(Globals.STARTSCENE_HBOX_SPACING);
+
         helpTextWrapper = new FlowPane();
         helpTextWrapper.setMinHeight(height);
         helpTextWrapper.setMinWidth(width);
         helpTextWrapper.setVisible(false);
         helpTextWrapper.setStyle("-fx-background-color: black");
         helpTextWrapper.getChildren().add(helpText);
+        helpTextWrapper.getChildren().add(hyperlink);
         helpTextWrapper.setLayoutX(Globals.STARTSCENE_SPACING);
         helpTextWrapper.setLayoutY(Globals.STARTSCENE_SPACING);
     }
