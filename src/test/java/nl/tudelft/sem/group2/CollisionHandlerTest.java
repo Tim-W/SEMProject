@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import java.util.HashSet;
 
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,7 +32,7 @@ public class CollisionHandlerTest {
     private HashSet<Unit> set;
     private Stix stix;
     private AreaTracker areaTracker;
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private AreaState[][] boardGrid = new AreaState[GRID_WIDTH + 1][GRID_HEIGHT + 1];
     private Cursor cursor;
 
     /**

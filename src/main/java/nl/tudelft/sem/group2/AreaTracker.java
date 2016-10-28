@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 
@@ -11,23 +10,29 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
+
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
  */
-public class AreaTracker {
+public class AreaTracker extends Observable {
 
     private static final Logger LOGGER = Logger.getLogger();
 
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private AreaState[][] boardGrid = new AreaState[GRID_WIDTH + 1][GRID_HEIGHT + 1];
     private Stack<Point> visiting = new Stack<>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
+    private int areaLeft = GRID_SURFACE;
     private ThreadLocalRandom threadLocalRandom;
 
     /**
@@ -105,18 +110,18 @@ public class AreaTracker {
         Point dir = stix.getStixCoordinates().get(1);
         // Instantiate the two temporary area trackers, these linkedlists
         // accumulate all the points on one side of the stix
-        // When the floodfill algorithm finds a qix however the linkedlist is
-        // set to null
-        resetAreas();
-        resetBorders();
-        // Initialize the set which contains the visited points for the
-        // floodfill algorithm
+        // When the floodfill algorithm finds a qix however the linkedlist is set to null
+        resetBordersAndAreas();
+        // Initialize the set which contains the visited points for the floodfill algorithm
         visited = new HashSet<>();
         checkDirections(qixCoordinates, start, dir, stix);
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
         updateScoreCounter(fastArea, stix, scoreCounter);
-
+        //notify the qix
+        areaLeft -= newArea.size();
+        setChanged();
+        notifyObservers((double) areaLeft);
         if (fastArea) {
             Logger.getLogger().log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {
@@ -138,12 +143,9 @@ public class AreaTracker {
         stix.emptyStix();
     }
 
-    private void resetBorders() {
+    private void resetBordersAndAreas() {
         border1 = new LinkedList<>();
         border2 = new LinkedList<>();
-    }
-
-    private void resetAreas() {
         area1 = new LinkedList<>();
         area2 = new LinkedList<>();
     }
@@ -164,12 +166,6 @@ public class AreaTracker {
     }
 
     private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
-
-        //When testing create own scoreCounter
-        if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter(Color.RED);
-        }
-
         //Update score and percentage with newly created area,
         // therefore it's needed to know the stix was created fast or slow
         scoreCounter.updateScore(newArea.size() + stix.getStixCoordinates().size(), fastArea);

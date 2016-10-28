@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 25-9-2016.
+ * Test for the line traveller class
  */
 public class LineTravellerTest {
     private Fuse fuse;
@@ -29,6 +29,7 @@ public class LineTravellerTest {
     public static void BeforeClass() {
         new JFXPanel();
     }
+
     @Before
     public void setUp() throws Exception {
         areaTracker = Mockito.mock(AreaTracker.class);

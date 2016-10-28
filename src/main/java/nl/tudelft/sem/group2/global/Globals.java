@@ -7,19 +7,21 @@ public final class Globals {
 
     public static final int BOARD_WIDTH = 300;
     public static final int BOARD_HEIGHT = 300;
+    public static final int GRID_WIDTH = BOARD_WIDTH / 2;
+    public static final int GRID_HEIGHT = BOARD_HEIGHT / 2;
+    public static final int GRID_SURFACE = GRID_WIDTH * GRID_HEIGHT;
     public static final int GAME_WIDTH = 340;
     public static final int GAME_HEIGHT = 420;
-    public static final double TARGET_PERCENTAGE = .20;
     public static final int CURSOR_START_X = 75;
     public static final int CURSOR_START_Y = 150;
     public static final int BOARD_MARGIN = 8;
     public static final int GAME_OFFSET_X = 15;
-    public static final int GAME_OFFSET_Y = 75;
+    public static final int GAME_OFFSET_Y = 100;
     public static final int BORDER_BOTTOM_HEIGHT = 20;
     public static final int BORDER_BOTTOM_POSITION_Y = 380;
     public static final int MESSAGEBOX_POSITION_X = 50;
     public static final int MESSAGEBOX_POSITION_Y = 176;
-    public static final int SCORESCENE_POSITION_Y = 60;
+    public static final int SCORESCENE_POSITION_Y = 100;
     public static final int GAMEOVER_POSITION_X = 103;
     public static final int GAMEWON_POSITION_X = 115;
     public static final double GAME_START_SOUND_VOLUME = 0.09;
@@ -51,7 +53,7 @@ public final class Globals {
     public static final int STARTSCENE_HELPTEXT_WRAPPING = 280;
     public static final int NANO_SECONDS_PER_SECOND = 100000000;
     public static final int LIVES = 3;
-
+    public static final int LEVELS = 3;
     private Globals() {
     }
 }

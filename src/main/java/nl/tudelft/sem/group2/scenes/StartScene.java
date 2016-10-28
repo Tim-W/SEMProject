@@ -96,8 +96,8 @@ public class StartScene extends javafx.scene.Scene {
                 singleButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
         singleButton.setOnMouseClicked(event -> {
-            stage.setScene(GameController.getInstance().getScene());
-            GameController.getInstance().makeCursors(false);
+            GameController.getInstance().initializeSinglePlayer();
+            stage.setScene(GameController.getInstance().getGameScene());
         });
     }
 
@@ -113,8 +113,8 @@ public class StartScene extends javafx.scene.Scene {
                 multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
         multiButton.setOnMouseClicked(event -> {
-            stage.setScene(GameController.getInstance().getScene());
-            GameController.getInstance().makeCursors(true);
+            GameController.getInstance().initializeMultiPlayer();
+            stage.setScene(GameController.getInstance().getGameScene());
         });
     }
 
@@ -175,11 +175,11 @@ public class StartScene extends javafx.scene.Scene {
     private void handleKeyPresses() {
         this.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DIGIT1) {
-                stage.setScene(GameController.getInstance().getScene());
-                GameController.getInstance().makeCursors(false);
+                GameController.getInstance().initializeSinglePlayer();
+                stage.setScene(GameController.getInstance().getGameScene());
             } else if (event.getCode() == KeyCode.DIGIT2) {
-                stage.setScene(GameController.getInstance().getScene());
-                GameController.getInstance().makeCursors(true);
+                GameController.getInstance().initializeSinglePlayer();
+                stage.setScene(GameController.getInstance().getGameScene());
             } else if (event.getCode() == KeyCode.H) {
                 helpTextWrapper.setVisible(true);
             } else if (event.getCode() == KeyCode.ESCAPE) {

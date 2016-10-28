@@ -1,10 +1,5 @@
 package nl.tudelft.sem.group2.scenes;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -22,6 +17,12 @@ import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Unit;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,8 +49,6 @@ public class GameScene extends Scene {
      */
     public GameScene(final Group root, Color color) {
         super(root, color);
-        // Initialize units set because it's necessary in GameController
-        // Temporary until CollisionHandler is merged into this
 
         initializeCanvas();
         // Initialize label in middle of screen to display start message
@@ -112,8 +111,6 @@ public class GameScene extends Scene {
 
         // Obtain GraphicsContext2d from canvas
         gc = canvas.getGraphicsContext2D();
-        // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
-        gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
     }
 
@@ -144,8 +141,6 @@ public class GameScene extends Scene {
     private void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
-        scoreScene.setScore(0);
-        scoreScene.setClaimedPercentage(0);
     }
 
     private void addMessageBox() {
@@ -169,16 +164,24 @@ public class GameScene extends Scene {
         gc.setFill(Color.WHITE);
         drawUncovered();
         drawBorders();
-        drawStixAndFuse();
-        if (GameController.getInstance().getUnits() == null) {
-            return;
+        if (GameController.getInstance().getUnits() != null) {
+            drawStixAndFuse();
+            for (Unit unit : GameController.getInstance().getUnits()) {
+                unit.draw(canvas);
+            }
+            applyEffect();
         }
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            unit.move();
-            unit.draw(canvas);
-        }
+    }
 
-        applyEffect();
+    /**
+     * move all units.
+     */
+    public void move() {
+        if (GameController.getInstance().getUnits() != null) {
+            for (Unit unit : GameController.getInstance().getUnits()) {
+                unit.move();
+            }
+        }
     }
 
     private void applyEffect() {
@@ -270,7 +273,7 @@ public class GameScene extends Scene {
      *
      * @param string string which the label should be
      */
-    public void setMessageLabel(String string) {
+    public void setMessage(String string) {
         messageLabel.setText(string);
     }
 

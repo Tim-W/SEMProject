@@ -2,7 +2,6 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
@@ -24,10 +23,7 @@ import static org.mockito.Mockito.verify;
  * Test for cursors
  */
 
-/**
- * ignore because
- * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
- */
+
 public class CursorTest {
 
     @Rule
@@ -49,7 +45,7 @@ public class CursorTest {
     }
 
     public void createCursor() {
-        gameController.makeCursors(false);
+        gameController.initializeSinglePlayer();
         if (cursor != null) {
             gameController.getCursors().set(0, cursor);
         } else {
@@ -237,7 +233,7 @@ public class CursorTest {
 
     @Test
     public void draw() throws Exception {
-        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, Color.RED, 3));
+        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 3, 1));
         spy.draw(new Canvas(1, 1));
         verify(spy).getSpriteIndex();
     }
