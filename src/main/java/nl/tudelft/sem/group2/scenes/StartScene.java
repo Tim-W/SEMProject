@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2.scenes;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
@@ -19,6 +15,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * StartScene that lets you pick single or multiplayer game.
@@ -135,7 +136,7 @@ public class StartScene extends javafx.scene.Scene {
         Text helpText = new Text(Globals.HELP_SCREEN_MESSAGE);
         helpText.setFill(Color.YELLOW);
         helpText.setWrappingWidth(Globals.STARTSCENE_HELPTEXT_WRAPPING);
-        helpText.setStyle("-fx-font-size: 16px");
+        helpText.setStyle("-fx-font-size: 15px");
 
         Hyperlink moreInformationLink = new Hyperlink("Click here to read more!");
         moreInformationLink.setOnMouseClicked(event -> {
