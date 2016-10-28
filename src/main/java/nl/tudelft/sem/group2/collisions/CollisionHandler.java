@@ -128,22 +128,4 @@ public class CollisionHandler {
 
         return null;
     }
-
-//    /**
-//     * Finds the cursor in the unitslist.
-//     *
-//     * @param unitsList the list of units
-//     * @return the index of the cursor
-//     */
-//    private int findCursor(ArrayList<Unit> unitsList) {
-//        int indexOfCursor = 0;
-//        for (int i = 0; i < unitsList.size(); i++) {
-//            Unit collider = unitsList.get(i);
-//            if (collider instanceof Cursor) {
-//                indexOfCursor = i;
-//                break;
-//            }
-//        }
-//        return indexOfCursor;
-//    }
 }

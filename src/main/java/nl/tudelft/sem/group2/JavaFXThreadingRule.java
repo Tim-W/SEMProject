@@ -12,9 +12,8 @@ import java.util.concurrent.CountDownLatch;
 /**
  * A JUnit rule for running tests on the JavaFX thread and performing
  * JavaFX initialisation.  To include in your test case, add the following code:
- * <p>
- * <pre>
- * {@literal @}Rule
+ *
+ * <p><pre>{@literal @}Rule
  * public JavaFXThreadingRule jfxRule = new JavaFXThreadingRule();
  * </pre>
  *

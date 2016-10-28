@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Test class for collisionHandler
+ * Test class for collisionHandler.
  * Created by Dennis on 14-10-16.
  */
 public class CollisionHandlerTest {
@@ -52,7 +52,7 @@ public class CollisionHandlerTest {
     }
 
     /**
-     * tests an empty set.
+     * Tests an empty set.
      */
     @Test
     public void emptyTest() {
@@ -61,7 +61,7 @@ public class CollisionHandlerTest {
     }
 
     /**
-     * tests a null set.
+     * Tests a null set.
      */
     @Test
     public void nullTest() {
@@ -69,7 +69,7 @@ public class CollisionHandlerTest {
     }
 
     /**
-     * tests the collision between sparx and cursor.
+     * Tests the collision between sparx and cursor.
      */
     @Test
     public void cursorSparxTest() {
@@ -80,7 +80,7 @@ public class CollisionHandlerTest {
     }
 
     /**
-     * tests the collision between qix and stix.
+     * Tests the collision between qix and stix.
      */
     @Test
     public void qixStixTest() {
@@ -92,7 +92,7 @@ public class CollisionHandlerTest {
     }
 
     /**
-     * tests the collision between qix and cursor.
+     * Tests the collision between qix and cursor.
      */
     @Test
     public void qixCursorTest() {
