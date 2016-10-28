@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
@@ -16,11 +20,6 @@ import javafx.stage.Stage;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
 /**
  * StartScene that lets you pick single or multiplayer game.
  */
@@ -28,7 +27,7 @@ public class StartScene extends javafx.scene.Scene {
 
     private Button singleButton;
     private Button multiButton;
-    private Button helpButton;
+    private Button backButton;
     private FlowPane helpTextWrapper;
     private Stage stage;
 
@@ -71,7 +70,7 @@ public class StartScene extends javafx.scene.Scene {
         hBox.getChildren().add(multiButton);
 
         HBox helpButtonWrapper = new HBox();
-        helpButtonWrapper.getChildren().add(helpButton);
+        helpButtonWrapper.getChildren().add(backButton);
         helpButtonWrapper.setAlignment(Pos.CENTER);
 
         buttonsBox.getChildren().add(hBox);
@@ -119,28 +118,27 @@ public class StartScene extends javafx.scene.Scene {
     }
 
     private void handleHelpButton() {
-        helpButton = new Button("Help");
-        helpButton.setTextFill(Color.YELLOW);
-        helpButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px; ");
-        helpButton.setPrefWidth(Globals.STARTSCENE_BUTTON_WIDTH);
+        backButton = new Button("Help");
+        backButton.setTextFill(Color.YELLOW);
+        backButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px; ");
+        backButton.setPrefWidth(Globals.STARTSCENE_BUTTON_WIDTH);
 
-        helpButton.setOnMouseEntered(event ->
-                helpButton.setStyle("-fx-background-color: #5d5d5d; -fx-font-size: 20px"));
-        helpButton.setOnMouseExited(event ->
-                helpButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
+        backButton.setOnMouseEntered(event ->
+                backButton.setStyle("-fx-background-color: #5d5d5d; -fx-font-size: 20px"));
+        backButton.setOnMouseExited(event ->
+                backButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
-        helpButton.setOnMouseClicked(event -> helpTextWrapper.setVisible(true));
+        backButton.setOnMouseClicked(event -> helpTextWrapper.setVisible(true));
     }
 
     private void handleHelpText(double width, double height) {
-
         Text helpText = new Text(Globals.HELP_SCREEN_MESSAGE);
         helpText.setFill(Color.YELLOW);
         helpText.setWrappingWidth(Globals.STARTSCENE_HELPTEXT_WRAPPING);
         helpText.setStyle("-fx-font-size: 16px");
 
-        Hyperlink hyperlink = new Hyperlink("Click here to read more!");
-        hyperlink.setOnMouseClicked(event -> {
+        Hyperlink moreInformationLink = new Hyperlink("Click here to read more!");
+        moreInformationLink.setOnMouseClicked(event -> {
             try {
                 if (Desktop.isDesktopSupported()) {
                     Desktop.getDesktop().browse(new URI("http://strategywiki.org/wiki/Qix"));
@@ -151,17 +149,30 @@ public class StartScene extends javafx.scene.Scene {
             }
         });
         //hyperlink.setTextFill(Color.WHITE);
-        hyperlink.setLayoutX(Globals.STARTSCENE_HBOX_SPACING);
+        moreInformationLink.setLayoutX(Globals.STARTSCENE_HBOX_SPACING);
 
         helpTextWrapper = new FlowPane();
         helpTextWrapper.setMinHeight(height);
         helpTextWrapper.setMinWidth(width);
         helpTextWrapper.setVisible(false);
         helpTextWrapper.setStyle("-fx-background-color: black");
+        helpTextWrapper.getChildren().add(goBackButton());
         helpTextWrapper.getChildren().add(helpText);
-        helpTextWrapper.getChildren().add(hyperlink);
+        helpTextWrapper.getChildren().add(moreInformationLink);
         helpTextWrapper.setLayoutX(Globals.STARTSCENE_SPACING);
         helpTextWrapper.setLayoutY(Globals.STARTSCENE_SPACING);
+    }
+
+    private Button goBackButton() {
+        Button goBackButton = new Button("<- Back to main menu");
+        goBackButton.setTextFill(Color.YELLOW);
+        goBackButton.setStyle("-fx-background-color: #707070; -fx-font-size: 12px");
+        goBackButton.setOnMouseEntered(event ->
+                goBackButton.setStyle("-fx-background-color: #5d5d5d; -fx-font-size: 12px"));
+        goBackButton.setOnMouseExited(event ->
+                goBackButton.setStyle("-fx-background-color: #707070; -fx-font-size: 12px"));
+        goBackButton.setOnMouseClicked(event -> helpTextWrapper.setVisible(false));
+        return goBackButton;
     }
 
     private void createPopup() {
