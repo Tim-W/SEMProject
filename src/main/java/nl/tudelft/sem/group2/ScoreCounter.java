@@ -50,7 +50,7 @@ public class ScoreCounter extends Observable {
      *                      slow (double points),
      *                      or fast (normal points)
      */
-    public void updateScore(int completedArea, boolean fastArea) {
+    void updateScore(int completedArea, boolean fastArea) {
         int totalArea = LaunchApp.getGridWidth() * LaunchApp.getGridHeight();
         double percentageIncrease = (double) completedArea / ((double) totalArea * 2);
         totalPercentage += percentageIncrease;
@@ -77,7 +77,7 @@ public class ScoreCounter extends Observable {
      * @return true if the claimed percentage is high enough.
      */
     public boolean hasWon() {
-        return getTotalPercentage() >= getTargetPercentage();
+        return getTotalPercentage() >= targetPercentage;
     }
 
 
@@ -104,9 +104,6 @@ public class ScoreCounter extends Observable {
         this.totalScore = totalScore;
     }
 
-    private double getTargetPercentage() {
-        return targetPercentage;
-    }
 
     public void setTargetPercentage(double targetPercentage) {
         this.targetPercentage = targetPercentage;

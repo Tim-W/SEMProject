@@ -406,15 +406,14 @@ public final class GameController {
 
     private void applyPowerups() {
         for (Cursor cursor : cursors) {
-            if (cursor.getPowerupHandler().getCurrentPowerup() != PowerUpType.NONE
+            if (cursor.getPowerupHandler().hasPowerup()
                     && cursor.getPowerupHandler().getPowerUpDuration() <= 0) {
                 cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.NONE);
             }
 
-            if (cursor.getPowerupHandler().getCurrentPowerup() != PowerUpType.NONE
+            if (cursor.getPowerupHandler().hasPowerup()
                     && cursor.getPowerupHandler().getPowerUpDuration() > 0) {
-                int duration = cursor.getPowerupHandler().getPowerUpDuration();
-                cursor.getPowerupHandler().setPowerUpDuration(duration - 1);
+                cursor.getPowerupHandler().decrementDuration();
             }
         }
     }

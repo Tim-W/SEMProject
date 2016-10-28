@@ -37,4 +37,18 @@ public class PowerupHandler {
     public void setPowerUpDuration(int powerUpDuration) {
         this.powerUpDuration = powerUpDuration;
     }
+
+    /**
+     * @return true if there is a powerup active.
+     */
+    public boolean hasPowerup() {
+        return currentPowerup != PowerUpType.NONE;
+    }
+
+    /**
+     * Decrements the powerup duration by one.
+     */
+    public void decrementDuration() {
+        powerUpDuration--;
+    }
 }
