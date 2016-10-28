@@ -74,6 +74,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.stix = stix;
         this.lives = lives;
         this.currentPowerup = PowerUpType.NONE;
+
     }
 
     @Override

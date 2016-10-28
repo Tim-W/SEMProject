@@ -1,11 +1,11 @@
 package nl.tudelft.sem.group2.level;
 
 /**
- * Created by gijs on 26-10-2016.
+ * Level class which keeps track of the target percentage, qix size and if the level is running.
  */
 public class Level {
     private int percentage;
-    private int id;
+    private int levelId;
     private int qixSize;
     // Boolean that states if the game is running
     private boolean isRunning = false;
@@ -14,12 +14,12 @@ public class Level {
      * creates a new level.
      *
      * @param percentage of level
-     * @param id         of level
+     * @param levelId         of level
      * @param qixSize    of qix
      */
-    public Level(int percentage, int id, int qixSize) {
+    public Level(int percentage, int levelId, int qixSize) {
         this.percentage = percentage;
-        this.id = id;
+        this.levelId = levelId;
         this.qixSize = qixSize;
     }
 
@@ -51,8 +51,8 @@ public class Level {
      *
      * @return int id of the level.
      */
-    public int getID() {
-        return id;
+    public int getLevelId() {
+        return levelId;
     }
 
     /**

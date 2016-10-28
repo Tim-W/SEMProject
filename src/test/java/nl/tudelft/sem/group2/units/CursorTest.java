@@ -23,10 +23,7 @@ import static org.mockito.Mockito.verify;
  * Test for cursors
  */
 
-/**
- * ignore because
- * java.lang.IllegalStateException: Not on FX application thread; currentThread = main
- */
+
 public class CursorTest {
 
     @Rule

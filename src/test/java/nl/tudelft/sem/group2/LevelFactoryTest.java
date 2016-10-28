@@ -7,14 +7,14 @@ import org.junit.Test;
 import static nl.tudelft.sem.group2.level.LevelFactory.createFromXml;
 
 /**
- * Created by gijs on 26-10-2016.
+ * Test for level factory
  */
 public class LevelFactoryTest {
     @Test
     public void testCreateFromXml() throws Exception {
         int id = 1;
         Level level = createFromXml(id, false);
-        Assert.assertEquals(level.getID(), id);
+        Assert.assertEquals(level.getLevelId(), id);
     }
 
 }
