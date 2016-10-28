@@ -29,7 +29,7 @@ public class ScoreCounter extends Observable {
 
     private Color color;
 
-    private int id;
+    private int cursorID;
 
     private int recentScore;
     private double recentPercentage;
@@ -38,19 +38,19 @@ public class ScoreCounter extends Observable {
     /**
      * Default score counter constructor.
      *
-     * @param id specifying the cursor.
+     * @param cursorID specifying the cursor.
      * @param targetPercentage of the level
      */
-    public ScoreCounter(int id, int targetPercentage) {
+    public ScoreCounter(int cursorID, int targetPercentage) {
         this.totalPercentage = 0;
         this.totalScore = 0;
         this.recentPercentage = 0;
         this.recentScore = 0;
         this.targetPercentage = targetPercentage;
-        this.id = id;
+        this.cursorID = cursorID;
         color = Color.BLUE;
         //if player 2
-        if (id == 1) {
+        if (cursorID == 1) {
             color = Color.RED;
         }
 
@@ -136,12 +136,12 @@ public class ScoreCounter extends Observable {
     }
 
     /**
-     * get id of the cursor.
+     * get cursorID of the cursor.
      *
-     * @return int id
+     * @return int cursorID
      */
-    public int getId() {
-        return id;
+    public int getCursorID() {
+        return cursorID;
     }
 
     /**

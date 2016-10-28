@@ -224,7 +224,7 @@ public class ScoreScene extends SubScene implements Observer {
     public void update(Observable o, Object arg) {
         if (o instanceof ScoreCounter) {
             ScoreCounter scoreCounter = (ScoreCounter) o;
-            int id = scoreCounter.getId();
+            int id = scoreCounter.getCursorID();
             addScore(scoreCounter.getRecentScore(), id);
             addClaimedPercentage(scoreCounter.getRecentPercentage(), id);
             LOGGER.log(Level.WARNING, "Score updated "
