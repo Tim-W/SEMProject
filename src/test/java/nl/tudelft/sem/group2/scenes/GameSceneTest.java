@@ -49,7 +49,7 @@ public class GameSceneTest {
     public void testDrawStixAndFuseVerifyNot() throws Exception {
         setUp();
         spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-        spyCursor.handleFuse();
+        spyCursor.getFuseHandler().handleFuse();
         scene.draw();
         verify(spyCursor, times(0)).isFast();
     }

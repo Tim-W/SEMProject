@@ -347,12 +347,12 @@ public final class GameController {
                     cursor.addLife();
                     return;
                 case EAT:
-                    cursor.setCurrentPowerup(PowerUpType.EAT);
-                    cursor.setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
+                    cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.EAT);
+                    cursor.getPowerupHandler().setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
                     return;
                 case SPEED:
-                    cursor.setCurrentPowerup(PowerUpType.SPEED);
-                    cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
+                    cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
+                    cursor.getPowerupHandler().setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
             }
         }
     }
@@ -391,7 +391,7 @@ public final class GameController {
      */
     private boolean powerUpActive() {
         for (Cursor cursor : cursors) {
-            if (cursor.getCurrentPowerup() != PowerUpType.NONE) {
+            if (cursor.getPowerupHandler().getCurrentPowerup() != PowerUpType.NONE) {
                 return true;
             }
         }
@@ -406,13 +406,15 @@ public final class GameController {
 
     private void applyPowerups() {
         for (Cursor cursor : cursors) {
-            if (cursor.getCurrentPowerup() != PowerUpType.NONE && cursor.getPowerUpDuration() <= 0) {
-                cursor.setCurrentPowerup(PowerUpType.NONE);
+            if (cursor.getPowerupHandler().getCurrentPowerup() != PowerUpType.NONE
+                    && cursor.getPowerupHandler().getPowerUpDuration() <= 0) {
+                cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.NONE);
             }
 
-            if (cursor.getCurrentPowerup() != PowerUpType.NONE && cursor.getPowerUpDuration() > 0) {
-                int duration = cursor.getPowerUpDuration();
-                cursor.setPowerUpDuration(duration - 1);
+            if (cursor.getPowerupHandler().getCurrentPowerup() != PowerUpType.NONE
+                    && cursor.getPowerupHandler().getPowerUpDuration() > 0) {
+                int duration = cursor.getPowerupHandler().getPowerUpDuration();
+                cursor.getPowerupHandler().setPowerUpDuration(duration - 1);
             }
         }
     }

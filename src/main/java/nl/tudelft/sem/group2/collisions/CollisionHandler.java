@@ -62,7 +62,7 @@ public class CollisionHandler {
                     }
                 } else {
                     if (cursor.intersect(collidee)) {
-                        if (cursor.getCurrentPowerup() == EAT && collidee instanceof Sparx) {
+                        if (cursor.getPowerupHandler().getCurrentPowerup() == EAT && collidee instanceof Sparx) {
                             unitsList.remove(collidee);
                             GameController.getInstance().removeUnit(collidee);
                             return false;
