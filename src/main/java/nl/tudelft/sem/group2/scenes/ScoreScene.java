@@ -26,7 +26,6 @@ import static nl.tudelft.sem.group2.global.Globals.LIVES;
 public class ScoreScene extends SubScene implements Observer {
 
     //standard target percentage
-    private static final int CENTER_SPACING = -5;
     private static final int TITLE_FIT_HEIGHT = 40;
     private static final int TITLE_FIT_WIDTH = 100;
     private static final int TITLE_WIDTH = 113;
@@ -37,7 +36,6 @@ public class ScoreScene extends SubScene implements Observer {
     private ArrayList<Label> claimedPercentageLabels;
     private ArrayList<Label> livesLabels;
     private ArrayList<Color> colors;
-    private ArrayList<Double> highClaimedPercentages;
     private Label totalClaimedPercentageLabel;
     private Label totalScoreLabel;
     private VBox left;
@@ -58,7 +56,7 @@ public class ScoreScene extends SubScene implements Observer {
      */
     public ScoreScene(Group root, double width, double height) {
         super(root, width, height);
-        Initialize();
+        initialize();
         createTitlePane();
         //TODO Fix font
         //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
@@ -77,14 +75,13 @@ public class ScoreScene extends SubScene implements Observer {
         root.getChildren().add(tilePane);
     }
 
-    private void Initialize() {
+    private void initialize() {
         totalClaimedPercentageLabel = new Label("0");
         totalScoreLabel = new Label("0");
         left = new VBox();
         left.setAlignment(Pos.TOP_CENTER);
         playerBoxes = new ArrayList<>();
         scoreLabels = new ArrayList<>();
-        highClaimedPercentages = new ArrayList<>();
         claimedPercentageLabels = new ArrayList<>();
         claimedPercentages = new ArrayList<>();
         scores = new ArrayList<>();
@@ -92,35 +89,34 @@ public class ScoreScene extends SubScene implements Observer {
         colors = new ArrayList<>();
     }
 
-    private void addPlayerBox(int ID) {
+    private void addPlayerBox(int id) {
         playerBoxes.add(new VBox());
-        playerBoxes.get(ID).setAlignment(Pos.CENTER);
-        if (ID == 0) {
+        playerBoxes.get(id).setAlignment(Pos.CENTER);
+        if (id == 0) {
             colors.add(Color.BLUE);
         } else {
             colors.add(Color.RED);
         }
-        highClaimedPercentages.add(0.0);
         scores.add(0);
         claimedPercentages.add(0.0);
-        addPlayerScore(ID);
-        setLivesLabel(LIVES, ID);
+        addPlayerScore(id);
+        setLivesLabel(LIVES, id);
     }
 
-    private void addPlayerScore(int ID) {
-        playerBoxes.get(ID).getChildren().add(new Label("Player " + (ID + 1)));
+    private void addPlayerScore(int id) {
+        playerBoxes.get(id).getChildren().add(new Label("Player " + (id + 1)));
 
         Label claimedPercentage = new Label();
         claimedPercentageLabels.add(claimedPercentage);
-        playerBoxes.get(ID).getChildren().add(claimedPercentage);
+        playerBoxes.get(id).getChildren().add(claimedPercentage);
 
         Label livesLabel = new Label();
         livesLabels.add(livesLabel);
-        playerBoxes.get(ID).getChildren().add(livesLabel);
+        playerBoxes.get(id).getChildren().add(livesLabel);
 
         Label score = new Label();
         scoreLabels.add(score);
-        playerBoxes.get(ID).getChildren().add(score);
+        playerBoxes.get(id).getChildren().add(score);
 
     }
 
@@ -178,15 +174,18 @@ public class ScoreScene extends SubScene implements Observer {
      * Set the current score amount.
      *
      * @param scoreInput the score to be shown - is displayed as-is
+     * @param id         of the cursor
      */
-    public void addScore(int scoreInput, int ID) {
-        scores.set(ID, scores.get(ID) + scoreInput);
+    public void addScore(int scoreInput, int id) {
+        scores.set(id, scores.get(id) + scoreInput);
         setTotalScore(scoreInput);
-        scoreLabels.get(ID).setText("Score: " + String.valueOf(scores.get(ID)));
+        scoreLabels.get(id).setText("Score: " + String.valueOf(scores.get(id)));
     }
 
     /**
      * Set the current score amount.
+     *
+     * @param scoreInput of the new area
      */
     public void setTotalScore(int scoreInput) {
         totalScore += scoreInput;
@@ -198,24 +197,22 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param claimedPercentageInput the claimed percentage in XX%, so no decimals
      */
-    private void addClaimedPercentage(double claimedPercentageInput, int ID) {
-        claimedPercentages.set(ID, claimedPercentages.get(ID) + claimedPercentageInput);
+    private void addClaimedPercentage(double claimedPercentageInput, int id) {
+        claimedPercentages.set(id, claimedPercentages.get(id) + claimedPercentageInput);
         setTotalClaimedPercentageLabel();
-        claimedPercentageLabels.get(ID).setText(Math.round(claimedPercentages.get(ID)) + "%");
-        highClaimedPercentages.set(ID, claimedPercentages.get(ID));
+        claimedPercentageLabels.get(id).setText(Math.round(claimedPercentages.get(id)) + "%");
     }
 
     /**
      * Display claimed percentage with a % sign.
-     *
      */
     private void setTotalClaimedPercentageLabel() {
         double percentage = 0;
         for (Double i : claimedPercentages) {
             percentage += i;
         }
-        totalClaimedPercentageLabel.setText("Claimed: " + Math.round(percentage) +
-                "% of " + GameController.getInstance()
+        totalClaimedPercentageLabel.setText("Claimed: " + Math.round(percentage)
+                + "% of " + GameController.getInstance()
                 .getLevelHandler().getLevel().getPercentage() + "%"
         );
     }
@@ -230,16 +227,14 @@ public class ScoreScene extends SubScene implements Observer {
     public void update(Observable o, Object arg) {
         if (o instanceof ScoreCounter) {
             ScoreCounter scoreCounter = (ScoreCounter) o;
-            int ID = scoreCounter.getID();
-            //if (scoreCounter.getTotalPercentage() >= highClaimedPercentages.get(ID)) {
-            addScore(scoreCounter.getRecentScore(), ID);
-            addClaimedPercentage(scoreCounter.getRecentPercentage(), ID);
-                LOGGER.log(Level.WARNING, "Score updated "
-                        + ID, this.getClass());
-                if (arg instanceof Integer) {
-                    setLivesLabel((int) arg, ID);
-                }
-            // }
+            int id = scoreCounter.getId();
+            addScore(scoreCounter.getRecentScore(), id);
+            addClaimedPercentage(scoreCounter.getRecentPercentage(), id);
+            LOGGER.log(Level.WARNING, "Score updated "
+                    + id, this.getClass());
+            if (arg instanceof Integer) {
+                setLivesLabel((int) arg, id);
+            }
         }
     }
 
@@ -260,8 +255,9 @@ public class ScoreScene extends SubScene implements Observer {
      * setter for the lives label.
      *
      * @param lives the amount of lives the player has left
+     * @param id of the cursor
      */
-    public void setLivesLabel(int lives, int ID) {
-        livesLabels.get(ID).setText("Lives: " + lives);
+    public void setLivesLabel(int lives, int id) {
+        livesLabels.get(id).setText("Lives: " + lives);
     }
 }

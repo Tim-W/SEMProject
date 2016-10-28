@@ -43,8 +43,6 @@ public class PowerUpCollisionsTest {
         handler = new CollisionHandler();
         set = new HashSet<>();
         cursors = new ArrayList<>();
-        //gameController = GameController.getInstance();
-        //gameController.initializeSinglePlayer();
         cursor = mock(Cursor.class);
         set.add(cursor);
         cursors.add(cursor);

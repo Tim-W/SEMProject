@@ -161,7 +161,7 @@ public final class GameController {
     }
 
     private void setScoreCounterInCursor(Cursor cursor) {
-        ScoreCounter scoreCounter = new ScoreCounter(cursor.getID(), levelHandler.getLevel().getPercentage());
+        ScoreCounter scoreCounter = new ScoreCounter(cursor.getId(), levelHandler.getLevel().getPercentage());
         scoreCounter.addObserver(gameScene.getScoreScene());
         cursor.setScoreCounter(scoreCounter);
     }

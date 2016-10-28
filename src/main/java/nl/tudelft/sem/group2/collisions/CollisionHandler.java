@@ -94,6 +94,7 @@ public class CollisionHandler {
      * Returns an integer > 0 if cursor collides with a powerup.
      *
      * @param units the list of units
+     * @param cursors cursors of the game
      * @return 0 if no collision, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
      */
     public PowerupEvent powerUpCollisions(Set<Unit> units, ArrayList<Cursor> cursors) {

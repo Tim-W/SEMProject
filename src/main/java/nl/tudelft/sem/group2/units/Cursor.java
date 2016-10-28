@@ -45,7 +45,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private KeyCode fastMoveKey, slowMoveKey;
     private ScoreCounter scoreCounter;
-    private int ID;
+    private int id;
 
 
     /**
@@ -56,17 +56,17 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param height      height, used for collision detection
      * @param areaTracker used for calculating areas
      * @param stix        current stix to use
-     * @param ID          identifies the cursor.
+     * @param id          identifies the cursor.
      * @param lives       the amount of lives a players starts with
      */
     public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, int lives,
-                  int ID) {
+                  int id) {
         super(position.x, position.y, width, height, areaTracker);
         Image[] sprite = new Image[1];
-        this.ID = ID;
+        this.id = id;
         String colorString = "blue";
         //if player 2
-        if (ID == 1) {
+        if (id == 1) {
             colorString = "red";
         }
         sprite[0] = new Image("/images/cursor_" + colorString + ".png");
@@ -312,12 +312,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
-     * Get ID of the cursor.
+     * Get id of the cursor.
      *
-     * @return int ID
+     * @return int id
      */
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
     /**

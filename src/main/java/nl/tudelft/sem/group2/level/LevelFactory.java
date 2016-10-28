@@ -23,6 +23,7 @@ public final class LevelFactory {
      * Method that parses a XML-file into a level.
      *
      * @param levelNumber - number of the level.
+     * @param twoPlayer true if game is multiplayer
      * @return - returns a level.
      */
     public static Level createFromXml(int levelNumber, boolean twoPlayer)

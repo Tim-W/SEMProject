@@ -20,6 +20,7 @@ public class LevelHandler {
 
     /**
      * iterates to next level.
+     * @param twoPlayer true if game is multiplayer
      */
     public void nextLevel(boolean twoPlayer) {
         levelID++;
