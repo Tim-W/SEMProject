@@ -49,8 +49,6 @@ public class GameScene extends Scene {
      */
     public GameScene(final Group root, Color color) {
         super(root, color);
-        // Initialize units set because it's necessary in GameController
-        // Temporary until CollisionHandler is merged into this
 
         initializeCanvas();
         // Initialize label in middle of screen to display start message
@@ -109,8 +107,6 @@ public class GameScene extends Scene {
 
         // Obtain GraphicsContext2d from canvas
         gc = canvas.getGraphicsContext2D();
-        // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
-        gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
     }
 

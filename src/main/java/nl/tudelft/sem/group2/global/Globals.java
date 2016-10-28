@@ -21,7 +21,7 @@ public final class Globals {
     public static final int BORDER_BOTTOM_POSITION_Y = 380;
     public static final int MESSAGEBOX_POSITION_X = 50;
     public static final int MESSAGEBOX_POSITION_Y = 176;
-    public static final int SCORESCENE_POSITION_Y = 60;
+    public static final int SCORESCENE_POSITION_Y = 100;
     public static final int GAMEOVER_POSITION_X = 103;
     public static final int GAMEWON_POSITION_X = 115;
     public static final double GAME_START_SOUND_VOLUME = 0.09;

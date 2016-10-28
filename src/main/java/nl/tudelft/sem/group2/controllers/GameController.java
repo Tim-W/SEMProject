@@ -60,7 +60,6 @@ public final class GameController {
     private CollisionHandler collisionHandler;
     private LevelHandler levelHandler;
     private GameScene gameScene;
-    private int score = 0;
     private boolean twoPlayers;
 
     /**
@@ -71,7 +70,6 @@ public final class GameController {
         areaTracker = new AreaTracker();
         levelHandler = new LevelHandler();
         collisionHandler = new CollisionHandler();
-        score = 0;
         //Animation timer initialization
         previousTime = System.nanoTime();
         createAnimationTimer();
@@ -261,30 +259,19 @@ public final class GameController {
     private void gameWon() {
         levelHandler.getLevel().pause();
         SoundHandler.playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
-        //check high score
-        for (Cursor cursor : cursors) {
-            if (cursor.getScoreCounter().getTotalScore() > score) {
-                score += cursor.getScoreCounter().getTotalScore();
-            }
-        }
         if (levelHandler.getLevelID() == LEVELS) {
             gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
             gameScene.setMessage("Game won!");
+            //LOGGER.log(java.util.logging.Level.INFO, "Game Won! Player won with a score of " + score, GameScene
+            // .class);
+
         } else {
             gameScene.setMessageBoxLayoutX(Globals.MESSAGEBOX_POSITION_X);
             gameScene.setMessage("Press SPACE to go to the next level!");
             levelHandler.nextLevel(twoPlayers);
             resetLevel();
         }
-
-        //check high score
-        for (Cursor cursor : cursors) {
-            if (cursor.getScoreCounter().getTotalScore() > score) {
-                score += cursor.getScoreCounter().getTotalScore();
-            }
         }
-        LOGGER.log(java.util.logging.Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
-    }
 
     /**
      * Setup an animation timer that runs at 300FPS.
@@ -472,7 +459,7 @@ public final class GameController {
         initializeCursorSpeed();
         if (e.getCode().equals(KeyCode.SPACE) && !levelHandler.getLevel().isRunning()) {
             SoundHandler.playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
-            if (score == 0) {
+            if (!levelHandler.getLevel().isRunning()) {
                 animationTimerStart();
                 LOGGER.log(java.util.logging.Level.INFO, "Game started succesfully", this.getClass());
             }

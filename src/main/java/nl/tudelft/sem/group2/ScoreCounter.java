@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.controllers.GameController;
 
 import java.util.Observable;
 import java.util.logging.Level;
@@ -31,6 +32,10 @@ public class ScoreCounter extends Observable {
 
     private int ID;
 
+    private int recentScore;
+    private double recentPercentage;
+
+
     /**
      * Default score counter constructor.
      *
@@ -39,7 +44,9 @@ public class ScoreCounter extends Observable {
     public ScoreCounter(int ID, int targetPercentage) {
         this.totalPercentage = 0;
         this.totalScore = 0;
-        this.targetPercentage = targetPercentage;
+        this.recentPercentage = 0;
+        this.recentScore = 0;
+        this.targetPercentage = GameController.getInstance().getLevelHandler().getLevel().getPercentage();
         this.ID = ID;
         color = Color.BLUE;
         //if player 2
@@ -61,15 +68,17 @@ public class ScoreCounter extends Observable {
     public void updateScore(int completedArea, boolean fastArea) {
         double percentageIncrease = (double) completedArea / GRID_SURFACE * 100 / 2;
         totalPercentage += percentageIncrease;
+        recentPercentage = percentageIncrease;
         LOGGER.log(Level.INFO, "Percentage increased with "
                 + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "
                 + Math.round(totalPercentage * FAST_AREA_MULTIPLIER) / 100.0, this.getClass());
-
         if (fastArea) {
+            recentScore = (int) (percentageIncrease * FAST_AREA_MULTIPLIER);
             totalScore += percentageIncrease * FAST_AREA_MULTIPLIER;
             LOGGER.log(Level.INFO, "Score increased with "
                     + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER), this.getClass());
         } else {
+            recentScore = (int) (percentageIncrease * SLOW_AREA_MULTIPLIER);
             totalScore += percentageIncrease * SLOW_AREA_MULTIPLIER;
             LOGGER.log(Level.INFO, "Score increased with "
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
@@ -108,6 +117,14 @@ public class ScoreCounter extends Observable {
 
     public void setTotalScore(int totalScore) {
         this.totalScore = totalScore;
+    }
+
+    public int getRecentScore() {
+        return recentScore;
+    }
+
+    public double getRecentPercentage() {
+        return recentPercentage;
     }
 
     public double getTargetPercentage() {

@@ -33,8 +33,8 @@ public class ScoreScene extends SubScene implements Observer {
     private static final int TITLE_PADDING = 5;
     private static final int TITLE_VGAP = 5;
     private TilePane tilePane;
-    private ArrayList<Label> scores;
-    private ArrayList<Label> claimedPercentages;
+    private ArrayList<Label> scoreLabels;
+    private ArrayList<Label> claimedPercentageLabels;
     private ArrayList<Label> livesLabels;
     private ArrayList<Color> colors;
     private ArrayList<Double> highClaimedPercentages;
@@ -42,8 +42,9 @@ public class ScoreScene extends SubScene implements Observer {
     private Label totalScoreLabel;
     private VBox left;
     private ArrayList<VBox> playerBoxes;
+    private ArrayList<Integer> scores;
+    private ArrayList<Double> claimedPercentages;
     private int totalScore;
-    private int totalPercentage;
 
     /**
      * Create a new ScoreScene.
@@ -57,10 +58,8 @@ public class ScoreScene extends SubScene implements Observer {
      */
     public ScoreScene(Group root, double width, double height) {
         super(root, width, height);
-        InitializeLabelsAndBoxes();
+        Initialize();
         createTitlePane();
-        totalScore = 0;
-        totalPercentage = 0;
         //TODO Fix font
         //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
         //title.setFont(f);
@@ -78,15 +77,17 @@ public class ScoreScene extends SubScene implements Observer {
         root.getChildren().add(tilePane);
     }
 
-    private void InitializeLabelsAndBoxes() {
-        totalClaimedPercentageLabel = new Label();
-        totalScoreLabel = new Label();
+    private void Initialize() {
+        totalClaimedPercentageLabel = new Label("0");
+        totalScoreLabel = new Label("0");
         left = new VBox();
         left.setAlignment(Pos.TOP_CENTER);
         playerBoxes = new ArrayList<>();
-        scores = new ArrayList<>();
+        scoreLabels = new ArrayList<>();
         highClaimedPercentages = new ArrayList<>();
+        claimedPercentageLabels = new ArrayList<>();
         claimedPercentages = new ArrayList<>();
+        scores = new ArrayList<>();
         livesLabels = new ArrayList<>();
         colors = new ArrayList<>();
     }
@@ -100,6 +101,8 @@ public class ScoreScene extends SubScene implements Observer {
             colors.add(Color.RED);
         }
         highClaimedPercentages.add(0.0);
+        scores.add(0);
+        claimedPercentages.add(0.0);
         addPlayerScore(ID);
         setLivesLabel(LIVES, ID);
     }
@@ -108,15 +111,15 @@ public class ScoreScene extends SubScene implements Observer {
         playerBoxes.get(ID).getChildren().add(new Label("Player " + (ID + 1)));
 
         Label claimedPercentage = new Label();
-        claimedPercentages.add(claimedPercentage);
+        claimedPercentageLabels.add(claimedPercentage);
         playerBoxes.get(ID).getChildren().add(claimedPercentage);
 
         Label livesLabel = new Label();
         livesLabels.add(livesLabel);
         playerBoxes.get(ID).getChildren().add(livesLabel);
 
-        Label score = new Label("0");
-        scores.add(score);
+        Label score = new Label();
+        scoreLabels.add(score);
         playerBoxes.get(ID).getChildren().add(score);
 
     }
@@ -129,35 +132,31 @@ public class ScoreScene extends SubScene implements Observer {
     }
 
     private void setClaimedPercentages() {
-        setTotalClaimedPercentageLabel(0);
+        setTotalClaimedPercentageLabel();
         totalClaimedPercentageLabel.setTextFill(Color.WHITE);
         totalClaimedPercentageLabel.setStyle("-fx-font-size:12;");
         left.getChildren().add(totalClaimedPercentageLabel);
-        for (int i = 0; i < claimedPercentages.size(); i++) {
-            Label label = claimedPercentages.get(i);
-            setClaimedPercentage(0, i);
+        for (int i = 0; i < claimedPercentageLabels.size(); i++) {
+            Label label = claimedPercentageLabels.get(i);
+            addClaimedPercentage(0, i);
             label.setTextFill(colors.get(i));
             label.setStyle("-fx-font-size:12;");
         }
     }
 
     private void setScoreLabels() {
+        totalScore = 0;
         setTotalScore(0);
         totalScoreLabel.setTextFill(Color.WHITE);
         totalScoreLabel.setStyle("-fx-font-size:12;");
         left.getChildren().add(totalScoreLabel);
-        for (int i = 0; i < scores.size(); i++) {
-            Label label = scores.get(i);
+        for (int i = 0; i < scoreLabels.size(); i++) {
+            Label label = scoreLabels.get(i);
             label.setTextFill(colors.get(i));
-            label.setStyle("-fx-font-size:24;");
+            label.setStyle("-fx-font-size:12;");
+            addScore(0, i);
         }
-    }/*
-
-    private void setClaimedText() {
-
-        claimed.setTextFill(color);
-        claimed.setStyle("-fx-font-size:12;");
-    }*/
+    }
 
     private void createLivesLabel() {
         for (int i = 0; i < livesLabels.size(); i++) {
@@ -171,7 +170,6 @@ public class ScoreScene extends SubScene implements Observer {
         tilePane = new TilePane();
         tilePane.prefTileWidthProperty().setValue(TITLE_WIDTH);
         tilePane.setPadding(new Insets(TITLE_PADDING));
-        tilePane.setMaxHeight(200);
         tilePane.setVgap(TITLE_VGAP);
         tilePane.getChildren().add(left);
     }
@@ -181,19 +179,18 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param scoreInput the score to be shown - is displayed as-is
      */
-    public void setScore(int scoreInput, int ID) {
-        totalScore += scoreInput;
-        setTotalScore(totalScore);
-        scores.get(ID).setText(String.valueOf(scoreInput));
+    public void addScore(int scoreInput, int ID) {
+        scores.set(ID, scores.get(ID) + scoreInput);
+        setTotalScore(scoreInput);
+        scoreLabels.get(ID).setText("Score: " + String.valueOf(scores.get(ID)));
     }
+
     /**
      * Set the current score amount.
-     *
-     * @param scoreInput the score to be shown - is displayed as-is
      */
     public void setTotalScore(int scoreInput) {
-        setTotalClaimedPercentageLabel(totalPercentage);
-        totalScoreLabel.setText("Score: " + String.valueOf(scoreInput));
+        totalScore += scoreInput;
+        totalScoreLabel.setText("Total score: " + String.valueOf(totalScore));
     }
 
     /**
@@ -201,20 +198,23 @@ public class ScoreScene extends SubScene implements Observer {
      *
      * @param claimedPercentageInput the claimed percentage in XX%, so no decimals
      */
-    private void setClaimedPercentage(double claimedPercentageInput, int ID) {
-        totalPercentage += claimedPercentageInput;
-        setTotalClaimedPercentageLabel(totalPercentage);
-        claimedPercentages.get(ID).setText(Math.round(claimedPercentageInput) + "%");
-        highClaimedPercentages.set(ID, claimedPercentageInput);
+    private void addClaimedPercentage(double claimedPercentageInput, int ID) {
+        claimedPercentages.set(ID, claimedPercentages.get(ID) + claimedPercentageInput);
+        setTotalClaimedPercentageLabel();
+        claimedPercentageLabels.get(ID).setText(Math.round(claimedPercentages.get(ID)) + "%");
+        highClaimedPercentages.set(ID, claimedPercentages.get(ID));
     }
 
     /**
      * Display claimed percentage with a % sign.
      *
-     * @param claimedTotalPercentageInput the total claimed percentage in XX%, so no decimals
      */
-    private void setTotalClaimedPercentageLabel(double claimedTotalPercentageInput) {
-        totalClaimedPercentageLabel.setText("Claimed: " + Math.round(claimedTotalPercentageInput) +
+    private void setTotalClaimedPercentageLabel() {
+        double percentage = 0;
+        for (Double i : claimedPercentages) {
+            percentage += i;
+        }
+        totalClaimedPercentageLabel.setText("Claimed: " + Math.round(percentage) +
                 "% of " + GameController.getInstance()
                 .getLevelHandler().getLevel().getPercentage() + "%"
         );
@@ -231,15 +231,15 @@ public class ScoreScene extends SubScene implements Observer {
         if (o instanceof ScoreCounter) {
             ScoreCounter scoreCounter = (ScoreCounter) o;
             int ID = scoreCounter.getID();
-            if (scoreCounter.getTotalPercentage() >= highClaimedPercentages.get(ID)) {
-                setScore(scoreCounter.getTotalScore(), ID);
-                setClaimedPercentage(scoreCounter.getTotalPercentage(), ID);
+            //if (scoreCounter.getTotalPercentage() >= highClaimedPercentages.get(ID)) {
+            addScore(scoreCounter.getRecentScore(), ID);
+            addClaimedPercentage(scoreCounter.getRecentPercentage(), ID);
                 LOGGER.log(Level.WARNING, "Score updated "
                         + ID, this.getClass());
                 if (arg instanceof Integer) {
                     setLivesLabel((int) arg, ID);
                 }
-            }
+            // }
         }
     }
 
@@ -247,8 +247,13 @@ public class ScoreScene extends SubScene implements Observer {
      * resets the percentage.
      */
     public void reset() {
-        setClaimedPercentage(0, 0);
-        setClaimedPercentage(0, 1);
+        for (int i = 0; i < claimedPercentages.size(); i++) {
+            claimedPercentages.set(i, 0.0);
+            scores.set(i, 0);
+            addScore(0, i);
+            addClaimedPercentage(0.0, i);
+        }
+        setTotalClaimedPercentageLabel();
     }
 
     /**
