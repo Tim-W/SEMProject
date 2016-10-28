@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.units.Stix;
-
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +11,9 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
+import javafx.scene.paint.Color;
+import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.units.Stix;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
@@ -138,31 +137,50 @@ public class AreaTracker {
         stix.emptyStix();
     }
 
+    /**
+     * Empty the border lists.
+     */
     private void resetBorders() {
         border1 = new LinkedList<>();
         border2 = new LinkedList<>();
     }
 
+    /**
+     * Empty the area lists.
+     */
     private void resetAreas() {
         area1 = new LinkedList<>();
         area2 = new LinkedList<>();
     }
 
+    /**
+     * Sets all the points from the current stix to border points on the grid.
+     *
+     * @param stix the stix that is currently being used.
+     */
     private void setOuterBorders(Stix stix) {
-        //Set all the points from the current stix to border points on the grid
         for (Point current : stix.getStixCoordinates()) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
         }
     }
 
+    /**
+     * Reset the temporary area tracker.
+     */
     private void resetAreaTracker() {
-        //Reset the temporary area tracker
         area1 = null;
         area2 = null;
         border1 = null;
         border2 = null;
     }
 
+    /**
+     * With the new calculated size, updates the score counter.
+     *
+     * @param fastArea     whether the new area is a fast area.
+     * @param stix         the stix that finished the area.
+     * @param scoreCounter the score counter.
+     */
     private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
 
         //When testing create own scoreCounter
@@ -175,6 +193,9 @@ public class AreaTracker {
         scoreCounter.updateScore(newArea.size() + stix.getStixCoordinates().size(), fastArea);
     }
 
+    /**
+     * Check area1 and set the borders on the right areas.
+     */
     private void setBorders() {
         if (area1 == null) {
             newArea = area2;
@@ -185,6 +206,13 @@ public class AreaTracker {
         }
     }
 
+    /**
+     * Checks the direction in which the stix started to move and calls the flood fill algorithm.
+     * @param qixCoordinates the spot which the qix is at.
+     * @param start starting point of the stix.
+     * @param dir direction if the stix.
+     * @param stix the stix of which the directions are being checked.
+     */
     private void checkDirections(Point qixCoordinates, Point start, Point dir, Stix stix) {
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX() || start.getY() != dir.getY()) {
@@ -269,6 +297,11 @@ public class AreaTracker {
         }
     }
 
+    /**
+     * Add a point for the area tracker to handle.
+     * @param addToArea1 whether the point lies in area1 or not.
+     * @param pointToCheck the point to add.
+     */
     private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
         if (addToArea1) {
             area1.add(pointToCheck);
@@ -289,8 +322,12 @@ public class AreaTracker {
         }
     }
 
+    /**
+     * If the point that hit the qix was the coordinate of the qix set,
+     * the temporary area tracker that is currently in use to null.
+     * @param addToArea1 whether to add it to area1. Otherwise to area2.
+     */
     private void hitQix(boolean addToArea1) {
-        // If that point was the coordinate of the qix set the temporary area tracker that is currently in use to null
         if (addToArea1) {
             area1 = null;
             border1 = null;
@@ -308,25 +345,6 @@ public class AreaTracker {
      */
     public AreaState[][] getBoardGrid() {
         return boardGrid.clone();
-    }
-
-    /**
-     * Shows a log which visualise the current board grid state.
-     */
-    public void printBoardGrid() {
-        // A map representing the relations between AreaStates and their String visualizations.
-        Map<AreaState, String> areaStateVisualisation = new HashMap<>();
-        areaStateVisualisation.put(AreaState.OUTERBORDER, "[X]");
-        areaStateVisualisation.put(AreaState.INNERBORDER, "[*]");
-        areaStateVisualisation.put(AreaState.UNCOVERED, "[ ]");
-        areaStateVisualisation.put(AreaState.FAST, "[F]");
-        areaStateVisualisation.put(AreaState.SLOW, "[S]");
-        for (AreaState[] column : boardGrid) {
-            for (AreaState state : column) {
-                System.out.print(areaStateVisualisation.get(state));
-            }
-            System.out.println();
-        }
     }
 
     /**
