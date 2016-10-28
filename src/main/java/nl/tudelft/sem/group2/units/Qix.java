@@ -24,9 +24,9 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A Qix is an enemy unit.
- * It moves randomly on the GameScene.
+ * It moves randomly on the board.
  * When the player touches the Qix while drawing,
- * or when the Qix touches the stix, it is views over.
+ * or when the Qix touches the stix, the player loses a life and must start drawing again.
  */
 public class Qix extends Unit implements CollisionInterface, Observer {
 
