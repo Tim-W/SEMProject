@@ -26,6 +26,10 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A cursor which can travel over lines and is controlled by user input (arrow keys).
+ * There are draw keys which for player 1 are I and O and for player 2 Z and X.
+ * With these draw keys a cursor can move from the lines and create it's own lines.
+ * I and Z are used to draw fast, and O and X for drawing slowly but gaining double points.
+ * The cursor can lose a live when colliding with the qix, a sparx or the fuse.
  */
 public class Cursor extends LineTraveller implements CollisionInterface {
     private static final Logger LOGGER = Logger.getLogger();
