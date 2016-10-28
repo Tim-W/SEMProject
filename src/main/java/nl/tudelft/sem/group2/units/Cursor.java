@@ -12,6 +12,7 @@ import nl.tudelft.sem.group2.KeypressHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.PowerupHandler;
 
@@ -30,7 +31,7 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
  */
 public class Cursor extends LineTraveller implements CollisionInterface {
     private static final Logger LOGGER = Logger.getLogger();
-    private final int animationSpeed = 30;
+    private int animationSpeed = Globals.ANIMATION_SPEED;
     private KeyCode currentMove = null;
     private int loops = 0;
     private int speed = 2;
@@ -383,6 +384,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             stix.emptyStix();
             fuseHandler.removeFuse();
         }
+
+        loops = 0;
+        animationSpeed = Globals.DEATH_ANIMATION_SPEED;
     }
 
 
