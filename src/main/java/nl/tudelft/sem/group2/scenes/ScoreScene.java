@@ -58,7 +58,7 @@ public class ScoreScene extends SubScene implements Observer {
         super(root, width, height);
         initialize();
         createTitlePane();
-         addPlayerBox(0);
+        addPlayerBox(0);
         if (GameController.getInstance().isTwoPlayers()) {
             addPlayerBox(1);
         }

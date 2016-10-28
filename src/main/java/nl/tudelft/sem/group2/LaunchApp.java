@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -10,8 +9,6 @@ import nl.tudelft.sem.group2.scenes.StartScene;
 
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.GAME_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
 
