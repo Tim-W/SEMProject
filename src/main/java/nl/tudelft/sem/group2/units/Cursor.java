@@ -164,14 +164,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.currentMove = currentMove;
     }
 
-    /**
-     * get the color of the cursor.
-     *
-     * @return Color of the cursor
-     */
-    public Color getColor() {
-        return color;
-    }
 
     @Override
     public void draw(Canvas canvas) {

@@ -152,7 +152,6 @@ public class AreaTracker extends Observable {
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
         updateScoreCounter(fastArea, stix, scoreCounter);
-        //notify the qix
         areaLeft -= newArea.size();
         setChanged();
         notifyObservers((double) areaLeft);

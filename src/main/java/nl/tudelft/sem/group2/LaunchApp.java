@@ -9,8 +9,6 @@ import nl.tudelft.sem.group2.scenes.StartScene;
 
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.GAME_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
 

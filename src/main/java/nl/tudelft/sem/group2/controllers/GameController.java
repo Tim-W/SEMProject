@@ -478,20 +478,6 @@ public final class GameController {
         }
     }
 
-    /**
-     * getter for testing.
-     *
-     * @return boolean isRunning
-     */
-    boolean isRunning() {
-        return isRunning;
-    }
-
-    private boolean stixNotEmpty(Cursor cursor) {
-        return cursor.getStix().getStixCoordinates() != null
-                && !cursor.getStix().getStixCoordinates().isEmpty();
-    }
-
     //Getters
 
     /**
