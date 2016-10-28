@@ -258,7 +258,7 @@ public final class GameController {
      */
     private void gameWon() {
         levelHandler.getLevel().pause();
-        SoundHandler.playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
+        SoundHandler.playSound("/sounds/qix-success.mp3", Globals.GAME_START_SOUND_VOLUME);
         if (levelHandler.getLevelID() == LEVELS) {
             gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
             gameScene.setMessage("Game won!");
@@ -291,7 +291,7 @@ public final class GameController {
                             }
                             if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
                                 cursor.cursorDied();
-                                SoundHandler.playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+                                SoundHandler.playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
                                 if (cursor.getLives() == 0) {
                                     gameOver();
                                 }
@@ -458,7 +458,7 @@ public final class GameController {
     public void keyPressed(KeyEvent e) {
         initializeCursorSpeed();
         if (e.getCode().equals(KeyCode.SPACE) && !levelHandler.getLevel().isRunning()) {
-            SoundHandler.playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
+            SoundHandler.playSound("/sounds/qix-new-life.mp3", Globals.GAME_START_SOUND_VOLUME);
             if (!levelHandler.getLevel().isRunning()) {
                 animationTimerStart();
                 LOGGER.log(java.util.logging.Level.INFO, "Game started succesfully", this.getClass());

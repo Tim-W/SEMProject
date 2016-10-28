@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2;
 
+import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -9,6 +10,8 @@ import nl.tudelft.sem.group2.scenes.StartScene;
 
 import java.util.logging.Level;
 
+import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.GAME_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
 
@@ -40,7 +43,7 @@ public class LaunchApp extends Application {
         primaryStage.setTitle("Qix");
         primaryStage.setWidth(GAME_WIDTH);
         primaryStage.setHeight(GAME_HEIGHT);
-        primaryStage.getIcons().add(new Image("/images/stageIcon.png"));
+        primaryStage.getIcons().add(new Image("/images/stage-icon.png"));
         LOGGER.log(Level.INFO, "Stage Created, Application Icon loaded", this.getClass());
 
         LOGGER.log(Level.INFO, "GameScene created succesfully", this.getClass());
@@ -50,7 +53,7 @@ public class LaunchApp extends Application {
         primaryStage.show();
 
         //Comment to mute empty sound
-        //playSound("/sounds/qix.mp3", 1);
+        //playSound("/sounds/background-music.mp3", 1);
         //((Group) scene.getRoot()).getChildren().add(mediaView);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
 

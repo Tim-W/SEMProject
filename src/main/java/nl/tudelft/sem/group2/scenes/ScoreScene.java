@@ -58,10 +58,7 @@ public class ScoreScene extends SubScene implements Observer {
         super(root, width, height);
         initialize();
         createTitlePane();
-        //TODO Fix font
-        //Font f = Font.loadFont(LaunchApp.class.getResource("qixfont.ttf").toExternalForm(),12);
-        //title.setFont(f);
-        addPlayerBox(0);
+         addPlayerBox(0);
         if (GameController.getInstance().isTwoPlayers()) {
             addPlayerBox(1);
         }
