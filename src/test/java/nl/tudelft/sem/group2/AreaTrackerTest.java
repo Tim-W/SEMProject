@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
@@ -8,7 +7,10 @@ import org.junit.Test;
 
 import java.awt.Point;
 
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * Test class for the AreaTracker class.
@@ -18,6 +20,7 @@ public class AreaTrackerTest {
     private static final int TEST_MAP_HEIGHT = 5;
 
     private Stix stix;
+    private ScoreCounter scoreCounter = mock(ScoreCounter.class);
 
     /**
      * Test method for the default constructor of AreaTracker.
@@ -29,7 +32,7 @@ public class AreaTrackerTest {
         stix = new Stix();
         AreaTracker areaTracker = new AreaTracker();
 
-        AreaState[][] expectedGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+        AreaState[][] expectedGrid = new AreaState[GRID_WIDTH + 1][GRID_HEIGHT + 1];
 
         for (int x = 0; x < expectedGrid.length; x++) {
             for (int y = 0; y < expectedGrid[x].length; y++) {
@@ -66,7 +69,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), true, stix, new ScoreCounter(Color.RED));
+        areaTracker.calculateNewArea(new Point(1, 2), true, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
 
@@ -87,7 +90,7 @@ public class AreaTrackerTest {
     public void testCalculateNewSlowArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), false, stix, new ScoreCounter(Color.RED));
+        areaTracker.calculateNewArea(new Point(1, 2), false, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(false);
 
@@ -108,7 +111,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastAreaWithQixOnOtherSide() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(3, 2), true, stix, new ScoreCounter(Color.RED));
+        areaTracker.calculateNewArea(new Point(3, 2), true, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
 

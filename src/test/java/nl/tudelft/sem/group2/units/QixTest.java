@@ -38,7 +38,7 @@ public class QixTest {
 
     @Before
     public void setUp() throws Exception {
-        qix = new Qix(areaTracker);
+        qix = new Qix(areaTracker, 5);
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         qix.setAreaTracker(areaTracker);
         spyQix = spy(qix);

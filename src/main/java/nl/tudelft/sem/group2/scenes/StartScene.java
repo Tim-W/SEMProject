@@ -2,7 +2,9 @@ package nl.tudelft.sem.group2.scenes;
 
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
@@ -13,6 +15,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * StartScene that lets you pick single or multiplayer game.
@@ -89,8 +96,8 @@ public class StartScene extends javafx.scene.Scene {
                 singleButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
         singleButton.setOnMouseClicked(event -> {
-            stage.setScene(GameController.getInstance().getScene());
-            GameController.getInstance().makeCursors(false);
+            GameController.getInstance().initializeSinglePlayer();
+            stage.setScene(GameController.getInstance().getGameScene());
         });
     }
 
@@ -106,8 +113,8 @@ public class StartScene extends javafx.scene.Scene {
                 multiButton.setStyle("-fx-background-color: #707070; -fx-font-size: 20px"));
 
         multiButton.setOnMouseClicked(event -> {
-            stage.setScene(GameController.getInstance().getScene());
-            GameController.getInstance().makeCursors(true);
+            GameController.getInstance().initializeMultiPlayer();
+            stage.setScene(GameController.getInstance().getGameScene());
         });
     }
 
@@ -132,26 +139,55 @@ public class StartScene extends javafx.scene.Scene {
         helpText.setWrappingWidth(Globals.STARTSCENE_HELPTEXT_WRAPPING);
         helpText.setStyle("-fx-font-size: 16px");
 
+        Hyperlink hyperlink = new Hyperlink("Click here to read more!");
+        hyperlink.setOnMouseClicked(event -> {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().browse(new URI("http://strategywiki.org/wiki/Qix"));
+                }
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+                createPopup();
+            }
+        });
+        //hyperlink.setTextFill(Color.WHITE);
+        hyperlink.setLayoutX(Globals.STARTSCENE_HBOX_SPACING);
+
         helpTextWrapper = new FlowPane();
         helpTextWrapper.setMinHeight(height);
         helpTextWrapper.setMinWidth(width);
         helpTextWrapper.setVisible(false);
         helpTextWrapper.setStyle("-fx-background-color: black");
         helpTextWrapper.getChildren().add(helpText);
+        helpTextWrapper.getChildren().add(hyperlink);
         helpTextWrapper.setLayoutX(Globals.STARTSCENE_SPACING);
         helpTextWrapper.setLayoutY(Globals.STARTSCENE_SPACING);
+    }
+
+    private void createPopup() {
+        final Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Unfortunately this feature is not working at your system");
+        alert.setHeaderText("Can't open browser...");
+        alert.initOwner(stage);
+        alert.showAndWait();
     }
 
     private void handleKeyPresses() {
         this.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DIGIT1) {
-                stage.setScene(GameController.getInstance().getScene());
-                GameController.getInstance().makeCursors(false);
+                GameController.getInstance().initializeSinglePlayer();
+                stage.setScene(GameController.getInstance().getGameScene());
             } else if (event.getCode() == KeyCode.DIGIT2) {
-                stage.setScene(GameController.getInstance().getScene());
-                GameController.getInstance().makeCursors(true);
+                GameController.getInstance().initializeSinglePlayer();
+                stage.setScene(GameController.getInstance().getGameScene());
             } else if (event.getCode() == KeyCode.H) {
                 helpTextWrapper.setVisible(true);
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                if (helpTextWrapper.isVisible()) {
+                    helpTextWrapper.setVisible(false);
+                } else {
+                    System.exit(0);
+                }
             }
         });
     }

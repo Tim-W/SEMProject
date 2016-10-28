@@ -10,6 +10,7 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
@@ -34,7 +35,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
+
+import static edu.emory.mathcs.backport.java.util.Arrays.asList;
+import static nl.tudelft.sem.group2.global.Globals.LEVELS;
 
 /**
  * Controller class for the GameScene to implement the MVC.
@@ -54,25 +57,19 @@ public final class GameController {
     private Set<Unit> units;
 
     private long previousTime;
-    // Boolean that states if the game is running
-    private boolean isRunning = false;
     private CollisionHandler collisionHandler;
+    private LevelHandler levelHandler;
     private GameScene gameScene;
+    private boolean twoPlayers;
 
     /**
      * Constructor for the GameController class.
      */
     private GameController() {
         // Initialize models for scoretracking.
-
         areaTracker = new AreaTracker();
-
-
-        Group group = new Group();
-        gameScene = new GameScene(group, Color.BLACK);
-
+        levelHandler = new LevelHandler();
         collisionHandler = new CollisionHandler();
-
         //Animation timer initialization
         previousTime = System.nanoTime();
         createAnimationTimer();
@@ -84,7 +81,6 @@ public final class GameController {
      * @return the only GameController
      */
     public static GameController getInstance() {
-        //if (gameController == null) {
         // Put lock on class since it we do not want to instantiate it twice
         synchronized (GameController.class) {
             // Check if logger is in the meanwhile not already instantiated.
@@ -92,7 +88,6 @@ public final class GameController {
                 gameController = new GameController();
             }
         }
-        //}
         return gameController;
     }
 
@@ -104,38 +99,53 @@ public final class GameController {
     }
 
     /**
+     * initialize gameController with one player.
+     */
+    public void initializeSinglePlayer() {
+        twoPlayers = false;
+        levelHandler.nextLevel(twoPlayers);
+        gameScene = new GameScene(new Group(), Color.BLACK);
+        makeUnits();
+    }
+
+    /**
+     * initialize gameController with multiple players.
+     */
+    public void initializeMultiPlayer() {
+        twoPlayers = true;
+        levelHandler.nextLevel(twoPlayers);
+        gameScene = new GameScene(new Group(), Color.BLACK);
+        makeUnits();
+    }
+
+    /**
      * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
-     *
-     * @param multiplayer if true 2 cursors are set
      */
-    public void makeCursors(boolean multiplayer) {
+    private void makeUnits() {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Color.YELLOW, Globals.LIVES);
-        cursors.add(cursor1);
-        cursor1.addKey(KeyCode.UP);
-        cursor1.addKey(KeyCode.DOWN);
-        cursor1.addKey(KeyCode.LEFT);
-        cursor1.addKey(KeyCode.RIGHT);
+                Globals.BOARD_MARGIN * 2, areaTracker, stix, Globals.LIVES, 0);
+        KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
+        cursor1.addKeys(asList(keys));
         cursor1.setFastMoveKey(KeyCode.O);
         cursor1.setSlowMoveKey(KeyCode.I);
+        addCursor(cursor1);
+        addUnit(cursor1);
         setScoreCounterInCursor(cursor1);
-        if (multiplayer) {
+        if (twoPlayers) {
             //second
             Stix stix2 = new Stix();
             Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Color.RED, Globals.LIVES);
-            cursors.add(cursor2);
-            cursor2.addKey(KeyCode.W);
-            cursor2.addKey(KeyCode.S);
-            cursor2.addKey(KeyCode.A);
-            cursor2.addKey(KeyCode.D);
+                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Globals.LIVES, 1);
+            keys = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D};
+            cursor2.addKeys(asList(keys));
             cursor2.setFastMoveKey(KeyCode.Z);
             cursor2.setSlowMoveKey(KeyCode.X);
             addUnit(cursor2);
+            addCursor(cursor2);
             setScoreCounterInCursor(cursor2);
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
@@ -143,19 +153,26 @@ public final class GameController {
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
         // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker);
-        addUnit(cursors.get(0));
+        qix = new Qix(areaTracker, levelHandler.getLevel().getQixSize());
+        areaTracker.addObserver(qix);
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
     }
 
     private void setScoreCounterInCursor(Cursor cursor) {
-        ScoreCounter scoreCounter = new ScoreCounter(cursor.getColor());
+        ScoreCounter scoreCounter = new ScoreCounter(cursor.getId(), levelHandler.getLevel().getPercentage());
         scoreCounter.addObserver(gameScene.getScoreScene());
         cursor.setScoreCounter(scoreCounter);
     }
 
+    private void resetLevel() {
+        units.clear();
+        areaTracker = new AreaTracker();
+        collisionHandler = new CollisionHandler();
+        makeUnits();
+        gameScene.getScoreScene().reset();
+    }
     /**
      * Adds a cursor to the cursors array which can at most contain two cursors.
      *
@@ -166,7 +183,6 @@ public final class GameController {
             cursors.add(cursor);
         }
     }
-
     /*****
      * Units.
      *****/
@@ -188,13 +204,6 @@ public final class GameController {
             }
         }
         units.add(unit);
-    }
-
-    /**
-     * Stop animations.
-     */
-    private void animationTimerStop() {
-        animationTimer.stop();
     }
 
     /**
@@ -228,16 +237,16 @@ public final class GameController {
      * stop the animations.
      */
     private void gameOver() {
-        animationTimerStop();
+        levelHandler.getLevel().pause();
         gameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
-        gameScene.setMessageLabel(" Game Over! ");
+        gameScene.setMessage(" Game Over! ");
 
         //Plays game over sound
 
         String score = "";
         for (Cursor cursor : cursors) {
             score += cursor.getScoreCounter() + ", ";
-            LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+            LOGGER.log(java.util.logging.Level.INFO, "Game Over, player died with a score of "
                     + cursor.getScoreCounter().getTotalScore(), GameController.class);
         }
     }
@@ -248,20 +257,21 @@ public final class GameController {
      * show that the player has won
      */
     private void gameWon() {
-        animationTimerStop();
+        levelHandler.getLevel().pause();
         SoundHandler.playSound("/sounds/qix-success.mp3", Globals.GAME_START_SOUND_VOLUME);
-        gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        gameScene.setMessageLabel(" You Won! ");
+        if (levelHandler.getLevelID() == LEVELS) {
+            gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+            gameScene.setMessage("Game won!");
+            //LOGGER.log(java.util.logging.Level.INFO, "Game Won! Player won with a score of " + score, GameScene
+            // .class);
 
-        //check high score
-        int score = 0;
-        for (Cursor cursor : cursors) {
-            if (cursor.getScoreCounter().getTotalScore() > score) {
-                score = cursor.getScoreCounter().getTotalScore();
-            }
+        } else {
+            gameScene.setMessageBoxLayoutX(Globals.MESSAGEBOX_POSITION_X);
+            gameScene.setMessage("Press SPACE to go to the next level!");
+            levelHandler.nextLevel(twoPlayers);
+            resetLevel();
         }
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
-    }
+        }
 
     /**
      * Setup an animation timer that runs at 300FPS.
@@ -272,30 +282,27 @@ public final class GameController {
             public void handle(long now) {
                 if (now - previousTime > Globals.NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
+
+                    if (levelHandler.getLevel().isRunning()) {
+                        gameScene.move();
+                        for (Cursor cursor : cursors) {
+                            if (cursor.getScoreCounter().hasWon()) {
+                                gameWon();
+                            }
+                            if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
+                                cursor.cursorDied();
+                                SoundHandler.playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+                                if (cursor.getLives() == 0) {
+                                    gameOver();
+                                }
+                            }
+                            cursor.calculateArea(qix);
+                        }
+                        handlePowerups();
+                        spawnPowerup();
+                    }
                     // draw
                     gameScene.draw();
-
-                    for (Cursor cursor : cursors) {
-                        if (cursor.getScoreCounter().hasWon()) {
-                            gameWon();
-                        }
-                    }
-
-                    for (Cursor cursor : cursors) {
-                        if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
-                            cursor.cursorDied();
-                            SoundHandler.playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
-                            if (cursor.getLives() == 0) {
-                                gameOver();
-                            }
-                        }
-                    }
-                    for (Cursor cursor : cursors) {
-                        cursor.calculateArea(qix);
-                    }
-
-                    handlePowerups();
-                    spawnPowerup();
                 }
             }
         };
@@ -337,7 +344,7 @@ public final class GameController {
             }
         }
 
-        PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units);
+        PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units, cursors);
         if (powerupEvent != null) {
             Cursor cursor = powerupEvent.getCursor();
             switch (powerupEvent.getPowerUpType()) {
@@ -419,6 +426,15 @@ public final class GameController {
     }
 
     /**
+     * check if game is multiplayer.
+     *
+     * @return boolean true if multiplayer
+     */
+    public boolean isTwoPlayers() {
+        return twoPlayers;
+    }
+
+    /**
      * Method that handles the action when a key is released.
      *
      * @param e describes which keyevent happened.
@@ -437,12 +453,14 @@ public final class GameController {
      */
     public void keyPressed(KeyEvent e) {
         initializeCursorSpeed();
-        if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
+        if (e.getCode().equals(KeyCode.SPACE) && !levelHandler.getLevel().isRunning()) {
             SoundHandler.playSound("/sounds/qix-new-life.mp3", Globals.GAME_START_SOUND_VOLUME);
-            animationTimerStart();
-            LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
-            isRunning = true;
-            gameScene.setMessageLabel("");
+            if (!levelHandler.getLevel().isRunning()) {
+                animationTimerStart();
+                LOGGER.log(java.util.logging.Level.INFO, "Game started succesfully", this.getClass());
+            }
+            levelHandler.getLevel().start();
+            gameScene.setMessage("");
         } else {
             for (Cursor cursor : cursors) {
                 cursor.keyPressed(e);
@@ -469,6 +487,10 @@ public final class GameController {
         return isRunning;
     }
 
+    private boolean stixNotEmpty(Cursor cursor) {
+        return cursor.getStix().getStixCoordinates() != null
+                && !cursor.getStix().getStixCoordinates().isEmpty();
+    }
 
     //Getters
 
@@ -481,7 +503,7 @@ public final class GameController {
         return areaTracker;
     }
 
-    public GameScene getScene() {
+    public GameScene getGameScene() {
         return gameScene;
     }
 
@@ -504,6 +526,10 @@ public final class GameController {
      */
     public static void setUnits(Set<Unit> units) {
         getInstance().units = units;
+    }
+
+    public LevelHandler getLevelHandler() {
+        return levelHandler;
     }
 
     /**

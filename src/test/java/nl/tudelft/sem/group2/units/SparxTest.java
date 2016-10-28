@@ -3,7 +3,6 @@ package nl.tudelft.sem.group2.units;
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -11,6 +10,8 @@ import org.junit.Test;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class SparxTest {
     private Sparx sparx;
     private AreaTracker areaTracker;
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 2][LaunchApp.getGridHeight() + 2];
+    private AreaState[][] boardGrid = new AreaState[GRID_WIDTH + 2][GRID_HEIGHT + 2];
 
     @BeforeClass
     public static void BeforeClass() {

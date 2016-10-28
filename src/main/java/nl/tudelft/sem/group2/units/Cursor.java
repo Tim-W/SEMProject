@@ -17,6 +17,7 @@ import nl.tudelft.sem.group2.powerups.PowerupHandler;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private KeyCode fastMoveKey, slowMoveKey;
     private ScoreCounter scoreCounter;
-    private Color color;
+    private int id;
     private PowerupHandler powerupHandler;
     private FuseHandler fuseHandler;
 
@@ -55,18 +56,18 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param height      height, used for collision detection
      * @param areaTracker used for calculating areas
      * @param stix        current stix to use
-     * @param color       specifies color for this cursor.
+     * @param id          identifies the cursor.
      * @param lives       the amount of lives a players starts with
      */
-    public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, Color color, int lives) {
+    public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix, int lives,
+                  int id) {
         super(position.x, position.y, width, height, areaTracker);
         Image[] sprite = new Image[1];
-        this.color = color;
-        String colorString = "red";
-        if (color.equals(Color.BLUE)) {
-            colorString = "blue";
-        } else if (color.equals(Color.YELLOW)) {
-            colorString = "yellow";
+        this.id = id;
+        String colorString = "blue";
+        //if player 2
+        if (id == 1) {
+            colorString = "red";
         }
         sprite[0] = new Image("/images/cursor-" + colorString + ".png");
         setSprite(sprite);
@@ -81,7 +82,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         for (int i = 0; i < speed; i++) {
             int transX = 0;
             int transY = 0;
-
             if (currentMove != null) {
                 // A map containing relationships between keycodes and the movement directions.
                 Map<KeyCode, CursorMovement> cursorMovementMap = new HashMap<>();
@@ -281,6 +281,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * Get id of the cursor.
+     *
+     * @return int id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
      * @return whether the cursor is moving fast or slow
      */
     public boolean isFast() {
@@ -317,6 +326,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void addKey(KeyCode keycode) {
         arrowKeys.add(keycode);
+    }
+
+    /**
+     * @param keycodes the keys that are specific to this cursor.
+     */
+    public void addKeys(Collection<KeyCode> keycodes) {
+        arrowKeys.addAll(keycodes);
     }
 
     /**

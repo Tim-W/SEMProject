@@ -22,23 +22,6 @@ public class LaunchApp extends Application {
     private static final Logger LOGGER = Logger.getLogger();
 
     /**
-     * @return grid height - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridHeight() {
-        // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
-        return BOARD_HEIGHT / 2;
-    }
-
-    /**
-     * @return grid width - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridWidth() {
-        return BOARD_WIDTH / 2;
-    }
-
-    /**
      * Launches the application.
      *
      * @param args - not used
