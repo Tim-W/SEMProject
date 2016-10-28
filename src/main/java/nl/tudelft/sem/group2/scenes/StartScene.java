@@ -2,6 +2,7 @@ package nl.tudelft.sem.group2.scenes;
 
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.image.ImageView;
@@ -146,6 +147,7 @@ public class StartScene extends javafx.scene.Scene {
                 }
             } catch (IOException | URISyntaxException e) {
                 e.printStackTrace();
+                createPopup();
             }
         });
         //hyperlink.setTextFill(Color.WHITE);
@@ -160,6 +162,14 @@ public class StartScene extends javafx.scene.Scene {
         helpTextWrapper.getChildren().add(hyperlink);
         helpTextWrapper.setLayoutX(Globals.STARTSCENE_SPACING);
         helpTextWrapper.setLayoutY(Globals.STARTSCENE_SPACING);
+    }
+
+    private void createPopup() {
+        final Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Unfortunately this feature is not working at your system");
+        alert.setHeaderText("Can't open browser...");
+        alert.initOwner(stage);
+        alert.showAndWait();
     }
 
     private void handleKeyPresses() {
