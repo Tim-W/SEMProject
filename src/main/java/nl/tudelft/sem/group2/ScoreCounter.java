@@ -148,6 +148,7 @@ public class ScoreCounter extends Observable {
 
     /**
      * notify life changed.
+     *
      * @param lives of cursor
      */
     public void notifyLife(int lives) {

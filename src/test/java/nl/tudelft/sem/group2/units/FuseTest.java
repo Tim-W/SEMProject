@@ -29,6 +29,7 @@ public class FuseTest {
     public static void BeforeClass() {
         new JFXPanel();
     }
+
     @Before
     public void setUp() throws Exception {
         createFuse(new Fuse(3, 3, 3, 4, areaTracker, stix));

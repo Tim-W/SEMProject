@@ -11,6 +11,8 @@ import java.util.logging.Level;
 /**
  * An object that can be moved an drawn on a 2D grid.
  * Supports intersection checking between two units.
+ * This is the base class of most of the entities in 'Qix'.
+ * This allows for standardized methods which are the same across all those entities.
  */
 public abstract class Unit extends Coordinate implements Draw, Movable, CollisionInterface {
 

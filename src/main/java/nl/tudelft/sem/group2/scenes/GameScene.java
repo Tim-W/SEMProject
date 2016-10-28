@@ -186,7 +186,7 @@ public class GameScene extends Scene {
     private void applyEffect() {
         List<Cursor> cursors = GameController.getInstance().getCursors();
         for (Cursor cursor : cursors) {
-            switch (cursor.getCurrentPowerup()) {
+            switch (cursor.getPowerupHandler().getCurrentPowerup()) {
                 case EAT:
                     gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
                     break;
@@ -236,8 +236,8 @@ public class GameScene extends Scene {
         cursorList.addAll(GameController.getInstance().getUnits().stream().
                 filter(unit -> unit instanceof Cursor).map(unit -> (Cursor) unit).collect(Collectors.toList()));
         for (Cursor cursor : cursorList) {
-            if (cursor.getFuse() != null) {
-                fuse = new Point(cursor.getFuse().getIntX(), cursor.getFuse().getIntY());
+            if (cursor.getFuseHandler().getFuse() != null) {
+                fuse = new Point(cursor.getFuseHandler().getFuse().getIntX(), cursor.getFuseHandler().getFuse().getIntY());
                 foundFuse = true;
             }
             for (Point p : cursor.getStix().getStixCoordinates()) {
@@ -257,9 +257,9 @@ public class GameScene extends Scene {
                     gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
                 }
             }
-            if (cursor.getFuse() != null) {
-                cursor.getFuse().move();
-                cursor.getFuse().draw(canvas);
+            if (cursor.getFuseHandler().getFuse() != null) {
+                cursor.getFuseHandler().getFuse().move();
+                cursor.getFuseHandler().getFuse().draw(canvas);
             }
             foundFuse = false;
             fuse = new Point(-1, -1);

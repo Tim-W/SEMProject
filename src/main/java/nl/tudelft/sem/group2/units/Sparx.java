@@ -12,7 +12,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 
 /**
- * An enemy unit which travels over the outerborders.
+ * An enemy unit which travels over the same lines as the cursor.
  * When a Sparx collides with a cursor, the views ends.
  */
 public class Sparx extends LineTraveller implements CollisionInterface {

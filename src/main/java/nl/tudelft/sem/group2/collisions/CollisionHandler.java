@@ -62,7 +62,7 @@ public class CollisionHandler {
                     }
                 } else {
                     if (cursor.intersect(collidee)) {
-                        if (cursor.getCurrentPowerup() == EAT && collidee instanceof Sparx) {
+                        if (cursor.getPowerupHandler().getCurrentPowerup() == EAT && collidee instanceof Sparx) {
                             unitsList.remove(collidee);
                             GameController.getInstance().removeUnit(collidee);
                             return false;
@@ -128,22 +128,4 @@ public class CollisionHandler {
 
         return null;
     }
-
-//    /**
-//     * Finds the cursor in the unitslist.
-//     *
-//     * @param unitsList the list of units
-//     * @return the index of the cursor
-//     */
-//    private int findCursor(ArrayList<Unit> unitsList) {
-//        int indexOfCursor = 0;
-//        for (int i = 0; i < unitsList.size(); i++) {
-//            Unit collider = unitsList.get(i);
-//            if (collider instanceof Cursor) {
-//                indexOfCursor = i;
-//                break;
-//            }
-//        }
-//        return indexOfCursor;
-//    }
 }

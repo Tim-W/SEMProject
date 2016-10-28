@@ -15,6 +15,7 @@ import static nl.tudelft.sem.group2.global.Globals.FUSE_DELAY;
  * Describes the Fuse.
  * A Fuse is an enemy that travels over the stix which the cursor draws,
  * but it only moves over the stix when the cursor is standing still.
+ * When the fuse reaches the cursor the player loses a life and the stix the player was drawing is deleted.
  */
 public class Fuse extends LineTraveller implements CollisionInterface {
     private int speed = 1;
@@ -108,5 +109,9 @@ public class Fuse extends LineTraveller implements CollisionInterface {
      */
     public void setDelay(int delay) {
         this.delay = delay;
+    }
+
+    public boolean isMoving() {
+        return moving;
     }
 }
