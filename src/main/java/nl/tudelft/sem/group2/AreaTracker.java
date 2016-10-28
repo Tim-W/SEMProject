@@ -1,9 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.sound.SoundHandler;
-import nl.tudelft.sem.group2.units.Stix;
-
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +13,7 @@ import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Stix;
 
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
