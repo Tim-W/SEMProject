@@ -11,9 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.board.AreaState;
-import nl.tudelft.sem.group2.board.AreaTracker;
-import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
@@ -35,12 +32,12 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
-    private static Label messageLabel;
-    private static VBox messageBox;
     private static ScoreScene scoreScene;
-    private static Canvas canvas;
-    private static GraphicsContext gc;
-    private static Image image;
+    private Label messageLabel;
+    private VBox messageBox;
+    private Canvas canvas;
+    private GraphicsContext gc;
+    private Image image;
 
     /**
      * Create a new GameScene.
@@ -51,8 +48,6 @@ public class GameScene extends Scene {
      */
     public GameScene(final Group root, Color color) {
         super(root, color);
-        // Initialize units set because it's necessary in GameController
-        // Temporary until CollisionHandler is merged into this
 
         initializeCanvas();
         // Initialize label in middle of screen to display start message
@@ -72,7 +67,11 @@ public class GameScene extends Scene {
         Random random = new Random();
         //Choose random image
         int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
-        setImage(new Image("/images/" + image + ".png", Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT, false, false));
+        setImage(new Image(
+                "/images/background-image-" + image + ".png",
+                Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT,
+                false,
+                false));
         //Draw black rectangle over image to avoid spoilers
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
@@ -95,12 +94,8 @@ public class GameScene extends Scene {
     /**
      * @return the scorescene
      */
-    public static ScoreScene getScoreScene() {
+    public ScoreScene getScoreScene() {
         return scoreScene;
-    }
-
-    public static GraphicsContext getGc() {
-        return gc;
     }
 
     /**
@@ -115,8 +110,6 @@ public class GameScene extends Scene {
 
         // Obtain GraphicsContext2d from canvas
         gc = canvas.getGraphicsContext2D();
-        // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
-        gc.setFill(Color.BLUE);
         gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
     }
 
@@ -147,8 +140,6 @@ public class GameScene extends Scene {
     private void createScoreScene() {
         Group group = new Group();
         scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
-        scoreScene.setScore(0);
-        scoreScene.setClaimedPercentage(0);
     }
 
     private void addMessageBox() {
@@ -172,16 +163,24 @@ public class GameScene extends Scene {
         gc.setFill(Color.WHITE);
         drawUncovered();
         drawBorders();
-        drawStixAndFuse();
-        if (GameController.getInstance().getUnits() == null) {
-            return;
+        if (GameController.getInstance().getUnits() != null) {
+            drawStixAndFuse();
+            for (Unit unit : GameController.getInstance().getUnits()) {
+                unit.draw(canvas);
+            }
+            applyEffect();
         }
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            unit.move();
-            unit.draw(canvas);
-        }
+    }
 
-        applyEffect();
+    /**
+     * move all units.
+     */
+    public void move() {
+        if (GameController.getInstance().getUnits() != null) {
+            for (Unit unit : GameController.getInstance().getUnits()) {
+                unit.move();
+            }
+        }
     }
 
     private void applyEffect() {
@@ -193,6 +192,8 @@ public class GameScene extends Scene {
                     break;
                 case SPEED:
                     gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                    break;
+                default:
                     break;
             }
 
@@ -270,8 +271,8 @@ public class GameScene extends Scene {
      *
      * @param string string which the label should be
      */
-    public void setMessageLabel(String string) {
-        GameScene.messageLabel.setText(string);
+    public void setMessage(String string) {
+        messageLabel.setText(string);
     }
 
     /**
@@ -280,19 +281,7 @@ public class GameScene extends Scene {
      * @param position new x-position
      */
     public void setMessageBoxLayoutX(int position) {
-        GameScene.messageBox.setLayoutX(position);
-    }
-
-    /**
-     * Update the info on the scorescene with actual info from scorecounter.
-     *
-     * @param scoreCounter scorecounter from GameController.
-     * @param cursor       current cursor for which lives should be updated.
-     */
-    public void updateScorescene(ScoreCounter scoreCounter, Cursor cursor) {
-        scoreScene.setScore(scoreCounter.getTotalScore());
-        scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
-        scoreScene.setLivesLabel(cursor.getLives());
+        messageBox.setLayoutX(position);
     }
 }
 

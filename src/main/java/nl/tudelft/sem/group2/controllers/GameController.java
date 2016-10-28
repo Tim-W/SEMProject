@@ -1,15 +1,5 @@
 package nl.tudelft.sem.group2.controllers;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Level;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -18,8 +8,10 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
@@ -36,6 +28,18 @@ import nl.tudelft.sem.group2.units.SparxDirection;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static edu.emory.mathcs.backport.java.util.Arrays.asList;
+import static nl.tudelft.sem.group2.global.Globals.LEVELS;
+
 /**
  * Controller class for the GameScene to implement the MVC.
  */
@@ -50,26 +54,23 @@ public final class GameController {
     // Units
     private ArrayList<Cursor> cursors;
     private Qix qix;
+    private AreaTracker areaTracker;
     private Set<Unit> units;
 
     private long previousTime;
     // Boolean that states if the game is running
     private boolean isRunning = false;
     private CollisionHandler collisionHandler;
+    private LevelHandler levelHandler;
     private GameScene gameScene;
-
-    private LinkedList<KeyCode> cursorFastMoveKey = new LinkedList<>();
-    private LinkedList<KeyCode> cursorSlowMoveKey = new LinkedList<>();
+    private boolean twoPlayers;
 
     /**
      * Constructor for the GameController class.
      */
     private GameController() {
         // Initialize models for scoretracking.
-
-        Group group = new Group();
-        gameScene = new GameScene(group, Color.BLACK);
-
+        levelHandler = new LevelHandler();
         collisionHandler = new CollisionHandler();
 
         //Animation timer initialization
@@ -84,7 +85,6 @@ public final class GameController {
      * @return the only GameController
      */
     public static GameController getInstance() {
-        //if (gameController == null) {
         // Put lock on class since it we do not want to instantiate it twice
         synchronized (GameController.class) {
             // Check if logger is in the meanwhile not already instantiated.
@@ -92,7 +92,6 @@ public final class GameController {
                 gameController = new GameController();
             }
         }
-        //}
         return gameController;
     }
 
@@ -104,49 +103,80 @@ public final class GameController {
     }
 
     /**
+     * initialize gameController with one player.
+     */
+    public void initializeSinglePlayer() {
+        twoPlayers = false;
+        levelHandler.nextLevel(twoPlayers);
+        gameScene = new GameScene(new Group(), Color.BLACK);
+        makeUnits();
+    }
+
+    /**
+     * initialize gameController with multiple players.
+     */
+    public void initializeMultiPlayer() {
+        twoPlayers = true;
+        levelHandler.nextLevel(twoPlayers);
+        gameScene = new GameScene(new Group(), Color.BLACK);
+        makeUnits();
+    }
+
+    /**
      * Method which generates a cursor, a sparx and a qix which is used for a single player match.
      * This also binds the correct key controls to the right cursor.
-     * @param multiplayer if true 2 cursors are set
      */
-    public void makeCursors(boolean multiplayer) {
-
+    private void makeUnits() {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
-        cursors.add(new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, stix, Color.YELLOW, Globals.LIVES));
-        cursors.get(0).addKey(KeyCode.UP);
-        cursors.get(0).addKey(KeyCode.DOWN);
-        cursors.get(0).addKey(KeyCode.LEFT);
-        cursors.get(0).addKey(KeyCode.RIGHT);
-        cursorFastMoveKey.add(KeyCode.O);
-        cursorSlowMoveKey.add(KeyCode.I);
-        if (multiplayer) {
+        Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
+                Globals.BOARD_MARGIN * 2, stix, Globals.LIVES, 0);
+        KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
+        cursor1.addKeys(asList(keys));
+        cursor1.setFastMoveKey(KeyCode.O);
+        cursor1.setSlowMoveKey(KeyCode.I);
+        addCursor(cursor1);
+        addUnit(cursor1);
+        setScoreCounterInCursor(cursor1);
+        if (twoPlayers) {
             //second
             Stix stix2 = new Stix();
-            cursors.add(new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, stix2, Color.RED, Globals.LIVES));
-            cursors.get(1).addKey(KeyCode.W);
-            cursors.get(1).addKey(KeyCode.S);
-            cursors.get(1).addKey(KeyCode.A);
-            cursors.get(1).addKey(KeyCode.D);
-            cursorFastMoveKey.add(KeyCode.Z);
-            cursorSlowMoveKey.add(KeyCode.X);
-            addUnit(cursors.get(1));
+            Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
+                    Globals.BOARD_MARGIN * 2, stix2, Globals.LIVES, 1);
+            keys = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D};
+            cursor2.addKeys(asList(keys));
+            cursor2.setFastMoveKey(KeyCode.Z);
+            cursor2.setSlowMoveKey(KeyCode.X);
+            addUnit(cursor2);
+            addCursor(cursor2);
+            setScoreCounterInCursor(cursor2);
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, SparxDirection.LEFT);
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
         // Initialize and add units to units set in Gamescene
-        qix = new Qix();
-        addUnit(cursors.get(0));
+        qix = new Qix(levelHandler.getLevel().getQixSize());
+        AreaTracker.getInstance().addObserver(qix);
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
-
     }
 
+    private void setScoreCounterInCursor(Cursor cursor) {
+        ScoreCounter scoreCounter = new ScoreCounter(cursor.getId(), levelHandler.getLevel().getPercentage());
+        scoreCounter.addObserver(gameScene.getScoreScene());
+        cursor.setScoreCounter(scoreCounter);
+    }
+
+    private void resetLevel() {
+        units.clear();
+        AreaTracker.reset();
+        collisionHandler = new CollisionHandler();
+        makeUnits();
+        gameScene.getScoreScene().reset();
+    }
     /**
      * Adds a cursor to the cursors array which can at most contain two cursors.
      *
@@ -182,13 +212,6 @@ public final class GameController {
     }
 
     /**
-     * Stop animations.
-     */
-    private void animationTimerStop() {
-        animationTimer.stop();
-    }
-
-    /**
      * Start animations.
      */
     public void animationTimerStart() {
@@ -219,16 +242,16 @@ public final class GameController {
      * stop the animations.
      */
     private void gameOver() {
-        animationTimerStop();
+        levelHandler.getLevel().pause();
         gameScene.setMessageBoxLayoutX(Globals.GAMEOVER_POSITION_X);
-        gameScene.setMessageLabel(" Game Over! ");
+        gameScene.setMessage(" Game Over! ");
 
         //Plays game over sound
 
         String score = "";
         for (Cursor cursor : cursors) {
             score += cursor.getScoreCounter() + ", ";
-            LOGGER.log(Level.INFO, "Game Over, player died with a score of "
+            LOGGER.log(java.util.logging.Level.INFO, "Game Over, player died with a score of "
                     + cursor.getScoreCounter().getTotalScore(), GameController.class);
         }
     }
@@ -239,20 +262,21 @@ public final class GameController {
      * show that the player has won
      */
     private void gameWon() {
-        animationTimerStop();
-        new SoundHandler().playSound("/sounds/Qix_Succes.mp3", Globals.GAME_START_SOUND_VOLUME);
-        gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
-        gameScene.setMessageLabel(" You Won! ");
+        levelHandler.getLevel().pause();
+        SoundHandler.playSound("/sounds/qix-success.mp3", Globals.GAME_START_SOUND_VOLUME);
+        if (levelHandler.getLevelID() == LEVELS) {
+            gameScene.setMessageBoxLayoutX(Globals.GAMEWON_POSITION_X);
+            gameScene.setMessage("Game won!");
+            //LOGGER.log(java.util.logging.Level.INFO, "Game Won! Player won with a score of " + score, GameScene
+            // .class);
 
-        //check high score
-        int score = 0;
-        for (Cursor cursor : cursors) {
-            if (cursor.getScoreCounter().getTotalScore() > score) {
-                score = cursor.getScoreCounter().getTotalScore();
-            }
+        } else {
+            gameScene.setMessageBoxLayoutX(Globals.MESSAGEBOX_POSITION_X);
+            gameScene.setMessage("Press SPACE to go to the next level!");
+            levelHandler.nextLevel(twoPlayers);
+            resetLevel();
         }
-        LOGGER.log(Level.INFO, "Game Won! Player won with a score of " + score, GameScene.class);
-    }
+        }
 
     /**
      * Setup an animation timer that runs at 300FPS.
@@ -263,30 +287,142 @@ public final class GameController {
             public void handle(long now) {
                 if (now - previousTime > Globals.NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
+
                     // draw
                     gameScene.draw();
 
-                    for (Cursor cursor : cursors) {
-                        if (cursor.getScoreCounter().hasWon()) {
-                            gameWon();
+                    if (levelHandler.getLevel().isRunning()) {
+                        gameScene.move();
+                        for (Cursor cursor : cursors) {
+                            if (cursor.getScoreCounter().hasWon()) {
+                                gameWon();
+                            }
+                            if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
+                                cursor.cursorDied();
+                                SoundHandler.playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
+                                if (cursor.getLives() == 0) {
+                                    gameOver();
+                                }
+                            }
+                            cursor.calculateArea(qix);
                         }
+                        handlePowerups();
+                        spawnPowerup();
                     }
 
-                    for (Cursor cursor : cursors) {
-                        if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
-                            cursor.cursorDied();
-                            new SoundHandler().playSound("/sounds/Qix_Death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
-                            if (cursor.getLives() == 0) {
-                                gameOver();
-                            }
-                        }
-                    }
-                    for (Cursor cursor : cursors) {
-                        cursor.calculateArea(qix);
-                    }
                 }
             }
         };
+    }
+
+    private void checkSparx() {
+        int nSparx = 0;
+        for (Unit u : units) {
+            if (u instanceof Sparx) {
+                nSparx++;
+            }
+        }
+
+        while (nSparx < 2) {
+            for (Cursor cursor : cursors) {
+                int[] coordinates = BoardGrid.getInstance().findPowerupLocation(cursor.oppositeQuadrant());
+                Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
+                        Globals.BOARD_MARGIN * 2, SparxDirection.randomDirection());
+                addUnit(sparx);
+                nSparx++;
+            }
+        }
+    }
+
+    private void handlePowerups() {
+
+        Iterator<Unit> iter = units.iterator();
+        //code to remove powerups from the board after a certain amount of time
+        while (iter.hasNext()) {
+            Unit unit = iter.next();
+            if (unit instanceof Powerup) {
+                Powerup powerup = (Powerup) unit;
+                powerup.decreaseDuration();
+                if (powerup.getDuration() <= 0) {
+                    iter.remove();
+                }
+            }
+        }
+
+        PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units, cursors);
+        if (powerupEvent != null) {
+            Cursor cursor = powerupEvent.getCursor();
+            switch (powerupEvent.getPowerUpType()) {
+                case NONE:
+                    return;
+                case LIFE:
+                    cursor.addLife();
+                    return;
+                case EAT:
+                    cursor.setCurrentPowerup(PowerUpType.EAT);
+                    cursor.setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
+                    return;
+                case SPEED:
+                    cursor.setCurrentPowerup(PowerUpType.SPEED);
+                    cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
+            }
+        }
+    }
+
+    /**
+     * Spawns a new powerup at random and when none is active yet.
+     */
+    private void spawnPowerup() {
+        double rand = ThreadLocalRandom.current().nextDouble();
+        if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
+
+            for (Cursor cursor : cursors) {
+
+                int quadrant = cursor.oppositeQuadrant();
+
+                int[] coordinates = BoardGrid.getInstance().findPowerupLocation(quadrant);
+                Powerup powerup = null;
+                Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
+                powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerupMap.put(PowerUpType.LIFE, new PowerLife(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerupMap.put(PowerUpType.SPEED, new PowerSpeed(coordinates[0], coordinates[1],
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                powerup = powerupMap.get(PowerUpType.randomType());
+                if (powerup == null) {
+                    return;
+                }
+                addUnit(powerup);
+            }
+        }
+    }
+
+    /**
+     * @return true if a power up is active
+     */
+    private boolean powerUpActive() {
+        for (Cursor cursor : cursors) {
+            if (cursor.hasPowerUp()) {
+                return true;
+            }
+        }
+
+        for (Unit u : units) {
+            if (u instanceof Powerup) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * check if game is multiplayer.
+     *
+     * @return boolean true if multiplayer
+     */
+    public boolean isTwoPlayers() {
+        return twoPlayers;
     }
 
     /**
@@ -296,12 +432,11 @@ public final class GameController {
      */
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
-        for (int i = 0; i < cursors.size(); i++) {
-            Cursor cursor = cursors.get(i);
+        for (Cursor cursor : cursors) {
             if (keyCode.equals(cursor.getCurrentMove())) {
                 cursor.handleFuse();
                 cursor.setCurrentMove(null);
-            } else if (keyCode.equals(cursorFastMoveKey.get(i)) || keyCode.equals(cursorSlowMoveKey.get(i))) {
+            } else if (keyCode.equals(cursor.getFastMoveKey()) || keyCode.equals(cursor.getSlowMoveKey())) {
                 cursor.setDrawing(false);
                 cursor.setSpeed(2);
                 cursor.handleFuse();
@@ -316,26 +451,27 @@ public final class GameController {
      */
     public void keyPressed(KeyEvent e) {
         initializeCursorSpeed();
-        if (e.getCode().equals(KeyCode.SPACE) && !isRunning) {
-            new SoundHandler().playSound("/sounds/Qix_NewLife.mp3", Globals.GAME_START_SOUND_VOLUME);
-            animationTimerStart();
-            LOGGER.log(Level.INFO, "Game started succesfully", this.getClass());
-            isRunning = true;
-            gameScene.setMessageLabel("");
+        if (e.getCode().equals(KeyCode.SPACE) && !levelHandler.getLevel().isRunning()) {
+            SoundHandler.playSound("/sounds/qix-new-life.mp3", Globals.GAME_START_SOUND_VOLUME);
+            if (!levelHandler.getLevel().isRunning()) {
+                animationTimerStart();
+                LOGGER.log(java.util.logging.Level.INFO, "Game started succesfully", this.getClass());
+            }
+            levelHandler.getLevel().start();
+            gameScene.setMessage("");
         } else {
-            for (int i = 0; i < cursors.size(); i++) {
-                Cursor cursor = cursors.get(i);
+            for (Cursor cursor : cursors) {
                 if (cursor.getArrowKeys().contains(e.getCode())) {
                     if (cursor.isDrawing() && cursor.getFuse() != null) {
                         cursor.getFuse().notMoving();
                     }
                     cursor.setCurrentMove(e.getCode());
-                } else if (e.getCode().equals(cursorSlowMoveKey.get(i))) {
-                    if (!stixNotEmpty(i) || !cursor.isFast()) {
+                } else if (e.getCode().equals(cursor.getSlowMoveKey())) {
+                    if (!stixNotEmpty(cursor) || !cursor.isFast()) {
                         cursor.setSpeed(1);
                         cursor.setDrawing(true);
                     }
-                } else if (e.getCode().equals(cursorFastMoveKey.get(i))) {
+                } else if (e.getCode().equals(cursor.getFastMoveKey())) {
                     cursor.setSpeed(2);
                     cursor.setDrawing(true);
                 }
@@ -356,22 +492,13 @@ public final class GameController {
         }
     }
 
-    /**
-     * getter for testing.
-     *
-     * @return boolean isRunning
-     */
-    boolean isRunning() {
-        return isRunning;
-    }
-
-    private boolean stixNotEmpty(int cursorIndex) {
-        return !cursors.get(cursorIndex).getStix().isEmpty();
+    private boolean stixNotEmpty(Cursor cursor) {
+        return !cursor.getStix().isEmpty();
     }
 
     //Getters
 
-    public GameScene getScene() {
+    public GameScene getGameScene() {
         return gameScene;
     }
 
@@ -396,6 +523,10 @@ public final class GameController {
         getInstance().units = units;
     }
 
+    public LevelHandler getLevelHandler() {
+        return levelHandler;
+    }
+
     /**
      * removes a unit of the list of units.
      *
@@ -403,22 +534,6 @@ public final class GameController {
      */
     public void removeUnit(Unit unit) {
         units.remove(unit);
-        //checkSparx();
-    }
-
-    public LinkedList<KeyCode> getCursorFastMoveKey() {
-        return cursorFastMoveKey;
-    }
-
-    public void setCursorFastMoveKey(LinkedList<KeyCode> cursorFastMoveKey) {
-        this.cursorFastMoveKey = cursorFastMoveKey;
-    }
-
-    public LinkedList<KeyCode> getCursorSlowMoveKey() {
-        return cursorSlowMoveKey;
-    }
-
-    public void setCursorSlowMoveKey(LinkedList<KeyCode> cursorSlowMoveKey) {
-        this.cursorSlowMoveKey = cursorSlowMoveKey;
+        checkSparx();
     }
 }

@@ -1,16 +1,17 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.canvas.Canvas;
-import nl.tudelft.sem.group2.board.AreaState;
-import nl.tudelft.sem.group2.board.AreaTracker;
-import nl.tudelft.sem.group2.LaunchApp;
+import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,30 +19,16 @@ import static org.mockito.Mockito.when;
  * Created by gijs on 24-9-2016.
  */
 public class SparxTest {
-    /*@Test
-    public void move() throws Exception {
-
-    }
-
-    @Test
-    public void toString() throws Exception {
-
-    }
-
-    @Test
-    public void logCurrentMove() throws Exception {
-
-    }*/
     private Sparx sparx;
     private AreaTracker areaTracker;
-    private Canvas canvas;
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 2][LaunchApp.getGridHeight() + 2];
+    private AreaState[][] boardGrid = new AreaState[GRID_WIDTH + 2][GRID_HEIGHT + 2];
 
-
+    @BeforeClass
+    public static void BeforeClass() {
+        new JFXPanel();
+    }
     @Before
     public void setUp() throws Exception {
-        new JFXPanel();
-        canvas = new Canvas(50, 50);
         areaTracker = mock(AreaTracker.class);
         when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
         for (int i = 0; i < boardGrid.length; i++) {

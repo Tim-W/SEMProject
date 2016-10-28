@@ -16,8 +16,12 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Random;
 import java.util.logging.Level;
 
+import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
@@ -26,9 +30,8 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
  * When the player touches the Qix while drawing,
  * or when the Qix touches the stix, it is views over.
  */
-public class Qix extends Unit implements CollisionInterface {
+public class Qix extends Unit implements CollisionInterface, Observer {
 
-    private static final int LINE_LENGTH = 5;
     private static final int POSITION_LENGTH = 4;
     private static final double MINIMUM_COLOR_BRIGHTNESS = 0.3;
     private static final int PRECISION = 6;
@@ -36,7 +39,12 @@ public class Qix extends Unit implements CollisionInterface {
     private static final int RANDOMNESSPOSITIONLENGTH = 4;
     private static final int RANDOMNESSLINELENGTH = 2;
     private static final int COLLISIONSIZE = 10;
+    private static final double DECREASELINESIZE = 0.1;
+    private static final double DIVIDESTARTLINELENGTH = 8;
+    private static final double MULTIPLIER = 1.5;
     private static final Logger LOGGER = Logger.getLogger();
+    private int startLineLength;
+    private double lineLength;
     private int animationLoops = 0;
     private float[] direction = new float[2];
     private LinkedList<float[]> oldDirections = new LinkedList<>();
@@ -49,9 +57,12 @@ public class Qix extends Unit implements CollisionInterface {
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
      *
+     * @param startLineLength the start line length of the qix
      */
-    public Qix() {
+    public Qix(int startLineLength) {
         super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+        this.startLineLength = startLineLength;
+        lineLength = startLineLength;
         LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
                 + Globals.QIX_START_Y + ")", this.getClass());
     }
@@ -74,7 +85,7 @@ public class Qix extends Unit implements CollisionInterface {
         coordinate[1] = getIntY();
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         float random = (float) Math.random() * RANDOMNESSLINELENGTH - RANDOMNESSLINELENGTH / 2;
-        float scale = (LINE_LENGTH + random) / length;
+        double scale = (lineLength + random) / length;
         direction[0] *= scale;
         direction[1] *= scale;
         double[] colors = new double[3];
@@ -107,7 +118,8 @@ public class Qix extends Unit implements CollisionInterface {
         float scale = (POSITION_LENGTH + random) / length;
         direction[0] *= scale;
         direction[1] *= scale;
-        animationLoops += (int) (Math.random() * LINESCOUNT);
+        Random rng = new Random();
+        animationLoops += rng.nextInt(LINESCOUNT);
     }
 
     /**
@@ -160,6 +172,10 @@ public class Qix extends Unit implements CollisionInterface {
                 }
             }
         }
+    }
+
+    public void setLineLength(int lineLength) {
+        this.lineLength = lineLength;
     }
 
     /**
@@ -300,5 +316,16 @@ public class Qix extends Unit implements CollisionInterface {
      */
     public void logCurrentMove() {
         LOGGER.log(Level.FINE, "Qix moved to (" + getX() + "," + getY() + ")", this.getClass());
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof AreaTracker) {
+            double multiplier = Math.pow(((double) arg) / GRID_SURFACE,
+                    DECREASELINESIZE + startLineLength / DIVIDESTARTLINELENGTH) * MULTIPLIER;
+            if (multiplier < 1) {
+                lineLength = startLineLength * multiplier;
+            }
+        }
     }
 }

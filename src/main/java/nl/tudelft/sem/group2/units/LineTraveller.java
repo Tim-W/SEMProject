@@ -64,11 +64,11 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
     }
 
     public Image[] getSprite() {
-        return sprite;
+        return sprite.clone();
     }
 
     public void setSprite(Image[] sprite) {
-        this.sprite = sprite;
+        this.sprite = sprite.clone();
     }
 
     public int getSpriteIndex() {

@@ -10,14 +10,13 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
-import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
-import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -37,15 +36,20 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private LinkedList<double[][]> oldLines = new LinkedList<>();
 
     private Stix stix;
+    private int lives;
     private Fuse fuse;
 
     private ScoreCounter scoreCounter;
     private PowerUpType currentPowerup;
+    private int powerUpDuration;
+
+    private KeyCode fastMoveKey, slowMoveKey;
 
     private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
     private KeyCode currentMove = null;
     private boolean isDrawing = false;
     private int speed = Globals.CURSOR_FAST;
+    private int id;
 
 
 
@@ -56,29 +60,24 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param width       width, used for collision detection
      * @param height      height, used for collision detection
      * @param stix        current stix to use
-     * @param color       specifies color for this cursor.
+     * @param id          identifies the cursor.
      * @param lives       the amount of lives a players starts with
      */
-    public Cursor(Point position, int width, int height, Stix stix, Color color, int lives) {
+    public Cursor(Point position, int width, int height, Stix stix, int lives, int id) {
         super(position.x, position.y, width, height);
         Image[] sprite = new Image[1];
-
-        String colorString = "red";
-        if (color.equals(Color.BLUE)) {
-            colorString = "blue";
-        } else if (color.equals(Color.YELLOW)) {
-            colorString = "yellow";
-        } else {
-            color = Color.RED;
+        this.id = id;
+        String colorString = "blue";
+        //if player 2
+        if (id == 1) {
+            colorString = "red";
         }
-        sprite[0] = new Image("/images/cursor_" + colorString + ".png");
+        sprite[0] = new Image("/images/cursor-" + colorString + ".png");
         setSprite(sprite);
         this.stix = stix;
-        scoreCounter = new ScoreCounter(color);
-        GameController.getInstance().getScene();
-        scoreCounter.addObserver(GameScene.getScoreScene());
-        this.scoreCounter.setLives(lives);
+        this.lives = lives;
         this.currentPowerup = PowerUpType.NONE;
+
     }
 
     @Override
@@ -278,7 +277,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void calculateArea(Qix qix) {
         if (this.grid.isOuterborder(this.getIntX(), this.getIntY()) && !this.getStix().isEmpty()) {
 
-            new SoundHandler().playSound("/sounds/Qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            SoundHandler.playSound("/sounds/qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
 
             AreaTracker.getInstance().calculateNewArea(new Coordinate(qix.getIntX(), qix.getIntY()),
                     this.isFast(), getStix(), scoreCounter);
@@ -288,14 +287,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
-    /***** Getters and setters *****/
-
     /**
      * @return true if the cursor is drawing
      */
     public boolean isDrawing() {
         return isDrawing;
     }
+
+    /***** Getters and setters *****/
 
     /**
      * @param drawing if cursor is moving while user has key X or Z down
@@ -316,6 +315,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    /**
+     * Get id of the cursor.
+     *
+     * @return int id
+     */
+    public int getId() {
+        return id;
     }
 
     /**
@@ -365,6 +373,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * @param keycodes the keys that are specific to this cursor.
+     */
+    public void addKeys(Collection<KeyCode> keycodes) {
+        arrowKeys.addAll(keycodes);
+    }
+
+    /**
      * @return this cursor specific keys.
      */
     public ArrayList<KeyCode> getArrowKeys() {
@@ -376,6 +391,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public ScoreCounter getScoreCounter() {
         return scoreCounter;
+    }
+
+    /**
+     * set the scorecounter of the cursor.
+     *
+     * @param scoreCounter of the cursor
+     */
+    public void setScoreCounter(ScoreCounter scoreCounter) {
+        this.scoreCounter = scoreCounter;
     }
 
     /**
@@ -392,20 +416,20 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @return amount of lives left
      */
     public int getLives() {
-        return scoreCounter.getLives();
+        return lives;
     }
 
     /**
      * Method that decreases amount of lives cursor has upon dying.
      */
     public void cursorDied() {
-        if (scoreCounter.getLives() >= 1) {
-            scoreCounter.subtractLife();
+        if (lives >= 1) {
+            subtractLife();
         }
         this.quadrant();
-        LOGGER.log(Level.INFO, "Player died, lives remaining: " + scoreCounter.getLives(), this.getClass());
+        LOGGER.log(Level.INFO, "Player died, lives remaining: " + lives, this.getClass());
 
-        if (scoreCounter.getLives() > 0 && stix != null && !stix.isStixEmpty()) {
+        if (lives > 0 && stix != null && !stix.isStixEmpty()) {
             Point newStartPos = stix.getStixCoordinates().getFirst();
             this.setX((int) newStartPos.getX());
             this.setY((int) newStartPos.getY());
@@ -427,6 +451,10 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.currentPowerup = currentPowerup;
     }
 
+    public void setPowerUpDuration(int duration){
+        this.powerUpDuration = duration;
+    }
+
 
     /**
      * @return true if the cursor has a powerup active
@@ -439,8 +467,35 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * Adds a life to the cursor.
      */
     public void addLife() {
-        scoreCounter.addLife();
-        LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + scoreCounter.getLives(), Cursor.class);
+        lives++;
+        scoreCounter.notifyLife(lives);
+        //scoreCounter.addLife();
+        LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
+    }
+
+    /**
+     * decrement a life to the cursor.
+     */
+    public void subtractLife() {
+        lives--;
+        scoreCounter.notifyLife(lives);
+        LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
+    }
+
+    public KeyCode getFastMoveKey() {
+        return fastMoveKey;
+    }
+
+    public void setFastMoveKey(KeyCode fastMoveKey) {
+        this.fastMoveKey = fastMoveKey;
+    }
+
+    public KeyCode getSlowMoveKey() {
+        return slowMoveKey;
+    }
+
+    public void setSlowMoveKey(KeyCode slowMoveKey) {
+        this.slowMoveKey = slowMoveKey;
     }
 
     /**

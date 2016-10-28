@@ -1,22 +1,29 @@
 package nl.tudelft.sem.group2.board;
 
-import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.units.Stix;
-
 import java.awt.Point;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Observable;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.units.Stix;
+
+import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
+
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
  */
-public class AreaTracker {
+public class AreaTracker extends Observable{
 
     private static final Logger LOGGER = Logger.getLogger();
     private static volatile AreaTracker instance;
@@ -26,6 +33,8 @@ public class AreaTracker {
     private LinkedList<Coordinate> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
+    private int areaLeft = GRID_SURFACE;
+
 
     /**
      * Constructor for the AreaTracker class.
@@ -60,6 +69,46 @@ public class AreaTracker {
             }
         }
         return instance;
+    }
+
+    /**
+     *
+     */
+    public static void reset() {
+        instance = null;
+    }
+
+    /**
+     * Return the quadrant the cursor is in, as follows.
+     * 12
+     * 34
+     *
+     * @return the quadrant the cursor is in
+     */
+    private static int quadrant(int x, int y) {
+        if (x < Globals.BOARD_WIDTH / 4) {
+            if (y < Globals.BOARD_HEIGHT / 4) {
+                return 0;
+            } else {
+                return 3;
+            }
+        } else if (y < Globals.BOARD_HEIGHT / 4) {
+            return 1;
+        }
+        return 2;
+    }
+
+    /**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the opposite quadrant the cursor is in
+     */
+    public static int oppositeQuadrant(int x, int y) {
+        int quadrant = quadrant(x, y);
+
+        return (quadrant + 2) % 4;
     }
 
     /**
@@ -139,11 +188,6 @@ public class AreaTracker {
     }
 
     private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
-
-        //When testing create own scoreCounter
-        if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter(Color.RED);
-        }
 
         //Update score and percentage with newly created area,
         // therefore it's needed to know the stix was created fast or slow
@@ -275,8 +319,6 @@ public class AreaTracker {
         }
         foundQix = true;
     }
-
-
 
 
 }

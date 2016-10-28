@@ -7,8 +7,8 @@ import java.util.Observable;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.FAST_AREA_MULTIPLIER;
+import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
 import static nl.tudelft.sem.group2.global.Globals.SLOW_AREA_MULTIPLIER;
-import static nl.tudelft.sem.group2.global.Globals.TARGET_PERCENTAGE;
 
 /**
  * Class which keeps track of the current score of the player.
@@ -28,20 +28,32 @@ public class ScoreCounter extends Observable {
     // Percentage which player needs to achieve to win the level.
     private double targetPercentage;
 
-    private Color color = Color.RED;
+    private Color color;
 
-    private int lives;
+    private int cursorID;
+
+    private int recentScore;
+    private double recentPercentage;
+
 
     /**
      * Default score counter constructor.
      *
-     * @param color color of the scoreCounter text should change depending on player.
+     * @param cursorID specifying the cursor.
+     * @param targetPercentage of the level
      */
-    public ScoreCounter(Color color) {
+    public ScoreCounter(int cursorID, int targetPercentage) {
         this.totalPercentage = 0;
         this.totalScore = 0;
-        this.targetPercentage = TARGET_PERCENTAGE;
-        this.color = color;
+        this.recentPercentage = 0;
+        this.recentScore = 0;
+        this.targetPercentage = targetPercentage;
+        this.cursorID = cursorID;
+        color = Color.BLUE;
+        //if player 2
+        if (cursorID == 1) {
+            color = Color.RED;
+        }
 
     }
 
@@ -55,21 +67,22 @@ public class ScoreCounter extends Observable {
      *                      or fast (normal points)
      */
     public void updateScore(int completedArea, boolean fastArea) {
-        int totalArea = BoardGrid.getGridWidth() * BoardGrid.getGridHeight();
-        double percentageIncrease = (double) completedArea / ((double) totalArea * 2);
+        double percentageIncrease = (double) completedArea / GRID_SURFACE * 100 / 2;
         totalPercentage += percentageIncrease;
-
+        recentPercentage = percentageIncrease;
         LOGGER.log(Level.INFO, "Percentage increased with "
                 + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "
                 + Math.round(totalPercentage * FAST_AREA_MULTIPLIER) / 100.0, this.getClass());
 
         if (fastArea) {
+            recentScore = (int) (percentageIncrease * FAST_AREA_MULTIPLIER);
             totalScore += percentageIncrease * FAST_AREA_MULTIPLIER;
             LOGGER.log(Level.INFO, "Score increased with "
                     + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER), this.getClass());
         } else {
+            recentScore = (int) (percentageIncrease * SLOW_AREA_MULTIPLIER);
             totalScore += percentageIncrease * SLOW_AREA_MULTIPLIER;
-            LOGGER.log(Level.INFO, "Score updated with "
+            LOGGER.log(Level.INFO, "Score increased with "
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
 
@@ -96,7 +109,7 @@ public class ScoreCounter extends Observable {
         return totalPercentage;
     }
 
-    public void setTotalPercentage(double totalPercentage) {
+    public void setTotalPercentage(int totalPercentage) {
         this.totalPercentage = totalPercentage;
     }
 
@@ -108,40 +121,37 @@ public class ScoreCounter extends Observable {
         this.totalScore = totalScore;
     }
 
+    public int getRecentScore() {
+        return recentScore;
+    }
+
+    public double getRecentPercentage() {
+        return recentPercentage;
+    }
+
     public double getTargetPercentage() {
         return targetPercentage;
     }
 
-    public void setTargetPercentage(double targetPercentage) {
+    public void setTargetPercentage(int targetPercentage) {
         this.targetPercentage = targetPercentage;
     }
 
-    public int getLives() {
-        return lives;
-    }
-
-    public void setLives(int lives) {
-        this.lives = lives;
-
+    /**
+     * get cursorID of the cursor.
+     *
+     * @return int cursorID
+     */
+    public int getCursorID() {
+        return cursorID;
     }
 
     /**
-     * subtracts lives.
+     * notify life changed.
+     * @param lives of cursor
      */
-    //TODO rename this
-    public void subtractLife() {
-        this.lives = lives - 1;
+    public void notifyLife(int lives) {
         setChanged();
-        notifyObservers();
-    }
-
-    /**
-     * subtracts lives.
-     */
-    //TODO rename this
-    public void addLife() {
-        this.lives = lives + 1;
-        setChanged();
-        notifyObservers();
+        notifyObservers(lives);
     }
 }
