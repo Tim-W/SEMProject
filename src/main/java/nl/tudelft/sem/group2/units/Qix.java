@@ -43,10 +43,12 @@ public class Qix extends Unit implements CollisionInterface, Observer {
     private static final double DIVIDESTARTLINELENGTH = 8;
     private static final double MULTIPLIER = 1.5;
     private static final Logger LOGGER = Logger.getLogger();
+
     private int startLineLength;
     private double lineLength;
     private int animationLoops = 0;
     private float[] direction = new float[2];
+    //TODO use the Coordinate class
     private LinkedList<float[]> oldDirections = new LinkedList<>();
     private LinkedList<float[]> oldCoordinates = new LinkedList<>();
     private LinkedList<double[]> colorArray = new LinkedList<>();
@@ -154,7 +156,7 @@ public class Qix extends Unit implements CollisionInterface, Observer {
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         //loop through the grid
         for (int i = 0; i < grid.getWidth(); i++) {
-            for (int j = 0; j < grid.getHeight(); j++) {
+            for (int j = 0; j < grid.getWidth(); j++) {
                 if (grid.isInnerborder(i, j) || grid.isOuterborder(i, j)) {
                     float dx = getCoordinate(0) - i;
                     float dy = getCoordinate(1) - j;

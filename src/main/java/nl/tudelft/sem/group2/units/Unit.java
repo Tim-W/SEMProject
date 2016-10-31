@@ -61,12 +61,17 @@ public abstract class Unit extends Coordinate implements Draw, Movable, Collisio
         return false;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (this == obj);
+    }
+
     /**
      *
      * @return
      */
     public Rectangle toRectangle() {
-        return new Rectangle(this.x, this.y, 1, 1 );
+        return new Rectangle(this.x, this.y, 2, 2 );
     }
 
 }

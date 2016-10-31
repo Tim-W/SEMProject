@@ -70,7 +70,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         super(position.x, position.y, width, height);
         Image[] sprite = new Image[1];
         this.id = id;
-        String colorString = "blue";
+        String colorString = "yellow";
         //if player 2
         if (id == 1) {
             colorString = "red";
@@ -151,7 +151,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     @Override
     public boolean intersect(Unit collidee) {
-        return super.intersect(collidee) || fuseHandler.getFuse() != null && fuseHandler.getFuse().intersect(this);
+        return super.intersect(collidee) || (fuseHandler.getFuse() != null && fuseHandler.getFuse().intersect(this));
     }
 
     /**

@@ -171,6 +171,7 @@ public final class GameController {
     private void resetLevel() {
         units.clear();
         AreaTracker.reset();
+        BoardGrid.resetBoardGrid();
         collisionHandler = new CollisionHandler();
         makeUnits();
         gameScene.getScoreScene().reset();
@@ -200,11 +201,7 @@ public final class GameController {
             units = new HashSet<>();
         }
         if (unit instanceof Fuse) {
-            for (Unit unit1 : units) {
-                if (unit1 instanceof Fuse) {
-                    return;
-                }
-            }
+            return;
         }
         units.add(unit);
     }
@@ -295,7 +292,7 @@ public final class GameController {
                             if (cursor.getScoreCounter().hasWon()) {
                                 gameWon();
                             }
-                            if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
+                            if (collisionHandler.collisions(getUnits(), cursor)) {
                                 cursor.cursorDied();
                                 SoundHandler.playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
                                 if (cursor.getLives() == 0) {

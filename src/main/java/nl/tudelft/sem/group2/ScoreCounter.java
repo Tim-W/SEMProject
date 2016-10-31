@@ -49,7 +49,7 @@ public class ScoreCounter extends Observable {
         this.recentScore = 0;
         this.targetPercentage = targetPercentage;
         this.cursorID = cursorID;
-        color = Color.BLUE;
+        color = Color.YELLOW;
         //if player 2
         if (cursorID == 1) {
             color = Color.RED;

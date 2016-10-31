@@ -40,54 +40,42 @@ public class CollisionHandler {
      * This method should be called every gameframe.
      *
      * @param units set of units in the game atm
-     * @param stix  current stix
      * @return if there is a collision
      */
     //TODO check if this still works
-    public boolean collisions(Set<Unit> units, Stix stix) {
+    public boolean collisions(Set<Unit> units, Cursor cursor) {
         if (units == null || units.isEmpty()) {
             return false;
         }
-        initializeLists(units);
-        for (Cursor cursor : cursorList) {
-            unitsList.remove(cursor);
-            for (Unit collidee : unitsList) {
-                if (collidee instanceof Powerup) {
-                    continue;
-                } else if (collidee instanceof Qix) {
-                    if (stix != null && stix.intersect(collidee)) {
-                        return true;
-                    } else if (collidee.intersect(cursor) && cursor.uncoveredOn()) {
-                        return true;
-                    }
-                } else {
-                    if (cursor.intersect(collidee)) {
-                        if (cursor.getPowerupHandler().getCurrentPowerup() == EAT && collidee instanceof Sparx) {
-                            unitsList.remove(collidee);
-                            GameController.getInstance().removeUnit(collidee);
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    } else if (collidee instanceof Cursor && (cursor.getStix().intersect(collidee)
-                            || ((Cursor) collidee).getStix().intersect(cursor))) {
+        unitsList = new ArrayList<>();
+        unitsList.addAll(units);
+        unitsList.remove(cursor);
+
+        for (Unit collidee : unitsList) {
+            if (collidee instanceof Powerup) {
+                continue;
+            } else if (collidee instanceof Qix) {
+                if (cursor.getStix() != null && cursor.getStix().intersect(collidee)) {
+                    return true;
+                } else if (collidee.intersect(cursor) && cursor.uncoveredOn()) {
+                    return true;
+                }
+            } else {
+                if (cursor.intersect(collidee)) {
+                    if (cursor.getPowerupHandler().getCurrentPowerup() == EAT && collidee instanceof Sparx) {
+                        unitsList.remove(collidee);
+                        //GameController.getInstance().removeUnit(collidee);
+                        return false;
+                    } else {
                         return true;
                     }
+                } else if (collidee instanceof Cursor && (cursor.getStix().intersect(collidee)
+                        || ((Cursor) collidee).getStix().intersect(cursor))) {
+                    return true;
                 }
             }
         }
         return false;
-    }
-
-    private void initializeLists(Set<Unit> units) {
-        unitsList = new ArrayList<>();
-        unitsList.addAll(units);
-        cursorList = new ArrayList<>();
-        for (Unit collider : unitsList) {
-            if (collider instanceof Cursor) {
-                cursorList.add((Cursor) collider);
-            }
-        }
     }
 
     /**
