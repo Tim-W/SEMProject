@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2.scenes;
 
+import java.awt.Point;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -15,11 +19,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.awt.Point;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -28,9 +27,9 @@ import static org.mockito.Mockito.when;
 
 
 /**
- * Created by gijs on 30-9-2016.
+ * Tests the GameScene.
  */
-public class gameSceneTest {
+public class GameSceneTest {
     //@Rule
     //public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private GameScene gameScene;
@@ -41,7 +40,7 @@ public class gameSceneTest {
     private FuseHandler fuseHandler;
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
