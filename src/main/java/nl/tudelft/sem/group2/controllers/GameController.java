@@ -18,6 +18,7 @@ import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.scenes.ScoreScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
@@ -104,7 +105,7 @@ public final class GameController {
     public void initializeSinglePlayer() {
         twoPlayers = false;
         levelHandler.nextLevel(twoPlayers);
-        gameScene = new GameScene(new Group(), Color.BLACK);
+        gameScene = new GameScene(new Group(), Color.BLACK, createScoreScene());
         makeUnits();
     }
 
@@ -114,7 +115,7 @@ public final class GameController {
     public void initializeMultiPlayer() {
         twoPlayers = true;
         levelHandler.nextLevel(twoPlayers);
-        gameScene = new GameScene(new Group(), Color.BLACK);
+        gameScene = new GameScene(new Group(), Color.BLACK, createScoreScene());
         makeUnits();
     }
 
@@ -173,6 +174,7 @@ public final class GameController {
         makeUnits();
         gameScene.getScoreScene().reset();
     }
+
     /**
      * Adds a cursor to the cursors array which can at most contain two cursors.
      *
@@ -204,6 +206,11 @@ public final class GameController {
             }
         }
         units.add(unit);
+    }
+
+    private ScoreScene createScoreScene() {
+        Group group = new Group();
+        return new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
     }
 
     /**
@@ -271,7 +278,7 @@ public final class GameController {
             levelHandler.nextLevel(twoPlayers);
             resetLevel();
         }
-        }
+    }
 
     /**
      * Setup an animation timer that runs at 300FPS.
@@ -284,7 +291,7 @@ public final class GameController {
                     previousTime = now;
 
                     if (levelHandler.getLevel().isRunning()) {
-                        gameScene.move();
+                        gameScene.move(units);
                         for (Cursor cursor : cursors) {
                             if (cursor.getScoreCounter().hasWon()) {
                                 gameWon();
@@ -302,7 +309,7 @@ public final class GameController {
                         spawnPowerup();
                     }
                     // draw
-                    gameScene.draw();
+                    gameScene.draw(units, areaTracker.getBoardGrid());
                 }
             }
         };

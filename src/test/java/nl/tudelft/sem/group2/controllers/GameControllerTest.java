@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.awt.Point;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -123,7 +124,7 @@ public class GameControllerTest {
         int previoustime = 1;
         gameController.setPreviousTime(previoustime);
         gameController.getAnimationTimer().handle(previoustime + 200000000);
-        verify(mock, times(1)).draw();
+        verify(mock, times(1)).draw(any(), any());
     }
 
     //TODO fix this test
