@@ -122,6 +122,6 @@ public class Fuse extends LineTraveller implements CollisionInterface {
      * @return boolean true if point has the same coordinates
      */
     public boolean onPoint(Point p) {
-        return p.getX() == lastX && p.getY() == lastY;
+        return p.x == lastX && p.y == lastY;
     }
 }
