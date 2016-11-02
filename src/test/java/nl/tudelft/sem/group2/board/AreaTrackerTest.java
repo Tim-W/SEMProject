@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2.board;
 
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -27,7 +28,7 @@ public class AreaTrackerTest {
     @BeforeClass
     public void setUp() throws Exception {
         grid = mock(BoardGrid.class);
-        when(BoardGrid.getInstance()).thenReturn(grid);
+        when(GameController.getInstance().getGrid()).thenReturn(grid);
     }
 
     /**

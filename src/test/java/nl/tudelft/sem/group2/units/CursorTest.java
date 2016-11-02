@@ -5,6 +5,7 @@ import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,7 +41,7 @@ public class CursorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(BoardGrid.getInstance()).thenReturn(grid);
+        when(GameController.getInstance().getGrid()).thenReturn(grid);
     }
 
     public void createCursor() {

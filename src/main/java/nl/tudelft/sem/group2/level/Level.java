@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2.level;
 
+import nl.tudelft.sem.group2.board.BoardGrid;
+
 /**
  * Level class which keeps track of the target percentage, qix size and if the level is running.
  */
@@ -9,6 +11,7 @@ public class Level {
     private int qixSize;
     // Boolean that states if the game is running
     private boolean isRunning = false;
+    private BoardGrid boardGrid;
 
     /**
      * creates a new level.
@@ -21,6 +24,7 @@ public class Level {
         this.percentage = percentage;
         this.levelId = levelId;
         this.qixSize = qixSize;
+        boardGrid = new BoardGrid();
     }
 
     /**
@@ -71,5 +75,12 @@ public class Level {
      */
     public int getQixSize() {
         return qixSize;
+    }
+
+    /**
+     * @return
+     */
+    public BoardGrid getBoardGrid() {
+        return boardGrid;
     }
 }

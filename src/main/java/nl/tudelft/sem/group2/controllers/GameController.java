@@ -171,7 +171,6 @@ public final class GameController {
     private void resetLevel() {
         units.clear();
         AreaTracker.reset();
-        BoardGrid.resetBoardGrid();
         collisionHandler = new CollisionHandler();
         makeUnits();
         gameScene.getScoreScene().reset();
@@ -326,7 +325,7 @@ public final class GameController {
 
         while (nSparx < 2) {
             for (Cursor cursor : cursors) {
-                int[] coordinates = BoardGrid.getInstance().findPowerupLocation(cursor.oppositeQuadrant());
+                int[] coordinates = GameController.getInstance().getGrid().findPowerupLocation(cursor.oppositeQuadrant());
                 Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
                         Globals.BOARD_MARGIN * 2, SparxDirection.randomDirection());
                 addUnit(sparx);
@@ -382,7 +381,7 @@ public final class GameController {
 
                 int quadrant = cursor.oppositeQuadrant();
 
-                int[] coordinates = BoardGrid.getInstance().findPowerupLocation(quadrant);
+                int[] coordinates = GameController.getInstance().getGrid().findPowerupLocation(quadrant);
                 Powerup powerup = null;
                 Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
                 powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
@@ -524,5 +523,12 @@ public final class GameController {
     public void removeUnit(Unit unit) {
         units.remove(unit);
         checkSparx();
+    }
+
+    /**
+     * @return
+     */
+    public BoardGrid getGrid() {
+        return levelHandler.getLevel().getBoardGrid();
     }
 }

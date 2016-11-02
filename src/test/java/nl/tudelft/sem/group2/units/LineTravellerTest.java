@@ -3,13 +3,12 @@ package nl.tudelft.sem.group2.units;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.controllers.GameController;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.spy;
@@ -39,10 +38,11 @@ public class LineTravellerTest {
      */
     //TODO fix test
     @Ignore
+    @Test
     public void innerBorderOn() throws Exception {
         fuse.setX(0);
         fuse.setY(0);
-        when(BoardGrid.getInstance().isInnerborder(0, 0)).thenReturn(true);
+        when(GameController.getInstance().getGrid().isInnerborder(0, 0)).thenReturn(true);
         Assert.assertTrue(fuse.innerBorderOn());
     }
 

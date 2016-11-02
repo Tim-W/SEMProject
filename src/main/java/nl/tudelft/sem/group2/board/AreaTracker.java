@@ -2,6 +2,7 @@ package nl.tudelft.sem.group2.board;
 
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -105,7 +106,7 @@ public final class AreaTracker extends Observable {
      */
     public synchronized void calculateNewArea(Point qixCoordinates,
                                               boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
-        this.grid = BoardGrid.getInstance();
+        this.grid = GameController.getInstance().getGrid();
         setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm

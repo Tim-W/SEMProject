@@ -1,10 +1,10 @@
 package nl.tudelft.sem.group2.units;
 
-import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.controllers.GameController;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.awt.Point;
+import java.util.LinkedList;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyFloat;
@@ -44,7 +45,7 @@ public class QixTest {
     public void setUp() throws Exception {
         qix = new Qix(5);
         grid = mock(BoardGrid.class, Mockito.RETURNS_MOCKS);
-        when(BoardGrid.getInstance()).thenReturn(grid);
+        when(GameController.getInstance().getGrid()).thenReturn(grid);
         spyQix = spy(qix);
     }
 

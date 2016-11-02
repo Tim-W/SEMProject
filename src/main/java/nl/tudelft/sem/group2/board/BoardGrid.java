@@ -15,7 +15,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
  */
 public final class BoardGrid {
 
-    private static volatile BoardGrid instance;
+    //private static volatile BoardGrid instance;
 
     private AreaState[][] boardGrid;
     private int width;
@@ -26,7 +26,7 @@ public final class BoardGrid {
      * Constructor for the BoardGrid class.
      * The constructor sets all the grid points to border and the rest to uncovered
      */
-    private BoardGrid() {
+    public BoardGrid() {
         this(getGridWidth() + 1, getGridHeight() + 1);
 
     }
@@ -72,13 +72,13 @@ public final class BoardGrid {
             boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
         }
     }
-
-    /**
+/*
+    *//**
      * Getter for the BoardGrid this is a singleton class so everywhere the BoardGrid is used it is the same instance
      * This method allows getting of that instance and instantiates it when it is not instantiated yet.
      *
      * @return the only one instance of BoardGrid.
-     */
+     *//*
     public static BoardGrid getInstance() {
         if (instance == null) {
             // Put lock on class since it we do not want to instantiate it twice
@@ -90,14 +90,18 @@ public final class BoardGrid {
             }
         }
         return instance;
-    }
+    }*/
+/*
 
-    /**
+    */
+/**
      * Resets the instance of the BoardGrid to null.
-     */
+ *//*
+
     public static void resetBoardGrid() {
         instance = null;
     }
+*/
 
     /**
      * @return grid width - a point on the boardgrid is 2x2 pixels,
