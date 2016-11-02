@@ -108,7 +108,7 @@ public class GameControllerTest {
     public void keyReleasedCurrentMove() throws Exception {
         setUp();
         spyCursor.setCurrentMove(KeyCode.RIGHT);
-        spyCursor.getStix().addToStix(new Point(spyCursor.getIntX(), spyCursor.getIntY()));
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
         spyCursor.getFuseHandler().setFuse(spy(new Fuse(1, 1, 1, 1, spyCursor.getStix())));
         gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
                 false, false));
@@ -133,7 +133,7 @@ public class GameControllerTest {
 
         spyCursor.setStix(spy(spyCursor.getStix()));
         spyCursor.setCurrentMove(KeyCode.RIGHT);
-        spyCursor.getStix().addToStix(new Point(spyCursor.getIntX(), spyCursor.getIntY()));
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
         gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
                 false, false));
         Assert.assertEquals(spyCursor, gameController.getCursors().get(0));
@@ -146,7 +146,7 @@ public class GameControllerTest {
         setUp();
         spyCursor.getFuseHandler().setFuse(spy(new Fuse(1, 1, 1, 1, spyCursor.getStix())));
         spyCursor.setCurrentMove(KeyCode.RIGHT);
-        spyCursor.getStix().addToStix(new Point(spyCursor.getIntX() + 1, spyCursor.getIntY()));
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX() + 1, spyCursor.getY()));
         gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
                 false, false));
         verify(spyCursor.getFuseHandler().getFuse(), times(0)).moving();

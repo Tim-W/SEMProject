@@ -52,24 +52,24 @@ public class Fuse extends LineTraveller implements CollisionInterface {
             for (int i = 0; i < speed; i++) {
                 if (getX() < BOARD_WIDTH / 2
                         && !(getX() + 1 == lastX)
-                        && stix.getStixCoordinates().contains(new Point(getIntX() + 1, getIntY()))) {
-                    setLastCoordinates(getIntX(), getIntY());
-                    setX(getIntX() + 1);
+                        && stix.getStixCoordinates().contains(new Point(getX() + 1, getY()))) {
+                    setLastCoordinates(getX(), getY());
+                    setX(getX() + 1);
                 } else if (getY() < BOARD_HEIGHT / 2
                         && !(lastY == getY() + 1)
-                        && stix.getStixCoordinates().contains(new Point(getIntX(), getIntY() + 1))) {
-                    setLastCoordinates(getIntX(), getIntY());
-                    setY(getIntY() + 1);
+                        && stix.getStixCoordinates().contains(new Point(getX(), getY() + 1))) {
+                    setLastCoordinates(getX(), getY());
+                    setY(getY() + 1);
                 } else if (getX() > 0
                         && !(lastX == getX() - 1)
-                        && stix.getStixCoordinates().contains(new Point(getIntX() - 1, getIntY()))) {
-                    setLastCoordinates(getIntX(), getIntY());
-                    setX(getIntX() - 1);
+                        && stix.getStixCoordinates().contains(new Point(getX() - 1, getY()))) {
+                    setLastCoordinates(getX(), getY());
+                    setX(getX() - 1);
                 } else if (getY() > 0
                         && !(lastY == getY() - 1)
-                        && stix.getStixCoordinates().contains(new Point(getIntX(), getIntY() - 1))) {
-                    setLastCoordinates(getIntX(), getIntY());
-                    setY(getIntY() - 1);
+                        && stix.getStixCoordinates().contains(new Point(getX(), getY() - 1))) {
+                    setLastCoordinates(getX(), getY());
+                    setY(getY() - 1);
                 }
             }
         }

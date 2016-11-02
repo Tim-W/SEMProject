@@ -38,9 +38,9 @@ public class mainSceneTest {
     @Test
     public void testDrawStixAndFuseVerify() throws Exception {
         setUp();
-        spyCursor.getStix().addToStix(new Point(spyCursor.getIntX(), spyCursor.getIntY()));
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
         gameController.getCursors().get(0).getStix();
-        spyCursor.getStix().addToStix(new Point(spyCursor.getIntX(), spyCursor.getIntY() + 1));
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY() + 1));
         scene.draw();
         verify(spyCursor, times(1)).isFast();
     }
@@ -48,7 +48,7 @@ public class mainSceneTest {
     @Test
     public void testDrawStixAndFuseVerifyNot() throws Exception {
         setUp();
-        spyCursor.getStix().addToStix(new Point(spyCursor.getIntX(), spyCursor.getIntY()));
+        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
         spyCursor.getFuseHandler().handleFuse();
         scene.draw();
         verify(spyCursor, times(0)).isFast();

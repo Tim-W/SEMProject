@@ -21,8 +21,8 @@ public final class AreaTracker extends Observable {
     private static volatile AreaTracker instance;
 
     private BoardGrid grid;
-    private Stack<Coordinate> visiting = new Stack<>();
-    private LinkedList<Coordinate> area1, area2, border1, border2, newBorder, newArea;
+    private Stack<Point > visiting = new Stack<>();
+    private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
 
@@ -103,14 +103,14 @@ public final class AreaTracker extends Observable {
      * @param stix           current stix to use
      * @param scoreCounter   the counter that handles the score
      */
-    public synchronized void calculateNewArea(Coordinate qixCoordinates,
+    public synchronized void calculateNewArea(Point qixCoordinates,
                                               boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
         this.grid = BoardGrid.getInstance();
         setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm
-        Coordinate start = stix.getStixCoordinates().getFirst();
-        Coordinate dir = stix.getStixCoordinates().get(1);
+        Point start = stix.getStixCoordinates().getFirst();
+        Point dir = stix.getStixCoordinates().get(1);
         // Instantiate the two temporary area trackers, these linkedlists
         // accumulate all the points on one side of the stix
         // When the floodfill algorithm finds a qix however the linkedlist is
@@ -130,7 +130,7 @@ public final class AreaTracker extends Observable {
             LOGGER.log(Level.INFO, "New slow area claimed with size " + newArea.size(), this.getClass());
         }
         //Update the grid with the newly created area
-        for (Coordinate current : newArea) {
+        for (Point current : newArea) {
             if (fastArea) {
                 grid.setState(current, AreaState.FAST);
             } else {
@@ -138,7 +138,7 @@ public final class AreaTracker extends Observable {
             }
         }
         //Update the grid with the new inner borders
-        for (Coordinate current : newBorder) {
+        for (Point current : newBorder) {
             grid.setState(current, AreaState.INNERBORDER);
         }
         resetAreaTracker();
@@ -157,7 +157,7 @@ public final class AreaTracker extends Observable {
 
     private void setOuterBorders(Stix stix) {
         //Set all the points from the current stix to border points on the grid
-        for (Coordinate current : stix.getStixCoordinates()) {
+        for (Point current : stix.getStixCoordinates()) {
             grid.setState(current, AreaState.OUTERBORDER);
         }
     }
@@ -187,18 +187,18 @@ public final class AreaTracker extends Observable {
         }
     }
 
-    private void checkDirections(Coordinate qixCoordinates, Coordinate start, Coordinate dir, Stix stix) {
+    private void checkDirections(Point qixCoordinates, Point start, Point dir, Stix stix) {
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX() || start.getY() != dir.getY()) {
             //If stix was first moving in X direction get points above and under the first stix point,
             // start the floodfill algorithm from there
-            Coordinate beginPoint1 = new Coordinate((int) dir.getX(), (int) dir.getY() - 1);
-            Coordinate beginPoint2 = new Coordinate((int) dir.getX(), (int) dir.getY() + 1);
+            Point beginPoint1 = new Point((int) dir.getX(), (int) dir.getY() - 1);
+            Point beginPoint2 = new Point((int) dir.getX(), (int) dir.getY() + 1);
             if (start.getY() != dir.getY()) {
                 //If stix was first moving in Y direction get points left and right the first stix point,
                 // start the floodfill algorithm from there
-                beginPoint1 = new Coordinate((int) dir.getX() - 1, (int) dir.getY());
-                beginPoint2 = new Coordinate((int) dir.getX() + 1, (int) dir.getY());
+                beginPoint1 = new Point((int) dir.getX() - 1, (int) dir.getY());
+                beginPoint2 = new Point((int) dir.getX() + 1, (int) dir.getY());
             }
             foundQix = false;
             floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true, stix);
@@ -220,7 +220,7 @@ public final class AreaTracker extends Observable {
      * @param addToArea1     Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
      * @param stix           current stix to use
      */
-    private void floodFill(Coordinate pointToCheck, Point qixCoordinates, AreaState chosenState,
+    private void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState,
                           boolean addToArea1, Stix stix) {
         visiting.push(pointToCheck);
         while (!visiting.isEmpty()) {
@@ -244,7 +244,7 @@ public final class AreaTracker extends Observable {
      * @param stix          current stix to use
      */
     private void floodFill(Point qixCoorinates, AreaState chosenState, boolean addToArea1, Stix stix) {
-        Coordinate pointToCheck = visiting.pop();
+        Point pointToCheck = visiting.pop();
         if (foundQix) {
             return;
         }
@@ -258,7 +258,7 @@ public final class AreaTracker extends Observable {
                 // add that point to the right temporary area tracker
                 addPointToAreaTracker(addToArea1, pointToCheck);
             }
-        } else if (grid.isOuterborder(pointToCheck)
+        } else if (grid.isOuterborder(pointToCheck.x, pointToCheck.y)
                 && !stix.getStixCoordinates().contains(pointToCheck)) {
             if (addToArea1) {
                 border1.add(pointToCheck);
@@ -266,12 +266,12 @@ public final class AreaTracker extends Observable {
                 border2.add(pointToCheck);
             }
             visited.add(pointToCheck);
-        } else if (grid.isInnerborder(pointToCheck)) {
+        } else if (grid.isInnerborder(pointToCheck.x, pointToCheck.y)) {
             visited.add(pointToCheck);
         }
     }
 
-    private void addPointToAreaTracker(boolean addToArea1, Coordinate pointToCheck) {
+    private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
         if (addToArea1) {
             area1.add(pointToCheck);
         } else {
@@ -279,12 +279,12 @@ public final class AreaTracker extends Observable {
         }
         visited.add(pointToCheck);
         // Check all the four neighbours of the current point recursively
-        Coordinate[] points = new Coordinate[4];
-        points[0] = new Coordinate((int) pointToCheck.getX(), (int) pointToCheck.getY() - 1);
-        points[1] = new Coordinate((int) pointToCheck.getX(), (int) pointToCheck.getY() + 1);
-        points[2] = new Coordinate((int) pointToCheck.getX() - 1, (int) pointToCheck.getY());
-        points[3] = new Coordinate((int) pointToCheck.getX() + 1, (int) pointToCheck.getY());
-        for (Coordinate point : points) {
+        Point[] points = new Point[4];
+        points[0] = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY() - 1);
+        points[1] = new Point((int) pointToCheck.getX(), (int) pointToCheck.getY() + 1);
+        points[2] = new Point((int) pointToCheck.getX() - 1, (int) pointToCheck.getY());
+        points[3] = new Point((int) pointToCheck.getX() + 1, (int) pointToCheck.getY());
+        for (Point point : points) {
             if (!visited.contains(point)) {
                 visiting.push(point);
             }

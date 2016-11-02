@@ -2,7 +2,6 @@ package nl.tudelft.sem.group2.units;
 
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
-import nl.tudelft.sem.group2.board.Coordinate;
 
 import java.awt.Point;
 import java.awt.Polygon;
@@ -22,7 +21,7 @@ import java.util.logging.Level;
 public class Stix implements CollisionInterface {
 
     private static final Logger LOGGER = Logger.getLogger();
-    private LinkedList<Coordinate> stixCoordinates;
+    private LinkedList<Point> stixCoordinates;
 
     /**
      * Constructor for stix class.
@@ -87,10 +86,10 @@ public class Stix implements CollisionInterface {
     /**
      * Method that adds a point to the current stix.
      *
-     * @param coordinates point that gets added to the stix
+     * @param coordinate point that gets added to the stix
      */
-    public void addToStix(Point coordinates) {
-        stixCoordinates.add(new Coordinate(coordinates.x, coordinates.y));
+    public void addToStix(Point coordinate) {
+        stixCoordinates.add(coordinate);
     }
 
     /**
@@ -115,7 +114,7 @@ public class Stix implements CollisionInterface {
      *
      * @return the current stix
      */
-    public LinkedList<Coordinate> getStixCoordinates() {
+    public LinkedList<Point> getStixCoordinates() {
         return stixCoordinates;
     }
 }

@@ -45,9 +45,9 @@ public class SparxTest {
     }
 
     public void moveOuter(int x, int y) {
-        when(grid.getState(new Point(sparx.getIntX() + x, sparx.getIntY() + y))).thenReturn(AreaState.OUTERBORDER);
-        int newx = sparx.getIntX() + x * 2;
-        int newy = sparx.getIntY() + y * 2;
+        when(grid.getState(new Point(sparx.getX() + x, sparx.getY() + y))).thenReturn(AreaState.OUTERBORDER);
+        int newx = sparx.getX() + x * 2;
+        int newy = sparx.getY() + y * 2;
         if (newx >= 0 && newx <= BOARD_WIDTH / 2 && newy >= 0 && newy <= BOARD_HEIGHT / 2) {
             boardGrid[newx][newy] = AreaState.OUTERBORDER;
         }
@@ -55,9 +55,9 @@ public class SparxTest {
     }
 
     public void moveInner(int x, int y) {
-        when(grid.getState(new Point(sparx.getIntX() + x, sparx.getIntY() + y))).thenReturn(AreaState.INNERBORDER);
-        int newx = sparx.getIntX() + x * 2;
-        int newy = sparx.getIntY() + y * 2;
+        when(grid.getState(new Point(sparx.getX() + x, sparx.getY() + y))).thenReturn(AreaState.INNERBORDER);
+        int newx = sparx.getX() + x * 2;
+        int newy = sparx.getY() + y * 2;
         if (newx >= 0 && newx <= BOARD_WIDTH / 2 && newy >= 0 && newy <= BOARD_HEIGHT / 2) {
             boardGrid[newx][newy] = AreaState.INNERBORDER;
         }
@@ -67,192 +67,192 @@ public class SparxTest {
     @Test
     public void moveRightOuterR() throws Exception {
         createSparx(2, 2, 2, 2, SparxDirection.RIGHT);
-        int x = sparx.getIntX();
+        int x = sparx.getX();
         moveOuter(1, 0);
-        Assert.assertEquals(x + 2, sparx.getIntX());
+        Assert.assertEquals(x + 2, sparx.getX());
     }
 
     @Test
     public void moveRightOuterD() throws Exception {
         createSparx(2, 2, 2, 2, SparxDirection.RIGHT);
-        int y = sparx.getIntY();
+        int y = sparx.getY();
         moveOuter(0, 1);
-        Assert.assertEquals(y + 2, sparx.getIntY());
+        Assert.assertEquals(y + 2, sparx.getY());
     }
 
     @Test
     public void moveRightOuterL() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.RIGHT);
-        int x = sparx.getIntX();
+        int x = sparx.getX();
         moveOuter(-1, 0);
-        Assert.assertEquals(x - 2, sparx.getIntX());
+        Assert.assertEquals(x - 2, sparx.getX());
     }
 
     @Test
     public void moveRightOuterU() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.RIGHT);
-        int y = sparx.getIntY();
+        int y = sparx.getY();
         moveOuter(0, -1);
-        Assert.assertEquals(y - 2, sparx.getIntY());
+        Assert.assertEquals(y - 2, sparx.getY());
     }
 
     @Test
     public void moveRightInnerR() throws Exception {
         createSparx(2, 2, 2, 2, SparxDirection.RIGHT);
-        int x = sparx.getIntX();
+        int x = sparx.getX();
         moveInner(1, 0);
-        Assert.assertEquals(x + 2, sparx.getIntX());
+        Assert.assertEquals(x + 2, sparx.getX());
     }
 
     @Test
     public void moveRightInnerD() throws Exception {
         createSparx(2, 2, 2, 2, SparxDirection.RIGHT);
-        int y = sparx.getIntY();
+        int y = sparx.getY();
         moveInner(0, 1);
-        Assert.assertEquals(y + 2, sparx.getIntY());
+        Assert.assertEquals(y + 2, sparx.getY());
     }
 
     @Test
     public void moveRightInnerL() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.RIGHT);
-        int x = sparx.getIntX();
+        int x = sparx.getX();
         moveInner(-1, 0);
-        Assert.assertEquals(x - 2, sparx.getIntX());
+        Assert.assertEquals(x - 2, sparx.getX());
     }
 
     @Test
     public void moveRightInnerU() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.RIGHT);
-        int y = sparx.getIntY();
+        int y = sparx.getY();
         moveInner(0, -1);
-        Assert.assertEquals(y - 2, sparx.getIntY());
+        Assert.assertEquals(y - 2, sparx.getY());
     }
 
     @Test
     public void moveLeftOuterR() throws Exception {
         createSparx(2, 2, 2, 2, SparxDirection.LEFT);
-        int x = sparx.getIntX();
+        int x = sparx.getX();
         moveOuter(1, 0);
-        Assert.assertEquals(x + 2, sparx.getIntX());
+        Assert.assertEquals(x + 2, sparx.getX());
     }
 
     @Test
     public void moveLeftOuterD() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.LEFT);
-        int y = sparx.getIntY();
+        int y = sparx.getY();
         moveOuter(0, 1);
-        Assert.assertEquals(y + 2, sparx.getIntY());
+        Assert.assertEquals(y + 2, sparx.getY());
     }
 
     @Test
     public void moveLeftOuterL() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.LEFT);
-        int x = sparx.getIntX();
+        int x = sparx.getX();
         moveOuter(-1, 0);
-        Assert.assertEquals(x - 2, sparx.getIntX());
+        Assert.assertEquals(x - 2, sparx.getX());
     }
 
     @Test
     public void moveLeftOuterU() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.LEFT);
-        int y = sparx.getIntY();
+        int y = sparx.getY();
         moveOuter(0, -1);
-        Assert.assertEquals(y - 2, sparx.getIntY());
+        Assert.assertEquals(y - 2, sparx.getY());
     }
 
     @Test
     public void moveLeftInnerR() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.LEFT);
-        int x = sparx.getIntX();
+        int x = sparx.getX();
         moveInner(1, 0);
-        Assert.assertEquals(x + 2, sparx.getIntX());
+        Assert.assertEquals(x + 2, sparx.getX());
     }
 
     @Test
     public void moveLeftInnerD() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.LEFT);
-        int y = sparx.getIntY();
+        int y = sparx.getY();
         moveInner(0, 1);
-        Assert.assertEquals(y + 2, sparx.getIntY());
+        Assert.assertEquals(y + 2, sparx.getY());
     }
 
     @Test
     public void moveLeftInnerL() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.LEFT);
-        int x = sparx.getIntX();
+        int x = sparx.getX();
         moveInner(-1, 0);
-        Assert.assertEquals(x - 2, sparx.getIntX());
+        Assert.assertEquals(x - 2, sparx.getX());
     }
 
     @Test
     public void moveLeftInnerU() throws Exception {
         createSparx(3, 3, 2, 2, SparxDirection.LEFT);
-        int y = sparx.getIntY();
+        int y = sparx.getY();
         moveInner(0, -1);
-        Assert.assertEquals(y - 2, sparx.getIntY());
+        Assert.assertEquals(y - 2, sparx.getY());
     }
 
     @Test
     public void moveOneRR() throws Exception {
         createSparx(BOARD_WIDTH / 2 - 1, BOARD_HEIGHT / 2 - 1, 2, 2, SparxDirection.RIGHT);
-        int dim = sparx.getIntX();
+        int dim = sparx.getX();
         moveOuter(1, 0);
-        Assert.assertEquals(dim + 1, sparx.getIntX());
+        Assert.assertEquals(dim + 1, sparx.getX());
     }
 
     @Test
     public void moveOneRD() throws Exception {
         createSparx(BOARD_WIDTH / 2 - 1, BOARD_HEIGHT / 2 - 1, 2, 2, SparxDirection.RIGHT);
-        int dim = sparx.getIntY();
+        int dim = sparx.getY();
         moveOuter(0, 1);
-        Assert.assertEquals(dim + 1, sparx.getIntY());
+        Assert.assertEquals(dim + 1, sparx.getY());
     }
 
     @Test
     public void moveOneRL() throws Exception {
         createSparx(1, 1, 2, 2, SparxDirection.RIGHT);
-        int dim = sparx.getIntX();
+        int dim = sparx.getX();
         moveOuter(-1, 0);
-        Assert.assertEquals(dim - 1, sparx.getIntX());
+        Assert.assertEquals(dim - 1, sparx.getX());
     }
 
     @Test
     public void moveOneRU() throws Exception {
         createSparx(1, 1, 2, 2, SparxDirection.RIGHT);
-        int dim = sparx.getIntY();
+        int dim = sparx.getY();
         moveOuter(0, -1);
-        Assert.assertEquals(dim - 1, sparx.getIntY());
+        Assert.assertEquals(dim - 1, sparx.getY());
     }
 
     @Test
     public void moveOneLR() throws Exception {
         createSparx(BOARD_WIDTH / 2 - 1, BOARD_HEIGHT / 2 - 1, 2, 2, SparxDirection.LEFT);
-        int dim = sparx.getIntX();
+        int dim = sparx.getX();
         moveOuter(1, 0);
-        Assert.assertEquals(dim + 1, sparx.getIntX());
+        Assert.assertEquals(dim + 1, sparx.getX());
     }
 
     @Test
     public void moveOneLD() throws Exception {
         createSparx(BOARD_WIDTH / 2 - 1, BOARD_HEIGHT / 2 - 1, 2, 2, SparxDirection.LEFT);
-        int dim = sparx.getIntY();
+        int dim = sparx.getY();
         moveOuter(0, 1);
-        Assert.assertEquals(dim + 1, sparx.getIntY());
+        Assert.assertEquals(dim + 1, sparx.getY());
     }
 
     @Test
     public void moveOneLL() throws Exception {
         createSparx(1, 1, 2, 2, SparxDirection.LEFT);
-        int dim = sparx.getIntX();
+        int dim = sparx.getX();
         moveOuter(-1, 0);
-        Assert.assertEquals(dim - 1, sparx.getIntX());
+        Assert.assertEquals(dim - 1, sparx.getX());
     }
 
     @Test
     public void moveOneLU() throws Exception {
         createSparx(1, 1, 2, 2, SparxDirection.LEFT);
-        int dim = sparx.getIntY();
+        int dim = sparx.getY();
         moveOuter(0, -1);
-        Assert.assertEquals(dim - 1, sparx.getIntY());
+        Assert.assertEquals(dim - 1, sparx.getY());
     }
 }

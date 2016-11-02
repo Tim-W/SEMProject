@@ -1,12 +1,13 @@
 package nl.tudelft.sem.group2.board;
 
-import java.awt.Point;
 
 /**
  * Created by Erik on 25-10-2016.
  */
-public class Coordinate extends Point {
+public class Coordinate {
 
+    private int x;
+    private int y;
     private int width;
     private int height;
 
@@ -19,7 +20,8 @@ public class Coordinate extends Point {
      * @param height      height
      */
     public Coordinate(int x, int y, int width, int height) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
         this.width = width;
         this.height = height;
     }
@@ -54,19 +56,21 @@ public class Coordinate extends Point {
         return low <= y && y < up;
     }
 
-    public int getIntX() {
-        return (int) super.getX();
-    }
-
-    public int getIntY() {
-        return (int) super.getY();
+    public int getX() {
+        return x;
     }
 
     public void setX(int x) {
-        this.x = x; }
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
 
     public void setY(int y) {
-        this.y = y; }
+        this.y = y;
+    }
 
     public int getWidth() {
         return width;

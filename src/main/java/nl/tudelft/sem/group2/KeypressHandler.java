@@ -30,26 +30,26 @@ public final class KeypressHandler {
         if (cursor.getX() + transX >= 0 && cursor.getX() + transX <= Globals.BOARD_WIDTH / 2
                 && cursor.getY() + transY >= 0 && cursor.getY()
                 + transY <= Globals.BOARD_WIDTH / 2) {
-            if (BoardGrid.getInstance().isUncovered(cursor.getIntX() + transX, cursor.getIntY() + transY)
+            if (BoardGrid.getInstance().isUncovered(cursor.getX() + transX, cursor.getY() + transY)
                     && cursor.isDrawing()) {
-                if (!cursor.getStix().contains(new Point(cursor.getIntX() + transX, cursor.getIntY() + transY))
+                if (!cursor.getStix().contains(new Point(cursor.getX() + transX, cursor.getY() + transY))
                         && !cursor.getStix().contains(
-                        new Point(cursor.getIntX() + transX * 2, cursor.getIntY() + transY * 2))
+                        new Point(cursor.getX() + transX * 2, cursor.getY() + transY * 2))
                         && BoardGrid.getInstance().isUncovered(
-                        cursor.getIntX() + transX + transY, cursor.getIntY() + transY + transX)
+                        cursor.getX() + transX + transY, cursor.getY() + transY + transX)
                         && BoardGrid.getInstance().isUncovered(
-                        cursor.getIntX() + transX - transY, cursor.getIntY() + transY - transX)) {
+                        cursor.getX() + transX - transY, cursor.getY() + transY - transX)) {
 
-                    if (BoardGrid.getInstance().isOuterborder(cursor.getIntX(), cursor.getIntY())) {
-                        cursor.getStix().addToStix(new Point(cursor.getIntX(), cursor.getIntY()));
+                    if (BoardGrid.getInstance().isOuterborder(cursor.getX(), cursor.getY())) {
+                        cursor.getStix().addToStix(new Point(cursor.getX(), cursor.getY()));
                     }
-                    cursor.setX(cursor.getIntX() + transX);
-                    cursor.setY(cursor.getIntY() + transY);
-                    cursor.getStix().addToStix(new Point(cursor.getIntX(), cursor.getIntY()));
+                    cursor.setX(cursor.getX() + transX);
+                    cursor.setY(cursor.getY() + transY);
+                    cursor.getStix().addToStix(new Point(cursor.getX(), cursor.getY()));
                 }
-            } else if (BoardGrid.getInstance().isOuterborder(cursor.getIntX() + transX, cursor.getIntY() + transY)) {
-                cursor.setX(cursor.getIntX() + transX);
-                cursor.setY(cursor.getIntY() + transY);
+            } else if (BoardGrid.getInstance().isOuterborder(cursor.getX() + transX, cursor.getY() + transY)) {
+                cursor.setX(cursor.getX() + transX);
+                cursor.setY(cursor.getY() + transY);
             }
         }
     }

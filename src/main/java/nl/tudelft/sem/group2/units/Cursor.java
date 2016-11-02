@@ -10,7 +10,6 @@ import nl.tudelft.sem.group2.KeypressHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.board.AreaTracker;
-import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
@@ -171,8 +170,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     @Override
     public void draw(Canvas canvas) {
-        int drawX = gridToCanvas(getIntX());
-        int drawY = gridToCanvas(getIntY());
+        int drawX = gridToCanvas(getX());
+        int drawY = gridToCanvas(getY());
         final int lineCount = 10;
         if (loops < animationSpeed + lineCount) {
             calculateLineCoordinates(drawX, drawY, canvas);
@@ -237,11 +236,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param qix the qix of the game
      */
     public void calculateArea(Qix qix) {
-        if (getGrid().isOuterborder(this.getIntX(), this.getIntY()) && !this.getStix().isEmpty()) {
+        if (getGrid().isOuterborder(this.getX(), this.getY()) && !this.getStix().isEmpty()) {
 
             SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
 
-            AreaTracker.getInstance().calculateNewArea(new Coordinate(qix.getIntX(), qix.getIntY()),
+            AreaTracker.getInstance().calculateNewArea(new Point(qix.getX(), qix.getY()),
                     this.isFast(), getStix(), scoreCounter);
 
             //Remove the Fuse from the gameView when completing an area

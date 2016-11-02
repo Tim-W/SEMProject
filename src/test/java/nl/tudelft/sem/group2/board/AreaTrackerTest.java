@@ -1,16 +1,9 @@
 package nl.tudelft.sem.group2.board;
 
 import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.board.Coordinate;
-import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.board.AreaState;
-import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.units.Stix;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 
 import java.awt.Point;
 
@@ -59,7 +52,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastArea() throws Exception {
 
         instantiateStix();
-        AreaTracker.getInstance().calculateNewArea(new Coordinate(1, 2), true, stix, scoreCounter);
+        AreaTracker.getInstance().calculateNewArea(new Point(1, 2), true, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
 

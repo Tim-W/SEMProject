@@ -80,7 +80,7 @@ public abstract class Unit extends Coordinate implements Draw, Movable, Collisio
      * @return the rectangle representation of this Unit
      */
     public Rectangle toRectangle() {
-        return new Rectangle(this.x, this.y, 2, 2);
+        return new Rectangle(getX(), getY(), 2, 2);
     }
 
 }

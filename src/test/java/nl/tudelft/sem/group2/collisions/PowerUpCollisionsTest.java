@@ -75,7 +75,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testEat() {
         when(cursor.intersect(any())).thenReturn(true);
-        PowerEat powerup = new PowerEat(cursor.getIntX(), cursor.getIntY(), 1, 1);
+        PowerEat powerup = new PowerEat(cursor.getX(), cursor.getY(), 1, 1);
         set.add(powerup);
         PowerupEvent event = new PowerupEvent(cursor, EAT);
         Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set, cursors).getClass());
@@ -87,7 +87,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testSpeed() {
         when(cursor.intersect(any())).thenReturn(true);
-        PowerSpeed powerup = new PowerSpeed(cursor.getIntX(), cursor.getIntY(), 1, 1);
+        PowerSpeed powerup = new PowerSpeed(cursor.getX(), cursor.getY(), 1, 1);
         set.add(powerup);
         PowerupEvent event = new PowerupEvent(cursor, SPEED);
         Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set, cursors).getClass());
@@ -99,7 +99,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testLife() {
         when(cursor.intersect(any())).thenReturn(true);
-        PowerLife powerup = new PowerLife(cursor.getIntX(), cursor.getIntY(), 1, 1);
+        PowerLife powerup = new PowerLife(cursor.getX(), cursor.getY(), 1, 1);
         set.add(powerup);
         PowerupEvent event = new PowerupEvent(cursor, LIFE);
         Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set, cursors).getClass());
@@ -110,7 +110,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testEatNoIntersection() {
-        PowerEat powerup = new PowerEat(cursor.getIntX() + 20, cursor.getIntY() + 20, 1, 1);
+        PowerEat powerup = new PowerEat(cursor.getX() + 20, cursor.getY() + 20, 1, 1);
         set.add(powerup);
         Assert.assertEquals(null, handler.powerUpCollisions(set, cursors));
     }
@@ -121,7 +121,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testSpeedNoIntersection() {
-        PowerSpeed powerup = new PowerSpeed(cursor.getIntX() + 20, cursor.getIntY() + 20, 1, 1);
+        PowerSpeed powerup = new PowerSpeed(cursor.getX() + 20, cursor.getY() + 20, 1, 1);
         set.add(powerup);
         Assert.assertEquals(null, handler.powerUpCollisions(set, cursors));
     }
@@ -131,7 +131,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testLifeNoIntersection() {
-        PowerLife powerup = new PowerLife(cursor.getIntX() + 20, cursor.getIntY() + 20, 1, 1);
+        PowerLife powerup = new PowerLife(cursor.getX() + 20, cursor.getY() + 20, 1, 1);
         set.add(powerup);
         Assert.assertEquals(null, handler.powerUpCollisions(set, cursors));
     }
@@ -143,7 +143,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testNoPowerupsNoCursor() {
         set.clear();
-        Sparx sparx = new Sparx(cursor.getIntX(), cursor.getIntY(), 1, 1 , SparxDirection.RIGHT);
+        Sparx sparx = new Sparx(cursor.getX(), cursor.getY(), 1, 1 , SparxDirection.RIGHT);
         set.add(sparx);
         Assert.assertEquals(null, handler.powerUpCollisions(set, cursors));
     }
@@ -154,7 +154,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testNoInstanceOf() {
-        PowerLife powerup = new PowerLife(cursor.getIntX() + 20, cursor.getIntY() + 20, 1, 1);
+        PowerLife powerup = new PowerLife(cursor.getX() + 20, cursor.getY() + 20, 1, 1);
         set.add(powerup);
         Assert.assertEquals(null, handler.powerUpCollisions(set, cursors));
     }

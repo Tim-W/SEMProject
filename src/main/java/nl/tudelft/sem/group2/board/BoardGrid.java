@@ -121,9 +121,19 @@ public final class BoardGrid {
      * @param cor the point/coordinate on the map for witch the state has to change
      * @param state the new state for the given point
      */
-    public void setState(Point cor, AreaState state) {
+    public void setState(Coordinate cor, AreaState state) {
         if (inBound(cor)) {
-            this.boardGrid[cor.x][cor.y] = state;
+            this.boardGrid[cor.getX()][cor.getY()] = state;
+        }
+    }
+    /**
+     *
+     * @param p the point/coordinate on the map for witch the state has to change
+     * @param state the new state for the given point
+     */
+    public void setState(Point p, AreaState state) {
+        if (inBound(p)) {
+            this.boardGrid[p.x][p.y] = state;
         }
     }
 
@@ -132,9 +142,20 @@ public final class BoardGrid {
      * @param cor the point/coordinate on the map for witch the state is needed
      * @return The state of the point, if the point is found on the map. null otherwise
      */
-    public AreaState getState(Point cor) {
+    public AreaState getState(Coordinate cor) {
         if (inBound(cor)) {
-            return this.boardGrid[cor.x][cor.y];
+            return this.boardGrid[cor.getX()][cor.getY()];
+        }
+        return null;
+    }
+    /**
+     *
+     * @param p the point/coordinate on the map for witch the state is needed
+     * @return The state of the point, if the point is found on the map. null otherwise
+     */
+    public AreaState getState(Point p) {
+        if (inBound(p)) {
+            return this.boardGrid[p.x][p.y];
         }
         return null;
     }
@@ -144,11 +165,18 @@ public final class BoardGrid {
      * @param cor the point/coordinate on the map to be checked
      * @return true if the point/coordinate is on the map
      */
-    private boolean inBound(Point cor) {
-        if (!(cor instanceof Coordinate)) {
-            cor = new Coordinate(cor.x, cor.y);
-        }
-        return ((Coordinate) cor).xBetween(0, width) && ((Coordinate) cor).yBetween(0, height);
+    private boolean inBound(Coordinate cor) {
+        return cor.xBetween(0, width) && cor.yBetween(0, height);
+    }
+
+    /**
+     *
+     * @param p the point/coordinate on the map to be checked
+     * @return true if the point/coordinate is on the map
+     */
+    private boolean inBound(Point p) {
+        Coordinate cor = new Coordinate(p.x, p.y);
+        return cor.xBetween(0, width) && cor.yBetween(0, height);
     }
 
     /**
@@ -156,7 +184,7 @@ public final class BoardGrid {
      * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an OUTERBORDER AreaState
      */
-    public boolean isOuterborder(Point cor) {
+    public boolean isOuterborder(Coordinate cor) {
         return AreaState.OUTERBORDER.equals(getState(cor));
     }
 
@@ -165,7 +193,7 @@ public final class BoardGrid {
      * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an UNCOVERED AreaState
      */
-    public boolean isUncovered(Point cor) {
+    public boolean isUncovered(Coordinate cor) {
         return AreaState.UNCOVERED.equals(getState(cor));
     }
 
@@ -174,7 +202,7 @@ public final class BoardGrid {
      * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an INNERBORDER AreaState
      */
-    public boolean isInnerborder(Point cor) {
+    public boolean isInnerborder(Coordinate cor) {
         return AreaState.INNERBORDER.equals(getState(cor));
     }
 
@@ -351,6 +379,7 @@ public final class BoardGrid {
     /**
      * Shows a log which visualise the current board grid state.
      */
+    //TODO rename to toString
     public void printBoardGrid() {
         // A map representing the relations between AreaStates and their String visualizations.
         Map<AreaState, String> areaStateVisualisation = new HashMap<>();

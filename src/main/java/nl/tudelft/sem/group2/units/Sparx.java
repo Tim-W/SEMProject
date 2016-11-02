@@ -69,22 +69,22 @@ public class Sparx extends LineTraveller implements CollisionInterface {
             left2 = false;
             offset = 1;
         }
-        if (checkX(left1) && getGrid().isOuterborder(getIntX() + offset, getIntY())) {
-            setXAndLastX(getIntX() + offset);
-        } else if (checkY(left1) && getGrid().isOuterborder(getIntX(), getIntY() + offset)) {
-            setYAndLastY(getIntY() + offset);
-        } else if (checkX(left2) && getGrid().isOuterborder(getIntX() - offset, getIntY())) {
-            setXAndLastX(getIntX() - offset);
-        } else if (checkY(left2) && getGrid().isOuterborder(getIntX(), getIntY() - offset)) {
-            setYAndLastY(getIntY() - offset);
-        } else if (checkX(left1) && getGrid().isInnerborder(getIntX() + offset, getIntY())) {
-            setXAndLastX(getIntX() + offset);
-        } else if (checkY(left1) && getGrid().isInnerborder(getIntX(), getIntY() + offset)) {
-            setYAndLastY(getIntY() + offset);
-        } else if (checkX(left2) && getGrid().isInnerborder(getIntX() - offset, getIntY())) {
-            setXAndLastX(getIntX() - offset);
-        } else if (checkY(left2) && getGrid().isInnerborder(getIntX(), getIntY() - offset)) {
-            setYAndLastY(getIntY() - offset);
+        if (checkX(left1) && getGrid().isOuterborder(getX() + offset, getY())) {
+            setXAndLastX(getX() + offset);
+        } else if (checkY(left1) && getGrid().isOuterborder(getX(), getY() + offset)) {
+            setYAndLastY(getY() + offset);
+        } else if (checkX(left2) && getGrid().isOuterborder(getX() - offset, getY())) {
+            setXAndLastX(getX() - offset);
+        } else if (checkY(left2) && getGrid().isOuterborder(getX(), getY() - offset)) {
+            setYAndLastY(getY() - offset);
+        } else if (checkX(left1) && getGrid().isInnerborder(getX() + offset, getY())) {
+            setXAndLastX(getX() + offset);
+        } else if (checkY(left1) && getGrid().isInnerborder(getX(), getY() + offset)) {
+            setYAndLastY(getY() + offset);
+        } else if (checkX(left2) && getGrid().isInnerborder(getX() - offset, getY())) {
+            setXAndLastX(getX() - offset);
+        } else if (checkY(left2) && getGrid().isInnerborder(getX(), getY() - offset)) {
+            setYAndLastY(getY() - offset);
         }
     }
 
@@ -113,7 +113,7 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param x new x value
      */
     public void setXAndLastX(int x) {
-        setLastCoordinates(getIntX(), getIntY());
+        setLastCoordinates(getX(), getY());
         setX(x);
     }
 
@@ -123,7 +123,7 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      * @param y new y value
      */
     public void setYAndLastY(int y) {
-        setLastCoordinates(getIntX(), getIntY());
+        setLastCoordinates(getX(), getY());
         setY(y);
     }
 

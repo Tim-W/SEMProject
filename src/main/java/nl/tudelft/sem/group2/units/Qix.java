@@ -72,16 +72,16 @@ public class Qix extends Unit implements CollisionInterface, Observer {
 
     @Override
     public void move() {
-        coordinate[0] = getIntX();
-        coordinate[1] = getIntY();
+        coordinate[0] = getX();
+        coordinate[1] = getY();
         if (animationLoops <= 0) {
             changeDirection();
         }
         checkLineCollision();
         this.setX((int) (coordinate[0] + direction[0]));
         this.setY((int) (coordinate[1] + direction[1]));
-        coordinate[0] = getIntX();
-        coordinate[1] = getIntY();
+        coordinate[0] = getX();
+        coordinate[1] = getY();
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         float random = (float) Math.random() * RANDOMNESSLINELENGTH - RANDOMNESSLINELENGTH / 2;
         double scale = (lineLength + random) / length;

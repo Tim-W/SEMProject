@@ -51,8 +51,8 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
     public void draw(Canvas canvas) {
         canvas.getGraphicsContext2D().drawImage(
                 sprite[getSpriteIndex()],
-                gridToCanvas(this.x) - getWidth() / 2,
-                gridToCanvas(this.y) - getHeight() / 2,
+                gridToCanvas(getX()) - getWidth() / 2,
+                gridToCanvas(getY()) - getHeight() / 2,
                 getWidth(),
                 getHeight()
         );

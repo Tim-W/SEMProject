@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
-import nl.tudelft.sem.group2.board.Coordinate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -24,7 +23,7 @@ public class FuseHandlerTest {
     private Cursor cursor;
     private Fuse fuse;
     private Stix stix;
-    private LinkedList<Coordinate> points;
+    private LinkedList<Point> points;
     private FuseHandler fuseHandler;
 
     @Before
@@ -43,9 +42,9 @@ public class FuseHandlerTest {
 
     @Test
     public void handleFuseSpawn() {
-        points.add(new Coordinate(0, 0));
-        when(cursor.getIntX()).thenReturn(0);
-        when(cursor.getIntY()).thenReturn(0);
+        points.add(new Point(0, 0));
+        when(cursor.getX()).thenReturn(0);
+        when(cursor.getY()).thenReturn(0);
         fuseHandler.setFuse(null);
         fuseHandler.handleFuse();
         Assert.assertNotNull(fuse);
@@ -57,13 +56,13 @@ public class FuseHandlerTest {
     //TODO fix AssertionError
     @Ignore
     public void handleFuseExisting() {
-        points.add(new Coordinate(0, 0));
+        points.add(new Point(0, 0));
         fuse = new Fuse(0, 0, 0, 0, null);
         fuse.notMoving();
         fuseHandler.setFuse(fuse);
 
-        when(cursor.getIntX()).thenReturn(0);
-        when(cursor.getIntY()).thenReturn(0);
+        when(cursor.getX()).thenReturn(0);
+        when(cursor.getY()).thenReturn(0);
 
         fuseHandler.handleFuse();
         Assert.assertTrue(fuse.isMoving());

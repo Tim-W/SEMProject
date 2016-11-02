@@ -25,7 +25,7 @@ public class FuseHandler {
      * handles making fuse and makes it start moving.
      */
     public void handleFuse() {
-        if (cursor.getStix().contains(new Point(cursor.getIntX(), cursor.getIntY()))) {
+        if (cursor.getStix().contains(new Point(cursor.getX(), cursor.getY()))) {
             if (fuse == null) {
                 fuse =
                         new Fuse((int) cursor.getStix().getStixCoordinates().getFirst().getX(),

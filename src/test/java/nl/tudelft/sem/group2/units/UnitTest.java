@@ -46,8 +46,8 @@ public class UnitTest {
      * @throws Exception
      */
     @Test
-    public void getIntX() throws Exception {
-        Assert.assertEquals(unit.getIntX(), 1);
+    public void getX() throws Exception {
+        Assert.assertEquals(unit.getX(), 1);
     }
 
 
@@ -55,8 +55,8 @@ public class UnitTest {
      * @throws Exception
      */
     @Test
-    public void getIntY() throws Exception {
-        Assert.assertEquals(unit.getIntY(), 1);
+    public void getY() throws Exception {
+        Assert.assertEquals(unit.getY(), 1);
     }
 
     /**
@@ -65,7 +65,7 @@ public class UnitTest {
     @Test
     public void setX() throws Exception {
         unit.setX(0);
-        Assert.assertEquals(unit.getIntX(), 0);
+        Assert.assertEquals(unit.getX(), 0);
     }
 
     /**
@@ -74,7 +74,7 @@ public class UnitTest {
     @Test
     public void setY() throws Exception {
         unit.setY(0);
-        Assert.assertEquals(unit.getIntY(), 0);
+        Assert.assertEquals(unit.getY(), 0);
     }
 
     /**
