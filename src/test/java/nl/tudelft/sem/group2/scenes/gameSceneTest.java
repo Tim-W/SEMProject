@@ -5,8 +5,10 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
+import nl.tudelft.sem.group2.powerups.PowerupHandler;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
+import nl.tudelft.sem.group2.units.FuseHandler;
 import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 import org.junit.Before;
@@ -36,6 +38,7 @@ public class gameSceneTest {
     private Cursor cursor;
     private Stix stix;
     private AreaState[][] areaStates;
+    private FuseHandler fuseHandler;
 
     @BeforeClass
     public static void BeforeClass() {
@@ -49,16 +52,20 @@ public class gameSceneTest {
         cursor = mock(Cursor.class);
         stix = mock(Stix.class);
         when(cursor.getStix()).thenReturn(stix);
-        when(cursor.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
+        fuseHandler = mock(FuseHandler.class);
+        when(cursor.getFuseHandler()).thenReturn(fuseHandler);
+        PowerupHandler powerupHandler = mock(PowerupHandler.class);
+        when(powerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
+        when(cursor.getPowerupHandler()).thenReturn(powerupHandler);
         units.add(cursor);
         areaStates = new AreaState[1][1];
     }
 
     @Test
     public void testDrawStixAndFuseVerifyNoFuse() throws Exception {
-        when(cursor.getFuse()).thenReturn(null);
+        when(fuseHandler.getFuse()).thenReturn(null);
         when(stix.pointEqualsFirstPoint(any())).thenReturn(false);
-        LinkedList<Point> points = new LinkedList<Point>();
+        LinkedList<Point> points = new LinkedList<>();
         points.add(new Point(1, 1));
         when(stix.getStixCoordinates()).thenReturn(points);
         gameScene.draw(units, areaStates);
@@ -68,7 +75,7 @@ public class gameSceneTest {
 
     @Test
     public void testDrawStixAndFuseVerifyFuse() throws Exception {
-        when(cursor.getFuse()).thenReturn(mock(Fuse.class));
+        when(fuseHandler.getFuse()).thenReturn(mock(Fuse.class));
         when(stix.pointEqualsFirstPoint(any())).thenReturn(false);
         LinkedList<Point> points = new LinkedList<>();
         Point point = mock(Point.class);

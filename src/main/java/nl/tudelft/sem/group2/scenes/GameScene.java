@@ -15,6 +15,7 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
@@ -41,8 +42,8 @@ public class GameScene extends Scene {
      * Create a new GameScene.
      * Sets up all listeners and default objects to play the game
      *
-     * @param root  the root scene this scene is built on
-     * @param color background color of the scene
+     * @param root       the root scene this scene is built on
+     * @param color      background color of the scene
      * @param scoreScene the score scene
      */
     public GameScene(final Group root, Color color, ScoreScene scoreScene) {
@@ -151,7 +152,8 @@ public class GameScene extends Scene {
 
     /**
      * Draw all the units on the screen.
-     * @param units units of the game
+     *
+     * @param units     units of the game
      * @param boardGrid boardGrid of the game
      */
     public void draw(Set<Unit> units, AreaState[][] boardGrid) {
@@ -172,6 +174,7 @@ public class GameScene extends Scene {
 
     /**
      * move all units.     *
+     *
      * @param units units of the game
      */
     public void move(Set<Unit> units) {
@@ -183,15 +186,16 @@ public class GameScene extends Scene {
     private void applyEffect(Set<Unit> units) {
         for (Unit unit : units) {
             if (unit instanceof Cursor) {
-            switch (((Cursor) unit).getPowerupHandler().getCurrentPowerup()) {
-                case EAT:
-                    gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
-                    break;
-                case SPEED:
-                    gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
-                    break;
-                default:
-                    break;
+                switch (((Cursor) unit).getPowerupHandler().getCurrentPowerup()) {
+                    case EAT:
+                        gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
+                        break;
+                    case SPEED:
+                        gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -227,37 +231,39 @@ public class GameScene extends Scene {
             return;
         }
         boolean foundFuse = false;
-        Point fuse = new Point(-1, -1);
+        Point fusePoint = new Point(-1, -1);
         for (Unit unit : units) {
             if (unit instanceof Cursor) {
                 Cursor cursor = (Cursor) unit;
-            if (cursor.getFuseHandler().getFuse() != null) {
-                fuse = new Point(cursor.getFuseHandler().getFuse().getX(), cursor.getFuseHandler().getFuse().getY());
-                foundFuse = true;
-            }
-            for (Point p : cursor.getStix().getStixCoordinates()) {
-                if (!cursor.getStix().pointEqualsFirstPoint(p)) {
-                    if (!foundFuse) {
-                        if (cursor.isFast()) {
-                            gc.setFill(Color.MEDIUMBLUE);
-                        } else {
-                            gc.setFill(Color.DARKRED);
-                        }
-                    } else {
-                        if (p.equals(fuse)) {
-                            foundFuse = false;
-                        }
-                        gc.setFill(Color.GRAY);
-                    }
-                    gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+                Fuse fuse = cursor.getFuseHandler().getFuse();
+                if (fuse != null) {
+                    fusePoint = new Point(fuse.getX(), fuse.getY());
+                    foundFuse = true;
                 }
+                for (Point p : cursor.getStix().getStixCoordinates()) {
+                    if (!cursor.getStix().pointEqualsFirstPoint(p)) {
+                        if (!foundFuse) {
+                            if (cursor.isFast()) {
+                                gc.setFill(Color.MEDIUMBLUE);
+                            } else {
+                                gc.setFill(Color.DARKRED);
+                            }
+                        } else {
+                            if (p.equals(fusePoint)) {
+                                foundFuse = false;
+                            }
+                            gc.setFill(Color.GRAY);
+                        }
+                        gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+                    }
+                }
+                if (fuse != null) {
+                    fuse.move();
+                    fuse.draw(canvas);
+                }
+                foundFuse = false;
+                fusePoint = new Point(-1, -1);
             }
-            if (cursor.getFuseHandler().getFuse() != null) {
-                cursor.getFuseHandler().getFuse().move();
-                cursor.getFuseHandler().getFuse().draw(canvas);
-            }
-            foundFuse = false;
-            fuse = new Point(-1, -1);
         }
     }
 
