@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.controllers;
 
+import java.awt.Point;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
@@ -11,14 +12,14 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.awt.Point;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-
+/**
+ * Tests the GameController methods.
+ */
 public class GameControllerTest {
     @Rule
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
@@ -49,7 +50,9 @@ public class GameControllerTest {
     public void keyPressedArrow() throws Exception {
         setUp();
         spyCursor.setDrawing(true);
-        spyCursor.getFuseHandler().setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
+        spyCursor.getFuseHandler().setFuse(spy(
+                new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())
+        ));
         spyCursor.setDrawing(true);
         gameController.keyPressed(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, " ", "", KeyCode.RIGHT, false, false,
                 false, false));
@@ -109,9 +112,19 @@ public class GameControllerTest {
         setUp();
         spyCursor.setCurrentMove(KeyCode.RIGHT);
         spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-        spyCursor.getFuseHandler().setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
-        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
-                false, false));
+        spyCursor.getFuseHandler().setFuse(spy(
+                new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())
+        ));
+        gameController.keyReleased(
+                new KeyEvent(
+                        KeyEvent.KEY_RELEASED,
+                        " ",
+                        "",
+                        gameController.getCursors().get(0).getCurrentMove(),
+                        false,
+                        false,
+                        false,
+                        false));
         verify(spyCursor.getFuseHandler().getFuse(), times(1)).setMoving(true);
     }
 
@@ -134,8 +147,15 @@ public class GameControllerTest {
         spyCursor.setStix(spy(spyCursor.getStix()));
         spyCursor.setCurrentMove(KeyCode.RIGHT);
         spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
-                false, false));
+        gameController.keyReleased(
+                new KeyEvent(KeyEvent.KEY_RELEASED,
+                        " ",
+                        "",
+                        gameController.getCursors().get(0).getCurrentMove(),
+                        false,
+                        false,
+                        false,
+                        false));
         Assert.assertEquals(spyCursor, gameController.getCursors().get(0));
         Assert.assertNotNull(spyCursor.getFuseHandler().getFuse());
         //verify(spyCursor.getStix(), times(3)).getStixCoordinates();
@@ -144,16 +164,25 @@ public class GameControllerTest {
     @Test
     public void keyReleasedCurrentMoveNoCoordinates() throws Exception {
         setUp();
-        spyCursor.getFuseHandler().setFuse(spy(new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())));
+        spyCursor.getFuseHandler().setFuse(spy(
+                new Fuse(1, 1, 1, 1, gameController.getAreaTracker(), spyCursor.getStix())
+        ));
         spyCursor.setCurrentMove(KeyCode.RIGHT);
         spyCursor.getStix().addToStix(new Point(spyCursor.getX() + 1, spyCursor.getY()));
-        gameController.keyReleased(new KeyEvent(null, null, KeyEvent.KEY_RELEASED, " ", "", gameController.getCursors().get(0).getCurrentMove(), false, false,
-                false, false));
+        gameController.keyReleased(new KeyEvent(
+                KeyEvent.KEY_RELEASED,
+                " ",
+                "",
+                gameController.getCursors().get(0).getCurrentMove(),
+                false,
+                false,
+                false,
+                false));
         verify(spyCursor.getFuseHandler().getFuse(), times(0)).setMoving(true);
     }
 
     /**
-     * test addUnit not to add two fuses
+     * test addUnit not to add two fuses.
      *
      * @throws Exception
      */

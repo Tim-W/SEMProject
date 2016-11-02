@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
+import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaState;
@@ -8,8 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.LinkedList;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyFloat;
@@ -32,7 +31,7 @@ public class QixTest {
     private AreaState[][] boardGrid = new AreaState[1][1];
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 

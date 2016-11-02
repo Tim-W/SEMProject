@@ -26,7 +26,7 @@ public class LineTravellerTest {
     private AreaTracker areaTracker;
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
