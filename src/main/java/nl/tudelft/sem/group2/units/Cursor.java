@@ -98,8 +98,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 KeypressHandler.cursorAssertMove(this, transX, transY);
             }
         }
-        if (fuse != null) {
-            fuse.move();
+        if (fuseHandler.getFuse() != null) {
+            fuseHandler.getFuse().move();
         }
     }
 
@@ -253,9 +253,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * Draw current Stix and Fuse on screen.
      */
     private void drawStixAndFuse(GraphicsContext gc) {
-        stix.draw(gc, fuse, isFast());
-        if (fuse != null) {
-            fuse.draw(gc);
+        stix.draw(gc, fuseHandler.getFuse(), isFast());
+        if (fuseHandler.getFuse() != null) {
+            fuseHandler.getFuse().draw(gc);
         }
     }
 

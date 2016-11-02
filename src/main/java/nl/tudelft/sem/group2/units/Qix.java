@@ -91,8 +91,8 @@ public class Qix extends Unit implements CollisionInterface, Observer {
             colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
         }
         getColorArray().addFirst(colors);
-        getOldDirections().addFirst(new float[]{direction[0], direction[1]});
-        getOldCoordinates().addFirst(new float[]{coordinate[0], coordinate[1]});
+        getOldDirections().addFirst(new float[] {direction[0], direction[1]});
+        getOldCoordinates().addFirst(new float[] {coordinate[0], coordinate[1]});
         if (oldDirections.size() > LINESCOUNT) {
             oldDirections.removeLast();
             oldCoordinates.removeLast();
