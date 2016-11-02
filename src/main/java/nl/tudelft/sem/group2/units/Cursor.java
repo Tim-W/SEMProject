@@ -444,6 +444,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return fuseHandler;
     }
 
+
     /**
      * @return String format of cursor.
      */

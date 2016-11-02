@@ -149,7 +149,7 @@ public class StartScene extends javafx.scene.Scene {
                 createPopup();
             }
         });
-        //hyperlink.setTextFill(Color.WHITE);
+
         moreInformationLink.setLayoutX(Globals.STARTSCENE_HBOX_SPACING);
 
         helpTextWrapper = new FlowPane();

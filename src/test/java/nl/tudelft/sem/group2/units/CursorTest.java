@@ -2,10 +2,12 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,6 +20,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Test for cursors.
@@ -249,4 +252,15 @@ public class CursorTest {
         cursor.cursorDied();
         Assert.assertEquals(0, cursor.getLives());
     }*/
+
+    @Test
+    public void speedPowerupTest() {
+        cursor = new Cursor(new Point(0, 0), 0, 0, areaTracker, stix, 1, 1);
+        cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
+        cursor.setSpeed(1);
+
+        KeyEvent keyEvent = mock(KeyEvent.class);
+        when(keyEvent.getCode()).thenReturn(KeyCode.A);
+        cursor.keyPressed(keyEvent);
+    }
 }
