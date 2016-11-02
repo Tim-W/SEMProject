@@ -7,7 +7,7 @@ import org.junit.Test;
 import static nl.tudelft.sem.group2.level.LevelFactory.createFromXml;
 
 /**
- * Test for level factory
+ * Test for level factory.
  */
 public class LevelFactoryTest {
     @Test

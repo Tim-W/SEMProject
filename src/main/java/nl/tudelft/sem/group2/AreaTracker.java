@@ -1,8 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.units.Stix;
-
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +12,9 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
+import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.sound.SoundHandler;
+import nl.tudelft.sem.group2.units.Stix;
 
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
@@ -94,6 +94,39 @@ public class AreaTracker extends Observable {
     }
 
     /**
+     * Return the quadrant the cursor is in, as follows.
+     * 12
+     * 34
+     *
+     * @return the quadrant the cursor is in
+     */
+    private static int quadrant(int x, int y) {
+        if (x < Globals.BOARD_WIDTH / 4) {
+            if (y < Globals.BOARD_HEIGHT / 4) {
+                return 0;
+            } else {
+                return 3;
+            }
+        } else if (y < Globals.BOARD_HEIGHT / 4) {
+            return 1;
+        }
+        return 2;
+    }
+
+    /**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the opposite quadrant the cursor is in
+     */
+    public static int oppositeQuadrant(int x, int y) {
+        int quadrant = quadrant(x, y);
+
+        return (quadrant + 2) % 4;
+    }
+
+    /**
      * /**
      * Method that updates the grid when a stix is completed.
      *
@@ -118,7 +151,6 @@ public class AreaTracker extends Observable {
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
         updateScoreCounter(fastArea, stix, scoreCounter);
-        //notify the qix
         areaLeft -= newArea.size();
         setChanged();
         notifyObservers((double) areaLeft);
@@ -141,8 +173,12 @@ public class AreaTracker extends Observable {
         }
         resetAreaTracker();
         stix.emptyStix();
+        SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
     }
 
+    /**
+     * Sets the border and area lists to empty.
+     */
     private void resetBordersAndAreas() {
         border1 = new LinkedList<>();
         border2 = new LinkedList<>();
@@ -150,27 +186,43 @@ public class AreaTracker extends Observable {
         area2 = new LinkedList<>();
     }
 
+    /**
+     * Sets all the points from the current stix to border points on the grid.
+     *
+     * @param stix the stix that is currently being used.
+     */
     private void setOuterBorders(Stix stix) {
-        //Set all the points from the current stix to border points on the grid
         for (Point current : stix.getStixCoordinates()) {
             boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
         }
     }
 
+    /**
+     * Reset the temporary area tracker.
+     */
     private void resetAreaTracker() {
-        //Reset the temporary area tracker
         area1 = null;
         area2 = null;
         border1 = null;
         border2 = null;
     }
 
+    /**
+     * With the new calculated size, updates the score counter.
+     *
+     * @param fastArea     whether the new area is a fast area.
+     * @param stix         the stix that finished the area.
+     * @param scoreCounter the score counter.
+     */
     private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
         //Update score and percentage with newly created area,
         // therefore it's needed to know the stix was created fast or slow
         scoreCounter.updateScore(newArea.size() + stix.getStixCoordinates().size(), fastArea);
     }
 
+    /**
+     * Check area1 and set the borders on the right areas.
+     */
     private void setBorders() {
         if (area1 == null) {
             newArea = area2;
@@ -181,6 +233,14 @@ public class AreaTracker extends Observable {
         }
     }
 
+    /**
+     * Checks the direction in which the stix started to move and calls the flood fill algorithm.
+     *
+     * @param qixCoordinates the spot which the qix is at.
+     * @param start          starting point of the stix.
+     * @param dir            direction if the stix.
+     * @param stix           the stix of which the directions are being checked.
+     */
     private void checkDirections(Point qixCoordinates, Point start, Point dir, Stix stix) {
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX() || start.getY() != dir.getY()) {
@@ -265,6 +325,12 @@ public class AreaTracker extends Observable {
         }
     }
 
+    /**
+     * Add a point for the area tracker to handle.
+     *
+     * @param addToArea1   whether the point lies in area1 or not.
+     * @param pointToCheck the point to add.
+     */
     private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
         if (addToArea1) {
             area1.add(pointToCheck);
@@ -285,8 +351,13 @@ public class AreaTracker extends Observable {
         }
     }
 
+    /**
+     * If the point that hit the qix was the coordinate of the qix set,
+     * the temporary area tracker that is currently in use to null.
+     *
+     * @param addToArea1 whether to add it to area1. Otherwise to area2.
+     */
     private void hitQix(boolean addToArea1) {
-        // If that point was the coordinate of the qix set the temporary area tracker that is currently in use to null
         if (addToArea1) {
             area1 = null;
             border1 = null;
@@ -304,25 +375,6 @@ public class AreaTracker extends Observable {
      */
     public AreaState[][] getBoardGrid() {
         return boardGrid.clone();
-    }
-
-    /**
-     * Shows a log which visualise the current board grid state.
-     */
-    public void printBoardGrid() {
-        // A map representing the relations between AreaStates and their String visualizations.
-        Map<AreaState, String> areaStateVisualisation = new HashMap<>();
-        areaStateVisualisation.put(AreaState.OUTERBORDER, "[X]");
-        areaStateVisualisation.put(AreaState.INNERBORDER, "[*]");
-        areaStateVisualisation.put(AreaState.UNCOVERED, "[ ]");
-        areaStateVisualisation.put(AreaState.FAST, "[F]");
-        areaStateVisualisation.put(AreaState.SLOW, "[S]");
-        for (AreaState[] column : boardGrid) {
-            for (AreaState state : column) {
-                System.out.print(areaStateVisualisation.get(state));
-            }
-            System.out.println();
-        }
     }
 
     /**

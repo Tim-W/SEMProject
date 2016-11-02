@@ -7,7 +7,6 @@ import nl.tudelft.sem.group2.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -62,8 +61,8 @@ public class QixTest {
             spyQix.getColorArray().addFirst(colors);
         }
         LinkedList<float[]> linkedList2 = new LinkedList<>();
-        linkedList2.add(new float[] {1, 1});
-        linkedList2.add(new float[] {1, 1});
+        linkedList2.add(new float[]{1, 1});
+        linkedList2.add(new float[]{1, 1});
         spyQix.setOldCoordinates(linkedList2);
         spyQix.setOldDirections(linkedList2);
         spyQix.draw(canvas);
@@ -110,7 +109,6 @@ public class QixTest {
     }
 
     @Test
-    @Ignore
     public void checkLineCollision2() throws Exception {
         spyQix.getAreaTracker().getBoardGrid()[0][0] = AreaState.INNERBORDER;
         when(spyQix.getCoordinate(anyInt())).thenReturn((float) 10);
@@ -147,7 +145,7 @@ public class QixTest {
     @Test
     public void toPolygon2() throws Exception {
         LinkedList<float[]> linkedlist = new LinkedList<float[]>();
-        linkedlist.add(new float[] {1, 1});
+        linkedlist.add(new float[]{1, 1});
         spyQix.setOldDirections(linkedlist);
         spyQix.setOldCoordinates(linkedlist);
         spyQix.toPolygon();

@@ -10,6 +10,8 @@ import java.util.logging.Level;
 /**
  * An object that can be moved an drawn on a 2D grid.
  * Supports intersection checking between two units.
+ * This is the base class of most of the entities in 'Qix'.
+ * This allows for standardized methods which are the same across all those entities.
  */
 public abstract class Unit implements Draw, Movable, CollisionInterface {
     private static final Logger LOGGER = Logger.getLogger();
@@ -31,9 +33,9 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
     public Unit(int x, int y, int width, int height, AreaTracker areaTracker) {
         this.setX(x);
         this.setY(y);
-        this.setWidth(width);
-        this.setHeight(height);
-        this.setAreaTracker(areaTracker);
+        this.height = height;
+        this.width = width;
+        this.areaTracker = areaTracker;
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 
@@ -54,20 +56,12 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         this.y = y;
     }
 
-    public int getWidth() {
+    protected int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
+    protected int getHeight() {
         return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     /**
@@ -97,7 +91,7 @@ public abstract class Unit implements Draw, Movable, CollisionInterface {
         return areaTracker;
     }
 
-    public void setAreaTracker(AreaTracker areaTracker) {
+    protected void setAreaTracker(AreaTracker areaTracker) {
         this.areaTracker = areaTracker;
     }
 }
