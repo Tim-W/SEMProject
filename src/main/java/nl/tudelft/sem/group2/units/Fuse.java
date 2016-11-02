@@ -109,4 +109,14 @@ public class Fuse extends LineTraveller implements CollisionInterface {
     public void setDelay(int delay) {
         this.delay = delay;
     }
+
+    /**
+     * checks if point p is on the fuse coordinates.
+     *
+     * @param p Point
+     * @return boolean true if point has the same coordinates
+     */
+    public boolean onPoint(Point p) {
+        return p.getX() == lastX && p.getY() == lastY;
+    }
 }

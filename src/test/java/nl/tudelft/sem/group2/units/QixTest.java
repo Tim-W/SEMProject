@@ -46,13 +46,6 @@ public class QixTest {
     }
 
     @Test
-    public void draw() throws Exception {
-        Canvas spyCanvas = spy(canvas);
-        qix.draw(spyCanvas);
-        verify(spyCanvas).getGraphicsContext2D();
-    }
-
-    @Test
     public void draw2() throws Exception {
         for (int i = 0; i < 2; i++) {
             double[] colors = new double[3];
@@ -66,14 +59,14 @@ public class QixTest {
         linkedList2.add(new float[] {1, 1});
         spyQix.setOldCoordinates(linkedList2);
         spyQix.setOldDirections(linkedList2);
-        spyQix.draw(canvas);
+        spyQix.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spyQix, times(4 * spyQix.getOldDirections().size())).getOldCoordinate(anyInt());
         verify(spyQix, times(4 * spyQix.getOldDirections().size())).getOldDirection(anyInt());
     }
 
     @Test
     public void changeDirection() throws Exception {
-        spyQix.draw(canvas);
+        spyQix.draw(new Canvas(1, 1).getGraphicsContext2D());
         spyQix.setAnimationLoops(0);
         spyQix.move();
         verify(spyQix, atLeast(2)).setDirection(any(float.class), anyInt());

@@ -4,13 +4,8 @@ import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.units.Cursor;
 import org.junit.Rule;
-import org.junit.Test;
-
-import java.awt.Point;
 
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 
 /**
@@ -35,24 +30,5 @@ public class mainSceneTest {
         gameController.getUnits().add(spyCursor);
     }
 
-    @Test
-    public void testDrawStixAndFuseVerify() throws Exception {
-        setUp();
-        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-        gameController.getCursors().get(0).getStix();
-        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY() + 1));
-        scene.draw();
-        verify(spyCursor, times(1)).isFast();
-
-    }
-
-    @Test
-    public void testDrawStixAndFuseVerifyNot() throws Exception {
-        setUp();
-        spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
-        spyCursor.handleFuse();
-        scene.draw();
-        verify(spyCursor, times(0)).isFast();
-    }
 
 }

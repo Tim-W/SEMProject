@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -94,6 +93,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 assertMove(transX, transY);
             }
         }
+        if (fuse != null) {
+            fuse.move();
+        }
     }
 
 
@@ -127,6 +129,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * Method which tests if cursor intersects with other unit.
+     *
      * @param collidee the other unit
      * @return if cursor intersects with other unit
      */
@@ -182,28 +185,28 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(GraphicsContext gc) {
         int drawX = gridToCanvas(getX());
         int drawY = gridToCanvas(getY());
+        drawStixAndFuse(gc);
         final int lineCount = 10;
         if (loops < animationSpeed + lineCount) {
-            calculateLineCoordinates(drawX, drawY, canvas);
+            calculateLineCoordinates(drawX, drawY);
             if (oldLines.size() > lineCount || oldLines.size() > animationSpeed - loops) {
                 oldLines.removeLast();
             }
-            GraphicsContext gC = canvas.getGraphicsContext2D();
-            gC.setStroke(Color.WHITE);
+            gc.setStroke(Color.WHITE);
             for (double[][] l : oldLines) {
-                gC.beginPath();
+                gc.beginPath();
                 for (int i = 0; i < 4; i++) {
-                    gC.moveTo(l[i][0], l[i][1]);
-                    gC.lineTo(l[i][2], l[i][3]);
+                    gc.moveTo(l[i][0], l[i][1]);
+                    gc.lineTo(l[i][2], l[i][3]);
                 }
-                gC.stroke();
+                gc.stroke();
             }
             loops++;
         }
-        canvas.getGraphicsContext2D().drawImage(
+        gc.drawImage(
                 getSprite()[getSpriteIndex()],
                 drawX - getWidth() / 2 + 1,
                 drawY - getHeight() / 2 + 1,
@@ -212,11 +215,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         );
     }
 
-    private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
+    private void calculateLineCoordinates(int drawX, int drawY) {
         if (loops < animationSpeed) {
-            double height = canvas.getHeight();
+            double height = Globals.BORDER_BOTTOM_HEIGHT;
             double heightVar = height / animationSpeed * loops;
-            double width = canvas.getWidth();
+            double width = Globals.BOARD_WIDTH;
             double widthVar = width / animationSpeed * loops;
             final double lineSize = 80.0;
             double lineSizeVar = (lineSize / animationSpeed) * loops;
@@ -279,6 +282,16 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                     this.isFast(), getStix(), scoreCounter);
             //Remove the Fuse from the gameView when completing an area
             removeFuse();
+        }
+    }
+
+    /**
+     * Draw current Stix and Fuse on screen.
+     */
+    private void drawStixAndFuse(GraphicsContext gc) {
+        stix.draw(gc, fuse, isFast());
+        if (fuse != null) {
+            fuse.draw(gc);
         }
     }
 
