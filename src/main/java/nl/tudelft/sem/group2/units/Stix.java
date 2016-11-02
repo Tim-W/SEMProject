@@ -94,4 +94,14 @@ public class Stix implements CollisionInterface {
     public LinkedList<Point> getStixCoordinates() {
         return stixCoordinates;
     }
+
+    /**
+     * checks if Point p equals the first point of the coordinates.
+     *
+     * @param p Point that is checked
+     * @return boolean true if equals
+     */
+    public boolean pointEqualsFirstPoint(Point p) {
+        return stixCoordinates.getFirst().equals(p);
+    }
 }
