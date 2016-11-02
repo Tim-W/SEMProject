@@ -22,7 +22,7 @@ public final class AreaTracker extends Observable {
     private static volatile AreaTracker instance;
 
     private BoardGrid grid;
-    private Stack<Point > visiting = new Stack<>();
+    private Stack<Point> visiting = new Stack<>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
@@ -142,7 +142,7 @@ public final class AreaTracker extends Observable {
         for (Point current : newBorder) {
             grid.setState(current, AreaState.INNERBORDER);
         }
-        resetAreaTracker();
+        //resetAreaTracker();
         stix.emptyStix();
     }
 
@@ -161,14 +161,6 @@ public final class AreaTracker extends Observable {
         for (Point current : stix.getStixCoordinates()) {
             grid.setState(current, AreaState.OUTERBORDER);
         }
-    }
-
-    private void resetAreaTracker() {
-        //Reset the temporary area tracker
-        area1 = null;
-        area2 = null;
-        border1 = null;
-        border2 = null;
     }
 
     private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
@@ -193,13 +185,13 @@ public final class AreaTracker extends Observable {
         if (start.getX() != dir.getX() || start.getY() != dir.getY()) {
             //If stix was first moving in X direction get points above and under the first stix point,
             // start the floodfill algorithm from there
-            Point beginPoint1 = new Point((int) dir.getX(), (int) dir.getY() - 1);
-            Point beginPoint2 = new Point((int) dir.getX(), (int) dir.getY() + 1);
+            Point beginPoint1 = new Point(dir.x, dir.y - 1);
+            Point beginPoint2 = new Point(dir.x, dir.y + 1);
             if (start.getY() != dir.getY()) {
                 //If stix was first moving in Y direction get points left and right the first stix point,
                 // start the floodfill algorithm from there
-                beginPoint1 = new Point((int) dir.getX() - 1, (int) dir.getY());
-                beginPoint2 = new Point((int) dir.getX() + 1, (int) dir.getY());
+                beginPoint1 = new Point(dir.x - 1, dir.y);
+                beginPoint2 = new Point(dir.x + 1, dir.y);
             }
             foundQix = false;
             floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true, stix);
@@ -222,7 +214,7 @@ public final class AreaTracker extends Observable {
      * @param stix           current stix to use
      */
     private void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState,
-                          boolean addToArea1, Stix stix) {
+                           boolean addToArea1, Stix stix) {
         visiting.push(pointToCheck);
         while (!visiting.isEmpty()) {
             floodFill(qixCoordinates, chosenState, addToArea1, stix);

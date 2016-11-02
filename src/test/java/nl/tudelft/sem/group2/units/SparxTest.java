@@ -11,8 +11,6 @@ import org.junit.Test;
 
 import java.awt.Point;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.mockito.Matchers.anyInt;
@@ -48,7 +46,7 @@ public class SparxTest {
         when(grid.getState(new Point(sparx.getX() + x, sparx.getY() + y))).thenReturn(AreaState.OUTERBORDER);
         int newx = sparx.getX() + x * 2;
         int newy = sparx.getY() + y * 2;
-        if (newx >= 0 && newx <= BOARD_WIDTH / 2 && newy >= 0 && newy <= BOARD_HEIGHT / 2) {
+        if (newx >= 0 && newx <= GRID_WIDTH && newy >= 0 && newy <= GRID_HEIGHT) {
             boardGrid[newx][newy] = AreaState.OUTERBORDER;
         }
         sparx.move();
@@ -58,7 +56,7 @@ public class SparxTest {
         when(grid.getState(new Point(sparx.getX() + x, sparx.getY() + y))).thenReturn(AreaState.INNERBORDER);
         int newx = sparx.getX() + x * 2;
         int newy = sparx.getY() + y * 2;
-        if (newx >= 0 && newx <= BOARD_WIDTH / 2 && newy >= 0 && newy <= BOARD_HEIGHT / 2) {
+        if (newx >= 0 && newx <= GRID_WIDTH && newy >= 0 && newy <= GRID_HEIGHT) {
             boardGrid[newx][newy] = AreaState.INNERBORDER;
         }
         sparx.move();
@@ -194,7 +192,7 @@ public class SparxTest {
 
     @Test
     public void moveOneRR() throws Exception {
-        createSparx(BOARD_WIDTH / 2 - 1, BOARD_HEIGHT / 2 - 1, 2, 2, SparxDirection.RIGHT);
+        createSparx(GRID_WIDTH - 1, GRID_HEIGHT - 1, 2, 2, SparxDirection.RIGHT);
         int dim = sparx.getX();
         moveOuter(1, 0);
         Assert.assertEquals(dim + 1, sparx.getX());
@@ -202,7 +200,7 @@ public class SparxTest {
 
     @Test
     public void moveOneRD() throws Exception {
-        createSparx(BOARD_WIDTH / 2 - 1, BOARD_HEIGHT / 2 - 1, 2, 2, SparxDirection.RIGHT);
+        createSparx(GRID_WIDTH - 1, GRID_HEIGHT - 1, 2, 2, SparxDirection.RIGHT);
         int dim = sparx.getY();
         moveOuter(0, 1);
         Assert.assertEquals(dim + 1, sparx.getY());
@@ -226,7 +224,7 @@ public class SparxTest {
 
     @Test
     public void moveOneLR() throws Exception {
-        createSparx(BOARD_WIDTH / 2 - 1, BOARD_HEIGHT / 2 - 1, 2, 2, SparxDirection.LEFT);
+        createSparx(GRID_WIDTH - 1, GRID_HEIGHT - 1, 2, 2, SparxDirection.LEFT);
         int dim = sparx.getX();
         moveOuter(1, 0);
         Assert.assertEquals(dim + 1, sparx.getX());
@@ -234,7 +232,7 @@ public class SparxTest {
 
     @Test
     public void moveOneLD() throws Exception {
-        createSparx(BOARD_WIDTH / 2 - 1, BOARD_HEIGHT / 2 - 1, 2, 2, SparxDirection.LEFT);
+        createSparx(GRID_WIDTH - 1, GRID_HEIGHT - 1, 2, 2, SparxDirection.LEFT);
         int dim = sparx.getY();
         moveOuter(0, 1);
         Assert.assertEquals(dim + 1, sparx.getY());

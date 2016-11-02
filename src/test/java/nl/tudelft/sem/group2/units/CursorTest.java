@@ -16,8 +16,8 @@ import org.junit.Test;
 import java.awt.Point;
 
 import static edu.emory.mathcs.backport.java.util.Arrays.asList;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -97,7 +97,7 @@ public class CursorTest {
     @Test
     public void dontMoveR() throws Exception {
         createCursor();
-        cursor.setX(BOARD_WIDTH / 2);
+        cursor.setX(GRID_WIDTH);
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.RIGHT);
         cursor.move();
@@ -117,7 +117,7 @@ public class CursorTest {
     @Test
     public void dontMoveD() throws Exception {
         createCursor();
-        cursor.setY(BOARD_HEIGHT / 2);
+        cursor.setY(GRID_HEIGHT);
         int dim = cursor.getY();
         cursor.setCurrentMove(KeyCode.DOWN);
         cursor.move();

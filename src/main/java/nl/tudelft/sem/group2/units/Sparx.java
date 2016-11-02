@@ -6,8 +6,8 @@ import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
  * An enemy unit which travels over the same lines as the cursor.
@@ -90,14 +90,14 @@ public class Sparx extends LineTraveller implements CollisionInterface {
 
     private boolean checkX(boolean right) {
         if (right) {
-            return getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX);
+            return getX() < GRID_WIDTH && !(getX() + 1 == lastX);
         }
         return getX() > 0 && !(lastX == getX() - 1);
     }
 
     private boolean checkY(boolean down) {
         if (down) {
-            return getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1);
+            return getY() < GRID_HEIGHT && !(lastY == getY() + 1);
         }
         return getY() > 0 && !(lastY == getY() - 1);
     }

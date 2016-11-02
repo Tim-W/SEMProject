@@ -325,7 +325,8 @@ public final class GameController {
 
         while (nSparx < 2) {
             for (Cursor cursor : cursors) {
-                int[] coordinates = GameController.getInstance().getGrid().findPowerupLocation(cursor.oppositeQuadrant());
+                int[] coordinates = GameController.getInstance().getGrid()
+                        .findPowerupLocation(cursor.oppositeQuadrant());
                 Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
                         Globals.BOARD_MARGIN * 2, SparxDirection.randomDirection());
                 addUnit(sparx);
@@ -516,6 +517,15 @@ public final class GameController {
     }
 
     /**
+     * only used for testing.
+     *
+     * @param levelHandler LevelHandler
+     */
+    public void setLevelHandler(LevelHandler levelHandler) {
+        this.levelHandler = levelHandler;
+    }
+
+    /**
      * removes a unit of the list of units.
      *
      * @param unit the unit to be removed
@@ -526,9 +536,12 @@ public final class GameController {
     }
 
     /**
-     * @return
+     * @return BoardGrid
      */
     public BoardGrid getGrid() {
+        if (levelHandler.getLevel() == null) {
+            return null;
+        }
         return levelHandler.getLevel().getBoardGrid();
     }
 }

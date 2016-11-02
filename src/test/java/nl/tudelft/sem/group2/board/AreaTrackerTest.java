@@ -2,21 +2,22 @@ package nl.tudelft.sem.group2.board;
 
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.level.Level;
+import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.units.Stix;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.Before;
 
 import java.awt.Point;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * Test class for the AreaTracker class.
  */
-//TODO tests should be fixed
-@Ignore
 public class AreaTrackerTest {
     private static final int TEST_MAP_WIDTH = 5;
     private static final int TEST_MAP_HEIGHT = 5;
@@ -24,11 +25,16 @@ public class AreaTrackerTest {
     private Stix stix;
     private ScoreCounter scoreCounter = mock(ScoreCounter.class);
     private BoardGrid grid;
+    private LevelHandler levelHandler;
 
-    @BeforeClass
+    @Before
     public void setUp() throws Exception {
+        stix = new Stix();
         grid = mock(BoardGrid.class);
-        when(GameController.getInstance().getGrid()).thenReturn(grid);
+        levelHandler = mock(LevelHandler.class);
+        GameController.getInstance().setLevelHandler(levelHandler);
+        when(levelHandler.getLevel()).thenReturn(mock(Level.class));
+        when(levelHandler.getLevel().getBoardGrid()).thenReturn(grid);
     }
 
     /**
@@ -38,29 +44,20 @@ public class AreaTrackerTest {
      */
     @org.junit.Test
     public void testConstructor() throws Exception {
-       assertNotNull(AreaTracker.getInstance());
+        assertNotNull(AreaTracker.getInstance());
     }
 
     /**
-     * Test for the calculateNewArea method when fast area is created.
+     * Test verify setOuterBorder is called.
      *
      * @throws Exception when the AreaTracker fails to do its job
      */
     @org.junit.Test
-    public void testCalculateNewFastArea() throws Exception {
-
-        instantiateStix();
+    public void testVerifySetOuterBorder() throws Exception {
+        stix.addToStix(new Point(1, 1));
+        stix.addToStix(new Point(1, 2));
         AreaTracker.getInstance().calculateNewArea(new Point(1, 2), true, stix, scoreCounter);
-
-        AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
-
-        /*AreaState[][] currentGrid = areaTracker.getBoardGrid();
-        for (int i = 0; i < TEST_MAP_HEIGHT; i++) {
-            for (int j = 0; j < TEST_MAP_WIDTH; j++) {
-                assertEquals(expectedGrid[j][i], currentGrid[j][i]);
-            }
-        }
-        */
+        verify(grid, times(1)).setState(new Point(1, 1), AreaState.OUTERBORDER);
     }
 
     /**
@@ -163,6 +160,7 @@ public class AreaTrackerTest {
         }
         return expectedGrid;
     }
+
     private void instantiateStix() {
         stix = new Stix();
         stix.addToStix(new Point(2, 0));

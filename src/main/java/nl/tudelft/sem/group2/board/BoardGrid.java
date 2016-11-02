@@ -9,15 +9,17 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
  * Created by Erik on 25-10-2016.
  */
-public final class BoardGrid {
+public class BoardGrid {
 
     //private static volatile BoardGrid instance;
 
-    private AreaState[][] boardGrid;
+    private AreaState[][] areaStates;
     private int width;
     private int height;
     private ThreadLocalRandom threadLocalRandom;
@@ -27,49 +29,29 @@ public final class BoardGrid {
      * The constructor sets all the grid points to border and the rest to uncovered
      */
     public BoardGrid() {
-        this(getGridWidth() + 1, getGridHeight() + 1);
-
-    }
-
-    /**
-     * Constructor for the BoardGrid class.
-     * The constructor sets all the grid points to border and the rest to uncovered
-     *
-     * @param gridWidth the gridWidth
-     * @param gridHeight the gridHeight
-     */
-    private BoardGrid(int gridWidth, int gridHeight) {
-
+        width = GRID_WIDTH + 1;
+        height = GRID_HEIGHT + 1;
+        areaStates = new AreaState[width][height];
         threadLocalRandom = ThreadLocalRandom.current();
 
-        if (gridWidth > 1 && gridHeight > 1) {
-            width = gridWidth;
-            height = gridHeight;
-        } else {
-            width = getGridWidth() + 1;
-            height = getGridHeight() + 1;
-        }
-        boardGrid = new AreaState[width][height];
-
-
-        for (int i = 0; i < boardGrid.length; i++) {
-            for (int j = 0; j < boardGrid[i].length; j++) {
+        for (int i = 0; i < areaStates.length; i++) {
+            for (int j = 0; j < areaStates[i].length; j++) {
                 //By default, all points are uncovered
-                boardGrid[j][i] = AreaState.UNCOVERED;
+                areaStates[j][i] = AreaState.UNCOVERED;
             }
         }
         //If the current row is the first row set all grid points border on that row
-        for (int i = 0; i < boardGrid.length; i++) {
+        for (int i = 0; i < areaStates.length; i++) {
             //If current column is the last column set the grid point on that column and the current row border
-            boardGrid[0][i] = AreaState.OUTERBORDER;
-            boardGrid[boardGrid[0].length - 1][i] = AreaState.OUTERBORDER;
+            areaStates[0][i] = AreaState.OUTERBORDER;
+            areaStates[areaStates[0].length - 1][i] = AreaState.OUTERBORDER;
         }
 
-        for (int j = 0; j < boardGrid[0].length; j++) {
+        for (int j = 0; j < areaStates[0].length; j++) {
             //If the current row is the bottom row set all grid points border on that row
-            boardGrid[j][0] = AreaState.OUTERBORDER;
+            areaStates[j][0] = AreaState.OUTERBORDER;
             //If the current column is the last column set the grid point on that column and the current row border
-            boardGrid[j][boardGrid.length - 1] = AreaState.OUTERBORDER;
+            areaStates[j][areaStates.length - 1] = AreaState.OUTERBORDER;
         }
     }
 /*
@@ -95,7 +77,7 @@ public final class BoardGrid {
 
     */
 /**
-     * Resets the instance of the BoardGrid to null.
+ * Resets the instance of the BoardGrid to null.
  *//*
 
     public static void resetBoardGrid() {
@@ -103,69 +85,50 @@ public final class BoardGrid {
     }
 */
 
-    /**
-     * @return grid width - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridWidth() {
-        return BOARD_WIDTH / 2;
-    }
 
     /**
-     * @return grid height - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridHeight() {
-        // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
-        return BOARD_HEIGHT / 2;
-    }
-
-    /**
-     *
-     * @param cor the point/coordinate on the map for witch the state has to change
+     * @param cor   the point/coordinate on the map for witch the state has to change
      * @param state the new state for the given point
      */
     public void setState(Coordinate cor, AreaState state) {
         if (inBound(cor)) {
-            this.boardGrid[cor.getX()][cor.getY()] = state;
-        }
-    }
-    /**
-     *
-     * @param p the point/coordinate on the map for witch the state has to change
-     * @param state the new state for the given point
-     */
-    public void setState(Point p, AreaState state) {
-        if (inBound(p)) {
-            this.boardGrid[p.x][p.y] = state;
+            this.areaStates[cor.getX()][cor.getY()] = state;
         }
     }
 
     /**
-     *
+     * @param p     the point/coordinate on the map for witch the state has to change
+     * @param state the new state for the given point
+     */
+    public void setState(Point p, AreaState state) {
+        if (inBound(p)) {
+            this.areaStates[p.x][p.y] = state;
+        }
+    }
+
+    /**
      * @param cor the point/coordinate on the map for witch the state is needed
      * @return The state of the point, if the point is found on the map. null otherwise
      */
     public AreaState getState(Coordinate cor) {
         if (inBound(cor)) {
-            return this.boardGrid[cor.getX()][cor.getY()];
-        }
-        return null;
-    }
-    /**
-     *
-     * @param p the point/coordinate on the map for witch the state is needed
-     * @return The state of the point, if the point is found on the map. null otherwise
-     */
-    public AreaState getState(Point p) {
-        if (inBound(p)) {
-            return this.boardGrid[p.x][p.y];
+            return this.areaStates[cor.getX()][cor.getY()];
         }
         return null;
     }
 
     /**
-     *
+     * @param p the point/coordinate on the map for witch the state is needed
+     * @return The state of the point, if the point is found on the map. null otherwise
+     */
+    public AreaState getState(Point p) {
+        if (inBound(p)) {
+            return this.areaStates[p.x][p.y];
+        }
+        return null;
+    }
+
+    /**
      * @param cor the point/coordinate on the map to be checked
      * @return true if the point/coordinate is on the map
      */
@@ -174,7 +137,6 @@ public final class BoardGrid {
     }
 
     /**
-     *
      * @param p the point/coordinate on the map to be checked
      * @return true if the point/coordinate is on the map
      */
@@ -184,7 +146,6 @@ public final class BoardGrid {
     }
 
     /**
-     *
      * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an OUTERBORDER AreaState
      */
@@ -193,7 +154,6 @@ public final class BoardGrid {
     }
 
     /**
-     *
      * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an UNCOVERED AreaState
      */
@@ -202,7 +162,6 @@ public final class BoardGrid {
     }
 
     /**
-     *
      * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an INNERBORDER AreaState
      */
@@ -211,7 +170,6 @@ public final class BoardGrid {
     }
 
     /**
-     *
      * @param x x coord
      * @param y y coord
      * @return true if the tile at (x,y) has an OUTERBORDER AreaState
@@ -221,7 +179,6 @@ public final class BoardGrid {
     }
 
     /**
-     *
      * @param x x coord
      * @param y y coord
      * @return true if the tile at (x,y) has an UNCOVERED AreaState
@@ -231,7 +188,6 @@ public final class BoardGrid {
     }
 
     /**
-     *
      * @param x x coord
      * @param y y coord
      * @return true if the tile at (x,y) has an INNERBORDER AreaState
@@ -257,26 +213,26 @@ public final class BoardGrid {
     private boolean cornerIsCovered(int quadrant) {
         switch (quadrant) {
             case 0:
-                if (boardGrid[1][1] != AreaState.UNCOVERED) {
-                    boardGrid[0][0] = AreaState.INNERBORDER;
+                if (areaStates[1][1] != AreaState.UNCOVERED) {
+                    areaStates[0][0] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 1:
-                if (boardGrid[BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
-                    boardGrid[BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
+                if (areaStates[GRID_WIDTH - 1][1] != AreaState.UNCOVERED) {
+                    areaStates[GRID_WIDTH][0] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 2:
-                if (boardGrid[BOARD_WIDTH / 2 - 1][BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[BOARD_WIDTH / 2][BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                if (areaStates[GRID_WIDTH - 1][GRID_HEIGHT - 1] != AreaState.UNCOVERED) {
+                    areaStates[GRID_WIDTH][GRID_HEIGHT] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 3:
-                if (boardGrid[1][BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[0][BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                if (areaStates[1][GRID_HEIGHT - 1] != AreaState.UNCOVERED) {
+                    areaStates[0][GRID_HEIGHT] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
@@ -297,18 +253,18 @@ public final class BoardGrid {
         int x = BOARD_WIDTH / 4;
         int y = BOARD_HEIGHT / 4;
 
-        if (this.cornerIsCovered(quadrant)) {
+        if (cornerIsCovered(quadrant)) {
 
-            while (boardGrid[x][y] != AreaState.OUTERBORDER) {
+            while (areaStates[x][y] != AreaState.OUTERBORDER) {
 
                 int[] newLocation = permutateLocation(x, y, quadrant);
                 x = newLocation[0];
                 y = newLocation[1];
 
-                if (x > BOARD_WIDTH / 2 || x < 0) {
+                if (x > GRID_WIDTH || x < 0) {
                     x = BOARD_WIDTH / 4;
                 }
-                if (y > BOARD_HEIGHT / 2 || y < 0) {
+                if (y > GRID_HEIGHT || y < 0) {
                     y = BOARD_HEIGHT / 4;
                 }
             }
@@ -363,9 +319,9 @@ public final class BoardGrid {
         int y;
         Map<Integer, List<Integer>> quadrantCornerMap = new HashMap<>();
         quadrantCornerMap.put(0, Arrays.asList(0, 0));
-        quadrantCornerMap.put(1, Arrays.asList(BOARD_WIDTH / 2, 0));
-        quadrantCornerMap.put(2, Arrays.asList(BOARD_WIDTH / 2, BOARD_HEIGHT / 2));
-        quadrantCornerMap.put(3, Arrays.asList(0, BOARD_HEIGHT / 2));
+        quadrantCornerMap.put(1, Arrays.asList(GRID_WIDTH, 0));
+        quadrantCornerMap.put(2, Arrays.asList(GRID_WIDTH, GRID_HEIGHT));
+        quadrantCornerMap.put(3, Arrays.asList(0, GRID_HEIGHT));
         List<Integer> integers = quadrantCornerMap.get(quadrant);
         if (integers != null) {
             x = integers.get(0);
@@ -381,10 +337,11 @@ public final class BoardGrid {
     }
 
     /**
-     * Shows a log which visualise the current board grid state.
+     * Returns a string which visualise the current board grid state.
      */
-    //TODO rename to toString
-    public void printBoardGrid() {
+    @Override
+    public String toString() {
+        String r = "";
         // A map representing the relations between AreaStates and their String visualizations.
         Map<AreaState, String> areaStateVisualisation = new HashMap<>();
         areaStateVisualisation.put(AreaState.OUTERBORDER, "[X]");
@@ -392,11 +349,11 @@ public final class BoardGrid {
         areaStateVisualisation.put(AreaState.UNCOVERED, "[ ]");
         areaStateVisualisation.put(AreaState.FAST, "[F]");
         areaStateVisualisation.put(AreaState.SLOW, "[S]");
-        for (AreaState[] column : boardGrid) {
+        for (AreaState[] column : areaStates) {
             for (AreaState state : column) {
-                System.out.print(areaStateVisualisation.get(state));
+                r += areaStateVisualisation.get(state);
             }
-            System.out.println();
         }
+        return r;
     }
 }

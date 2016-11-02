@@ -5,9 +5,9 @@ import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Point;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.FUSE_DELAY;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
  * Describes the Fuse.
@@ -50,12 +50,12 @@ public class Fuse extends LineTraveller implements CollisionInterface {
             delay--;
         } else if (moving) {
             for (int i = 0; i < speed; i++) {
-                if (getX() < BOARD_WIDTH / 2
+                if (getX() < GRID_WIDTH
                         && !(getX() + 1 == lastX)
                         && stix.getStixCoordinates().contains(new Point(getX() + 1, getY()))) {
                     setLastCoordinates(getX(), getY());
                     setX(getX() + 1);
-                } else if (getY() < BOARD_HEIGHT / 2
+                } else if (getY() < GRID_HEIGHT
                         && !(lastY == getY() + 1)
                         && stix.getStixCoordinates().contains(new Point(getX(), getY() + 1))) {
                     setLastCoordinates(getX(), getY());

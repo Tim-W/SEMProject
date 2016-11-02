@@ -27,9 +27,9 @@ public final class KeypressHandler {
      * @param transY the translation in Y direction
      */
     public static void cursorAssertMove(Cursor cursor, int transX, int transY) {
-        if (cursor.getX() + transX >= 0 && cursor.getX() + transX <= Globals.BOARD_WIDTH / 2
+        if (cursor.getX() + transX >= 0 && cursor.getX() + transX <= Globals.GRID_WIDTH
                 && cursor.getY() + transY >= 0 && cursor.getY()
-                + transY <= Globals.BOARD_WIDTH / 2) {
+                + transY <= Globals.GRID_WIDTH) {
             if (GameController.getInstance().getGrid().isUncovered(cursor.getX() + transX, cursor.getY() + transY)
                     && cursor.isDrawing()) {
                 if (!cursor.getStix().contains(new Point(cursor.getX() + transX, cursor.getY() + transY))
@@ -47,7 +47,8 @@ public final class KeypressHandler {
                     cursor.setY(cursor.getY() + transY);
                     cursor.getStix().addToStix(new Point(cursor.getX(), cursor.getY()));
                 }
-            } else if (GameController.getInstance().getGrid().isOuterborder(cursor.getX() + transX, cursor.getY() + transY)) {
+            } else if (GameController.getInstance().getGrid()
+                    .isOuterborder(cursor.getX() + transX, cursor.getY() + transY)) {
                 cursor.setX(cursor.getX() + transX);
                 cursor.setY(cursor.getY() + transY);
             }
