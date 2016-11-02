@@ -47,7 +47,8 @@ public final class KeypressHandler {
                     cursor.setY(cursor.getY() + transY);
                     cursor.getStix().addToStix(new Point(cursor.getX(), cursor.getY()));
                 }
-            } else if (GameController.getInstance().getGrid().isOuterborder(cursor.getX() + transX, cursor.getY() + transY)) {
+            } else if (GameController.getInstance().getGrid().
+                    isOuterborder(cursor.getX() + transX, cursor.getY() + transY)) {
                 cursor.setX(cursor.getX() + transX);
                 cursor.setY(cursor.getY() + transY);
             }

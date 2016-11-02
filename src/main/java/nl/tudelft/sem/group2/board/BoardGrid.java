@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
  * Created by Erik on 25-10-2016.
@@ -27,7 +27,7 @@ public final class BoardGrid {
      * The constructor sets all the grid points to border and the rest to uncovered
      */
     public BoardGrid() {
-        this(getGridWidth() + 1, getGridHeight() + 1);
+        this(GRID_WIDTH + 1, GRID_HEIGHT + 1);
 
     }
 
@@ -46,8 +46,8 @@ public final class BoardGrid {
             width = gridWidth;
             height = gridHeight;
         } else {
-            width = getGridWidth() + 1;
-            height = getGridHeight() + 1;
+            width = GRID_HEIGHT + 1;
+            height = GRID_HEIGHT + 1;
         }
         boardGrid = new AreaState[width][height];
 
@@ -102,23 +102,6 @@ public final class BoardGrid {
         instance = null;
     }
 */
-
-    /**
-     * @return grid width - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridWidth() {
-        return BOARD_WIDTH / 2;
-    }
-
-    /**
-     * @return grid height - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridHeight() {
-        // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
-        return BOARD_HEIGHT / 2;
-    }
 
     /**
      *
@@ -263,20 +246,20 @@ public final class BoardGrid {
                 }
                 break;
             case 1:
-                if (boardGrid[BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
-                    boardGrid[BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
+                if (boardGrid[GRID_WIDTH - 1][1] != AreaState.UNCOVERED) {
+                    boardGrid[GRID_WIDTH][0] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 2:
-                if (boardGrid[BOARD_WIDTH / 2 - 1][BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[BOARD_WIDTH / 2][BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                if (boardGrid[GRID_WIDTH - 1][GRID_HEIGHT - 1] != AreaState.UNCOVERED) {
+                    boardGrid[GRID_WIDTH][GRID_HEIGHT] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 3:
-                if (boardGrid[1][BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[0][BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                if (boardGrid[1][GRID_HEIGHT - 1] != AreaState.UNCOVERED) {
+                    boardGrid[0][GRID_HEIGHT] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
@@ -294,8 +277,8 @@ public final class BoardGrid {
      */
     public int[] findPowerupLocation(int quadrant) {
         int[] res = new int[2];
-        int x = BOARD_WIDTH / 4;
-        int y = BOARD_HEIGHT / 4;
+        int x = GRID_WIDTH / 2;
+        int y = GRID_HEIGHT / 2;
 
         if (this.cornerIsCovered(quadrant)) {
 
@@ -305,11 +288,11 @@ public final class BoardGrid {
                 x = newLocation[0];
                 y = newLocation[1];
 
-                if (x > BOARD_WIDTH / 2 || x < 0) {
-                    x = BOARD_WIDTH / 4;
+                if (x > GRID_WIDTH || x < 0) {
+                    x = GRID_WIDTH / 2;
                 }
-                if (y > BOARD_HEIGHT / 2 || y < 0) {
-                    y = BOARD_HEIGHT / 4;
+                if (y > GRID_HEIGHT || y < 0) {
+                    y = GRID_HEIGHT / 2;
                 }
             }
             res[0] = x;
@@ -363,9 +346,9 @@ public final class BoardGrid {
         int y;
         Map<Integer, List<Integer>> quadrantCornerMap = new HashMap<>();
         quadrantCornerMap.put(0, Arrays.asList(0, 0));
-        quadrantCornerMap.put(1, Arrays.asList(BOARD_WIDTH / 2, 0));
-        quadrantCornerMap.put(2, Arrays.asList(BOARD_WIDTH / 2, BOARD_HEIGHT / 2));
-        quadrantCornerMap.put(3, Arrays.asList(0, BOARD_HEIGHT / 2));
+        quadrantCornerMap.put(1, Arrays.asList(GRID_WIDTH, 0));
+        quadrantCornerMap.put(2, Arrays.asList(GRID_WIDTH, GRID_HEIGHT));
+        quadrantCornerMap.put(3, Arrays.asList(0, GRID_HEIGHT));
         List<Integer> integers = quadrantCornerMap.get(quadrant);
         if (integers != null) {
             x = integers.get(0);

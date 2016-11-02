@@ -325,7 +325,8 @@ public final class GameController {
 
         while (nSparx < 2) {
             for (Cursor cursor : cursors) {
-                int[] coordinates = GameController.getInstance().getGrid().findPowerupLocation(cursor.oppositeQuadrant());
+                int[] coordinates =
+                        GameController.getInstance().getGrid().findPowerupLocation(cursor.oppositeQuadrant());
                 Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
                         Globals.BOARD_MARGIN * 2, SparxDirection.randomDirection());
                 addUnit(sparx);
@@ -526,7 +527,7 @@ public final class GameController {
     }
 
     /**
-     * @return
+     * @return the boardgrid
      */
     public BoardGrid getGrid() {
         return levelHandler.getLevel().getBoardGrid();

@@ -78,7 +78,7 @@ public class Level {
     }
 
     /**
-     * @return
+     * @return the boardgrid
      */
     public BoardGrid getBoardGrid() {
         return boardGrid;
