@@ -6,10 +6,10 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.KeypressHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
@@ -151,7 +151,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     @Override
     public boolean intersect(Unit collidee) {
-        return super.intersect(collidee) || (fuseHandler.getFuse() != null && fuseHandler.getFuse().intersect(this));
+        return super.intersect(collidee) || fuseHandler.getFuse() != null && fuseHandler.getFuse().intersect(this);
     }
 
     /**
@@ -174,7 +174,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         int drawX = gridToCanvas(getIntX());
         int drawY = gridToCanvas(getIntY());
         final int lineCount = 10;
-        if (loops < Globals.ANIMATION_SPEED + lineCount) {
+        if (loops < animationSpeed + lineCount) {
             calculateLineCoordinates(drawX, drawY, canvas);
             if (oldLines.size() > lineCount || oldLines.size() > Globals.ANIMATION_SPEED - loops) {
                 oldLines.removeLast();
@@ -201,7 +201,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
-        if (loops < Globals.ANIMATION_SPEED) {
+        if (loops < animationSpeed) {
             double height = canvas.getHeight();
             double heightVar = height / Globals.ANIMATION_SPEED * loops;
             double width = canvas.getWidth();
@@ -239,7 +239,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public void calculateArea(Qix qix) {
         if (getGrid().isOuterborder(this.getIntX(), this.getIntY()) && !this.getStix().isEmpty()) {
 
-            SoundHandler.playSound("/sounds/qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+            SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
 
             AreaTracker.getInstance().calculateNewArea(new Coordinate(qix.getIntX(), qix.getIntY()),
                     this.isFast(), getStix(), scoreCounter);
@@ -292,7 +292,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @return whether the cursor is moving fast or slow
      */
     public boolean isFast() {
-        return (speed != Globals.CURSOR_SLOW);
+        return speed != Globals.CURSOR_SLOW;
     }
 
     /**

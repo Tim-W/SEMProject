@@ -1,7 +1,5 @@
 package nl.tudelft.sem.group2.board;
 
-import nl.tudelft.sem.group2.global.Globals;
-
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -102,6 +100,23 @@ public final class BoardGrid {
     }
 
     /**
+     * @return grid width - a point on the boardgrid is 2x2 pixels,
+     * so a boardgrid contains 150x150
+     */
+    public static int getGridWidth() {
+        return BOARD_WIDTH / 2;
+    }
+
+    /**
+     * @return grid height - a point on the boardgrid is 2x2 pixels,
+     * so a boardgrid contains 150x150
+     */
+    public static int getGridHeight() {
+        // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
+        return BOARD_HEIGHT / 2;
+    }
+
+    /**
      *
      * @param cor the point/coordinate on the map for witch the state has to change
      * @param state the new state for the given point
@@ -154,7 +169,6 @@ public final class BoardGrid {
         return AreaState.UNCOVERED.equals(getState(cor));
     }
 
-
     /**
      *
      * @param cor the point/coordinate on the map to be checked
@@ -163,7 +177,6 @@ public final class BoardGrid {
     public boolean isInnerborder(Point cor) {
         return AreaState.INNERBORDER.equals(getState(cor));
     }
-
 
     /**
      *
@@ -185,7 +198,6 @@ public final class BoardGrid {
         return isUncovered(new Coordinate(x, y));
     }
 
-
     /**
      *
      * @param x x coord
@@ -196,29 +208,12 @@ public final class BoardGrid {
         return isInnerborder(new Coordinate(x, y));
     }
 
-
     public int getWidth() {
         return width;
     }
+
     public int getHeight() {
         return height;
-    }
-
-    /**
-     * @return grid width - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridWidth() {
-        return BOARD_WIDTH / 2;
-    }
-
-    /**
-     * @return grid height - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridHeight() {
-        // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
-        return BOARD_HEIGHT / 2;
     }
 
     /**
@@ -236,20 +231,20 @@ public final class BoardGrid {
                 }
                 break;
             case 1:
-                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
-                    boardGrid[Globals.BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
+                if (boardGrid[BOARD_WIDTH / 2 - 1][1] != AreaState.UNCOVERED) {
+                    boardGrid[BOARD_WIDTH / 2][0] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 2:
-                if (boardGrid[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[Globals.BOARD_WIDTH / 2][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                if (boardGrid[BOARD_WIDTH / 2 - 1][BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[BOARD_WIDTH / 2][BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
             case 3:
-                if (boardGrid[1][Globals.BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
-                    boardGrid[0][Globals.BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
+                if (boardGrid[1][BOARD_HEIGHT / 2 - 1] != AreaState.UNCOVERED) {
+                    boardGrid[0][BOARD_HEIGHT / 2] = AreaState.INNERBORDER;
                     return true;
                 }
                 break;
@@ -267,8 +262,8 @@ public final class BoardGrid {
      */
     public int[] findPowerupLocation(int quadrant) {
         int[] res = new int[2];
-        int x = Globals.BOARD_WIDTH / 4;
-        int y = Globals.BOARD_HEIGHT / 4;
+        int x = BOARD_WIDTH / 4;
+        int y = BOARD_HEIGHT / 4;
 
         if (this.cornerIsCovered(quadrant)) {
 
@@ -278,11 +273,11 @@ public final class BoardGrid {
                 x = newLocation[0];
                 y = newLocation[1];
 
-                if (x > Globals.BOARD_WIDTH / 2 || x < 0) {
-                    x = Globals.BOARD_WIDTH / 4;
+                if (x > BOARD_WIDTH / 2 || x < 0) {
+                    x = BOARD_WIDTH / 4;
                 }
-                if (y > Globals.BOARD_HEIGHT / 2 || y < 0) {
-                    y = Globals.BOARD_HEIGHT / 4;
+                if (y > BOARD_HEIGHT / 2 || y < 0) {
+                    y = BOARD_HEIGHT / 4;
                 }
             }
             res[0] = x;
@@ -336,9 +331,9 @@ public final class BoardGrid {
         int y;
         Map<Integer, List<Integer>> quadrantCornerMap = new HashMap<>();
         quadrantCornerMap.put(0, Arrays.asList(0, 0));
-        quadrantCornerMap.put(1, Arrays.asList(Globals.BOARD_WIDTH / 2, 0));
-        quadrantCornerMap.put(2, Arrays.asList(Globals.BOARD_WIDTH / 2, Globals.BOARD_HEIGHT / 2));
-        quadrantCornerMap.put(3, Arrays.asList(0, Globals.BOARD_HEIGHT / 2));
+        quadrantCornerMap.put(1, Arrays.asList(BOARD_WIDTH / 2, 0));
+        quadrantCornerMap.put(2, Arrays.asList(BOARD_WIDTH / 2, BOARD_HEIGHT / 2));
+        quadrantCornerMap.put(3, Arrays.asList(0, BOARD_HEIGHT / 2));
         List<Integer> integers = quadrantCornerMap.get(quadrant);
         if (integers != null) {
             x = integers.get(0);

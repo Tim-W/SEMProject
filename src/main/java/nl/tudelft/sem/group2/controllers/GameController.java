@@ -5,10 +5,10 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.board.AreaTracker;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.level.LevelHandler;
@@ -54,7 +54,6 @@ public final class GameController {
     // Units
     private ArrayList<Cursor> cursors;
     private Qix qix;
-    private AreaTracker areaTracker;
     private Set<Unit> units;
 
     private long previousTime;

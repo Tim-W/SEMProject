@@ -2,8 +2,8 @@ package nl.tudelft.sem.group2.units;
 
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.board.Coordinate;
+import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Rectangle;
 import java.util.logging.Level;
@@ -20,25 +20,25 @@ public abstract class Unit extends Coordinate implements Draw, Movable, Collisio
 
 
     /**
-     *
-     * The grid instance that holds the states of the coordinates of the board.
-     * @return the grid instance
-     */
-    protected BoardGrid getGrid() {
-        return BoardGrid.getInstance();
-    }
-
-    /**
      * Create a Unit at (x,y) position.
      *
-     * @param x           x coord
-     * @param y           y coord
-     * @param width       width, used for the sprite
-     * @param height      height, used for the sprite
+     * @param x      x coord
+     * @param y      y coord
+     * @param width  width, used for the sprite
+     * @param height height, used for the sprite
      */
     public Unit(int x, int y, int width, int height) {
         super(x, y, width, height);
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
+    }
+
+    /**
+     * The grid instance that holds the states of the coordinates of the board.
+     *
+     * @return the grid instance
+     */
+    protected BoardGrid getGrid() {
+        return BoardGrid.getInstance();
     }
 
     /**
@@ -68,16 +68,15 @@ public abstract class Unit extends Coordinate implements Draw, Movable, Collisio
 
     @Override
     public boolean equals(Object obj) {
-        return (this == obj);
+        return this == obj;
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return super.hashCode() + LOGGER.hashCode();
     }
 
     /**
-     *
      * @return the rectangle representation of this Unit
      */
     public Rectangle toRectangle() {

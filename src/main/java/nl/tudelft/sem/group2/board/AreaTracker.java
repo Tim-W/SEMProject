@@ -1,20 +1,16 @@
 package nl.tudelft.sem.group2.board;
 
-import java.awt.Point;
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.units.Stix;
 
+import java.awt.Point;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
-
-import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.units.Stix;
-
-import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
 
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
@@ -29,7 +25,6 @@ public final class AreaTracker extends Observable {
     private LinkedList<Coordinate> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
-    private int areaLeft = GRID_SURFACE;
 
 
     /**
@@ -37,15 +32,6 @@ public final class AreaTracker extends Observable {
      * The constructor sets all the grid points to border and the rest to uncovered
      */
     private AreaTracker() {
-    }
-
-    /**
-     * Custom constructor mainly created for testing purposes.
-     *
-     * @param width  width of the boardGrid
-     * @param height height of the boardGrid
-     */
-    private AreaTracker(int width, int height) {
     }
 
     /**
@@ -74,14 +60,14 @@ public final class AreaTracker extends Observable {
     public static void reset() {
         instance = null;
     }
-
-    /**
+/*
+    *//**
      * Return the quadrant the cursor is in, as follows.
      * 12
      * 34
      *
      * @return the quadrant the cursor is in
-     */
+     *//*
     private static int quadrant(int x, int y) {
         if (x < Globals.BOARD_WIDTH / 4) {
             if (y < Globals.BOARD_HEIGHT / 4) {
@@ -93,20 +79,20 @@ public final class AreaTracker extends Observable {
             return 1;
         }
         return 2;
-    }
-
-    /**
+    }*/
+/*
+    *//**
      * Gives the opposite quadrant the cursor is in.
      *
      * @param x the x coordinate
      * @param y the y coordinate
      * @return the opposite quadrant the cursor is in
-     */
+     *//*
     public static int oppositeQuadrant(int x, int y) {
         int quadrant = quadrant(x, y);
 
         return (quadrant + 2) % 4;
-    }
+    }*/
 
     /**
      * /**
