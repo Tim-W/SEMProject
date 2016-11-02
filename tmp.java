@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 /**
  * Tests the GameScene.
  */
-public class gameSceneTest {
+public class GameSceneTest {
     //@Rule
     //public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     private GameScene gameScene;
