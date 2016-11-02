@@ -11,6 +11,8 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
  * Created by Erik on 25-10-2016.
@@ -88,6 +90,9 @@ public class BoardGrid {
 
     /**
      * @param cor   the point/coordinate on the map for witch the state has to change
+    /**
+     *
+     * @param cor the point/coordinate on the map for witch the state has to change
      * @param state the new state for the given point
      */
     public void setState(Coordinate cor, AreaState state) {
@@ -250,8 +255,8 @@ public class BoardGrid {
      */
     public int[] findPowerupLocation(int quadrant) {
         int[] res = new int[2];
-        int x = BOARD_WIDTH / 4;
-        int y = BOARD_HEIGHT / 4;
+        int x = GRID_WIDTH / 2;
+        int y = GRID_HEIGHT / 2;
 
         if (cornerIsCovered(quadrant)) {
 
@@ -262,10 +267,10 @@ public class BoardGrid {
                 y = newLocation[1];
 
                 if (x > GRID_WIDTH || x < 0) {
-                    x = BOARD_WIDTH / 4;
+                    x = GRID_WIDTH / 2;
                 }
                 if (y > GRID_HEIGHT || y < 0) {
-                    y = BOARD_HEIGHT / 4;
+                    y = GRID_HEIGHT / 2;
                 }
             }
             res[0] = x;

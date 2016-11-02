@@ -536,7 +536,7 @@ public final class GameController {
     }
 
     /**
-     * @return BoardGrid
+     * @return the boardgrid
      */
     public BoardGrid getGrid() {
         if (levelHandler.getLevel() == null) {
