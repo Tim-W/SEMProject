@@ -15,11 +15,8 @@ import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.util.List;
-import java.awt.Point;
 import java.util.Random;
 import java.util.Set;
 
@@ -165,7 +162,6 @@ public class GameScene extends Scene {
         drawUncovered(boardGrid);
         drawBorders(boardGrid);
         if (units != null) {
-            drawStixAndFuse(units);
             for (Unit unit : units) {
                 unit.draw(gc);
             }

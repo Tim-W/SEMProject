@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -179,7 +180,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         drawStixAndFuse(gc);
         final int lineCount = 10;
         if (loops < animationSpeed + lineCount) {
-            calculateLineCoordinates(drawX, drawY);
+            calculateLineCoordinates(drawX, drawY, gc.getCanvas());
             if (oldLines.size() > lineCount || oldLines.size() > animationSpeed - loops) {
                 oldLines.removeLast();
             }
@@ -203,11 +204,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         );
     }
 
-    private void calculateLineCoordinates(int drawX, int drawY) {
+    private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
         if (loops < animationSpeed) {
-            double height = Globals.BORDER_BOTTOM_HEIGHT;
+            double height = canvas.getHeight();
             double heightVar = height / animationSpeed * loops;
-            double width = Globals.BOARD_WIDTH;
+            double width = canvas.getWidth();
             double widthVar = width / animationSpeed * loops;
             final double lineSize = 80.0;
             double lineSizeVar = (lineSize / animationSpeed) * loops;

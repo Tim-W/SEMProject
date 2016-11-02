@@ -22,7 +22,7 @@ public class StixTest {
     private Fuse fuse;
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
