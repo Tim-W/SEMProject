@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2.powerups;
 
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.board.AreaTracker;
 
 /**
  * Eat Powerup.
@@ -11,10 +10,10 @@ public class PowerEat extends Powerup {
     /**
      * Creates a new Eat powerup.
      *
-     * @param x           x coord
-     * @param y           y coord
-     * @param width       width, used for collision
-     * @param height      height, used for collision
+     * @param x      x coord
+     * @param y      y coord
+     * @param width  width, used for collision
+     * @param height height, used for collision
      */
     public PowerEat(int x, int y, int width, int height) {
         super(x, y, width, height);

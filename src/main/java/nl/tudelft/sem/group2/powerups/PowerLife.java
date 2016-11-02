@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2.powerups;
 
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.board.AreaTracker;
 
 /**
  * Life Powerup.
