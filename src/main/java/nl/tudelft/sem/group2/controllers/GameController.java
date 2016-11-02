@@ -318,7 +318,8 @@ public final class GameController {
 
         while (nSparx < 2) {
             for (Cursor cursor : cursors) {
-                int[] coordinates = areaTracker.findPowerupLocation(cursor.oppositeQuadrant());
+                int[] coordinates = areaTracker.findPowerupLocation(
+                        AreaTracker.oppositeQuadrant(cursor.getX(), cursor.getY()));
                 Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
                         Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.randomDirection());
                 addUnit(sparx);
@@ -353,12 +354,12 @@ public final class GameController {
                     cursor.addLife();
                     return;
                 case EAT:
-                    cursor.setCurrentPowerup(PowerUpType.EAT);
-                    cursor.setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
+                    cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.EAT);
+                    cursor.getPowerupHandler().setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
                     return;
                 case SPEED:
-                    cursor.setCurrentPowerup(PowerUpType.SPEED);
-                    cursor.setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
+                    cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
+                    cursor.getPowerupHandler().setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
             }
         }
     }
@@ -372,7 +373,7 @@ public final class GameController {
 
             for (Cursor cursor : cursors) {
 
-                int quadrant = cursor.oppositeQuadrant();
+                int quadrant = AreaTracker.oppositeQuadrant(cursor.getX(), cursor.getY());
 
                 int[] coordinates = areaTracker.findPowerupLocation(quadrant);
                 Powerup powerup = null;
@@ -397,7 +398,7 @@ public final class GameController {
      */
     private boolean powerUpActive() {
         for (Cursor cursor : cursors) {
-            if (cursor.hasPowerUp()) {
+            if (cursor.getPowerupHandler().getCurrentPowerup() != PowerUpType.NONE) {
                 return true;
             }
         }
@@ -412,12 +413,14 @@ public final class GameController {
 
     private void applyPowerups() {
         for (Cursor cursor : cursors) {
-            if (cursor.hasPowerUp() && cursor.getPowerUpDuration() <= 0) {
-                cursor.setCurrentPowerup(PowerUpType.NONE);
+            if (cursor.getPowerupHandler().hasPowerup()
+                    && cursor.getPowerupHandler().getPowerUpDuration() <= 0) {
+                cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.NONE);
             }
 
-            if (cursor.hasPowerUp() && cursor.getPowerUpDuration() > 0) {
-                cursor.decrementPowerupDuration();
+            if (cursor.getPowerupHandler().hasPowerup()
+                    && cursor.getPowerupHandler().getPowerUpDuration() > 0) {
+                cursor.getPowerupHandler().decrementDuration();
             }
         }
     }
@@ -439,14 +442,7 @@ public final class GameController {
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
         for (Cursor cursor : cursors) {
-            if (keyCode.equals(cursor.getCurrentMove())) {
-                cursor.handleFuse();
-                cursor.setCurrentMove(null);
-            } else if (keyCode.equals(cursor.getFastMoveKey()) || keyCode.equals(cursor.getSlowMoveKey())) {
-                cursor.setDrawing(false);
-                cursor.setSpeed(2);
-                cursor.handleFuse();
-            }
+            cursor.keyReleased(keyCode);
         }
     }
 
@@ -467,25 +463,7 @@ public final class GameController {
             gameScene.setMessage("");
         } else {
             for (Cursor cursor : cursors) {
-                if (cursor.getArrowKeys().contains(e.getCode())) {
-                    if (cursor.isDrawing() && cursor.getFuse() != null) {
-                        cursor.getFuse().setMoving(false);
-                    }
-                    cursor.setCurrentMove(e.getCode());
-                } else if (e.getCode().equals(cursor.getSlowMoveKey())) {
-                    if (!stixNotEmpty(cursor) || !cursor.isFast()) {
-                        cursor.setSpeed(1);
-                        cursor.setDrawing(true);
-                        cursor.setFast(false);
-                    }
-                } else if (e.getCode().equals(cursor.getFastMoveKey())) {
-                    cursor.setSpeed(2);
-                    cursor.setDrawing(true);
-                    cursor.setFast(true);
-                }
-                if (cursor.getCurrentPowerup() == PowerUpType.SPEED) {
-                    cursor.setSpeed(cursor.getSpeed() + 1);
-                }
+                cursor.keyPressed(e);
             }
         }
     }
@@ -498,11 +476,6 @@ public final class GameController {
                 cursor.setSpeed(Globals.CURSOR_SLOW);
             }
         }
-    }
-
-    private boolean stixNotEmpty(Cursor cursor) {
-        return cursor.getStix().getStixCoordinates() != null
-                && !cursor.getStix().getStixCoordinates().isEmpty();
     }
 
     //Getters

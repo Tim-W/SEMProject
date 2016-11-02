@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Test for the line traveller class
+ * Test for the line traveller class.
  */
 public class LineTravellerTest {
     private Fuse fuse;
@@ -38,7 +38,6 @@ public class LineTravellerTest {
     }
 
     /**
-     *
      * @throws Exception
      */
     @Test
@@ -52,7 +51,6 @@ public class LineTravellerTest {
     }
 
     /**
-     *
      * @throws Exception
      */
     @Test
@@ -62,12 +60,9 @@ public class LineTravellerTest {
     }
 
     /**
-     * draw method is not testable.
-     * because all variables used are not accesible.
-     * and there are no mockable objects.
+     * Draw method is not testable, because all variables used are not accesible and there are no mockable objects.
      */
     /**
-     *
      * @throws Exception
      */
     @Test
@@ -78,7 +73,6 @@ public class LineTravellerTest {
     }
 
     /**
-     *
      * @throws Exception
      */
     @Test

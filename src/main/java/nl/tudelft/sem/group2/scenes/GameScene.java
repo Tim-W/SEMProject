@@ -183,7 +183,7 @@ public class GameScene extends Scene {
     private void applyEffect() {
         List<Cursor> cursors = GameController.getInstance().getCursors();
         for (Cursor cursor : cursors) {
-            switch (cursor.getCurrentPowerup()) {
+            switch (cursor.getPowerupHandler().getCurrentPowerup()) {
                 case EAT:
                     gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
                     break;
@@ -193,7 +193,6 @@ public class GameScene extends Scene {
                 default:
                     break;
             }
-
         }
     }
 

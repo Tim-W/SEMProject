@@ -43,7 +43,7 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
      * @param y y coord
      * @return true if the tile at (x,y) has an INNERBORDER AreaState
      */
-    protected boolean innerBorderOn(int x, int y) {
+    public boolean innerBorderOn(int x, int y) {
         return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.INNERBORDER);
     }
 
@@ -52,7 +52,7 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
      * @param y y coord
      * @return true if the tile at (x,y) has an OUTERBORDER AreaState
      */
-    protected boolean outerBorderOn(int x, int y) {
+    public boolean outerBorderOn(int x, int y) {
         return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.OUTERBORDER);
     }
 

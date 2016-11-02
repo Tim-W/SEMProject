@@ -15,6 +15,12 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * Class which keeps track of the current stix.
+ * The stix is the line a cursor is drawing.
+ * A stix can be created by holding one of the draw keys on the cursor and start moving into unclaimed territory.
+ * When the cursor reaches a border again the stix is completed and the side without the qix will be set to claimed
+ * territory.
+ * A fuse will spawn on the stix when the cursor is not moving and the fuse will travel on the fuse until it reaches
+ * the cursor at which point the player will lose a life and will need to start drawing again.
  */
 public class Stix implements CollisionInterface {
 
