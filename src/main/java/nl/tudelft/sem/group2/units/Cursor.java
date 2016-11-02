@@ -47,8 +47,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     private KeyCode fastMoveKey, slowMoveKey;
     private ScoreCounter scoreCounter;
-    private Map<KeyCode, CursorMovement> cursorMovementMap;
-    private CursorMovement currentMove = null;
+    private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
+    private KeyCode currentMove = null;
     private boolean isDrawing = false;
     private int speed = Globals.CURSOR_FAST;
     private int id;
@@ -79,7 +79,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         this.lives = lives;
-        cursorMovementMap = new HashMap<>();
         powerupHandler = new PowerupHandler();
         fuseHandler = new FuseHandler(this);
     }
@@ -97,8 +96,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 cursorMovementMap.put(arrowKeys.get(3), new CursorMovement(1, 0));
                 cursorMovementMap.put(arrowKeys.get(0), new CursorMovement(0, -1));
                 cursorMovementMap.put(arrowKeys.get(1), new CursorMovement(0, 1));
-                transX += currentMove.getTransX();
-                transY += currentMove.getTransY();
+                transX += cursorMovementMap.get(currentMove).getTransX();
+                transY += cursorMovementMap.get(currentMove).getTransY();
                 KeypressHandler.cursorAssertMove(this, transX, transY);
             }
         }
@@ -238,7 +237,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param qix the qix of the game
      */
     public void calculateArea(Qix qix) {
-        if (this.getGrid().isOuterborder(this.getIntX(), this.getIntY()) && !this.getStix().isEmpty()) {
+        if (getGrid().isOuterborder(this.getIntX(), this.getIntY()) && !this.getStix().isEmpty()) {
 
             SoundHandler.playSound("/sounds/qix_Success.mp3", Globals.SUCCESS_SOUND_VOLUME);
 
@@ -317,22 +316,22 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /**
      * @param keycode the key that is specific to this cursor.
      */
-    public void addKey(KeyCode keycode, CursorMovement movement) {
-        cursorMovementMap.put(keycode, movement)
+    public void addKey(KeyCode keycode) {
+        arrowKeys.add(keycode);
     }
 
     /**
      * @param keycodes the keys that are specific to this cursor.
      */
-    public void addKeys(Map<KeyCode, CursorMovement> keycodes) {
-        cursorMovementMap.putAll(keycodes);
+    public void addKeys(Collection<KeyCode> keycodes) {
+        arrowKeys.addAll(keycodes);
     }
 
     /**
      * @return this cursor specific keys.
      */
-    public Map<KeyCode, CursorMovement> getArrowKeys() {
-        return cursorMovementMap;
+    public ArrayList<KeyCode> getArrowKeys() {
+        return arrowKeys;
     }
 
     /**

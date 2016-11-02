@@ -85,7 +85,7 @@ public final class BoardGrid {
         if (instance == null) {
             // Put lock on class since it we do not want to instantiate it twice
             synchronized (BoardGrid.class) {
-                // Check if logger is in the meanwhile not already instantiated.
+                // Check if boardgrid is in the meanwhile not already instantiated.
                 if (instance == null) {
                     instance = new BoardGrid();
                 }
