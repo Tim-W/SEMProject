@@ -108,7 +108,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void keyPressed(KeyEvent e) {
         if (getArrowKeys().contains(e.getCode())) {
-            if (isDrawing() && fuseHandler.getFuse() != null) {
+            if (isDrawing() && fuseHandler.hasFuse()) {
                 fuseHandler.getFuse().setMoving(false);
             }
             setCurrentMove(e.getCode());
@@ -152,7 +152,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     @Override
     public boolean intersect(Unit collidee) {
-        return super.intersect(collidee) || fuseHandler.getFuse() != null && fuseHandler.getFuse().intersect(this);
+        return fuseHandler.hasFuse() && fuseHandler.getFuse().intersect(this) || super.intersect(collidee);
     }
 
     /**
@@ -443,6 +443,11 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public FuseHandler getFuseHandler() {
         return fuseHandler;
     }
+
+    public void setFuseHandler(FuseHandler fuseHandler) {
+        this.fuseHandler = fuseHandler;
+    }
+
 
 
     /**
