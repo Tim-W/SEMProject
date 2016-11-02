@@ -181,7 +181,7 @@ public class GameScene extends Scene {
         }
     }
 
-    private void drawUncovered() {
+    private void drawUncovered(AreaState[][] boardGrid) {
         gc.setFill(Color.BLACK);
         for (int i = 0; i < boardGrid.length; i++) {
             for (int j = 0; j < boardGrid[i].length; j++) {
