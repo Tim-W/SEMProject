@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
+import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.board.AreaState;
@@ -12,7 +13,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.awt.Point;
-import java.util.LinkedList;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyFloat;
@@ -36,7 +36,7 @@ public class QixTest {
     private BoardGrid grid;
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
@@ -46,13 +46,6 @@ public class QixTest {
         grid = mock(BoardGrid.class, Mockito.RETURNS_MOCKS);
         when(BoardGrid.getInstance()).thenReturn(grid);
         spyQix = spy(qix);
-    }
-
-    @Test
-    public void draw() throws Exception {
-        Canvas spyCanvas = spy(canvas);
-        qix.draw(spyCanvas);
-        verify(spyCanvas).getGraphicsContext2D();
     }
 
     @Test
@@ -69,14 +62,14 @@ public class QixTest {
         linkedList2.add(new float[] {1, 1});
         spyQix.setOldCoordinates(linkedList2);
         spyQix.setOldDirections(linkedList2);
-        spyQix.draw(canvas);
+        spyQix.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spyQix, times(4 * spyQix.getOldDirections().size())).getOldCoordinate(anyInt());
         verify(spyQix, times(4 * spyQix.getOldDirections().size())).getOldDirection(anyInt());
     }
 
     @Test
     public void changeDirection() throws Exception {
-        spyQix.draw(canvas);
+        spyQix.draw(new Canvas(1, 1).getGraphicsContext2D());
         spyQix.setAnimationLoops(0);
         spyQix.move();
         verify(spyQix, atLeast(2)).setDirection(any(float.class), anyInt());
@@ -100,21 +93,21 @@ public class QixTest {
     @Test
     public void checkLineCollisionI() throws Exception {
         spyQix.setAnimationLoops(1);
-        when(grid.getState(new Point(0,0))).thenReturn(AreaState.INNERBORDER);
+        when(grid.getState(new Point(0, 0))).thenReturn(AreaState.INNERBORDER);
         spyQix.move();
         verify(spyQix, times(2)).getCoordinate(anyInt());
     }
 
     @Test
     public void checkLineCollisionO() throws Exception {
-        when(grid.getState(new Point(0,0))).thenReturn(AreaState.OUTERBORDER);
+        when(grid.getState(new Point(0, 0))).thenReturn(AreaState.OUTERBORDER);
         spyQix.move();
         verify(spyQix, times(2)).getCoordinate(anyInt());
     }
 
     @Test
     public void checkLineCollision2() throws Exception {
-        when(grid.getState(new Point(0,0))).thenReturn(AreaState.INNERBORDER);
+        when(grid.getState(new Point(0, 0))).thenReturn(AreaState.INNERBORDER);
         when(spyQix.getCoordinate(anyInt())).thenReturn((float) 10);
         spyQix.move();
         verify(spyQix, times(2)).setDirection(anyFloat(), anyInt());
@@ -122,7 +115,7 @@ public class QixTest {
 
     @Test
     public void checkLineCollision3() throws Exception {
-        when(grid.getState(new Point(0,0))).thenReturn(AreaState.INNERBORDER);
+        when(grid.getState(new Point(0, 0))).thenReturn(AreaState.INNERBORDER);
         when(spyQix.getCoordinate(anyInt())).thenReturn((float) 0);
         spyQix.move();
         verify(spyQix, times(4)).setDirection(anyFloat(), anyInt());

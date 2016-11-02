@@ -7,9 +7,6 @@ import org.junit.Ignore;
 
 import java.awt.Point;
 
-import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

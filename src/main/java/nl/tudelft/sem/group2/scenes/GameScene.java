@@ -15,10 +15,8 @@ import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Point;
 import java.util.Random;
 import java.util.Set;
 
@@ -163,9 +161,8 @@ public class GameScene extends Scene {
         drawUncovered();
         drawBorders();
         if (units != null) {
-            drawStixAndFuse(units);
             for (Unit unit : units) {
-                unit.draw(canvas);
+                unit.draw(gc);
             }
             applyEffect(units);
         }
@@ -218,50 +215,6 @@ public class GameScene extends Scene {
                 if (grid.isOuterborder(i, j) || grid.isInnerborder(i, j)) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
-            }
-        }
-    }
-
-    /**
-     * Draw current Stix and Fuse on screen.
-     */
-    private void drawStixAndFuse(Set<Unit> units) {
-        if (units == null) {
-            return;
-        }
-        boolean foundFuse = false;
-        Point fusePoint = new Point(-1, -1);
-        for (Unit unit : units) {
-            if (unit instanceof Cursor) {
-                Cursor cursor = (Cursor) unit;
-                Fuse fuse = cursor.getFuseHandler().getFuse();
-                if (fuse != null) {
-                    fusePoint = new Point(fuse.getX(), fuse.getY());
-                    foundFuse = true;
-                }
-                for (Point p : cursor.getStix().getStixCoordinates()) {
-                    if (!cursor.getStix().pointEqualsFirstPoint(p)) {
-                        if (!foundFuse) {
-                            if (cursor.isFast()) {
-                                gc.setFill(Color.MEDIUMBLUE);
-                            } else {
-                                gc.setFill(Color.DARKRED);
-                            }
-                        } else {
-                            if (p.equals(fusePoint)) {
-                                foundFuse = false;
-                            }
-                            gc.setFill(Color.GRAY);
-                        }
-                        gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
-                    }
-                }
-                if (fuse != null) {
-                    fuse.move();
-                    fuse.draw(canvas);
-                }
-                foundFuse = false;
-                fusePoint = new Point(-1, -1);
             }
         }
     }

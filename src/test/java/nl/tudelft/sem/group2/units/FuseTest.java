@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
+import java.awt.Point;
+import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import nl.tudelft.sem.group2.board.AreaTracker;
 import org.junit.Assert;
@@ -8,9 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.awt.Point;
-import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -29,13 +28,13 @@ public class FuseTest {
     private AreaTracker areaTracker = Mockito.mock(AreaTracker.class);
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
     @Before
     public void setUp() throws Exception {
-        createFuse(new Fuse(3, 3, 3, 4,stix));
+        createFuse(new Fuse(3, 3, 3, 4, stix));
         fuse.setDelay(0);
     }
 

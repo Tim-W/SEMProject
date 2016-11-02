@@ -2,7 +2,6 @@ package nl.tudelft.sem.group2.collisions;
 
 import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
-import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
@@ -143,7 +142,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testNoPowerupsNoCursor() {
         set.clear();
-        Sparx sparx = new Sparx(cursor.getX(), cursor.getY(), 1, 1 , SparxDirection.RIGHT);
+        Sparx sparx = new Sparx(cursor.getX(), cursor.getY(), 1, 1, SparxDirection.RIGHT);
         set.add(sparx);
         Assert.assertEquals(null, handler.powerUpCollisions(set, cursors));
     }

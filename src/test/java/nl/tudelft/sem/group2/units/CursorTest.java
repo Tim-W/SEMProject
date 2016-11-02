@@ -5,7 +5,6 @@ import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import org.junit.Assert;
 import org.junit.Before;
@@ -66,11 +65,11 @@ public class CursorTest {
             vertical = 1;
         }
         if (outerborder) {
-            when(grid.getState(new Point(x,y))).thenReturn(AreaState.OUTERBORDER);
+            when(grid.getState(new Point(x, y))).thenReturn(AreaState.OUTERBORDER);
         } else {
-            when(grid.getState(new Point(x - horizontal,y - vertical))).thenReturn(AreaState.UNCOVERED);
-            when(grid.getState(new Point(x + horizontal,y + vertical))).thenReturn(AreaState.UNCOVERED);
-            when(grid.getState(new Point(cursor.getX(),cursor.getY()))).thenReturn(AreaState.UNCOVERED);
+            when(grid.getState(new Point(x - horizontal, y - vertical))).thenReturn(AreaState.UNCOVERED);
+            when(grid.getState(new Point(x + horizontal, y + vertical))).thenReturn(AreaState.UNCOVERED);
+            when(grid.getState(new Point(cursor.getX(), cursor.getY()))).thenReturn(AreaState.UNCOVERED);
         }
         cursor.setCurrentMove(k);
         cursor.move();
@@ -218,9 +217,9 @@ public class CursorTest {
     public void isFast() throws Exception {
         createCursor();
         boolean oldValue = cursor.isFast();
-        if(oldValue) {
+        if (oldValue) {
             cursor.setSpeed(1);
-        }else{
+        } else {
             cursor.setSpeed(2);
         }
         Assert.assertEquals(!oldValue, cursor.isFast());
@@ -230,19 +229,9 @@ public class CursorTest {
     @Test
     public void draw() throws Exception {
         Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, stix, 3, 1));
-        spy.draw(new Canvas(1, 1));
+        spy.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spy).getSpriteIndex();
     }
 
-    /*@Test
-    public void testCursorHasDied() throws Exception {
-        createCursor();
-        Assert.assertEquals(2, cursor.getLives());
-        cursor.cursorDied();
-        Assert.assertEquals(1, cursor.getLives());
-        cursor.cursorDied();
-        Assert.assertEquals(0, cursor.getLives());
-        cursor.cursorDied();
-        Assert.assertEquals(0, cursor.getLives());
-    }*/
+
 }

@@ -22,8 +22,9 @@ public class ScoreCounterTest {
         double percentage = scoreCounter.getTotalPercentage();
         int completedArea = 10;
         scoreCounter.updateScore(completedArea, true);
-        Assert.assertEquals(percentage + (double) completedArea / GRID_SURFACE * 100 / 2, scoreCounter.getTotalPercentage
-                (), 0.01);
+        Assert.assertEquals(percentage + (double) completedArea / GRID_SURFACE * 100 / 2,
+                scoreCounter.getTotalPercentage(),
+                0.01);
     }
 
     @Test

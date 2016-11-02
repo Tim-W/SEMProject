@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by gijs on 24-9-2016.
+ * Tests the methods of the Sparx.
  */
 //TODO fix tests
 @Ignore
@@ -30,7 +30,7 @@ public class SparxTest {
     private AreaState[][] boardGrid = new AreaState[GRID_WIDTH + 2][GRID_HEIGHT + 2];
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 

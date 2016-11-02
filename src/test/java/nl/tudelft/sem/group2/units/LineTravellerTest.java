@@ -24,7 +24,7 @@ public class LineTravellerTest {
     private Stix stix;
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
@@ -42,7 +42,7 @@ public class LineTravellerTest {
     public void innerBorderOn() throws Exception {
         fuse.setX(0);
         fuse.setY(0);
-        when(BoardGrid.getInstance().isInnerborder(0,0)).thenReturn(true);
+        when(BoardGrid.getInstance().isInnerborder(0, 0)).thenReturn(true);
         Assert.assertTrue(fuse.innerBorderOn());
     }
 
@@ -64,7 +64,7 @@ public class LineTravellerTest {
     @Test
     public void incrementSpriteIndex() throws Exception {
         Fuse spyFuse = spy(new Fuse(2, 2, 2, 2, stix));
-        spyFuse.draw(new Canvas(1, 1));
+        spyFuse.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spyFuse).setSpriteIndex(anyInt());
     }
 

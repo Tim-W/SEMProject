@@ -1,9 +1,6 @@
 package nl.tudelft.sem.group2.collisions;
 
 import javafx.embed.swing.JFXPanel;
-import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.collisions.CollisionHandler;
-import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.powerups.PowerupHandler;
@@ -11,7 +8,6 @@ import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
 import nl.tudelft.sem.group2.units.SparxDirection;
-import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,8 +16,6 @@ import org.junit.Test;
 
 import java.util.HashSet;
 
-import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

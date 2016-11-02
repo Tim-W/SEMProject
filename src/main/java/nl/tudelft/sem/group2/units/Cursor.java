@@ -100,6 +100,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 KeypressHandler.cursorAssertMove(this, transX, transY);
             }
         }
+        if (fuseHandler.getFuse() != null) {
+            fuseHandler.getFuse().move();
+        }
     }
 
     /**
@@ -145,6 +148,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * Method which tests if cursor intersects with other unit.
+     *
      * @param collidee the other unit
      * @return if cursor intersects with other unit
      */
@@ -169,28 +173,28 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(GraphicsContext gc) {
         int drawX = gridToCanvas(getX());
         int drawY = gridToCanvas(getY());
+        drawStixAndFuse(gc);
         final int lineCount = 10;
         if (loops < animationSpeed + lineCount) {
-            calculateLineCoordinates(drawX, drawY, canvas);
-            if (oldLines.size() > lineCount || oldLines.size() > Globals.ANIMATION_SPEED - loops) {
+            calculateLineCoordinates(drawX, drawY, gc.getCanvas());
+            if (oldLines.size() > lineCount || oldLines.size() > animationSpeed - loops) {
                 oldLines.removeLast();
             }
-            GraphicsContext gC = canvas.getGraphicsContext2D();
-            gC.setStroke(Color.WHITE);
+            gc.setStroke(Color.WHITE);
             for (double[][] l : oldLines) {
-                gC.beginPath();
+                gc.beginPath();
                 for (int i = 0; i < 4; i++) {
-                    gC.moveTo(l[i][0], l[i][1]);
-                    gC.lineTo(l[i][2], l[i][3]);
+                    gc.moveTo(l[i][0], l[i][1]);
+                    gc.lineTo(l[i][2], l[i][3]);
                 }
-                gC.stroke();
+                gc.stroke();
             }
             loops++;
         }
-        canvas.getGraphicsContext2D().drawImage(
+        gc.drawImage(
                 getSprite()[getSpriteIndex()],
                 drawX - getWidth() / 2 + 1,
                 drawY - getHeight() / 2 + 1,
@@ -245,6 +249,16 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
             //Remove the Fuse from the gameView when completing an area
             fuseHandler.removeFuse();
+        }
+    }
+
+    /**
+     * Draw current Stix and Fuse on screen.
+     */
+    private void drawStixAndFuse(GraphicsContext gc) {
+        stix.draw(gc, fuseHandler.getFuse(), isFast());
+        if (fuseHandler.getFuse() != null) {
+            fuseHandler.getFuse().draw(gc);
         }
     }
 
