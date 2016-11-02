@@ -15,8 +15,8 @@ public class Coordinate extends Point {
      *
      * @param x           x coord
      * @param y           y coord
-     * @param width       width, used for collision
-     * @param height      height, used for collision
+     * @param width       width
+     * @param height      height
      */
     public Coordinate(int x, int y, int width, int height) {
         super(x, y);
@@ -35,7 +35,7 @@ public class Coordinate extends Point {
     }
 
     /**
-     * Check whether a point lies between a x range with [low,up)
+     * Check whether a point lies between a x range with [low,up).
      * @param low lower bound
      * @param up upper bound (non-inclusive)
      * @return boolean whether point lies between two coordinates
@@ -45,7 +45,7 @@ public class Coordinate extends Point {
     }
 
     /**
-     * Check whether a point lies between a y range with [low,up)
+     * Check whether a point lies between a y range with [low,up).
      * @param low lower bound
      * @param up upper bound (non-inclusive)
      * @return boolean whether point lies between two coordinates
@@ -55,11 +55,11 @@ public class Coordinate extends Point {
     }
 
     public int getIntX() {
-        return (int)super.getX();
+        return (int) super.getX();
     }
 
     public int getIntY() {
-        return (int)super.getY();
+        return (int) super.getY();
     }
 
     public void setX(int x) {

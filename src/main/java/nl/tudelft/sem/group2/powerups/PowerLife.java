@@ -15,9 +15,8 @@ public class PowerLife extends Powerup {
      * @param y           y coord
      * @param width       width, used for collision
      * @param height      height, used for collision
-     * @param areaTracker the AreaTracker
      */
-    public PowerLife(int x, int y, int width, int height, AreaTracker areaTracker) {
+    public PowerLife(int x, int y, int width, int height) {
         super(x, y, width, height);
         Image[] sprite = new Image[4];
         sprite[0] = new Image("/images/heart.png");

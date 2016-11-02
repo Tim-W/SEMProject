@@ -55,8 +55,8 @@ public class FuseHandlerTest {
     @Test
     public void handleFuseExisting() {
         points.add(new Point(0, 0));
-        fuse = new Fuse(0, 0, 0, 0, null, null);
-        fuse.setMoving(false);
+        fuse = new Fuse(0, 0, 0, 0, null);
+        fuse.notMoving();
         fuseHandler.setFuse(fuse);
 
         when(cursor.getX()).thenReturn(0);
@@ -68,7 +68,7 @@ public class FuseHandlerTest {
 
     @Test
     public void removeFustTest() {
-        fuse = new Fuse(0, 0, 0, 0, null, null);
+        fuse = new Fuse(0, 0, 0, 0, null);
         fuseHandler.setFuse(fuse);
         Assert.assertNotNull(fuse);
 

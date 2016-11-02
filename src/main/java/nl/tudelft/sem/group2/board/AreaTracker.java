@@ -1,16 +1,12 @@
 package nl.tudelft.sem.group2.board;
 
 import java.awt.Point;
-import java.util.Arrays;
-import java.util.HashMap;
+
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 import java.util.Stack;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 import nl.tudelft.sem.group2.Logger;
@@ -23,7 +19,7 @@ import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
  */
-public class AreaTracker extends Observable{
+public final class AreaTracker extends Observable {
 
     private static final Logger LOGGER = Logger.getLogger();
     private static volatile AreaTracker instance;
@@ -53,7 +49,8 @@ public class AreaTracker extends Observable{
     }
 
     /**
-     * Getter for the AreaTracker this is a singleton class so everywhere the AreaTracker is used it is the same instance
+     * Getter for the AreaTracker this is a singleton class
+     * so everywhere the AreaTracker is used it is the same instance
      * This method allows getting of that instance and instantiates it when it is not instantiated yet.
      *
      * @return the only one instance of BoardGrid.
@@ -120,7 +117,8 @@ public class AreaTracker extends Observable{
      * @param stix           current stix to use
      * @param scoreCounter   the counter that handles the score
      */
-    public synchronized void calculateNewArea(Coordinate qixCoordinates, boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
+    public synchronized void calculateNewArea(Coordinate qixCoordinates,
+                                              boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
         this.grid = BoardGrid.getInstance();
         setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
@@ -140,7 +138,6 @@ public class AreaTracker extends Observable{
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
         updateScoreCounter(fastArea, stix, scoreCounter);
-
         if (fastArea) {
             Logger.getLogger().log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {

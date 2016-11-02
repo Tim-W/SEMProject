@@ -5,7 +5,6 @@ import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
 
 import java.awt.Point;
-import java.awt.image.BandCombineOp;
 
 /**
  * Class for handling the results of keypresses.

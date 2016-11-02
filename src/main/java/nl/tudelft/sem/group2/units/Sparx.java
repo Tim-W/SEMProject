@@ -1,9 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.util.logging.Level;
@@ -27,8 +25,8 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      *
      * @param x              x coord to start at
      * @param y              y coord to start at
-     * @param width          width, used for collision
-     * @param height         height, used for collision
+     * @param width          width, used for the sprite
+     * @param height         height, used for the sprite
      * @param sparxDirection direction in which the sparx starts moving,
      *                       which is either LEFT or RIGHT
      */
@@ -71,21 +69,21 @@ public class Sparx extends LineTraveller implements CollisionInterface {
             left2 = false;
             offset = 1;
         }
-        if (checkX(left1) && grid.isOuterborder(getIntX() + offset, getIntY())) {
+        if (checkX(left1) && getGrid().isOuterborder(getIntX() + offset, getIntY())) {
             setXAndLastX(getIntX() + offset);
-        } else if (checkY(left1) && grid.isOuterborder(getIntX(), getIntY() + offset)) {
+        } else if (checkY(left1) && getGrid().isOuterborder(getIntX(), getIntY() + offset)) {
             setYAndLastY(getIntY() + offset);
-        } else if (checkX(left2) && grid.isOuterborder(getIntX() - offset, getIntY())) {
+        } else if (checkX(left2) && getGrid().isOuterborder(getIntX() - offset, getIntY())) {
             setXAndLastX(getIntX() - offset);
-        } else if (checkY(left2) && grid.isOuterborder(getIntX(), getIntY() - offset)) {
+        } else if (checkY(left2) && getGrid().isOuterborder(getIntX(), getIntY() - offset)) {
             setYAndLastY(getIntY() - offset);
-        } else if (checkX(left1) && grid.isInnerborder(getIntX() + offset, getIntY())) {
+        } else if (checkX(left1) && getGrid().isInnerborder(getIntX() + offset, getIntY())) {
             setXAndLastX(getIntX() + offset);
-        } else if (checkY(left1) && grid.isInnerborder(getIntX(), getIntY() + offset)) {
+        } else if (checkY(left1) && getGrid().isInnerborder(getIntX(), getIntY() + offset)) {
             setYAndLastY(getIntY() + offset);
-        } else if (checkX(left2) && grid.isInnerborder(getIntX() - offset, getIntY())) {
+        } else if (checkX(left2) && getGrid().isInnerborder(getIntX() - offset, getIntY())) {
             setXAndLastX(getIntX() - offset);
-        } else if (checkY(left2) && grid.isInnerborder(getIntX(), getIntY() - offset)) {
+        } else if (checkY(left2) && getGrid().isInnerborder(getIntX(), getIntY() - offset)) {
             setYAndLastY(getIntY() - offset);
         }
     }

@@ -1,8 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.board.AreaTracker;
-import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.awt.Point;
@@ -30,8 +28,8 @@ public class Fuse extends LineTraveller implements CollisionInterface {
      *
      * @param x           the start x coord
      * @param y           the start y coord
-     * @param width       width of the fuse (used for collision detection)
-     * @param height      height of the fuse (used for collision detection)
+     * @param width       width of the fuse (used for the sprite)
+     * @param height      height of the fuse (used for the sprite)
      * @param stix        current stix to use
      */
     public Fuse(int x, int y, int width, int height, Stix stix) {
@@ -97,9 +95,16 @@ public class Fuse extends LineTraveller implements CollisionInterface {
         this.lastY = lastY;
     }
 
+    /**
+     * Sets the Fuse to move.
+     */
     public void moving() {
         this.moving = true;
     }
+
+    /**
+     * Sets the Fuse to not move.
+     */
     public void notMoving() {
         this.moving = false;
     }

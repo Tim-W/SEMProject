@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2;
 
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.board.BoardGrid;
 
 import java.util.Observable;
 import java.util.logging.Level;

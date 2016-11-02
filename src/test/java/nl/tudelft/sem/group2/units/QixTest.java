@@ -2,13 +2,15 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaState;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import java.awt.Point;
 import java.util.LinkedList;
 
 import static org.mockito.Matchers.any;
@@ -28,8 +30,7 @@ public class QixTest {
     private Qix qix;
     private Canvas canvas = new Canvas(1, 1);
     private Qix spyQix;
-    private AreaTracker areaTracker = mock(AreaTracker.class);
-    private AreaState[][] boardGrid = new AreaState[1][1];
+    private BoardGrid grid;
 
     @BeforeClass
     public static void BeforeClass() {
@@ -38,9 +39,9 @@ public class QixTest {
 
     @Before
     public void setUp() throws Exception {
-        qix = new Qix(areaTracker, 5);
-        when(areaTracker.getBoardGrid()).thenReturn(boardGrid);
-        qix.setAreaTracker(areaTracker);
+        qix = new Qix(5);
+        grid = mock(BoardGrid.class, Mockito.RETURNS_MOCKS);
+        when(BoardGrid.getInstance()).thenReturn(grid);
         spyQix = spy(qix);
     }
 
@@ -96,21 +97,21 @@ public class QixTest {
     @Test
     public void checkLineCollisionI() throws Exception {
         spyQix.setAnimationLoops(1);
-        spyQix.getAreaTracker().getBoardGrid()[0][0] = AreaState.INNERBORDER;
+        when(grid.getState(new Point(0,0))).thenReturn(AreaState.INNERBORDER);
         spyQix.move();
         verify(spyQix, times(2)).getCoordinate(anyInt());
     }
 
     @Test
     public void checkLineCollisionO() throws Exception {
-        spyQix.getAreaTracker().getBoardGrid()[0][0] = AreaState.OUTERBORDER;
+        when(grid.getState(new Point(0,0))).thenReturn(AreaState.OUTERBORDER);
         spyQix.move();
         verify(spyQix, times(2)).getCoordinate(anyInt());
     }
 
     @Test
     public void checkLineCollision2() throws Exception {
-        spyQix.getAreaTracker().getBoardGrid()[0][0] = AreaState.INNERBORDER;
+        when(grid.getState(new Point(0,0))).thenReturn(AreaState.INNERBORDER);
         when(spyQix.getCoordinate(anyInt())).thenReturn((float) 10);
         spyQix.move();
         verify(spyQix, times(2)).setDirection(anyFloat(), anyInt());
@@ -118,7 +119,7 @@ public class QixTest {
 
     @Test
     public void checkLineCollision3() throws Exception {
-        spyQix.getAreaTracker().getBoardGrid()[0][0] = AreaState.INNERBORDER;
+        when(grid.getState(new Point(0,0))).thenReturn(AreaState.INNERBORDER);
         when(spyQix.getCoordinate(anyInt())).thenReturn((float) 0);
         spyQix.move();
         verify(spyQix, times(4)).setDirection(anyFloat(), anyInt());

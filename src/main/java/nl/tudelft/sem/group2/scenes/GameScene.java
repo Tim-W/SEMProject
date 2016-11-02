@@ -237,7 +237,8 @@ public class GameScene extends Scene {
                 filter(unit -> unit instanceof Cursor).map(unit -> (Cursor) unit).collect(Collectors.toList()));
         for (Cursor cursor : cursorList) {
             if (cursor.getFuseHandler().getFuse() != null) {
-                fuse = new Point(cursor.getFuseHandler().getFuse().getIntX(), cursor.getFuseHandler().getFuse().getIntY());
+                fuse = new Point(cursor.getFuseHandler().getFuse().getIntY(),
+                        cursor.getFuseHandler().getFuse().getIntX());
                 foundFuse = true;
             }
             for (Point p : cursor.getStix().getStixCoordinates()) {

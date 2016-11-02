@@ -1,5 +1,7 @@
-package nl.tudelft.sem.group2;
+package nl.tudelft.sem.group2.board;
 
+import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.AreaTracker;
@@ -71,7 +73,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), true, stix, scoreCounter);
+        areaTracker.calculateNewArea(new Coordinate(1, 2), true, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(true);
 
@@ -92,7 +94,7 @@ public class AreaTrackerTest {
     public void testCalculateNewSlowArea() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(1, 2), false, stix, scoreCounter);
+        areaTracker.calculateNewArea(new Coordinate(1, 2), false, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(false);
 
@@ -113,7 +115,7 @@ public class AreaTrackerTest {
     public void testCalculateNewFastAreaWithQixOnOtherSide() throws Exception {
         AreaTracker areaTracker = instantiateAreaTracker();
 
-        areaTracker.calculateNewArea(new Point(3, 2), true, stix, scoreCounter);
+        areaTracker.calculateNewArea(new Coordinate(3, 2), true, stix, scoreCounter);
 
         AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
 

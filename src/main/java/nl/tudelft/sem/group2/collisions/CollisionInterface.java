@@ -2,8 +2,6 @@ package nl.tudelft.sem.group2.collisions;
 
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Rectangle;
-
 /**
  * Created by Dennis on 11-10-16
  * Interface for collisions, using the intersect method.

@@ -2,10 +2,6 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.board.AreaState;
-import nl.tudelft.sem.group2.board.AreaTracker;
-import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -23,9 +19,8 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
      *
      * @param x           x coord
      * @param y           y coord
-     * @param width       width, used for collision
-     * @param height      height, used for collision
-     * @param areaTracker used for calculating areas
+     * @param width       width, used for the sprite
+     * @param height      height, used for the sprite
      */
     public LineTraveller(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -35,21 +30,21 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
      * @return true if this tile at (x,y) has an UNCOVERED AreaState
      */
     public boolean uncoveredOn() {
-        return grid.isUncovered(this);
+        return getGrid().isUncovered(this);
     }
 
     /**
      * @return true if this tile at (x,y) has an INNERBORDER AreaState
      */
     protected boolean innerBorderOn() {
-        return grid.isInnerborder(this);
+        return getGrid().isInnerborder(this);
     }
 
     /**
      * @return true if this tile at (x,y) has an OUTERBORDER AreaState
      */
     protected boolean outerBorderOn() {
-        return grid.isOuterborder(this);
+        return getGrid().isOuterborder(this);
     }
 
     @Override

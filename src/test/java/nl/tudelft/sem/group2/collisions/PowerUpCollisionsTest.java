@@ -1,12 +1,16 @@
-package nl.tudelft.sem.group2.units;
+package nl.tudelft.sem.group2.collisions;
 
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
+import nl.tudelft.sem.group2.units.Cursor;
+import nl.tudelft.sem.group2.units.Sparx;
+import nl.tudelft.sem.group2.units.SparxDirection;
+import nl.tudelft.sem.group2.units.Unit;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -71,7 +75,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testEat() {
         when(cursor.intersect(any())).thenReturn(true);
-        PowerEat powerup = new PowerEat(cursor.getX(), cursor.getY(), 1, 1, areaTracker);
+        PowerEat powerup = new PowerEat(cursor.getX(), cursor.getY(), 1, 1);
         set.add(powerup);
         PowerupEvent event = new PowerupEvent(cursor, EAT);
         Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set, cursors).getClass());
@@ -83,7 +87,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testSpeed() {
         when(cursor.intersect(any())).thenReturn(true);
-        PowerSpeed powerup = new PowerSpeed(cursor.getX(), cursor.getY(), 1, 1, areaTracker);
+        PowerSpeed powerup = new PowerSpeed(cursor.getX(), cursor.getY(), 1, 1);
         set.add(powerup);
         PowerupEvent event = new PowerupEvent(cursor, SPEED);
         Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set, cursors).getClass());
@@ -95,7 +99,7 @@ public class PowerUpCollisionsTest {
     @Test
     public void testLife() {
         when(cursor.intersect(any())).thenReturn(true);
-        PowerLife powerup = new PowerLife(cursor.getX(), cursor.getY(), 1, 1, areaTracker);
+        PowerLife powerup = new PowerLife(cursor.getX(), cursor.getY(), 1, 1);
         set.add(powerup);
         PowerupEvent event = new PowerupEvent(cursor, LIFE);
         Assert.assertEquals(event.getClass(), handler.powerUpCollisions(set, cursors).getClass());
@@ -106,7 +110,7 @@ public class PowerUpCollisionsTest {
      */
     @Test
     public void testEatNoIntersection() {
-        PowerEat powerup = new PowerEat(cursor.getX() + 20, cursor.getY() + 20, 1, 1, areaTracker);
+        PowerEat powerup = new PowerEat(cursor.getX() + 20, cursor.getY() + 20, 1, 1);
         set.add(powerup);
         Assert.assertEquals(null, handler.powerUpCollisions(set, cursors));
     }

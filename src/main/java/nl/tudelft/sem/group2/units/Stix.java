@@ -95,8 +95,8 @@ public class Stix implements CollisionInterface {
 
     /**
      *
-     * @param point
-     * @return
+     * @param point The point that gets checked
+     * @return true if this Stix contains the point
      */
     public boolean contains(Point point) {
         return stixCoordinates.contains(point);
@@ -104,7 +104,7 @@ public class Stix implements CollisionInterface {
 
     /**
      *
-     * @return
+     * @return true if this Stix doens't contain any points
      */
     public boolean isEmpty() {
         return stixCoordinates == null || stixCoordinates.isEmpty();

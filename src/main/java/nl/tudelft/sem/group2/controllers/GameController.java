@@ -380,11 +380,11 @@ public final class GameController {
                 Powerup powerup = null;
                 Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
                 powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
                 powerupMap.put(PowerUpType.LIFE, new PowerLife(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
                 powerupMap.put(PowerUpType.SPEED, new PowerSpeed(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
                 powerup = powerupMap.get(PowerUpType.randomType());
                 if (powerup == null) {
                     return;

@@ -15,7 +15,7 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 /**
  * Created by Erik on 25-10-2016.
  */
-public class BoardGrid {
+public final class BoardGrid {
 
     private static volatile BoardGrid instance;
 
@@ -95,7 +95,7 @@ public class BoardGrid {
     }
 
     /**
-     * Resets the instance of the BoardGrid to null
+     * Resets the instance of the BoardGrid to null.
      */
     public static void resetBoardGrid() {
         instance = null;
@@ -103,8 +103,8 @@ public class BoardGrid {
 
     /**
      *
-     * @param cor
-     * @param state
+     * @param cor the point/coordinate on the map for witch the state has to change
+     * @param state the new state for the given point
      */
     public void setState(Point cor, AreaState state) {
         if (inBound(cor)) {
@@ -114,8 +114,8 @@ public class BoardGrid {
 
     /**
      *
-     * @param cor
-     * @return
+     * @param cor the point/coordinate on the map for witch the state is needed
+     * @return The state of the point, if the point is found on the map. null otherwise
      */
     public AreaState getState(Point cor) {
         if (inBound(cor)) {
@@ -126,8 +126,8 @@ public class BoardGrid {
 
     /**
      *
-     * @param cor
-     * @return
+     * @param cor the point/coordinate on the map to be checked
+     * @return true if the point/coordinate is on the map
      */
     private boolean inBound(Point cor) {
         if (!(cor instanceof Coordinate)) {
@@ -138,7 +138,7 @@ public class BoardGrid {
 
     /**
      *
-     * @param cor
+     * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an OUTERBORDER AreaState
      */
     public boolean isOuterborder(Point cor) {
@@ -147,7 +147,7 @@ public class BoardGrid {
 
     /**
      *
-     * @param cor
+     * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an UNCOVERED AreaState
      */
     public boolean isUncovered(Point cor) {
@@ -157,7 +157,7 @@ public class BoardGrid {
 
     /**
      *
-     * @param cor
+     * @param cor the point/coordinate on the map to be checked
      * @return true if the tile at (x,y) has an INNERBORDER AreaState
      */
     public boolean isInnerborder(Point cor) {

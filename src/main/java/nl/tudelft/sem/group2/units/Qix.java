@@ -3,11 +3,8 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
-import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
 
@@ -155,9 +152,9 @@ public class Qix extends Unit implements CollisionInterface, Observer {
     private void checkLineCollision() {
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         //loop through the grid
-        for (int i = 0; i < grid.getWidth(); i++) {
-            for (int j = 0; j < grid.getWidth(); j++) {
-                if (grid.isInnerborder(i, j) || grid.isOuterborder(i, j)) {
+        for (int i = 0; i < getGrid().getWidth(); i++) {
+            for (int j = 0; j < getGrid().getWidth(); j++) {
+                if (getGrid().isInnerborder(i, j) || getGrid().isOuterborder(i, j)) {
                     float dx = getCoordinate(0) - i;
                     float dy = getCoordinate(1) - j;
                     float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);

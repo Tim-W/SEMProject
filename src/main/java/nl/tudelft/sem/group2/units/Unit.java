@@ -17,22 +17,27 @@ import java.util.logging.Level;
 public abstract class Unit extends Coordinate implements Draw, Movable, CollisionInterface {
 
     private static final Logger LOGGER = Logger.getLogger();
+
+
     /**
+     *
      * The grid instance that holds the states of the coordinates of the board.
+     * @return the grid instance
      */
-    protected BoardGrid grid;
+    protected BoardGrid getGrid() {
+        return BoardGrid.getInstance();
+    }
 
     /**
      * Create a Unit at (x,y) position.
      *
-     * @param x
-     * @param y
-     * @param width
-     * @param height
+     * @param x           x coord
+     * @param y           y coord
+     * @param width       width, used for the sprite
+     * @param height      height, used for the sprite
      */
     public Unit(int x, int y, int width, int height) {
         super(x, y, width, height);
-        this.grid = BoardGrid.getInstance();
         LOGGER.log(Level.INFO, this.toString() + " created at (" + x + "," + y + ")", this.getClass());
     }
 
@@ -66,12 +71,17 @@ public abstract class Unit extends Coordinate implements Draw, Movable, Collisio
         return (this == obj);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     /**
      *
-     * @return
+     * @return the rectangle representation of this Unit
      */
     public Rectangle toRectangle() {
-        return new Rectangle(this.x, this.y, 2, 2 );
+        return new Rectangle(this.x, this.y, 2, 2);
     }
 
 }
