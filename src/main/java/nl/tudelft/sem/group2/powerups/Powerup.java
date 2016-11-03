@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.powerups;
 
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.LineTraveller;
 
@@ -19,10 +18,9 @@ public class Powerup extends LineTraveller {
      * @param y           y coord
      * @param width       width, used for collision
      * @param height      height, used for collision
-     * @param areaTracker the AreaTracker
      */
-    public Powerup(int x, int y, int width, int height, AreaTracker areaTracker) {
-        super(x, y, width, height, areaTracker);
+    public Powerup(int x, int y, int width, int height) {
+        super(x, y, width, height);
         this.duration = Globals.POWERUP_LIFETIME;
     }
 

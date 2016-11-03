@@ -5,9 +5,10 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.board.AreaTracker;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.level.LevelHandler;
@@ -18,6 +19,7 @@ import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import nl.tudelft.sem.group2.scenes.GameScene;
+import nl.tudelft.sem.group2.scenes.ScoreScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
@@ -53,7 +55,6 @@ public final class GameController {
     // Units
     private ArrayList<Cursor> cursors;
     private Qix qix;
-    private AreaTracker areaTracker;
     private Set<Unit> units;
 
     private long previousTime;
@@ -67,9 +68,9 @@ public final class GameController {
      */
     private GameController() {
         // Initialize models for scoretracking.
-        areaTracker = new AreaTracker();
         levelHandler = new LevelHandler();
         collisionHandler = new CollisionHandler();
+
         //Animation timer initialization
         previousTime = System.nanoTime();
         createAnimationTimer();
@@ -104,7 +105,7 @@ public final class GameController {
     public void initializeSinglePlayer() {
         twoPlayers = false;
         levelHandler.nextLevel(twoPlayers);
-        gameScene = new GameScene(new Group(), Color.BLACK);
+        gameScene = new GameScene(new Group(), Color.BLACK, createScoreScene());
         makeUnits();
     }
 
@@ -114,7 +115,7 @@ public final class GameController {
     public void initializeMultiPlayer() {
         twoPlayers = true;
         levelHandler.nextLevel(twoPlayers);
-        gameScene = new GameScene(new Group(), Color.BLACK);
+        gameScene = new GameScene(new Group(), Color.BLACK, createScoreScene());
         makeUnits();
     }
 
@@ -127,7 +128,7 @@ public final class GameController {
         //first
         Stix stix = new Stix();
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, stix, Globals.LIVES, 0);
+                Globals.BOARD_MARGIN * 2, stix, Globals.LIVES, 0);
         KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
         cursor1.addKeys(asList(keys));
         cursor1.setFastMoveKey(KeyCode.O);
@@ -139,7 +140,7 @@ public final class GameController {
             //second
             Stix stix2 = new Stix();
             Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, areaTracker, stix2, Globals.LIVES, 1);
+                    Globals.BOARD_MARGIN * 2, stix2, Globals.LIVES, 1);
             keys = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D};
             cursor2.addKeys(asList(keys));
             cursor2.setFastMoveKey(KeyCode.Z);
@@ -149,12 +150,12 @@ public final class GameController {
             setScoreCounterInCursor(cursor2);
         }
         Sparx sparxLeft = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.LEFT);
+                Globals.BOARD_MARGIN * 2, SparxDirection.LEFT);
         Sparx sparxRight = new Sparx(Globals.CURSOR_START_X, 0, Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.RIGHT);
+                Globals.BOARD_MARGIN * 2, SparxDirection.RIGHT);
         // Initialize and add units to units set in Gamescene
-        qix = new Qix(areaTracker, levelHandler.getLevel().getQixSize());
-        areaTracker.addObserver(qix);
+        qix = new Qix(levelHandler.getLevel().getQixSize());
+        AreaTracker.getInstance().addObserver(qix);
         addUnit(qix);
         addUnit(sparxRight);
         addUnit(sparxLeft);
@@ -168,11 +169,12 @@ public final class GameController {
 
     private void resetLevel() {
         units.clear();
-        areaTracker = new AreaTracker();
+        AreaTracker.reset();
         collisionHandler = new CollisionHandler();
         makeUnits();
         gameScene.getScoreScene().reset();
     }
+
     /**
      * Adds a cursor to the cursors array which can at most contain two cursors.
      *
@@ -183,6 +185,7 @@ public final class GameController {
             cursors.add(cursor);
         }
     }
+
     /*****
      * Units.
      *****/
@@ -197,13 +200,14 @@ public final class GameController {
             units = new HashSet<>();
         }
         if (unit instanceof Fuse) {
-            for (Unit unit1 : units) {
-                if (unit1 instanceof Fuse) {
-                    return;
-                }
-            }
+            return;
         }
         units.add(unit);
+    }
+
+    private ScoreScene createScoreScene() {
+        Group group = new Group();
+        return new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
     }
 
     /**
@@ -271,7 +275,7 @@ public final class GameController {
             levelHandler.nextLevel(twoPlayers);
             resetLevel();
         }
-        }
+    }
 
     /**
      * Setup an animation timer that runs at 300FPS.
@@ -283,13 +287,16 @@ public final class GameController {
                 if (now - previousTime > Globals.NANO_SECONDS_PER_SECOND / 3) {
                     previousTime = now;
 
+                    // draw
+                    gameScene.draw(units);
+
                     if (levelHandler.getLevel().isRunning()) {
-                        gameScene.move();
+                        gameScene.move(units);
                         for (Cursor cursor : cursors) {
                             if (cursor.getScoreCounter().hasWon()) {
                                 gameWon();
                             }
-                            if (collisionHandler.collisions(getUnits(), cursor.getStix())) {
+                            if (collisionHandler.collisions(getUnits(), cursor)) {
                                 cursor.cursorDied();
                                 SoundHandler.playSound("/sounds/qix-death.mp3", Globals.GAME_OVER_SOUND_VOLUME);
                                 if (cursor.getLives() == 0) {
@@ -301,8 +308,7 @@ public final class GameController {
                         handlePowerups();
                         spawnPowerup();
                     }
-                    // draw
-                    gameScene.draw();
+
                 }
             }
         };
@@ -318,10 +324,10 @@ public final class GameController {
 
         while (nSparx < 2) {
             for (Cursor cursor : cursors) {
-                int[] coordinates = areaTracker.findPowerupLocation(
-                        AreaTracker.oppositeQuadrant(cursor.getX(), cursor.getY()));
+                int[] coordinates = GameController.getInstance().getGrid()
+                        .findPowerupLocation(cursor.oppositeQuadrant());
                 Sparx sparx = new Sparx(coordinates[0], coordinates[1], Globals.BOARD_MARGIN * 2,
-                        Globals.BOARD_MARGIN * 2, areaTracker, SparxDirection.randomDirection());
+                        Globals.BOARD_MARGIN * 2, SparxDirection.randomDirection());
                 addUnit(sparx);
                 nSparx++;
             }
@@ -373,17 +379,17 @@ public final class GameController {
 
             for (Cursor cursor : cursors) {
 
-                int quadrant = AreaTracker.oppositeQuadrant(cursor.getX(), cursor.getY());
+                int quadrant = cursor.oppositeQuadrant();
 
-                int[] coordinates = areaTracker.findPowerupLocation(quadrant);
+                int[] coordinates = GameController.getInstance().getGrid().findPowerupLocation(quadrant);
                 Powerup powerup = null;
                 Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
                 powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
                 powerupMap.put(PowerUpType.LIFE, new PowerLife(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
                 powerupMap.put(PowerUpType.SPEED, new PowerSpeed(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2, areaTracker));
+                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
                 powerup = powerupMap.get(PowerUpType.randomType());
                 if (powerup == null) {
                     return;
@@ -480,15 +486,6 @@ public final class GameController {
 
     //Getters
 
-    /**
-     * AreaTracker.
-     *
-     * @return the area tracker
-     */
-    public AreaTracker getAreaTracker() {
-        return areaTracker;
-    }
-
     public GameScene getGameScene() {
         return gameScene;
     }
@@ -519,6 +516,15 @@ public final class GameController {
     }
 
     /**
+     * only used for testing.
+     *
+     * @param levelHandler LevelHandler
+     */
+    public void setLevelHandler(LevelHandler levelHandler) {
+        this.levelHandler = levelHandler;
+    }
+
+    /**
      * removes a unit of the list of units.
      *
      * @param unit the unit to be removed
@@ -526,5 +532,15 @@ public final class GameController {
     public void removeUnit(Unit unit) {
         units.remove(unit);
         checkSparx();
+    }
+
+    /**
+     * @return the boardgrid
+     */
+    public BoardGrid getGrid() {
+        if (levelHandler.getLevel() == null) {
+            return null;
+        }
+        return levelHandler.getLevel().getBoardGrid();
     }
 }
