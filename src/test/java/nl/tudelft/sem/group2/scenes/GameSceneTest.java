@@ -5,11 +5,11 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.level.Level;
 import nl.tudelft.sem.group2.level.LevelHandler;
+import nl.tudelft.sem.group2.powerups.CursorPowerupHandler;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
-import nl.tudelft.sem.group2.powerups.PowerupHandler;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.FuseHandler;
 import nl.tudelft.sem.group2.units.Stix;
@@ -56,9 +56,9 @@ public class GameSceneTest {
         when(cursor.getStix()).thenReturn(stix);
         fuseHandler = mock(FuseHandler.class);
         when(cursor.getFuseHandler()).thenReturn(fuseHandler);
-        PowerupHandler powerupHandler = mock(PowerupHandler.class);
-        when(powerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
-        when(cursor.getPowerupHandler()).thenReturn(powerupHandler);
+        CursorPowerupHandler cursorPowerupHandler = mock(CursorPowerupHandler.class);
+        when(cursorPowerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
+        when(cursor.getCursorPowerupHandler()).thenReturn(cursorPowerupHandler);
         units.add(cursor);
         areaStates = new AreaState[1][1];
     }

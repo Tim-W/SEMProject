@@ -20,7 +20,7 @@ This class is just a list of constants, no need for testing.
 ###nl.tudelft.sem.group2.scenes 0%
 We haven't made any test classes for hits yet, since these are GUI classes.
 
-###nl.tudelft.sem.group2.controllers 0%
+###nl.tudelft.sem.group2.gameController 0%
 We actaully had a test suite for this class, but the split to MVC made it unusable 
 and we did not have the time to rewrite it yet.
 

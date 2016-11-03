@@ -1,7 +1,7 @@
 package nl.tudelft.sem.group2.board;
 
 import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.level.Level;
 import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.units.Stix;

@@ -29,7 +29,7 @@ import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 public class Qix extends Unit implements CollisionInterface, Observer {
 
     private static final int POSITION_LENGTH = 4;
-    private static final double MINIMUM_COLOR_BRIGHTNESS = 0.3;
+    private static final double MINIMUM_COLOR_BDNESS = 0.3;
     private static final int PRECISION = 6;
     private static final int LINESCOUNT = 10;
     private static final int RANDOMNESSPOSITIONLENGTH = 4;
@@ -88,7 +88,7 @@ public class Qix extends Unit implements CollisionInterface, Observer {
         direction[1] *= scale;
         double[] colors = new double[3];
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
+            colors[i] = Math.random() * (1 - MINIMUM_COLOR_BDNESS) + MINIMUM_COLOR_BDNESS;
         }
         getColorArray().addFirst(colors);
         getOldDirections().addFirst(new float[] {direction[0], direction[1]});

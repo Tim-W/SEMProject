@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 
 import java.awt.Desktop;

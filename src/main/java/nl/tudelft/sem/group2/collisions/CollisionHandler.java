@@ -1,6 +1,6 @@
 package nl.tudelft.sem.group2.collisions;
 
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
@@ -58,7 +58,7 @@ public class CollisionHandler {
                 }
             } else {
                 if (cursor.intersect(collidee)) {
-                    if (cursor.getPowerupHandler().getCurrentPowerup() == EAT && collidee instanceof Sparx) {
+                    if (cursor.getCursorPowerupHandler().getCurrentPowerup() == EAT && collidee instanceof Sparx) {
                         unitsList.remove(collidee);
                         GameController.getInstance().removeUnit(collidee);
                         return false;

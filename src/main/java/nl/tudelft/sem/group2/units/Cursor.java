@@ -10,7 +10,7 @@ import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.cursorMovement.CursorKeypressHandler;
 import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.powerups.PowerupHandler;
+import nl.tudelft.sem.group2.powerups.CursorPowerupHandler;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
@@ -41,7 +41,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private boolean isDrawing = false;
     private int speed = Globals.CURSOR_FAST;
     private int id;
-    private PowerupHandler powerupHandler;
+    private CursorPowerupHandler cursorPowerupHandler;
     private FuseHandler fuseHandler;
     private CursorKeypressHandler cursorKeypressHandler;
 
@@ -69,7 +69,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         this.lives = lives;
-        powerupHandler = new PowerupHandler();
+        cursorPowerupHandler = new CursorPowerupHandler();
         fuseHandler = new FuseHandler(this);
         cursorKeypressHandler = new CursorKeypressHandler(this);
     } /*
@@ -85,7 +85,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public Cursor(Point position, int width, int height, Stix stix) {
         super(position.x, position.y, width, height);
         this.stix = stix;
-        powerupHandler = new PowerupHandler();
+        cursorPowerupHandler = new CursorPowerupHandler();
         fuseHandler = new FuseHandler(this);
     }
 */
@@ -142,7 +142,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 getWidth(),
                 getHeight()
         );
-        powerupHandler.applyEffect(gc);
+        cursorPowerupHandler.applyEffect(gc);
     }
 
     private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
@@ -387,8 +387,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
 
-    public PowerupHandler getPowerupHandler() {
-        return powerupHandler;
+    public CursorPowerupHandler getCursorPowerupHandler() {
+        return cursorPowerupHandler;
     }
 
     public FuseHandler getFuseHandler() {
