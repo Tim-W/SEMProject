@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;

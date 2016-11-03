@@ -59,7 +59,7 @@ public class CursorTest {
     private void createCursor() {
         cursor = new Cursor(new Point(0, 0), 2,
                 2, stix, Globals.LIVES, 0);
-        KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
+        KeyCode[] keys = new KeyCode[]{KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
         cursor.addKeys(asList(keys));
         cursor.setFastMoveKey(KeyCode.O);
         cursor.setSlowMoveKey(KeyCode.I);
@@ -435,11 +435,9 @@ public class CursorTest {
         when(fuseHandler.getFuse()).thenReturn(fuse);
         cursor.setFuseHandler(fuseHandler);
 
-        Unit unit = mock(Unit.class);
-        when(unit.getX()).thenReturn(10);
-        when(unit.getY()).thenReturn(10);
+        Sparx sparx = new Sparx(10, 10, 2, 2, SparxDirection.LEFT);
 
-        Assert.assertTrue(cursor.intersect(unit));
+        Assert.assertTrue(cursor.intersect(sparx));
     }
 
     @Test
@@ -454,11 +452,9 @@ public class CursorTest {
         when(fuseHandler.getFuse()).thenReturn(fuse);
         cursor.setFuseHandler(fuseHandler);
 
-        Unit unit = mock(Unit.class);
-        when(unit.getX()).thenReturn(1);
-        when(unit.getY()).thenReturn(1);
+        Sparx sparx = new Sparx(0, 0, 2, 2, SparxDirection.LEFT);
 
-        Assert.assertTrue(cursor.intersect(unit));
+        Assert.assertTrue(cursor.intersect(sparx));
     }
 
     @Test
@@ -539,6 +535,4 @@ public class CursorTest {
 
         Assert.assertEquals(0, cursor.getLives());
     }
-
-
 }
