@@ -1,11 +1,10 @@
 package nl.tudelft.sem.group2;
 
+import java.awt.Point;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.awt.Point;
 
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
@@ -252,7 +251,7 @@ public class AreaTrackerTest {
         AreaTracker areaTracker = new AreaTracker();
         areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2 - 1][Globals.BOARD_WIDTH / 2 - 1] = AreaState.FAST;
         areaTracker.findPowerupLocation(2);
-        assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[Globals.BOARD_WIDTH / 2][Globals.BOARD_WIDTH / 2]);
+        assertEquals(AreaState.INNERBORDER, areaTracker.getBoardGrid()[Globals.GRID_HEIGHT][Globals.GRID_WIDTH]);
     }
 
     /**

@@ -54,6 +54,7 @@
                         <id>validate</id>
                         <phase>validate</phase>
                         <configuration>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
                             <configLocation>checkstyle.xml</configLocation>
                             <encoding>UTF-8</encoding>
                             <consoleOutput>true</consoleOutput>
@@ -127,6 +128,7 @@
                     </reportSet>
                 </reportSets>
                 <configuration>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <configLocation>checkstyle.xml</configLocation>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>

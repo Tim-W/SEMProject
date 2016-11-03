@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
+import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.AreaState;
@@ -8,8 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.LinkedList;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyFloat;
@@ -32,7 +31,7 @@ public class QixTest {
     private AreaState[][] boardGrid = new AreaState[1][1];
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
@@ -45,13 +44,6 @@ public class QixTest {
     }
 
     @Test
-    public void draw() throws Exception {
-        Canvas spyCanvas = spy(canvas);
-        qix.draw(spyCanvas);
-        verify(spyCanvas).getGraphicsContext2D();
-    }
-
-    @Test
     public void draw2() throws Exception {
         for (int i = 0; i < 2; i++) {
             double[] colors = new double[3];
@@ -61,18 +53,18 @@ public class QixTest {
             spyQix.getColorArray().addFirst(colors);
         }
         LinkedList<float[]> linkedList2 = new LinkedList<>();
-        linkedList2.add(new float[]{1, 1});
-        linkedList2.add(new float[]{1, 1});
+        linkedList2.add(new float[] {1, 1});
+        linkedList2.add(new float[] {1, 1});
         spyQix.setOldCoordinates(linkedList2);
         spyQix.setOldDirections(linkedList2);
-        spyQix.draw(canvas);
+        spyQix.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spyQix, times(4 * spyQix.getOldDirections().size())).getOldCoordinate(anyInt());
         verify(spyQix, times(4 * spyQix.getOldDirections().size())).getOldDirection(anyInt());
     }
 
     @Test
     public void changeDirection() throws Exception {
-        spyQix.draw(canvas);
+        spyQix.draw(new Canvas(1, 1).getGraphicsContext2D());
         spyQix.setAnimationLoops(0);
         spyQix.move();
         verify(spyQix, atLeast(2)).setDirection(any(float.class), anyInt());
@@ -145,7 +137,7 @@ public class QixTest {
     @Test
     public void toPolygon2() throws Exception {
         LinkedList<float[]> linkedlist = new LinkedList<float[]>();
-        linkedlist.add(new float[]{1, 1});
+        linkedlist.add(new float[] {1, 1});
         spyQix.setOldDirections(linkedlist);
         spyQix.setOldCoordinates(linkedlist);
         spyQix.toPolygon();

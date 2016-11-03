@@ -26,7 +26,7 @@ public class LineTravellerTest {
     private AreaTracker areaTracker;
 
     @BeforeClass
-    public static void BeforeClass() {
+    public static void beforeClass() {
         new JFXPanel();
     }
 
@@ -68,7 +68,7 @@ public class LineTravellerTest {
     @Test
     public void incrementSpriteIndex() throws Exception {
         Fuse spyFuse = spy(new Fuse(2, 2, 2, 2, areaTracker, stix));
-        spyFuse.draw(new Canvas(1, 1));
+        spyFuse.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spyFuse).setSpriteIndex(anyInt());
     }
 

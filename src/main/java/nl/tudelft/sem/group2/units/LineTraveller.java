@@ -1,6 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
@@ -57,8 +57,8 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
     }
 
     @Override
-    public void draw(Canvas canvas) {
-        canvas.getGraphicsContext2D().drawImage(
+    public void draw(GraphicsContext gc) {
+        gc.drawImage(
                 sprite[getSpriteIndex()],
                 gridToCanvas(getX()) - getWidth() / 2,
                 gridToCanvas(getY()) - getHeight() / 2,
