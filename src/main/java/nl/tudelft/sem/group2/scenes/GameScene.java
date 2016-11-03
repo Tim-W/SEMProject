@@ -10,14 +10,16 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.Random;
 import java.util.Set;
+
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 
 /**
@@ -151,15 +153,14 @@ public class GameScene extends Scene {
      * Draw all the units on the screen.
      *
      * @param units     units of the game
-     * @param boardGrid boardGrid of the game
      */
-    public void draw(Set<Unit> units, AreaState[][] boardGrid) {
+    public void draw(Set<Unit> units) {
         // gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
         gc.drawImage(image, Globals.BOARD_MARGIN, Globals.BOARD_MARGIN);
         gc.setFill(Color.WHITE);
-        drawUncovered(boardGrid);
-        drawBorders(boardGrid);
+        drawUncovered();
+        drawBorders();
         if (units != null) {
             for (Unit unit : units) {
                 unit.draw(gc);
@@ -178,23 +179,23 @@ public class GameScene extends Scene {
         }
     }
 
-    private void drawUncovered(AreaState[][] boardGrid) {
+    private void drawUncovered() {
         gc.setFill(Color.BLACK);
-        for (int i = 0; i < boardGrid.length; i++) {
-            for (int j = 0; j < boardGrid[i].length; j++) {
-                if (boardGrid[i][j] == AreaState.UNCOVERED) {
+        for (int i = 0; i < GRID_WIDTH + 1; i++) {
+            for (int j = 0; j < GRID_HEIGHT + 1; j++) {
+                if (GameController.getInstance().getGrid().isUncovered(i, j)) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }
         }
     }
 
-    private void drawBorders(AreaState[][] boardGrid) {
+    private void drawBorders() {
         gc.setFill(Color.WHITE);
-        for (int i = 0; i < boardGrid.length; i++) {
-            for (int j = 0; j < boardGrid[i].length; j++) {
-                if (boardGrid[i][j] == AreaState.OUTERBORDER
-                        || boardGrid[i][j] == AreaState.INNERBORDER) {
+        BoardGrid grid = GameController.getInstance().getGrid();
+        for (int i = 0; i < GRID_WIDTH + 1; i++) {
+            for (int j = 0; j < GRID_HEIGHT + 1; j++) {
+                if (grid.isOuterborder(i, j) || grid.isInnerborder(i, j)) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
             }

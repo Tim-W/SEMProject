@@ -90,7 +90,7 @@ public class ScoreScene extends SubScene implements Observer {
         playerBoxes.add(new VBox());
         playerBoxes.get(id).setAlignment(Pos.CENTER);
         if (id == 0) {
-            colors.add(Color.BLUE);
+            colors.add(Color.YELLOW);
         } else {
             colors.add(Color.RED);
         }

@@ -48,7 +48,7 @@ public class ScoreCounter extends Observable {
         this.recentScore = 0;
         this.targetPercentage = targetPercentage;
         this.cursorID = cursorID;
-        color = Color.BLUE;
+        color = Color.YELLOW;
         //if player 2
         if (cursorID == 1) {
             color = Color.RED;
@@ -72,6 +72,7 @@ public class ScoreCounter extends Observable {
         LOGGER.log(Level.INFO, "Percentage increased with "
                 + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "
                 + Math.round(totalPercentage * FAST_AREA_MULTIPLIER) / 100.0, this.getClass());
+
         if (fastArea) {
             recentScore = (int) (percentageIncrease * FAST_AREA_MULTIPLIER);
             totalScore += percentageIncrease * FAST_AREA_MULTIPLIER;

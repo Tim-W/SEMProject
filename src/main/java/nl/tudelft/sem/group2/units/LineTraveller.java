@@ -2,8 +2,6 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -21,39 +19,32 @@ public abstract class LineTraveller extends Unit implements CollisionInterface {
      *
      * @param x           x coord
      * @param y           y coord
-     * @param width       width, used for collision
-     * @param height      height, used for collision
-     * @param areaTracker used for calculating areas
+     * @param width       width, used for the sprite
+     * @param height      height, used for the sprite
      */
-    public LineTraveller(int x, int y, int width, int height, AreaTracker areaTracker) {
-        super(x, y, width, height, areaTracker);
+    public LineTraveller(int x, int y, int width, int height) {
+        super(x, y, width, height);
     }
 
     /**
-     * @param x x coord
-     * @param y y coord
-     * @return true if the tile at (x,y) has an UNCOVERED AreaState
+     * @return true if this tile at (x,y) has an UNCOVERED AreaState
      */
-    public boolean uncoveredOn(int x, int y) {
-        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.UNCOVERED);
+    public boolean uncoveredOn() {
+        return getGrid().isUncovered(this);
     }
 
     /**
-     * @param x x coord
-     * @param y y coord
-     * @return true if the tile at (x,y) has an INNERBORDER AreaState
+     * @return true if this tile at (x,y) has an INNERBORDER AreaState
      */
-    public boolean innerBorderOn(int x, int y) {
-        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.INNERBORDER);
+    protected boolean innerBorderOn() {
+        return getGrid().isInnerborder(this);
     }
 
     /**
-     * @param x x coord
-     * @param y y coord
-     * @return true if the tile at (x,y) has an OUTERBORDER AreaState
+     * @return true if this tile at (x,y) has an OUTERBORDER AreaState
      */
-    public boolean outerBorderOn(int x, int y) {
-        return getAreaTracker().getBoardGrid()[x][y].equals(AreaState.OUTERBORDER);
+    protected boolean outerBorderOn() {
+        return getGrid().isOuterborder(this);
     }
 
     @Override

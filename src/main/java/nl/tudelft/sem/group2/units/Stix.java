@@ -74,7 +74,7 @@ public class Stix implements CollisionInterface {
                 }
             }
         } else if (unit instanceof Cursor && !this.isStixEmpty()) {
-            Rectangle collideeR = new Rectangle(unit.getX(), unit.getY(), 2, 2);
+            Rectangle collideeR = unit.toRectangle();
             for (Point point : this.getStixCoordinates()) {
                 if (collideeR.intersects(point.getX(), point.getY(), 1, 1)) {
 
@@ -116,10 +116,27 @@ public class Stix implements CollisionInterface {
     /**
      * Method that adds a point to the current stix.
      *
-     * @param coordinates point that gets added to the stix
+     * @param coordinate point that gets added to the stix
      */
-    public void addToStix(Point coordinates) {
-        stixCoordinates.add(coordinates);
+    public void addToStix(Point coordinate) {
+        stixCoordinates.add(coordinate);
+    }
+
+    /**
+     *
+     * @param point The point that gets checked
+     * @return true if this Stix contains the point
+     */
+    public boolean contains(Point point) {
+        return stixCoordinates.contains(point);
+    }
+
+    /**
+     *
+     * @return true if this Stix doens't contain any points
+     */
+    public boolean isEmpty() {
+        return stixCoordinates == null || stixCoordinates.isEmpty();
     }
 
     /**

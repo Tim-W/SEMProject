@@ -2,8 +2,7 @@ package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
@@ -40,10 +39,12 @@ public class Qix extends Unit implements CollisionInterface, Observer {
     private static final double DIVIDESTARTLINELENGTH = 8;
     private static final double MULTIPLIER = 1.5;
     private static final Logger LOGGER = Logger.getLogger();
+
     private int startLineLength;
     private double lineLength;
     private int animationLoops = 0;
     private float[] direction = new float[2];
+    //TODO use the Coordinate class
     private LinkedList<float[]> oldDirections = new LinkedList<>();
     private LinkedList<float[]> oldCoordinates = new LinkedList<>();
     private LinkedList<double[]> colorArray = new LinkedList<>();
@@ -54,11 +55,10 @@ public class Qix extends Unit implements CollisionInterface, Observer {
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
      *
-     * @param areaTracker     used for calculating areas
      * @param startLineLength the start line length of the qix
      */
-    public Qix(AreaTracker areaTracker, int startLineLength) {
-        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
+    public Qix(int startLineLength) {
+        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
         this.startLineLength = startLineLength;
         lineLength = startLineLength;
         LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
@@ -148,13 +148,11 @@ public class Qix extends Unit implements CollisionInterface, Observer {
      * Functions reverts the direction of the qix if there is a innerborder or outerborder close to the qix.
      */
     private void checkLineCollision() {
-        int gridLength = getAreaTracker().getBoardGrid().length;
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         //loop through the grid
-        for (int i = 0; i < gridLength; i++) {
-            for (int j = 0; j < gridLength; j++) {
-                if (getAreaTracker().getBoardGrid()[i][j] == AreaState.INNERBORDER
-                        || getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER) {
+        for (int i = 0; i < getGrid().getWidth(); i++) {
+            for (int j = 0; j < getGrid().getWidth(); j++) {
+                if (getGrid().isInnerborder(i, j) || getGrid().isOuterborder(i, j)) {
                     float dx = getCoordinate(0) - i;
                     float dy = getCoordinate(1) - j;
                     float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);
@@ -218,9 +216,7 @@ public class Qix extends Unit implements CollisionInterface, Observer {
             Polygon colliderP = this.toPolygon();
 
             // subtract one from width&height to make collisions look more real
-            Rectangle collideeR = new Rectangle(collidee.getX(),
-                    collidee.getY(), collidee.getWidth() / 2 - 1,
-                    collidee.getHeight() / 2 - 1);
+            Rectangle collideeR = collidee.toRectangle();
             if (colliderP.intersects(collideeR)) {
                 LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
                         + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
