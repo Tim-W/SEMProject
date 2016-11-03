@@ -1,31 +1,26 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.embed.swing.JFXPanel;
-import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.level.Level;
+import nl.tudelft.sem.group2.level.LevelHandler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import java.awt.Point;
 
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
  * Tests the methods of the Sparx.
  */
-//TODO fix tests
-@Ignore
 public class SparxTest {
     private Sparx sparx;
     private BoardGrid grid;
-    private AreaState[][] boardGrid = new AreaState[GRID_WIDTH + 2][GRID_HEIGHT + 2];
 
     @BeforeClass
     public static void beforeClass() {
@@ -35,7 +30,12 @@ public class SparxTest {
     @Before
     public void setUp() throws Exception {
         grid = mock(BoardGrid.class);
-        when(grid.getState(new Point(anyInt(), anyInt()))).thenReturn(AreaState.UNCOVERED);
+        GameController.deleteGameController();
+        LevelHandler levelHandler = mock(LevelHandler.class);
+        GameController.getInstance().setLevelHandler(levelHandler);
+        when(levelHandler.getLevel()).thenReturn(mock(Level.class));
+        when(levelHandler.getLevel().getBoardGrid()).thenReturn(grid);
+        //when(grid.getState((Point) any())).thenReturn(AreaState.UNCOVERED);
     }
 
     public void createSparx(int x, int y, int width, int height, SparxDirection e) {
@@ -43,22 +43,14 @@ public class SparxTest {
     }
 
     public void moveOuter(int x, int y) {
-        when(grid.getState(new Point(sparx.getX() + x, sparx.getY() + y))).thenReturn(AreaState.OUTERBORDER);
-        int newx = sparx.getX() + x * 2;
-        int newy = sparx.getY() + y * 2;
-        if (newx >= 0 && newx <= GRID_WIDTH && newy >= 0 && newy <= GRID_HEIGHT) {
-            boardGrid[newx][newy] = AreaState.OUTERBORDER;
-        }
+        when(grid.isOuterborder(sparx.getX() + x, sparx.getY() + y)).thenReturn(true);
+        when(grid.isOuterborder(sparx.getX() + x * 2, sparx.getY() + y * 2)).thenReturn(true);
         sparx.move();
     }
 
     public void moveInner(int x, int y) {
-        when(grid.getState(new Point(sparx.getX() + x, sparx.getY() + y))).thenReturn(AreaState.INNERBORDER);
-        int newx = sparx.getX() + x * 2;
-        int newy = sparx.getY() + y * 2;
-        if (newx >= 0 && newx <= GRID_WIDTH && newy >= 0 && newy <= GRID_HEIGHT) {
-            boardGrid[newx][newy] = AreaState.INNERBORDER;
-        }
+        when(grid.isInnerborder(sparx.getX() + x, sparx.getY() + y)).thenReturn(true);
+        when(grid.isInnerborder(sparx.getX() + x * 2, sparx.getY() + y * 2)).thenReturn(true);
         sparx.move();
     }
 

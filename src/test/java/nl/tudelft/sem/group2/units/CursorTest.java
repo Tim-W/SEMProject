@@ -7,6 +7,8 @@ import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.level.Level;
+import nl.tudelft.sem.group2.level.LevelHandler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -26,7 +28,6 @@ import static org.mockito.Mockito.when;
 /**
  * Test for cursors.
  */
-//TODO fix tests
 @Ignore
 public class CursorTest {
 
@@ -41,16 +42,20 @@ public class CursorTest {
 
     @Before
     public void setUp() throws Exception {
-        when(GameController.getInstance().getGrid()).thenReturn(grid);
+        grid = mock(BoardGrid.class);
+        LevelHandler levelHandler = mock(LevelHandler.class);
+        GameController.getInstance().setLevelHandler(levelHandler);
+        when(levelHandler.getLevel()).thenReturn(mock(Level.class));
+        when(levelHandler.getLevel().getBoardGrid()).thenReturn(grid);
     }
 
     public void createCursor() {
-        Cursor cursor1 = new Cursor(new Point(0, 0), 2,
+        cursor = new Cursor(new Point(0, 0), 2,
                 2, stix, Globals.LIVES, 0);
         KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
-        cursor1.addKeys(asList(keys));
-        cursor1.setFastMoveKey(KeyCode.O);
-        cursor1.setSlowMoveKey(KeyCode.I);
+        cursor.addKeys(asList(keys));
+        cursor.setFastMoveKey(KeyCode.O);
+        cursor.setSlowMoveKey(KeyCode.I);
         cursor.setSpeed(1);
         x = cursor.getX();
         y = cursor.getY();

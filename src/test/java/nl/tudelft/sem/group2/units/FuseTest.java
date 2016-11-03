@@ -1,15 +1,13 @@
 package nl.tudelft.sem.group2.units;
 
-import java.awt.Point;
-import java.util.LinkedList;
 import javafx.embed.swing.JFXPanel;
-import nl.tudelft.sem.group2.board.AreaTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
+
+import java.awt.Point;
+import java.util.LinkedList;
 
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
@@ -19,13 +17,11 @@ import static org.mockito.Mockito.when;
 /**
  * Created by gijs on 23-9-2016.
  */
-//TODO fix tests
-@Ignore
+
 public class FuseTest {
     private Fuse fuse;
     private LinkedList<Point> linkedList;
     private Stix stix = mock(Stix.class);
-    private AreaTracker areaTracker = Mockito.mock(AreaTracker.class);
 
     @BeforeClass
     public static void beforeClass() {

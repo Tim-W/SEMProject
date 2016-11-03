@@ -20,6 +20,9 @@ import nl.tudelft.sem.group2.units.Unit;
 import java.util.Random;
 import java.util.Set;
 
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
+
 
 /**
  * GameScene contains all the information about the current game.
@@ -198,8 +201,8 @@ public class GameScene extends Scene {
 
     private void drawUncovered() {
         gc.setFill(Color.BLACK);
-        for (int i = 0; i < GameController.getInstance().getGrid().getWidth(); i++) {
-            for (int j = 0; j < GameController.getInstance().getGrid().getHeight(); j++) {
+        for (int i = 0; i < GRID_WIDTH + 1; i++) {
+            for (int j = 0; j < GRID_HEIGHT + 1; j++) {
                 if (GameController.getInstance().getGrid().isUncovered(i, j)) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }
@@ -210,8 +213,8 @@ public class GameScene extends Scene {
     private void drawBorders() {
         gc.setFill(Color.WHITE);
         BoardGrid grid = GameController.getInstance().getGrid();
-        for (int i = 0; i < grid.getWidth(); i++) {
-            for (int j = 0; j < grid.getHeight(); j++) {
+        for (int i = 0; i < GRID_WIDTH + 1; i++) {
+            for (int j = 0; j < GRID_HEIGHT + 1; j++) {
                 if (grid.isOuterborder(i, j) || grid.isInnerborder(i, j)) {
                     gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
                 }

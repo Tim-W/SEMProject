@@ -11,8 +11,6 @@ import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
-import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
  * Created by Erik on 25-10-2016.
@@ -89,9 +87,6 @@ public class BoardGrid {
 
 
     /**
-     * @param cor   the point/coordinate on the map for witch the state has to change
-    /**
-     *
      * @param cor the point/coordinate on the map for witch the state has to change
      * @param state the new state for the given point
      */
@@ -255,10 +250,10 @@ public class BoardGrid {
      */
     public int[] findPowerupLocation(int quadrant) {
         int[] res = new int[2];
-        int x = GRID_WIDTH / 2;
-        int y = GRID_HEIGHT / 2;
+        int x = BOARD_WIDTH / 4;
+        int y = BOARD_HEIGHT / 4;
 
-        if (cornerIsCovered(quadrant)) {
+        if (this.cornerIsCovered(quadrant)) {
 
             while (areaStates[x][y] != AreaState.OUTERBORDER) {
 
@@ -266,11 +261,11 @@ public class BoardGrid {
                 x = newLocation[0];
                 y = newLocation[1];
 
-                if (x > GRID_WIDTH || x < 0) {
-                    x = GRID_WIDTH / 2;
+                if (x > BOARD_WIDTH / 2 || x < 0) {
+                    x = BOARD_WIDTH / 4;
                 }
-                if (y > GRID_HEIGHT || y < 0) {
-                    y = GRID_HEIGHT / 2;
+                if (y > BOARD_HEIGHT / 2 || y < 0) {
+                    y = BOARD_HEIGHT / 4;
                 }
             }
             res[0] = x;
@@ -324,9 +319,9 @@ public class BoardGrid {
         int y;
         Map<Integer, List<Integer>> quadrantCornerMap = new HashMap<>();
         quadrantCornerMap.put(0, Arrays.asList(0, 0));
-        quadrantCornerMap.put(1, Arrays.asList(GRID_WIDTH, 0));
-        quadrantCornerMap.put(2, Arrays.asList(GRID_WIDTH, GRID_HEIGHT));
-        quadrantCornerMap.put(3, Arrays.asList(0, GRID_HEIGHT));
+        quadrantCornerMap.put(1, Arrays.asList(BOARD_WIDTH / 2, 0));
+        quadrantCornerMap.put(2, Arrays.asList(BOARD_WIDTH / 2, BOARD_HEIGHT / 2));
+        quadrantCornerMap.put(3, Arrays.asList(0, BOARD_HEIGHT / 2));
         List<Integer> integers = quadrantCornerMap.get(quadrant);
         if (integers != null) {
             x = integers.get(0);
@@ -342,11 +337,10 @@ public class BoardGrid {
     }
 
     /**
-     * Returns a string which visualise the current board grid state.
+     * Shows a log which visualise the current board grid state.
      */
-    @Override
-    public String toString() {
-        String r = "";
+    //TODO rename to toString
+    public void printBoardGrid() {
         // A map representing the relations between AreaStates and their String visualizations.
         Map<AreaState, String> areaStateVisualisation = new HashMap<>();
         areaStateVisualisation.put(AreaState.OUTERBORDER, "[X]");
@@ -356,9 +350,9 @@ public class BoardGrid {
         areaStateVisualisation.put(AreaState.SLOW, "[S]");
         for (AreaState[] column : areaStates) {
             for (AreaState state : column) {
-                r += areaStateVisualisation.get(state);
+                System.out.print(areaStateVisualisation.get(state));
             }
+            System.out.println();
         }
-        return r;
     }
 }

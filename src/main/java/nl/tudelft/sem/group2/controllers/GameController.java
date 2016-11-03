@@ -74,7 +74,6 @@ public final class GameController {
         //Animation timer initialization
         previousTime = System.nanoTime();
         createAnimationTimer();
-
     }
 
     /**

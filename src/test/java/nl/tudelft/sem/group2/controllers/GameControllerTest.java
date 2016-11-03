@@ -7,6 +7,7 @@ import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Stix;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -29,10 +30,15 @@ public class GameControllerTest {
     private GameController gameController;
     private Cursor spyCursor;
 
+    @After
+    public void tearDown() throws Exception {
+        gameController.getAnimationTimer().stop();
+
+    }
+
     public void setUp() {
         GameController.deleteGameController();
         gameController = GameController.getInstance();
-        gameController.getAnimationTimer().stop();
         gameController.initializeSinglePlayer();
         spyCursor = spy(gameController.getCursors().get(0));
         gameController.getCursors().set(0, spyCursor);
