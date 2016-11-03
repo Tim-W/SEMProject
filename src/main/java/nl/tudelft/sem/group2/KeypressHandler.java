@@ -39,17 +39,18 @@ public final class KeypressHandler {
         Point dest = new Point(cursor.getX() + transX, cursor.getY() + transY);
         if (dest.getX() >= 0 && dest.getX() <= Globals.GRID_WIDTH
                 && dest.getY() >= 0 && dest.getY() <= Globals.GRID_HEIGHT) {
-            if (GameController.getInstance().getGrid().uncoveredOn((int) dest.getX(), (int) dest.getY()) && cursor.isDrawing()) {
+            if (GameController.getInstance().getGrid().isUncovered(dest.x, dest.y) && cursor
+                    .isDrawing()) {
                 LinkedList<Point> stix = cursor.getStix().getStixCoordinates();
                 if (!stix.contains(new Point(cursor.getX() + transX * 2, cursor.getY() + transY * 2))) {
-                    if (GameController.getInstance().getGrid().outerBorderOn(cursor.getX(), cursor.getY())) {
+                    if (GameController.getInstance().getGrid().isOuterborder(cursor.getX(), cursor.getY())) {
                         cursor.getStix().addToStix(new Point(cursor.getX(), cursor.getY()));
                     }
                     cursor.setX((int) dest.getX());
                     cursor.setY((int) dest.getY());
                     cursor.getStix().addToStix(new Point(cursor.getX(), cursor.getY()));
                 }
-            } else if (GameController.getInstance().getGrid().outerBorderOn((int) dest.getX(), (int) dest.getY())) {
+            } else if (GameController.getInstance().getGrid().isOuterborder(dest.x, dest.y)) {
                 cursor.setX((int) dest.getX());
                 cursor.setY((int) dest.getY());
                 cursor.logCurrentMove();

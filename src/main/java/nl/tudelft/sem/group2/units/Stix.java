@@ -132,7 +132,6 @@ public class Stix implements CollisionInterface {
     }
 
     /**
-     *
      * @return true if this Stix doens't contain any points
      */
     public boolean isEmpty() {

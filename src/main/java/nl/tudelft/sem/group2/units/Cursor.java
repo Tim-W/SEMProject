@@ -88,11 +88,10 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param position    spawn position fo cursor.
      * @param width       width of cursor.
      * @param height      height of cursor.
-     * @param areaTracker areaTracker to use.
      * @param stix        stix of the cursor.
      */
-    public Cursor(Point position, int width, int height, AreaTracker areaTracker, Stix stix) {
-        super(position.x, position.y, width, height, areaTracker);
+    public Cursor(Point position, int width, int height, Stix stix) {
+        super(position.x, position.y, width, height);
         this.stix = stix;
         powerupHandler = new PowerupHandler();
         fuseHandler = new FuseHandler(this);

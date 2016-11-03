@@ -74,6 +74,7 @@ public class GameControllerTest {
                 false, false));
         verify(spyCursor, times(1)).setSpeed(1);
     }
+
     //TODO fix test
     @Ignore
     public void keyPressedINotFast() throws Exception {

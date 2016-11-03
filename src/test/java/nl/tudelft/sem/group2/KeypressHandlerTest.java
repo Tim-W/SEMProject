@@ -1,6 +1,10 @@
 package nl.tudelft.sem.group2;
 
+import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.level.Level;
+import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Stix;
 import org.junit.Before;
@@ -10,6 +14,8 @@ import java.awt.Point;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Class which tests the behaviour of the KeypressHandler class.
@@ -18,14 +24,18 @@ public class KeypressHandlerTest {
 
     private Cursor cursor;
     private Stix stix;
-    private AreaTracker areaTracker;
+    private BoardGrid grid;
 
     @Before
     public void setUp() {
-        areaTracker = new AreaTracker(5, 5);
         stix = new Stix();
         Point spawnPoint = new Point(0, 0);
-        cursor = new Cursor(spawnPoint, 2, 2, areaTracker, stix);
+        cursor = new Cursor(spawnPoint, 2, 2, stix);
+        grid = new BoardGrid();
+        LevelHandler levelHandler = mock(LevelHandler.class);
+        GameController.getInstance().setLevelHandler(levelHandler);
+        when(levelHandler.getLevel()).thenReturn(mock(Level.class));
+        when(levelHandler.getLevel().getBoardGrid()).thenReturn(grid);
     }
 
     @Test
@@ -66,7 +76,6 @@ public class KeypressHandlerTest {
     @Test
     public void testTryToMoveToCovered() {
         KeypressHandler.cursorAssertMove(cursor, 0, 1);
-        areaTracker.getBoardGrid()[1][1] = AreaState.FAST;
         KeypressHandler.cursorAssertMove(cursor, 1, 0);
         assertEquals(cursor.getX(), 0);
         assertEquals(cursor.getY(), 1);
