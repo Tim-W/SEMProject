@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -167,7 +166,6 @@ public class GameScene extends Scene {
             for (Unit unit : units) {
                 unit.draw(gc);
             }
-            applyEffect(units);
         }
     }
 
@@ -179,23 +177,6 @@ public class GameScene extends Scene {
     public void move(Set<Unit> units) {
         for (Unit unit : units) {
             unit.move();
-        }
-    }
-
-    private void applyEffect(Set<Unit> units) {
-        for (Unit unit : units) {
-            if (unit instanceof Cursor) {
-                switch (((Cursor) unit).getPowerupHandler().getCurrentPowerup()) {
-                    case EAT:
-                        gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
-                        break;
-                    case SPEED:
-                        gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
-                        break;
-                    default:
-                        break;
-                }
-            }
         }
     }
 

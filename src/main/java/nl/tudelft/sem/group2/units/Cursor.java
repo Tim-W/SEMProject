@@ -201,6 +201,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 getWidth(),
                 getHeight()
         );
+        powerupHandler.applyEffect(canvas.getGraphicsContext2D());
     }
 
     private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
