@@ -6,16 +6,25 @@ import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.AreaState;
 import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
+import nl.tudelft.sem.group2.board.AreaState;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.level.Level;
+import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.awt.Point;
 
+import static edu.emory.mathcs.backport.java.util.Arrays.asList;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,17 +37,15 @@ import static org.mockito.Mockito.when;
 /**
  * Test for cursors.
  */
-
-
+@Ignore
 public class CursorTest {
 
     @Rule
     public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
 
     private Cursor cursor;
-    private AreaTracker areaTracker;
-    private GameController gameController;
     private Stix stix = mock(Stix.class);
+    private BoardGrid grid = mock(BoardGrid.class);
     private int x;
     private int y;
     private KeyEvent keyEventMock;
@@ -46,26 +53,26 @@ public class CursorTest {
 
     @Before
     public void setUp() throws Exception {
-        GameController.deleteGameController();
-        gameController = GameController.getInstance();
-        gameController.getAnimationTimer().stop();
-        areaTracker = gameController.getAreaTracker();
+        grid = mock(BoardGrid.class);
+        LevelHandler levelHandler = mock(LevelHandler.class);
+        GameController.getInstance().setLevelHandler(levelHandler);
+        when(levelHandler.getLevel()).thenReturn(mock(Level.class));
+        when(levelHandler.getLevel().getBoardGrid()).thenReturn(grid);
         keyEventMock = mock(KeyEvent.class);
         when(keyEventMock.getCode()).thenReturn(KeyCode.A);
     }
 
     public void createCursor() {
-        gameController.initializeSinglePlayer();
-        if (cursor != null) {
-            gameController.getCursors().set(0, cursor);
-        } else {
-            cursor = gameController.getCursors().get(0);
-        }
+        cursor = new Cursor(new Point(0, 0), 2,
+                2, stix, Globals.LIVES, 0);
+        KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
+        cursor.addKeys(asList(keys));
+        cursor.setFastMoveKey(KeyCode.O);
+        cursor.setSlowMoveKey(KeyCode.I);
         cursor.setSpeed(1);
         x = cursor.getX();
         y = cursor.getY();
         cursor.setStix(stix);
-        cursor.setAreaTracker(areaTracker);
     }
 
     public void moveCursor(KeyCode k, int x, int y, boolean outerborder) {
@@ -77,11 +84,11 @@ public class CursorTest {
             vertical = 1;
         }
         if (outerborder) {
-            areaTracker.getBoardGrid()[x][y] = AreaState.OUTERBORDER;
+            when(grid.getState(new Point(x, y))).thenReturn(AreaState.OUTERBORDER);
         } else {
-            areaTracker.getBoardGrid()[x - horizontal][y - vertical] = AreaState.UNCOVERED;
-            areaTracker.getBoardGrid()[x + horizontal][y + vertical] = AreaState.UNCOVERED;
-            areaTracker.getBoardGrid()[cursor.getX()][cursor.getY()] = AreaState.UNCOVERED;
+            when(grid.getState(new Point(x - horizontal, y - vertical))).thenReturn(AreaState.UNCOVERED);
+            when(grid.getState(new Point(x + horizontal, y + vertical))).thenReturn(AreaState.UNCOVERED);
+            when(grid.getState(new Point(cursor.getX(), cursor.getY()))).thenReturn(AreaState.UNCOVERED);
         }
         cursor.setCurrentMove(k);
         cursor.move();
@@ -108,7 +115,7 @@ public class CursorTest {
     @Test
     public void dontMoveR() throws Exception {
         createCursor();
-        cursor.setX(BOARD_WIDTH / 2);
+        cursor.setX(GRID_WIDTH);
         x = cursor.getX();
         cursor.setCurrentMove(KeyCode.RIGHT);
         cursor.move();
@@ -128,7 +135,7 @@ public class CursorTest {
     @Test
     public void dontMoveD() throws Exception {
         createCursor();
-        cursor.setY(BOARD_HEIGHT / 2);
+        cursor.setY(GRID_HEIGHT);
         int dim = cursor.getY();
         cursor.setCurrentMove(KeyCode.DOWN);
         cursor.move();
@@ -229,21 +236,18 @@ public class CursorTest {
     public void isFast() throws Exception {
         createCursor();
         boolean oldValue = cursor.isFast();
-        cursor.setFast(!oldValue);
+        if (oldValue) {
+            cursor.setSpeed(1);
+        } else {
+            cursor.setSpeed(2);
+        }
         Assert.assertEquals(!oldValue, cursor.isFast());
     }
 
-    @Test
-    public void setFast() throws Exception {
-        createCursor();
-        boolean oldValue = cursor.isFast();
-        cursor.setFast(!oldValue);
-        Assert.assertEquals(!oldValue, cursor.isFast());
-    }
 
     @Test
     public void draw() throws Exception {
-        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 3, 1));
+        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, stix, 3, 1));
         spy.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spy).getSpriteIndex();
     }

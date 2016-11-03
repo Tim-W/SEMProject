@@ -1,5 +1,9 @@
 package nl.tudelft.sem.group2.powerups;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.ColorAdjust;
+import nl.tudelft.sem.group2.global.Globals;
+
 /**
  * Created by dennis on 28-10-16.
  */
@@ -14,6 +18,24 @@ public class PowerupHandler {
     public PowerupHandler() {
         this.currentPowerup = PowerUpType.NONE;
         powerUpDuration = 0;
+    }
+
+    /**
+     * apply powerup effect to graphicsContext.
+     *
+     * @param gc GraphicsContext of the canvas
+     */
+    public void applyEffect(GraphicsContext gc) {
+        switch (currentPowerup) {
+            case EAT:
+                gc.applyEffect(new ColorAdjust(1, 0, 0, 0));
+                break;
+            case SPEED:
+                gc.applyEffect(new ColorAdjust(0, Globals.HALF, 0, 0));
+                break;
+            default:
+                break;
+        }
     }
 
     public PowerUpType getCurrentPowerup() {
