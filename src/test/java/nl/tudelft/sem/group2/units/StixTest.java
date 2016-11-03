@@ -1,14 +1,20 @@
 package nl.tudelft.sem.group2.units;
 
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.canvas.Canvas;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.LinkedList;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -30,6 +36,7 @@ public class StixTest {
     public void setUp() {
         stix = new Stix();
         stixCoordinates = new LinkedList<>();
+        fuse = mock(Fuse.class);
     }
 
     @Test
