@@ -56,8 +56,6 @@ public final class Globals {
     public static final int LEVELS = 3;
     public static final int ANIMATION_SPEED = 30;
     public static final int DEATH_ANIMATION_SPEED = 20;
-    public static final int FASTMOVEKEY = 4;
-    public static final int SLOWMOVEKEY = 5;
 
 
     private Globals() {

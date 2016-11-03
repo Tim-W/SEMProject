@@ -1,7 +1,6 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.input.KeyCode;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.controllers.GameController;
@@ -10,14 +9,11 @@ import nl.tudelft.sem.group2.level.Level;
 import nl.tudelft.sem.group2.level.LevelHandler;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
-import static edu.emory.mathcs.backport.java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -26,7 +22,6 @@ import static org.mockito.Mockito.when;
 /**
  * Test for cursors.
  */
-@Ignore
 public class CursorTest {
 
     @Rule
@@ -35,8 +30,6 @@ public class CursorTest {
     private Cursor cursor;
     private Stix stix = mock(Stix.class);
     private BoardGrid grid = mock(BoardGrid.class);
-    private int x;
-    private int y;
 
     @Before
     public void setUp() throws Exception {
@@ -48,13 +41,9 @@ public class CursorTest {
     }
 
     public void createCursor() {
-        KeyCode[] keyCodes = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D, KeyCode.Z, KeyCode.X};
         cursor = new Cursor(new Point(0, 0), 2,
-                2, stix, Globals.LIVES, 0, asList(keyCodes));
+                2, stix, Globals.LIVES, 0);
         cursor.setSpeed(1);
-        x = cursor.getX();
-        y = cursor.getY();
-        cursor.setStix(stix);
     }
 
 
@@ -73,7 +62,7 @@ public class CursorTest {
 
     @Test
     public void draw() throws Exception {
-        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, stix, 3, 1, new ArrayList<KeyCode>()));
+        Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, stix, 3, 1));
         spy.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spy).getSpriteIndex();
     }

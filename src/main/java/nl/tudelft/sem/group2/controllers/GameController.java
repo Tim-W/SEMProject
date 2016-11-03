@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static java.util.Arrays.asList;
 import static nl.tudelft.sem.group2.global.Globals.LEVELS;
 
 /**
@@ -128,19 +127,18 @@ public final class GameController {
         //first
         Stix stix = new Stix();
 
-        KeyCode[] keyCodes = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT,
-                KeyCode.O, KeyCode.I};
+
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
-                Globals.BOARD_MARGIN * 2, stix, Globals.LIVES, 0, asList(keyCodes));
+                Globals.BOARD_MARGIN * 2, stix, Globals.LIVES, 0);
         addCursor(cursor1);
         addUnit(cursor1);
         setScoreCounterInCursor(cursor1);
         if (twoPlayers) {
             //second
             Stix stix2 = new Stix();
-            keyCodes = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D, KeyCode.Z, KeyCode.X};
+
             Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
-                    Globals.BOARD_MARGIN * 2, stix2, Globals.LIVES, 1, asList(keyCodes));
+                    Globals.BOARD_MARGIN * 2, stix2, Globals.LIVES, 1);
             addUnit(cursor2);
             addCursor(cursor2);
             setScoreCounterInCursor(cursor2);

@@ -3,7 +3,6 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
@@ -16,7 +15,6 @@ import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -51,15 +49,14 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /**
      * Create a cursor.
      *
-     * @param position    start position
-     * @param width       width, used for the sprite
-     * @param height      height, used for the sprite
-     * @param stix        current stix to use
-     * @param lives       the amount of lives a players starts with
-     * @param id          identifies the cursor.
-     * @param keycodes    keycodes for the cursor.
+     * @param position start position
+     * @param width    width, used for the sprite
+     * @param height   height, used for the sprite
+     * @param stix     current stix to use
+     * @param lives    the amount of lives a players starts with
+     * @param id       identifies the cursor.
      */
-    public Cursor(Point position, int width, int height, Stix stix, int lives, int id, List<KeyCode> keycodes) {
+    public Cursor(Point position, int width, int height, Stix stix, int lives, int id) {
         super(position.x, position.y, width, height);
         Image[] sprite = new Image[1];
         this.id = id;
@@ -74,23 +71,24 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.lives = lives;
         powerupHandler = new PowerupHandler();
         fuseHandler = new FuseHandler(this);
-        cursorKeypressHandler = new CursorKeypressHandler(this, keycodes);
-    }
+        cursorKeypressHandler = new CursorKeypressHandler(this);
+    } /*
 
-    /**
+    *//*
      * Custom constructor for testing purposes.
      *
      * @param position    spawn position fo cursor.
      * @param width       width of cursor.
      * @param height      height of cursor.
      * @param stix        stix of the cursor.
-     */
+     *//*
     public Cursor(Point position, int width, int height, Stix stix) {
         super(position.x, position.y, width, height);
         this.stix = stix;
         powerupHandler = new PowerupHandler();
         fuseHandler = new FuseHandler(this);
     }
+*/
 
     @Override
     public void move() {
@@ -113,7 +111,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public boolean intersect(Unit collidee) {
         return super.intersect(collidee) || fuseHandler.getFuse() != null && fuseHandler.getFuse().intersect(this);
     }
-
 
 
     @Override
@@ -176,7 +173,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
             oldLines.addFirst(line);
         }
     }
-
 
 
     /**
@@ -389,8 +385,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         scoreCounter.notifyLife(lives);
         LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
     }
-
-
 
 
     public PowerupHandler getPowerupHandler() {

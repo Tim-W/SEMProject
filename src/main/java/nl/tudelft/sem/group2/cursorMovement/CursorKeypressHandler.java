@@ -13,8 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static nl.tudelft.sem.group2.global.Globals.FASTMOVEKEY;
-import static nl.tudelft.sem.group2.global.Globals.SLOWMOVEKEY;
+import static java.util.Arrays.asList;
 
 /**
  * Class for handling the results of keypresses.
@@ -28,19 +27,28 @@ public class CursorKeypressHandler {
 
     /**
      * Basic cosntructor for collision handler class.
-     * @param cursor    the cursor that is handled.
-     * @param keycodes    keycodes for the cursor.
+     *
+     * @param cursor the cursor that is handled.
      */
-    public CursorKeypressHandler(Cursor cursor, List<KeyCode> keycodes) {
+    public CursorKeypressHandler(Cursor cursor) {
         this.cursor = cursor;
-        this.keyCodes = keycodes;
+        KeyCode[] keyCodes = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT,
+        };
+        this.fastMoveKey = KeyCode.O;
+        this.slowMoveKey = KeyCode.I;
+        if (cursor.getId() == 1) {
+            keyCodes = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D};
+            this.fastMoveKey = KeyCode.Z;
+            this.slowMoveKey = KeyCode.X;
+        }
+        this.keyCodes = asList(keyCodes);
         cursorMovementMap = new HashMap<>();
-        cursorMovementMap.put(keycodes.get(2), new CursorMovement(-1, 0));
-        cursorMovementMap.put(keycodes.get(3), new CursorMovement(1, 0));
-        cursorMovementMap.put(keycodes.get(0), new CursorMovement(0, -1));
-        cursorMovementMap.put(keycodes.get(1), new CursorMovement(0, 1));
-        fastMoveKey = keycodes.get(FASTMOVEKEY);
-        slowMoveKey = keycodes.get(SLOWMOVEKEY);
+        cursorMovementMap.put(this.keyCodes.get(2), new CursorMovement(-1, 0));
+        cursorMovementMap.put(this.keyCodes.get(3), new CursorMovement(1, 0));
+        cursorMovementMap.put(this.keyCodes.get(0), new CursorMovement(0, -1));
+        cursorMovementMap.put(this.keyCodes.get(1), new CursorMovement(0, 1));
+
+
     }
 
     /**
