@@ -117,7 +117,7 @@ public class GameControllerTest {
     @Test
     public void keyReleasedCurrentMove() throws Exception {
         setUp();
-        spyCursor.setCurrentMove(KeyCode.RIGHT);
+        spyCursor.getCursorKeypressHandler().setCurrentMove(KeyCode.RIGHT);
         spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
         spyCursor.getFuseHandler().setFuse(spy(
                 new Fuse(1, 1, 1, 1, spyCursor.getStix())
@@ -127,7 +127,7 @@ public class GameControllerTest {
                         KeyEvent.KEY_RELEASED,
                         " ",
                         "",
-                        gameController.getCursors().get(0).getCurrentMove(),
+                        gameController.getCursors().get(0).getCursorKeypressHandler().getCurrentMove(),
                         false,
                         false,
                         false,
@@ -152,13 +152,13 @@ public class GameControllerTest {
         setUp();
 
         spyCursor.setStix(spy(spyCursor.getStix()));
-        spyCursor.setCurrentMove(KeyCode.RIGHT);
+        spyCursor.getCursorKeypressHandler().setCurrentMove(KeyCode.RIGHT);
         spyCursor.getStix().addToStix(new Point(spyCursor.getX(), spyCursor.getY()));
         gameController.keyReleased(
                 new KeyEvent(KeyEvent.KEY_RELEASED,
                         " ",
                         "",
-                        gameController.getCursors().get(0).getCurrentMove(),
+                        gameController.getCursors().get(0).getCursorKeypressHandler().getCurrentMove(),
                         false,
                         false,
                         false,
@@ -174,13 +174,13 @@ public class GameControllerTest {
         spyCursor.getFuseHandler().setFuse(spy(
                 new Fuse(1, 1, 1, 1, spyCursor.getStix())
         ));
-        spyCursor.setCurrentMove(KeyCode.RIGHT);
+        spyCursor.getCursorKeypressHandler().setCurrentMove(KeyCode.RIGHT);
         spyCursor.getStix().addToStix(new Point(spyCursor.getX() + 1, spyCursor.getY()));
         gameController.keyReleased(new KeyEvent(
                 KeyEvent.KEY_RELEASED,
                 " ",
                 "",
-                gameController.getCursors().get(0).getCurrentMove(),
+                gameController.getCursors().get(0).getCursorKeypressHandler().getCurrentMove(),
                 false,
                 false,
                 false,
