@@ -1,4 +1,4 @@
-package nl.tudelft.sem.group2.units;
+package nl.tudelft.sem.group2.cursorMovement;
 
 /**
  * Describes where a cursor should move next.
