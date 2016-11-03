@@ -59,6 +59,8 @@ public class PowerupHandler {
                 case SPEED:
                     cursor.getCursorPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
                     cursor.getCursorPowerupHandler().setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
+                    break;
+                default:
             }
         }
     }
