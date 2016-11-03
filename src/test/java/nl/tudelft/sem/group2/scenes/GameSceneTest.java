@@ -68,11 +68,6 @@ public class GameSceneTest {
      */
     @Test
     public void testDrawCursor() throws Exception {
-        //when(fuseHandler.getFuse()).thenReturn(null);
-        //when(stix.pointEqualsFirstPoint(any())).thenReturn(false);
-        //LinkedList<Point> points = new LinkedList<>();
-        //points.add(new Point(1, 1));
-        //when(stix.getStixCoordinates()).thenReturn(points);
         gameScene.draw(units);
         verify(cursor, times(1)).draw(any());
 

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import static org.mockito.Matchers.any;
@@ -114,8 +115,7 @@ public class StixTest {
     @Test
     public void intersectCursor() {
         Cursor cursor = mock(Cursor.class);
-        when(cursor.getX()).thenReturn(0);
-        when(cursor.getY()).thenReturn(0);
+        when(cursor.toRectangle()).thenReturn(new Rectangle(0, 0, 2, 2));
 
         stix.addToStix(new Point(0, 0));
         Assert.assertTrue(stix.intersect(cursor));
@@ -124,8 +124,7 @@ public class StixTest {
     @Test
     public void noIntersectCursor() {
         Cursor cursor = mock(Cursor.class);
-        when(cursor.getX()).thenReturn(0);
-        when(cursor.getY()).thenReturn(0);
+        when(cursor.toRectangle()).thenReturn(new Rectangle(0, 0, 2, 2));
 
         stix.addToStix(new Point(10, 10));
         Assert.assertFalse(stix.intersect(cursor));
