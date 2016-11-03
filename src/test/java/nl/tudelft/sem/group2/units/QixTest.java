@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
  */
 public class QixTest {
     private Qix qix;
-    private Canvas canvas = new Canvas(1, 1);
     private Qix spyQix;
     private BoardGrid grid;
 
@@ -114,6 +113,7 @@ public class QixTest {
         verify(spyQix, times(2)).getCoordinate(anyInt());
     }
 
+    @Ignore
     @Test
     public void checkLineCollision2() throws Exception {
         when(grid.getState(new Point(0, 0))).thenReturn(AreaState.INNERBORDER);
