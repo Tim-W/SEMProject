@@ -128,7 +128,8 @@ public final class GameController {
         //first
         Stix stix = new Stix();
 
-        KeyCode[] keyCodes = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.O, KeyCode.I};
+        KeyCode[] keyCodes = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT,
+                KeyCode.O, KeyCode.I};
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, stix, Globals.LIVES, 0, asList(keyCodes));
         addCursor(cursor1);

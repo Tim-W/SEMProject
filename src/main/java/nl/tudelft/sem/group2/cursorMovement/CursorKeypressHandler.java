@@ -13,6 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static nl.tudelft.sem.group2.global.Globals.FASTMOVEKEY;
+import static nl.tudelft.sem.group2.global.Globals.SLOWMOVEKEY;
+
 /**
  * Class for handling the results of keypresses.
  */
@@ -25,6 +28,8 @@ public class CursorKeypressHandler {
 
     /**
      * Basic cosntructor for collision handler class.
+     * @param cursor    the cursor that is handled.
+     * @param keycodes    keycodes for the cursor.
      */
     public CursorKeypressHandler(Cursor cursor, List<KeyCode> keycodes) {
         this.cursor = cursor;
@@ -34,8 +39,8 @@ public class CursorKeypressHandler {
         cursorMovementMap.put(keycodes.get(3), new CursorMovement(1, 0));
         cursorMovementMap.put(keycodes.get(0), new CursorMovement(0, -1));
         cursorMovementMap.put(keycodes.get(1), new CursorMovement(0, 1));
-        fastMoveKey = keycodes.get(4);
-        slowMoveKey = keycodes.get(5);
+        fastMoveKey = keycodes.get(FASTMOVEKEY);
+        slowMoveKey = keycodes.get(SLOWMOVEKEY);
     }
 
     /**

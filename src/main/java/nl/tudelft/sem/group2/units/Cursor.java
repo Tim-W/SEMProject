@@ -57,6 +57,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * @param stix        current stix to use
      * @param lives       the amount of lives a players starts with
      * @param id          identifies the cursor.
+     * @param keycodes    keycodes for the cursor.
      */
     public Cursor(Point position, int width, int height, Stix stix, int lives, int id, List<KeyCode> keycodes) {
         super(position.x, position.y, width, height);
