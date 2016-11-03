@@ -14,10 +14,10 @@ public class Coordinate {
     /**
      * Create a Coordinate at (x,y) position.
      *
-     * @param x           x coord
-     * @param y           y coord
-     * @param width       width
-     * @param height      height
+     * @param x      x coord
+     * @param y      y coord
+     * @param width  width
+     * @param height height
      */
     public Coordinate(int x, int y, int width, int height) {
         this.x = x;
@@ -29,8 +29,8 @@ public class Coordinate {
     /**
      * Create a Coordinate at (x,y) position.
      *
-     * @param x           x coord
-     * @param y           y coord
+     * @param x x coord
+     * @param y y coord
      */
     public Coordinate(int x, int y) {
         this(x, y, 2, 2);
@@ -38,8 +38,9 @@ public class Coordinate {
 
     /**
      * Check whether a point lies between a x range with [low,up).
+     *
      * @param low lower bound
-     * @param up upper bound (non-inclusive)
+     * @param up  upper bound (non-inclusive)
      * @return boolean whether point lies between two coordinates
      */
     public boolean xBetween(int low, int up) {
@@ -48,8 +49,9 @@ public class Coordinate {
 
     /**
      * Check whether a point lies between a y range with [low,up).
+     *
      * @param low lower bound
-     * @param up upper bound (non-inclusive)
+     * @param up  upper bound (non-inclusive)
      * @return boolean whether point lies between two coordinates
      */
     public boolean yBetween(int low, int up) {

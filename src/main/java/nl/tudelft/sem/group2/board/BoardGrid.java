@@ -87,7 +87,7 @@ public class BoardGrid {
 
 
     /**
-     * @param cor the point/coordinate on the map for witch the state has to change
+     * @param cor   the point/coordinate on the map for witch the state has to change
      * @param state the new state for the given point
      */
     public void setState(Coordinate cor, AreaState state) {

@@ -82,6 +82,21 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         fuseHandler = new FuseHandler(this);
     }
 
+    /**
+     * Custom constructor for testing purposes.
+     *
+     * @param position    spawn position fo cursor.
+     * @param width       width of cursor.
+     * @param height      height of cursor.
+     * @param stix        stix of the cursor.
+     */
+    public Cursor(Point position, int width, int height, Stix stix) {
+        super(position.x, position.y, width, height);
+        this.stix = stix;
+        powerupHandler = new PowerupHandler();
+        fuseHandler = new FuseHandler(this);
+    }
+
     @Override
     public void move() {
         for (int i = 0; i < speed; i++) {
