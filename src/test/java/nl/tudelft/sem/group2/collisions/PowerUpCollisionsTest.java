@@ -1,7 +1,7 @@
 package nl.tudelft.sem.group2.collisions;
 
-import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
