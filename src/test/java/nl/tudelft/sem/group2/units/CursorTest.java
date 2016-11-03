@@ -3,12 +3,10 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
+import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.board.AreaState;
 import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.level.Level;
@@ -16,7 +14,6 @@ import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -25,8 +22,6 @@ import java.awt.Point;
 import static edu.emory.mathcs.backport.java.util.Arrays.asList;
 import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -37,7 +32,6 @@ import static org.mockito.Mockito.when;
 /**
  * Test for cursors.
  */
-@Ignore
 public class CursorTest {
 
     @Rule
@@ -62,7 +56,7 @@ public class CursorTest {
         when(keyEventMock.getCode()).thenReturn(KeyCode.A);
     }
 
-    public void createCursor() {
+    private void createCursor() {
         cursor = new Cursor(new Point(0, 0), 2,
                 2, stix, Globals.LIVES, 0);
         KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
@@ -75,7 +69,7 @@ public class CursorTest {
         cursor.setStix(stix);
     }
 
-    public void moveCursor(KeyCode k, int x, int y, boolean outerborder) {
+    private void moveCursor(KeyCode k, int x, int y, boolean outerborder) {
         int horizontal = 0;
         int vertical = 0;
         if (k.equals(KeyCode.RIGHT) || k.equals(KeyCode.LEFT)) {
@@ -146,6 +140,7 @@ public class CursorTest {
     public void moveRight() throws Exception {
         createCursor();
         cursor.setDrawing(true);
+        when(grid.isUncovered(1, 0)).thenReturn(true);
         moveCursor(KeyCode.RIGHT, x + 1, y, false);
         Assert.assertEquals(x + 1, cursor.getX());
     }
@@ -266,7 +261,7 @@ public class CursorTest {
 
     @Test
     public void speedPowerupTestFromSlow() {
-        cursor = new Cursor(new Point(0, 0), 0, 0, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 0, 0, stix, 1, 1);
         cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
         cursor.setSpeed(1);
 
@@ -278,7 +273,7 @@ public class CursorTest {
 
     @Test
     public void speedPowerupTestFromFast() {
-        cursor = new Cursor(new Point(0, 0), 0, 0, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 0, 0, stix, 1, 1);
         cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
         cursor.setSpeed(2);
 
@@ -288,13 +283,13 @@ public class CursorTest {
 
     @Test
     public void stopFuseDrawingTest() {
-        cursor = new Cursor(new Point(0, 0), 0, 0, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 0, 0, stix, 1, 1);
         cursor.getArrowKeys().add(keyEventMock.getCode());
         cursor.setDrawing(true);
 
         FuseHandler fuseHandler = new FuseHandler(cursor);
-        Fuse fuse = new Fuse(0, 0, 1, 1, areaTracker, stix);
-        fuse.setMoving(true);
+        Fuse fuse = new Fuse(0, 0, 1, 1, stix);
+        fuse.notMoving();
         fuseHandler.setFuse(fuse);
         cursor.setFuseHandler(fuseHandler);
 
@@ -304,23 +299,23 @@ public class CursorTest {
 
     @Test
     public void keyPressedContainsNotDrawing() {
-        cursor = new Cursor(new Point(0, 0), 0, 0, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 0, 0, stix, 1, 1);
         cursor.getArrowKeys().add(keyEventMock.getCode());
         cursor.setDrawing(false);
 
         FuseHandler fuseHandler = new FuseHandler(cursor);
-        Fuse fuse = new Fuse(0, 0, 1, 1, areaTracker, stix);
-        fuse.setMoving(true);
+        Fuse fuse = new Fuse(0, 0, 1, 1, stix);
+        fuse.notMoving();
         fuseHandler.setFuse(fuse);
         cursor.setFuseHandler(fuseHandler);
 
         cursor.keyPressed(keyEventMock);
-        Assert.assertTrue(fuse.isMoving());
+        Assert.assertTrue(!fuse.isMoving());
     }
 
     @Test
     public void keyPressedContainsNoFuse() {
-        cursor = new Cursor(new Point(0, 0), 0, 0, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 0, 0, stix, 1, 1);
         cursor.getArrowKeys().add(keyEventMock.getCode());
         cursor.setDrawing(false);
 
@@ -333,7 +328,7 @@ public class CursorTest {
 
     @Test
     public void keyPressedDrawingContainsNoFuse() {
-        cursor = new Cursor(new Point(0, 0), 0, 0, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 0, 0, stix, 1, 1);
         cursor.getArrowKeys().add(keyEventMock.getCode());
         cursor.setDrawing(true);
 
@@ -347,7 +342,7 @@ public class CursorTest {
 
     @Test
     public void keyReleasedCurrentMove() {
-        cursor = new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(1, 1), 1, 1, stix, 1, 1);
         cursor.setCurrentMove(keyEventMock.getCode());
         FuseHandler fuseHandler = mock(FuseHandler.class);
         cursor.setFuseHandler(fuseHandler);
@@ -360,7 +355,7 @@ public class CursorTest {
 
     @Test
     public void keyReleasedFastMoveKey() {
-        cursor = new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(1, 1), 1, 1, stix, 1, 1);
         cursor.setCurrentMove(keyEventMock.getCode());
         cursor.setDrawing(true);
         cursor.setSpeed(3);
@@ -377,7 +372,7 @@ public class CursorTest {
 
     @Test
     public void keyReleasedSlowMoveKey() {
-        cursor = new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(1, 1), 1, 1, stix, 1, 1);
         cursor.setCurrentMove(keyEventMock.getCode());
         cursor.setDrawing(true);
         cursor.setSpeed(3);
@@ -394,7 +389,7 @@ public class CursorTest {
 
     @Test
     public void keyReleasedBothMoveKeys() {
-        cursor = new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(1, 1), 1, 1, stix, 1, 1);
         cursor.setCurrentMove(keyEventMock.getCode());
         cursor.setDrawing(true);
         cursor.setSpeed(3);
@@ -411,7 +406,7 @@ public class CursorTest {
 
     @Test
     public void keyReleasedNoKey() {
-        cursor = new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(1, 1), 1, 1, stix, 1, 1);
         cursor.setCurrentMove(keyEventMock.getCode());
         cursor.setDrawing(true);
         cursor.setSpeed(3);
@@ -430,7 +425,7 @@ public class CursorTest {
 
     @Test
     public void intersectionFuseNoUnit() {
-        cursor = new Cursor(new Point(0, 0), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 1, 1, stix, 1, 1);
 
         FuseHandler fuseHandler = mock(FuseHandler.class);
         when(fuseHandler.hasFuse()).thenReturn(true);
@@ -449,7 +444,7 @@ public class CursorTest {
 
     @Test
     public void intersectionFuseAndUnit() {
-        cursor = new Cursor(new Point(0, 0), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 1, 1, stix, 1, 1);
 
         FuseHandler fuseHandler = mock(FuseHandler.class);
         when(fuseHandler.hasFuse()).thenReturn(true);
@@ -468,7 +463,7 @@ public class CursorTest {
 
     @Test
     public void intersectionUnitNoFuse() {
-        cursor = new Cursor(new Point(0, 0), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 2, 2, stix, 1, 1);
 
         FuseHandler fuseHandler = mock(FuseHandler.class);
         when(fuseHandler.hasFuse()).thenReturn(true);
@@ -478,25 +473,22 @@ public class CursorTest {
         when(fuseHandler.getFuse()).thenReturn(fuse);
         cursor.setFuseHandler(fuseHandler);
 
-        Unit unit = mock(Unit.class);
-        when(unit.getX()).thenReturn(1);
-        when(unit.getY()).thenReturn(1);
+        Sparx sparx = new Sparx(0, 0, 2, 2, SparxDirection.LEFT);
 
-        Assert.assertTrue(cursor.intersect(unit));
+
+        Assert.assertTrue(cursor.intersect(sparx));
     }
 
     @Test
     public void intersectionUnitNullFuse() {
-        cursor = new Cursor(new Point(0, 0), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(0, 0), 2, 2, stix, 1, 1);
 
         FuseHandler fuseHandler = mock(FuseHandler.class);
         when(fuseHandler.hasFuse()).thenReturn(false);
 
-        Unit unit = mock(Unit.class);
-        when(unit.getX()).thenReturn(1);
-        when(unit.getY()).thenReturn(1);
+        Sparx sparx = new Sparx(0, 0, 2, 2, SparxDirection.LEFT);
 
-        Assert.assertTrue(cursor.intersect(unit));
+        Assert.assertTrue(cursor.intersect(sparx));
     }
 
     @Test
@@ -515,7 +507,7 @@ public class CursorTest {
 
     @Test
     public void addArrowKeys() {
-        cursor = new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(1, 1), 1, 1, stix, 1, 1);
         cursor.getArrowKeys().clear();
         cursor.addKey(KeyCode.A);
 
@@ -524,7 +516,7 @@ public class CursorTest {
 
     @Test
     public void addLife() {
-        cursor = new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(1, 1), 1, 1, stix, 1, 1);
 
         ScoreCounter scoreCounter = mock(ScoreCounter.class);
         cursor.setScoreCounter(scoreCounter);
@@ -537,7 +529,7 @@ public class CursorTest {
 
     @Test
     public void subtractLife() {
-        cursor = new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 1, 1);
+        cursor = new Cursor(new Point(1, 1), 1, 1, stix, 1, 1);
 
         ScoreCounter scoreCounter = mock(ScoreCounter.class);
         cursor.setScoreCounter(scoreCounter);

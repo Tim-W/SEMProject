@@ -1,5 +1,6 @@
 package nl.tudelft.sem.group2;
 
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.controllers.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -30,7 +31,8 @@ public final class KeypressHandler {
         if (cursor.getX() + transX >= 0 && cursor.getX() + transX <= Globals.GRID_WIDTH
                 && cursor.getY() + transY >= 0 && cursor.getY()
                 + transY <= Globals.GRID_WIDTH) {
-            if (GameController.getInstance().getGrid().isUncovered(cursor.getX() + transX, cursor.getY() + transY)
+            BoardGrid grid = GameController.getInstance().getGrid();
+            if (grid.isUncovered(cursor.getX() + transX, cursor.getY() + transY)
                     && cursor.isDrawing()) {
                 if (!cursor.getStix().contains(new Point(cursor.getX() + transX, cursor.getY() + transY))
                         && !cursor.getStix().contains(

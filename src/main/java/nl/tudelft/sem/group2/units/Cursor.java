@@ -154,7 +154,9 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     @Override
     public boolean intersect(Unit collidee) {
-        return super.intersect(collidee) || fuseHandler.hasFuse() && fuseHandler.getFuse().intersect(this);
+        boolean fuse = fuseHandler.hasFuse() && fuseHandler.getFuse().intersect(this);
+        boolean intersect = super.intersect(collidee);
+        return fuse || intersect;
     }
 
     /**

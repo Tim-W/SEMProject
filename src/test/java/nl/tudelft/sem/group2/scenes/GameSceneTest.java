@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2.scenes;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
@@ -19,9 +18,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.awt.Point;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 import static org.mockito.Matchers.any;
