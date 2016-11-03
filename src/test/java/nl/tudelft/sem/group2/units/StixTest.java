@@ -19,6 +19,13 @@ public class StixTest {
     private Stix stix;
     private LinkedList<Point> stixCoordinates;
 
+    private Fuse fuse;
+
+    @BeforeClass
+    public static void beforeClass() {
+        new JFXPanel();
+    }
+
     @Before
     public void setUp() {
         stix = new Stix();
@@ -115,5 +122,30 @@ public class StixTest {
 
         stix.addToStix(new Point(10, 10));
         Assert.assertFalse(stix.intersect(cursor));
+    }
+
+    @Test
+    public void testDraw() throws Exception {
+        stix.addToStix(new Point(1, 1));
+        stix.draw(new Canvas(1, 1).getGraphicsContext2D(), fuse, false);
+        verify(fuse, times(1)).onPoint(any());
+    }
+
+    @Test
+    public void testDrawTwoStixNotOnPoint() throws Exception {
+        stix.addToStix(new Point(1, 1));
+        stix.addToStix(new Point(1, 2));
+        when(fuse.onPoint(any())).thenReturn(false);
+        stix.draw(new Canvas(1, 1).getGraphicsContext2D(), fuse, false);
+        verify(fuse, times(2)).onPoint(any());
+    }
+
+    @Test
+    public void testDrawStixOnPoint() throws Exception {
+        stix.addToStix(new Point(1, 1));
+        stix.addToStix(new Point(1, 2));
+        when(fuse.onPoint(any())).thenReturn(true);
+        stix.draw(new Canvas(1, 1).getGraphicsContext2D(), fuse, false);
+        verify(fuse, times(1)).onPoint(any());
     }
 }

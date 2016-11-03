@@ -234,19 +234,9 @@ public class CursorTest {
     @Test
     public void draw() throws Exception {
         Cursor spy = spy(new Cursor(new Point(1, 1), 1, 1, areaTracker, stix, 3, 1));
-        spy.draw(new Canvas(1, 1));
+        spy.draw(new Canvas(1, 1).getGraphicsContext2D());
         verify(spy).getSpriteIndex();
     }
 
-    /*@Test
-    public void testCursorHasDied() throws Exception {
-        createCursor();
-        Assert.assertEquals(2, cursor.getLives());
-        cursor.cursorDied();
-        Assert.assertEquals(1, cursor.getLives());
-        cursor.cursorDied();
-        Assert.assertEquals(0, cursor.getLives());
-        cursor.cursorDied();
-        Assert.assertEquals(0, cursor.getLives());
-    }*/
+
 }

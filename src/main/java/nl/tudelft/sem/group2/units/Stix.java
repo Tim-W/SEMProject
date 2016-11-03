@@ -1,5 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
@@ -8,6 +10,8 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 import java.util.logging.Level;
+
+import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * Class which keeps track of the current stix.
@@ -84,6 +88,32 @@ public class Stix implements CollisionInterface {
     }
 
     /**
+     * draws stix.
+     *
+     * @param gc     graphicContext of the canvas
+     * @param fuse   of the cursor
+     * @param isFast boolean isFast of cursor
+     */
+    public void draw(GraphicsContext gc, Fuse fuse, boolean isFast) {
+        boolean foundFuse = false;
+        for (Point p : stixCoordinates) {
+            if (foundFuse || fuse == null) {
+                if (isFast) {
+                    gc.setFill(Color.MEDIUMBLUE);
+                } else {
+                    gc.setFill(Color.DARKRED);
+                }
+            } else {
+                if (fuse.onPoint(p)) {
+                    foundFuse = true;
+                }
+                gc.setFill(Color.GRAY);
+            }
+            gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
+        }
+    }
+
+    /**
      * Method that adds a point to the current stix.
      *
      * @param coordinates point that gets added to the stix
@@ -99,5 +129,15 @@ public class Stix implements CollisionInterface {
      */
     public LinkedList<Point> getStixCoordinates() {
         return stixCoordinates;
+    }
+
+    /**
+     * checks if Point p equals the first point of the coordinates.
+     *
+     * @param p Point that is checked
+     * @return boolean true if equals
+     */
+    public boolean pointEqualsFirstPoint(Point p) {
+        return stixCoordinates.getFirst().equals(p);
     }
 }
