@@ -13,7 +13,7 @@ import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
- * Created by Erik on 25-10-2016.
+ * Boardgrid class used for storing the state fo the board.
  */
 public class BoardGrid {
 
@@ -54,43 +54,12 @@ public class BoardGrid {
             areaStates[j][areaStates.length - 1] = AreaState.OUTERBORDER;
         }
     }
-/*
-    *//**
-     * Getter for the BoardGrid this is a singleton class so everywhere the BoardGrid is used it is the same instance
-     * This method allows getting of that instance and instantiates it when it is not instantiated yet.
-     *
-     * @return the only one instance of BoardGrid.
-     *//*
-    public static BoardGrid getInstance() {
-        if (instance == null) {
-            // Put lock on class since it we do not want to instantiate it twice
-            synchronized (BoardGrid.class) {
-                // Check if boardgrid is in the meanwhile not already instantiated.
-                if (instance == null) {
-                    instance = new BoardGrid();
-                }
-            }
-        }
-        return instance;
-    }*/
-/*
-
-    */
-/**
- * Resets the instance of the BoardGrid to null.
- *//*
-
-    public static void resetBoardGrid() {
-        instance = null;
-    }
-*/
-
 
     /**
      * @param cor   the point/coordinate on the map for witch the state has to change
      * @param state the new state for the given point
      */
-    public void setState(Coordinate cor, AreaState state) {
+    void setState(Coordinate cor, AreaState state) {
         if (inBound(cor)) {
             this.areaStates[cor.getX()][cor.getY()] = state;
         }
@@ -100,7 +69,7 @@ public class BoardGrid {
      * @param p     the point/coordinate on the map for witch the state has to change
      * @param state the new state for the given point
      */
-    public void setState(Point p, AreaState state) {
+    void setState(Point p, AreaState state) {
         if (inBound(p)) {
             this.areaStates[p.x][p.y] = state;
         }
@@ -110,7 +79,7 @@ public class BoardGrid {
      * @param cor the point/coordinate on the map for witch the state is needed
      * @return The state of the point, if the point is found on the map. null otherwise
      */
-    public AreaState getState(Coordinate cor) {
+    AreaState getState(Coordinate cor) {
         if (inBound(cor)) {
             return this.areaStates[cor.getX()][cor.getY()];
         }
@@ -126,6 +95,10 @@ public class BoardGrid {
             return this.areaStates[p.x][p.y];
         }
         return null;
+    }
+
+    public AreaState[][] getAreaStates() {
+        return areaStates.clone();
     }
 
     /**

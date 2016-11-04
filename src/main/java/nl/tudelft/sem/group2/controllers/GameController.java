@@ -174,7 +174,7 @@ public final class GameController {
      *
      * @param cursor cursor to add to cursor array.
      */
-    public void addCursor(Cursor cursor) {
+    private void addCursor(Cursor cursor) {
         if (cursor != null && cursors.size() < 2) {
             cursors.add(cursor);
         }
@@ -189,7 +189,7 @@ public final class GameController {
      *
      * @param unit unit to add
      */
-    public void addUnit(Unit unit) {
+    private void addUnit(Unit unit) {
         if (units == null) {
             units = new HashSet<>();
         }
@@ -207,7 +207,7 @@ public final class GameController {
     /**
      * Start animations.
      */
-    public void animationTimerStart() {
+    private void animationTimerStart() {
         animationTimer.start();
     }
 
@@ -216,7 +216,7 @@ public final class GameController {
      *
      * @return animationTimer
      */
-    public AnimationTimer getAnimationTimer() {
+    AnimationTimer getAnimationTimer() {
         return animationTimer;
     }
 
@@ -225,7 +225,7 @@ public final class GameController {
      *
      * @param previousTime setter
      */
-    public void setPreviousTime(long previousTime) {
+    void setPreviousTime(long previousTime) {
         this.previousTime = previousTime;
     }
 
@@ -274,7 +274,7 @@ public final class GameController {
     /**
      * Setup an animation timer that runs at 300FPS.
      */
-    public void createAnimationTimer() {
+    private void createAnimationTimer() {
         // animation timer for handling a loop
         animationTimer = new AnimationTimer() {
             public void handle(long now) {
@@ -297,7 +297,7 @@ public final class GameController {
                                     gameOver();
                                 }
                             }
-                            cursor.calculateArea(qix);
+                            cursor.calculateArea(qix, levelHandler.getLevel().getBoardGrid());
                         }
                         handlePowerups();
                         spawnPowerup();
@@ -376,7 +376,7 @@ public final class GameController {
                 int quadrant = cursor.oppositeQuadrant();
 
                 int[] coordinates = GameController.getInstance().getGrid().findPowerupLocation(quadrant);
-                Powerup powerup = null;
+                Powerup powerup
                 Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
                 powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
                         Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
@@ -484,11 +484,11 @@ public final class GameController {
         return gameScene;
     }
 
-    public void setGameScene(GameScene scene) {
+    void setGameScene(GameScene scene) {
         this.gameScene = scene;
     }
 
-    public ArrayList<Cursor> getCursors() {
+    ArrayList<Cursor> getCursors() {
         return cursors;
     }
 
@@ -536,5 +536,14 @@ public final class GameController {
             return null;
         }
         return levelHandler.getLevel().getBoardGrid();
+    }
+
+    /**
+     * Create a test game.
+     *
+     * @param twoPlayers boolean which describes if it is a two player game.
+     */
+    public void instantiateTestGame(boolean twoPlayers) {
+        levelHandler.nextLevel(twoPlayers);
     }
 }
