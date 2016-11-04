@@ -395,6 +395,12 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return fuseHandler;
     }
 
+    public void setFuseHandler(FuseHandler fuseHandler) {
+        this.fuseHandler = fuseHandler;
+    }
+
+
+
     /**
      * @return String format of cursor.
      */

@@ -61,4 +61,11 @@ public class FuseHandler {
     public void setFuse(Fuse fuse) {
         this.fuse = fuse;
     }
+
+    /**
+     * @return true if fusehandler has an active fuse.
+     */
+    public boolean hasFuse() {
+        return fuse != null;
+    }
 }
