@@ -2,7 +2,7 @@ package nl.tudelft.sem.group2.cursorMovement;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.units.Cursor;
@@ -109,7 +109,7 @@ public class CursorKeypressHandler {
             cursor.setSpeed(2);
             cursor.setDrawing(true);
         }
-        if (cursor.getPowerupHandler().getCurrentPowerup() == PowerUpType.SPEED) {
+        if (cursor.getCursorPowerupHandler().getCurrentPowerup() == PowerUpType.SPEED) {
             cursor.setSpeed(cursor.getSpeed() + 1);
         }
     }

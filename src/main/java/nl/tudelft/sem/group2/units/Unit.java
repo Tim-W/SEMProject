@@ -4,7 +4,7 @@ import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.board.Coordinate;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 
 import java.awt.Rectangle;
 import java.util.logging.Level;
