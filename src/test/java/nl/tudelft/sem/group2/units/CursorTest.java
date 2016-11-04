@@ -71,7 +71,7 @@ public class CursorTest {
     @Test
     public void speedPowerupTestFromSlow() {
         cursor = new Cursor(new Point(0, 0), 0, 0, stix, 1, 1);
-        cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
+        cursor.getCursorPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
         cursor.setSpeed(1);
 
         KeyEvent keyEvent = mock(KeyEvent.class);
@@ -83,7 +83,7 @@ public class CursorTest {
     @Test
     public void speedPowerupTestFromFast() {
         cursor = new Cursor(new Point(0, 0), 0, 0, stix, 1, 1);
-        cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
+        cursor.getCursorPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
         cursor.setSpeed(2);
 
         cursor.getCursorKeypressHandler().keyPressed(keyEventMock);
