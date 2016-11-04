@@ -1,15 +1,14 @@
 package nl.tudelft.sem.group2.collisions;
 
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.powerups.PowerEat;
 import nl.tudelft.sem.group2.powerups.PowerLife;
 import nl.tudelft.sem.group2.powerups.PowerSpeed;
-import nl.tudelft.sem.group2.powerups.PowerupUnit;
+import nl.tudelft.sem.group2.powerups.Powerup;
 import nl.tudelft.sem.group2.powerups.PowerupEvent;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
-import nl.tudelft.sem.group2.units.Stix;
 import nl.tudelft.sem.group2.units.Unit;
 
 import java.util.ArrayList;
@@ -24,9 +23,6 @@ import static nl.tudelft.sem.group2.powerups.PowerUpType.SPEED;
  */
 public class CollisionHandler {
 
-    private ArrayList<Unit> unitsList;
-    private ArrayList<Cursor> cursorList;
-
     /**
      * Basic cosntructor for collision handler class.
      */
@@ -36,73 +32,62 @@ public class CollisionHandler {
 
     /**
      * Check all collisions between Units.
-     * Determines what to do when two units collide.
      * This method should be called every gameframe.
      *
      * @param units set of units in the game atm
-     * @param stix  current stix
+     * @param cursor the cursor
      * @return if there is a collision
      */
     //TODO check if this still works
-    public boolean collisions(Set<Unit> units, Stix stix) {
+    public boolean collisions(Set<Unit> units, Cursor cursor) {
         if (units == null || units.isEmpty()) {
             return false;
         }
-        initializeLists(units);
-        for (Cursor cursor : cursorList) {
-            unitsList.remove(cursor);
-            for (Unit collidee : unitsList) {
-                if (collidee instanceof PowerupUnit) {
-                    continue;
-                } else if (collidee instanceof Qix) {
-                    if (stix != null && stix.intersect(collidee)) {
-                        return true;
-                    } else if (collidee.intersect(cursor) && cursor.uncoveredOn(cursor.getX(), cursor.getY())) {
-                        return true;
-                    }
-                } else {
-                    if (cursor.intersect(collidee)) {
-                        if (cursor.getCurrentPowerup() == EAT && collidee instanceof Sparx) {
-                            unitsList.remove(collidee);
-                            GameController.getInstance().removeUnit(collidee);
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    } else if (collidee instanceof Cursor && (cursor.getStix().intersect(collidee)
-                            || ((Cursor) collidee).getStix().intersect(cursor))) {
+        ArrayList<Unit> unitsList = new ArrayList<>();
+        unitsList.addAll(units);
+        unitsList.remove(cursor);
+
+        for (Unit collidee : unitsList) {
+            if (collidee instanceof Powerup) {
+                continue;
+            } else if (collidee instanceof Qix) {
+                if (cursor.getStix() != null && cursor.getStix().intersect(collidee)) {
+                    return true;
+                } else if (collidee.intersect(cursor) && cursor.uncoveredOn()) {
+                    return true;
+                }
+            } else {
+                if (cursor.intersect(collidee)) {
+                    if (cursor.getCursorPowerupHandler().getCurrentPowerup() == EAT && collidee instanceof Sparx) {
+                        unitsList.remove(collidee);
+                        GameController.getInstance().removeUnit(collidee);
+                        return false;
+                    } else {
                         return true;
                     }
+                } else if (collidee instanceof Cursor && (cursor.getStix().intersect(collidee)
+                        || ((Cursor) collidee).getStix().intersect(cursor))) {
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    private void initializeLists(Set<Unit> units) {
-        unitsList = new ArrayList<>();
-        unitsList.addAll(units);
-        cursorList = new ArrayList<>();
-        for (Unit collider : unitsList) {
-            if (collider instanceof Cursor) {
-                cursorList.add((Cursor) collider);
-            }
-        }
-    }
-
     /**
      * Returns an integer > 0 if cursor collides with a powerup.
      *
      * @param units the list of units
+     * @param cursors cursors of the game
      * @return 0 if no collision, 1 if life powerup, 2 if eat powerup and 3 if speed powerup
      */
-    public PowerupEvent powerUpCollisions(Set<Unit> units) {
+    public PowerupEvent powerUpCollisions(Set<Unit> units, ArrayList<Cursor> cursors) {
         if (units == null || units.isEmpty()) {
             return null;
         }
         ArrayList<Unit> unitsList = new ArrayList<>();
         for (Unit unit : units) {
-            if (unit instanceof PowerupUnit || unit instanceof Cursor) {
+            if (unit instanceof Powerup || unit instanceof Cursor) {
                 unitsList.add(unit);
             }
         }
@@ -110,22 +95,16 @@ public class CollisionHandler {
             return null;
         }
 
-        for (Cursor cursor : GameController.getInstance().getCursors()) {
+        for (Cursor cursor : cursors) {
             for (Unit collidee : unitsList) {
                 if (collidee instanceof PowerLife && cursor.intersect(collidee)) {
-                    synchronized (GameController.class) {
-                        GameController.getInstance().removeUnit(collidee);
-                    }
+                    units.remove(collidee);
                     return new PowerupEvent(cursor, LIFE);
                 } else if (collidee instanceof PowerEat && cursor.intersect(collidee)) {
-                    synchronized (GameController.class) {
-                        GameController.getInstance().removeUnit(collidee);
-                    }
+                    units.remove(collidee);
                     return new PowerupEvent(cursor, EAT);
                 } else if (collidee instanceof PowerSpeed && cursor.intersect(collidee)) {
-                    synchronized (GameController.class) {
-                        GameController.getInstance().removeUnit(collidee);
-                    }
+                    units.remove(collidee);
                     return new PowerupEvent(cursor, SPEED);
                 }
             }
@@ -133,22 +112,4 @@ public class CollisionHandler {
 
         return null;
     }
-
-//    /**
-//     * Finds the cursor in the unitslist.
-//     *
-//     * @param unitsList the list of units
-//     * @return the index of the cursor
-//     */
-//    private int findCursor(ArrayList<Unit> unitsList) {
-//        int indexOfCursor = 0;
-//        for (int i = 0; i < unitsList.size(); i++) {
-//            Unit collider = unitsList.get(i);
-//            if (collider instanceof Cursor) {
-//                indexOfCursor = i;
-//                break;
-//            }
-//        }
-//        return indexOfCursor;
-//    }
 }

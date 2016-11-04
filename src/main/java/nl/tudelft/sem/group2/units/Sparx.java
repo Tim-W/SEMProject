@@ -1,17 +1,16 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.image.Image;
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
 
 /**
- * An enemy unit which travels over the outerborders.
+ * An enemy unit which travels over the same lines as the cursor.
  * When a Sparx collides with a cursor, the views ends.
  */
 public class Sparx extends LineTraveller implements CollisionInterface {
@@ -26,14 +25,13 @@ public class Sparx extends LineTraveller implements CollisionInterface {
      *
      * @param x              x coord to start at
      * @param y              y coord to start at
-     * @param width          width, used for collision
-     * @param height         height, used for collision
-     * @param areaTracker    the AreaTracker
+     * @param width          width, used for the sprite
+     * @param height         height, used for the sprite
      * @param sparxDirection direction in which the sparx starts moving,
-     *                       which is either LEFT or RIGHT
+     *                       which is either LEFT or D
      */
-    public Sparx(int x, int y, int width, int height, AreaTracker areaTracker, SparxDirection sparxDirection) {
-        super(x, y, width, height, areaTracker);
+    public Sparx(int x, int y, int width, int height, SparxDirection sparxDirection) {
+        super(x, y, width, height);
         lastX = x;
         lastY = y;
         Image[] sprite = new Image[2];
@@ -71,35 +69,35 @@ public class Sparx extends LineTraveller implements CollisionInterface {
             left2 = false;
             offset = 1;
         }
-        if (checkX(left1) && outerBorderOn(getX() + offset, getY())) {
+        if (checkX(left1) && getGrid().isOuterborder(getX() + offset, getY())) {
             setXAndLastX(getX() + offset);
-        } else if (checkY(left1) && outerBorderOn(getX(), getY() + offset)) {
+        } else if (checkY(left1) && getGrid().isOuterborder(getX(), getY() + offset)) {
             setYAndLastY(getY() + offset);
-        } else if (checkX(left2) && outerBorderOn(getX() - offset, getY())) {
+        } else if (checkX(left2) && getGrid().isOuterborder(getX() - offset, getY())) {
             setXAndLastX(getX() - offset);
-        } else if (checkY(left2) && outerBorderOn(getX(), getY() - offset)) {
+        } else if (checkY(left2) && getGrid().isOuterborder(getX(), getY() - offset)) {
             setYAndLastY(getY() - offset);
-        } else if (checkX(left1) && innerBorderOn(getX() + offset, getY())) {
+        } else if (checkX(left1) && getGrid().isInnerborder(getX() + offset, getY())) {
             setXAndLastX(getX() + offset);
-        } else if (checkY(left1) && innerBorderOn(getX(), getY() + offset)) {
+        } else if (checkY(left1) && getGrid().isInnerborder(getX(), getY() + offset)) {
             setYAndLastY(getY() + offset);
-        } else if (checkX(left2) && innerBorderOn(getX() - offset, getY())) {
+        } else if (checkX(left2) && getGrid().isInnerborder(getX() - offset, getY())) {
             setXAndLastX(getX() - offset);
-        } else if (checkY(left2) && innerBorderOn(getX(), getY() - offset)) {
+        } else if (checkY(left2) && getGrid().isInnerborder(getX(), getY() - offset)) {
             setYAndLastY(getY() - offset);
         }
     }
 
     private boolean checkX(boolean right) {
         if (right) {
-            return getX() < BOARD_WIDTH / 2 && !(getX() + 1 == lastX);
+            return getX() < GRID_WIDTH && !(getX() + 1 == lastX);
         }
         return getX() > 0 && !(lastX == getX() - 1);
     }
 
     private boolean checkY(boolean down) {
         if (down) {
-            return getY() < BOARD_HEIGHT / 2 && !(lastY == getY() + 1);
+            return getY() < GRID_HEIGHT && !(lastY == getY() + 1);
         }
         return getY() > 0 && !(lastY == getY() - 1);
     }

@@ -1,6 +1,5 @@
 package nl.tudelft.sem.group2;
 
-import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -8,10 +7,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import nl.tudelft.sem.group2.scenes.StartScene;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import java.util.logging.Level;
+
 import static nl.tudelft.sem.group2.global.Globals.GAME_HEIGHT;
 import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
+import static nl.tudelft.sem.group2.sound.SoundHandler.playSound;
 
 /**
  * Starts the application.
@@ -19,23 +19,6 @@ import static nl.tudelft.sem.group2.global.Globals.GAME_WIDTH;
 public class LaunchApp extends Application {
 
     private static final Logger LOGGER = Logger.getLogger();
-
-    /**
-     * @return grid height - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridHeight() {
-        // a point on the boardgrid is 2x2 pixels, so a boardgrid contains 150x150
-        return BOARD_HEIGHT / 2;
-    }
-
-    /**
-     * @return grid width - a point on the boardgrid is 2x2 pixels,
-     * so a boardgrid contains 150x150
-     */
-    public static int getGridWidth() {
-        return BOARD_WIDTH / 2;
-    }
 
     /**
      * Launches the application.
@@ -68,10 +51,7 @@ public class LaunchApp extends Application {
         primaryStage.show();
 
         //Comment to mute empty sound
-        //playSound("/sounds/background-music.mp3", 1);
-        //((Group) scene.getRoot()).getChildren().add(mediaView);
+        playSound("/sounds/background-music.mp3", 1);
         LOGGER.log(Level.INFO, "Audio Loaded succesfully", this.getClass());
-
     }
-
 }

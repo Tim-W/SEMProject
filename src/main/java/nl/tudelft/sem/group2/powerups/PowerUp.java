@@ -4,12 +4,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by Erik on 28-10-2016.
+ *
  */
-public class PowerUp<E> implements ExecuteDelay {
+public class Powerup implements ExecuteDelay {
 
-    private E state;
-    private E standard;
+    private PowerUpType state;
 
     private int duration;
 
@@ -19,21 +18,20 @@ public class PowerUp<E> implements ExecuteDelay {
 
     /**
      *
-     * @param standard
+     * @param type
      */
-    public PowerUp(E standard) {
-        this.standard = standard;
-        this.state = standard;
+    public Powerup(PowerUpType type) {
+        this.state = type;
         this.timer = new Timer();
         this.duration = 0;
     }
 
-    public void setState(E type) {
+    public void setState(PowerUpType type) {
         this.state = type;
         startDuration();
     }
 
-    public E getState() {
+    public PowerUpType getState() {
         return state;
     }
 
@@ -50,7 +48,7 @@ public class PowerUp<E> implements ExecuteDelay {
      * @return true if the current is not the same as the standard state
      */
     public boolean notStandard() {
-        return state != standard;
+        return state != PowerUpType.NONE;
     }
 
     /**
@@ -67,7 +65,7 @@ public class PowerUp<E> implements ExecuteDelay {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                state = standard;
+                state = PowerUpType.NONE;
             }
         };
         this.task = timerTask;

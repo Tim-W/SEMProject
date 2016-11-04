@@ -1,11 +1,9 @@
 package nl.tudelft.sem.group2.units;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.global.Globals;
 
@@ -14,30 +12,39 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 import java.util.logging.Level;
 
+import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A Qix is an enemy unit.
- * It moves randomly on the GameScene.
+ * It moves randomly on the board.
  * When the player touches the Qix while drawing,
- * or when the Qix touches the stix, it is views over.
+ * or when the Qix touches the stix, the player loses a life and must start drawing again.
  */
-public class Qix extends Unit implements CollisionInterface {
+public class Qix extends Unit implements CollisionInterface, Observer {
 
-    private static final int LINE_LENGTH = 5;
     private static final int POSITION_LENGTH = 4;
-    private static final double MINIMUM_COLOR_BRIGHTNESS = 0.3;
+    private static final double MINIMUM_COLOR_BDNESS = 0.3;
     private static final int PRECISION = 6;
     private static final int LINESCOUNT = 10;
     private static final int RANDOMNESSPOSITIONLENGTH = 4;
     private static final int RANDOMNESSLINELENGTH = 2;
     private static final int COLLISIONSIZE = 10;
+    private static final double DECREASELINESIZE = 0.1;
+    private static final double DIVIDESTARTLINELENGTH = 8;
+    private static final double MULTIPLIER = 1.5;
     private static final Logger LOGGER = Logger.getLogger();
+
+    private int startLineLength;
+    private double lineLength;
     private int animationLoops = 0;
     private float[] direction = new float[2];
+    //TODO use the Coordinate class
     private LinkedList<float[]> oldDirections = new LinkedList<>();
     private LinkedList<float[]> oldCoordinates = new LinkedList<>();
     private LinkedList<double[]> colorArray = new LinkedList<>();
@@ -48,10 +55,12 @@ public class Qix extends Unit implements CollisionInterface {
      * Is by default placed on 30,30.
      * last parameters are for width and height but its just set to 1
      *
-     * @param areaTracker used for calculating areas
+     * @param startLineLength the start line length of the qix
      */
-    public Qix(AreaTracker areaTracker) {
-        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1, areaTracker);
+    public Qix(int startLineLength) {
+        super(Globals.QIX_START_X, Globals.QIX_START_Y, 1, 1);
+        this.startLineLength = startLineLength;
+        lineLength = startLineLength;
         LOGGER.log(Level.INFO, this.toString() + " created at (" + Globals.QIX_START_X + ","
                 + Globals.QIX_START_Y + ")", this.getClass());
     }
@@ -74,12 +83,12 @@ public class Qix extends Unit implements CollisionInterface {
         coordinate[1] = getY();
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         float random = (float) Math.random() * RANDOMNESSLINELENGTH - RANDOMNESSLINELENGTH / 2;
-        float scale = (LINE_LENGTH + random) / length;
+        double scale = (lineLength + random) / length;
         direction[0] *= scale;
         direction[1] *= scale;
         double[] colors = new double[3];
         for (int i = 0; i < colors.length; i++) {
-            colors[i] = Math.random() * (1 - MINIMUM_COLOR_BRIGHTNESS) + MINIMUM_COLOR_BRIGHTNESS;
+            colors[i] = Math.random() * (1 - MINIMUM_COLOR_BDNESS) + MINIMUM_COLOR_BDNESS;
         }
         getColorArray().addFirst(colors);
         getOldDirections().addFirst(new float[] {direction[0], direction[1]});
@@ -116,8 +125,7 @@ public class Qix extends Unit implements CollisionInterface {
      * This incudes all the lines of the qix.
      */
     @Override
-    public void draw(Canvas canvas) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+    public void draw(GraphicsContext gc) {
         gc.setFill(Color.RED);
         for (int i = 0; i < getOldDirections().size(); i++) {
             //get the random colors for the line
@@ -140,13 +148,11 @@ public class Qix extends Unit implements CollisionInterface {
      * Functions reverts the direction of the qix if there is a innerborder or outerborder close to the qix.
      */
     private void checkLineCollision() {
-        int gridLength = getAreaTracker().getBoardGrid().length;
         float length = (float) Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1]);
         //loop through the grid
-        for (int i = 0; i < gridLength; i++) {
-            for (int j = 0; j < gridLength; j++) {
-                if (getAreaTracker().getBoardGrid()[i][j] == AreaState.INNERBORDER
-                        || getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER) {
+        for (int i = 0; i < getGrid().getWidth(); i++) {
+            for (int j = 0; j < getGrid().getWidth(); j++) {
+                if (getGrid().isInnerborder(i, j) || getGrid().isOuterborder(i, j)) {
                     float dx = getCoordinate(0) - i;
                     float dy = getCoordinate(1) - j;
                     float lengthNew = (float) Math.sqrt(dx * dx + dy * dy);
@@ -163,6 +169,10 @@ public class Qix extends Unit implements CollisionInterface {
                 }
             }
         }
+    }
+
+    public void setLineLength(int lineLength) {
+        this.lineLength = lineLength;
     }
 
     /**
@@ -206,9 +216,7 @@ public class Qix extends Unit implements CollisionInterface {
             Polygon colliderP = this.toPolygon();
 
             // subtract one from width&height to make collisions look more real
-            Rectangle collideeR = new Rectangle(collidee.getX(),
-                    collidee.getY(), collidee.getWidth() / 2 - 1,
-                    collidee.getHeight() / 2 - 1);
+            Rectangle collideeR = collidee.toRectangle();
             if (colliderP.intersects(collideeR)) {
                 LOGGER.log(Level.INFO, this.toString() + " collided with " + collidee.toString()
                         + " at (" + this.getX() + "," + this.getY() + ")", this.getClass());
@@ -225,11 +233,11 @@ public class Qix extends Unit implements CollisionInterface {
         return "Qix";
     }
 
-    public LinkedList<float[]> getOldCoordinates() {
+    LinkedList<float[]> getOldCoordinates() {
         return oldCoordinates;
     }
 
-    public void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
+    void setOldCoordinates(LinkedList<float[]> oldCoordinates) {
         this.oldCoordinates = oldCoordinates;
     }
 
@@ -239,7 +247,7 @@ public class Qix extends Unit implements CollisionInterface {
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
-    public float[] getOldCoordinate(int i) {
+    float[] getOldCoordinate(int i) {
         return oldCoordinates.get(i);
     }
 
@@ -249,19 +257,19 @@ public class Qix extends Unit implements CollisionInterface {
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
-    public float getCoordinate(int i) {
+    float getCoordinate(int i) {
         return coordinate[i];
     }
 
-    public void setAnimationLoops(int animationLoops) {
+    void setAnimationLoops(int animationLoops) {
         this.animationLoops = animationLoops;
     }
 
-    public LinkedList<float[]> getOldDirections() {
+    LinkedList<float[]> getOldDirections() {
         return oldDirections;
     }
 
-    public void setOldDirections(LinkedList<float[]> oldDirections) {
+    void setOldDirections(LinkedList<float[]> oldDirections) {
         this.oldDirections = oldDirections;
     }
 
@@ -271,7 +279,7 @@ public class Qix extends Unit implements CollisionInterface {
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
-    public float[] getOldDirection(int i) {
+    float[] getOldDirection(int i) {
         return oldDirections.get(i);
     }
 
@@ -281,7 +289,7 @@ public class Qix extends Unit implements CollisionInterface {
      * @param i describes if you want the x or the y.
      * @return the x or y coordinate
      */
-    public float getDirection(int i) {
+    float getDirection(int i) {
         return direction[i];
     }
 
@@ -291,11 +299,11 @@ public class Qix extends Unit implements CollisionInterface {
      * @param direction the new direction
      * @param i         at which place
      */
-    public void setDirection(float direction, int i) {
+    void setDirection(float direction, int i) {
         this.direction[i] = direction;
     }
 
-    public LinkedList<double[]> getColorArray() {
+    LinkedList<double[]> getColorArray() {
         return colorArray;
     }
 
@@ -303,7 +311,18 @@ public class Qix extends Unit implements CollisionInterface {
      * Method which logs the current movement of the qix.
      * Only gets executed when log level is on detailledLogging.
      */
-    public void logCurrentMove() {
+    private void logCurrentMove() {
         LOGGER.log(Level.FINE, "Qix moved to (" + getX() + "," + getY() + ")", this.getClass());
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof AreaTracker) {
+            double multiplier = Math.pow(((double) arg) / GRID_SURFACE,
+                    DECREASELINESIZE + startLineLength / DIVIDESTARTLINELENGTH) * MULTIPLIER;
+            if (multiplier < 1) {
+                lineLength = startLineLength * multiplier;
+            }
+        }
     }
 }
