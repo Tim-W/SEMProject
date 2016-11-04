@@ -105,6 +105,7 @@ public class GameControllerTest {
         gameController.getAnimationTimer().handle(PREVIOUSTIME + 200000000);
         verify(spyCursor, times(2)).setSpeed(CURSOR_SLOW);
     }
+
     @Test
     public void keyPressedArrowSetCursorSpeedFast() throws Exception {
         spyCursor.setDrawing(true);
@@ -114,6 +115,7 @@ public class GameControllerTest {
         gameController.getAnimationTimer().handle(PREVIOUSTIME + 200000000);
         verify(spyCursor, times(1)).setSpeed(CURSOR_FAST);
     }
+
     @Test
     public void testHandle() throws Exception {
         GameScene mock = mock(GameScene.class);
@@ -135,6 +137,7 @@ public class GameControllerTest {
         GameScene mock = mock(GameScene.class);
         gameController.setGameScene(mock);
         gameController.getLevelHandler().getLevel().start();
+        gameController.getAnimationTimer().handle(PREVIOUSTIME + 200000000);
         verify(mock, times(1)).move(any());
     }
 

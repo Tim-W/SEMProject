@@ -368,7 +368,7 @@ public final class GameController {
 
     private void initializeCursorSpeed() {
         for (Cursor cursor : cursors) {
-            if (!cursor.isDrawing()) {
+            if (cursor.isFast() || !cursor.isDrawing()) {
                 cursor.setSpeed(Globals.CURSOR_FAST);
             } else {
                 cursor.setSpeed(Globals.CURSOR_SLOW);
@@ -438,7 +438,6 @@ public final class GameController {
 
     /**
      * only used for testing.
-     *
      * @param collisionHandler CollisionHandler
      */
     public void setCollisionHandler(CollisionHandler collisionHandler) {
