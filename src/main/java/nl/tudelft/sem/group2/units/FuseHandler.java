@@ -35,7 +35,7 @@ public class FuseHandler {
             } else {
                 fuse.moving();
             }
-            cursor.setCurrentMove(null);
+            cursor.getCursorKeypressHandler().setCurrentMove(null);
         }
     }
 

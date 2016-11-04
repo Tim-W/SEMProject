@@ -3,25 +3,18 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.KeypressHandler;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.cursorMovement.CursorKeypressHandler;
 import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.PowerupHandler;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
@@ -44,26 +37,24 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private Stix stix;
     private int lives;
 
-    private KeyCode fastMoveKey, slowMoveKey;
     private ScoreCounter scoreCounter;
-    private ArrayList<KeyCode> arrowKeys = new ArrayList<>();
-    private KeyCode currentMove = null;
     private boolean isDrawing = false;
     private int speed = Globals.CURSOR_FAST;
     private int id;
     private PowerupHandler powerupHandler;
     private FuseHandler fuseHandler;
+    private CursorKeypressHandler cursorKeypressHandler;
 
 
     /**
      * Create a cursor.
      *
-     * @param position    start position
-     * @param width       width, used for the sprite
-     * @param height      height, used for the sprite
-     * @param stix        current stix to use
-     * @param lives       the amount of lives a players starts with
-     * @param id          identifies the cursor.
+     * @param position start position
+     * @param width    width, used for the sprite
+     * @param height   height, used for the sprite
+     * @param stix     current stix to use
+     * @param lives    the amount of lives a players starts with
+     * @param id       identifies the cursor.
      */
     public Cursor(Point position, int width, int height, Stix stix, int lives, int id) {
         super(position.x, position.y, width, height);
@@ -80,86 +71,35 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.lives = lives;
         powerupHandler = new PowerupHandler();
         fuseHandler = new FuseHandler(this);
-    }
+        cursorKeypressHandler = new CursorKeypressHandler(this);
+    } /*
 
-    /**
+    *//*
      * Custom constructor for testing purposes.
      *
      * @param position    spawn position fo cursor.
      * @param width       width of cursor.
      * @param height      height of cursor.
      * @param stix        stix of the cursor.
-     */
+     *//*
     public Cursor(Point position, int width, int height, Stix stix) {
         super(position.x, position.y, width, height);
         this.stix = stix;
         powerupHandler = new PowerupHandler();
         fuseHandler = new FuseHandler(this);
     }
+*/
 
     @Override
     public void move() {
         for (int i = 0; i < speed; i++) {
-            int transX = 0;
-            int transY = 0;
-
-            if (currentMove != null) {
-                // A map containing relationships between keycodes and the movement directions.
-                Map<KeyCode, CursorMovement> cursorMovementMap = new HashMap<>();
-                cursorMovementMap.put(arrowKeys.get(2), new CursorMovement(-1, 0));
-                cursorMovementMap.put(arrowKeys.get(3), new CursorMovement(1, 0));
-                cursorMovementMap.put(arrowKeys.get(0), new CursorMovement(0, -1));
-                cursorMovementMap.put(arrowKeys.get(1), new CursorMovement(0, 1));
-                transX += cursorMovementMap.get(currentMove).getTransX();
-                transY += cursorMovementMap.get(currentMove).getTransY();
-                KeypressHandler.cursorAssertMove(this, transX, transY);
-            }
+            cursorKeypressHandler.cursorAssertMove();
         }
         if (fuseHandler.getFuse() != null) {
             fuseHandler.getFuse().move();
         }
     }
 
-    /**
-     * Handles a key press for the cursor.
-     *
-     * @param e the keyEvent of the key pressed
-     */
-    public void keyPressed(KeyEvent e) {
-        if (getArrowKeys().contains(e.getCode())) {
-            if (isDrawing() && fuseHandler.hasFuse()) {
-                fuseHandler.getFuse().notMoving();
-            }
-            setCurrentMove(e.getCode());
-        } else if (e.getCode().equals(getSlowMoveKey())) {
-            if (!stixDrawn() || !isFast()) {
-                setSpeed(1);
-                setDrawing(true);
-            }
-        } else if (e.getCode().equals(getFastMoveKey())) {
-            setSpeed(2);
-            setDrawing(true);
-        }
-        if (powerupHandler.getCurrentPowerup() == PowerUpType.SPEED) {
-            setSpeed(getSpeed() + 1);
-        }
-    }
-
-    /**
-     * Handles a key being released.
-     *
-     * @param keyCode the key being released
-     */
-    public void keyReleased(KeyCode keyCode) {
-        if (keyCode.equals(getCurrentMove())) {
-            fuseHandler.handleFuse();
-            setCurrentMove(null);
-        } else if (keyCode.equals(getFastMoveKey()) || keyCode.equals(getSlowMoveKey())) {
-            setDrawing(false);
-            setSpeed(2);
-            fuseHandler.handleFuse();
-        }
-    }
 
     /**
      * Method which tests if cursor intersects with other unit.
@@ -169,23 +109,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     @Override
     public boolean intersect(Unit collidee) {
-        boolean fuse = fuseHandler.hasFuse() && fuseHandler.getFuse().intersect(this);
-        boolean intersect = super.intersect(collidee);
-        return fuse || intersect;
-    }
-
-    /**
-     * @return the current move direction (up/down/left/right)
-     */
-    public KeyCode getCurrentMove() {
-        return currentMove;
-    }
-
-    /**
-     * @param currentMove the current move direction (up/down/left/right)
-     */
-    public void setCurrentMove(KeyCode currentMove) {
-        this.currentMove = currentMove;
+        return super.intersect(collidee) || fuseHandler.getFuse() != null && fuseHandler.getFuse().intersect(this);
     }
 
 
@@ -251,7 +175,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
 
-
     /**
      * When a new area is completed, calculate the new score.
      *
@@ -311,6 +234,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
+     * @return the CursorKeypressHandler of the cursor.
+     */
+    public CursorKeypressHandler getCursorKeypressHandler() {
+        return cursorKeypressHandler;
+    }
+
+    /**
      * Get id of the cursor.
      *
      * @return int id
@@ -340,29 +270,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void setStix(Stix stix) {
         this.stix = stix;
-    }
-
-
-
-    /**
-     * @param keycode the key that is specific to this cursor.
-     */
-    public void addKey(KeyCode keycode) {
-        arrowKeys.add(keycode);
-    }
-
-    /**
-     * @param keycodes the keys that are specific to this cursor.
-     */
-    public void addKeys(Collection<KeyCode> keycodes) {
-        arrowKeys.addAll(keycodes);
-    }
-
-    /**
-     * @return this cursor specific keys.
-     */
-    public ArrayList<KeyCode> getArrowKeys() {
-        return arrowKeys;
     }
 
     /**
@@ -456,7 +363,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /**
      * @return true if the cursor has drawn stix
      */
-    private boolean stixDrawn() {
+    public boolean stixDrawn() {
         return stix != null && !stix.isStixEmpty();
     }
 
@@ -479,21 +386,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
     }
 
-    public KeyCode getFastMoveKey() {
-        return fastMoveKey;
-    }
-
-    public void setFastMoveKey(KeyCode fastMoveKey) {
-        this.fastMoveKey = fastMoveKey;
-    }
-
-    public KeyCode getSlowMoveKey() {
-        return slowMoveKey;
-    }
-
-    public void setSlowMoveKey(KeyCode slowMoveKey) {
-        this.slowMoveKey = slowMoveKey;
-    }
 
     public PowerupHandler getPowerupHandler() {
         return powerupHandler;

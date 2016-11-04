@@ -190,7 +190,7 @@ public class StartScene extends javafx.scene.Scene {
                 GameController.getInstance().initializeSinglePlayer();
                 stage.setScene(GameController.getInstance().getGameScene());
             } else if (event.getCode() == KeyCode.DIGIT2) {
-                GameController.getInstance().initializeSinglePlayer();
+                GameController.getInstance().initializeMultiPlayer();
                 stage.setScene(GameController.getInstance().getGameScene());
             } else if (event.getCode() == KeyCode.H) {
                 helpTextWrapper.setVisible(true);

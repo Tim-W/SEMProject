@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static edu.emory.mathcs.backport.java.util.Arrays.asList;
 import static nl.tudelft.sem.group2.global.Globals.LEVELS;
 
 /**
@@ -127,24 +126,19 @@ public final class GameController {
         cursors = new ArrayList<>();
         //first
         Stix stix = new Stix();
+
+
         Cursor cursor1 = new Cursor(new Point(Globals.CURSOR_START_X, Globals.CURSOR_START_Y), Globals.BOARD_MARGIN * 2,
                 Globals.BOARD_MARGIN * 2, stix, Globals.LIVES, 0);
-        KeyCode[] keys = new KeyCode[] {KeyCode.UP, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT};
-        cursor1.addKeys(asList(keys));
-        cursor1.setFastMoveKey(KeyCode.O);
-        cursor1.setSlowMoveKey(KeyCode.I);
         addCursor(cursor1);
         addUnit(cursor1);
         setScoreCounterInCursor(cursor1);
         if (twoPlayers) {
             //second
             Stix stix2 = new Stix();
+
             Cursor cursor2 = new Cursor(new Point(0, 0), Globals.BOARD_MARGIN * 2,
                     Globals.BOARD_MARGIN * 2, stix2, Globals.LIVES, 1);
-            keys = new KeyCode[] {KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D};
-            cursor2.addKeys(asList(keys));
-            cursor2.setFastMoveKey(KeyCode.Z);
-            cursor2.setSlowMoveKey(KeyCode.X);
             addUnit(cursor2);
             addCursor(cursor2);
             setScoreCounterInCursor(cursor2);
@@ -448,7 +442,7 @@ public final class GameController {
     public void keyReleased(KeyEvent e) {
         KeyCode keyCode = e.getCode();
         for (Cursor cursor : cursors) {
-            cursor.keyReleased(keyCode);
+            cursor.getCursorKeypressHandler().keyReleased(keyCode);
         }
     }
 
@@ -469,7 +463,7 @@ public final class GameController {
             gameScene.setMessage("");
         } else {
             for (Cursor cursor : cursors) {
-                cursor.keyPressed(e);
+                cursor.getCursorKeypressHandler().keyPressed(e);
             }
         }
     }
