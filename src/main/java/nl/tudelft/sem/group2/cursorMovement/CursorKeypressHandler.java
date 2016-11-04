@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
  * Class for handling the results of keypresses.
  */
 public class CursorKeypressHandler {
-    private List<KeyCode> keyCodes;
+    private LinkedList<KeyCode> keyCodes;
     private KeyCode currentMove = null;
     private Cursor cursor;
     private Map<KeyCode, CursorMovement> cursorMovementMap;
@@ -41,7 +41,8 @@ public class CursorKeypressHandler {
             this.fastMoveKey = KeyCode.Z;
             this.slowMoveKey = KeyCode.X;
         }
-        this.keyCodes = asList(keyCodes);
+        this.keyCodes = new LinkedList<>();
+        this.keyCodes.addAll(asList(keyCodes));
         cursorMovementMap = new HashMap<>();
         cursorMovementMap.put(this.keyCodes.get(2), new CursorMovement(-1, 0));
         cursorMovementMap.put(this.keyCodes.get(3), new CursorMovement(1, 0));
@@ -95,7 +96,7 @@ public class CursorKeypressHandler {
      */
     public void keyPressed(KeyEvent e) {
         if (keyCodes.contains(e.getCode())) {
-            if (cursor.isDrawing() && cursor.getFuseHandler().getFuse() != null) {
+            if (cursor.isDrawing() && cursor.getFuseHandler().hasFuse()) {
                 cursor.getFuseHandler().getFuse().notMoving();
             }
             setCurrentMove(e.getCode());
@@ -150,4 +151,20 @@ public class CursorKeypressHandler {
         return keyCodes;
     }
 
+    public void setFastMoveKey(KeyCode fastMoveKey) {
+        this.fastMoveKey = fastMoveKey;
+    }
+
+    public void setSlowMoveKey(KeyCode slowMoveKey) {
+        this.slowMoveKey = slowMoveKey;
+    }
+
+    /**
+     * Adds a key to the keycodes list. Used for testing only.
+     *
+     * @param keycode the keycode to be added.
+     */
+    public void addKey(KeyCode keycode) {
+        keyCodes.add(keycode);
+    }
 }
