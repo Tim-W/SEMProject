@@ -1,9 +1,9 @@
 package nl.tudelft.sem.group2.collisions;
 
 import javafx.embed.swing.JFXPanel;
+import nl.tudelft.sem.group2.powerups.CursorPowerupHandler;
 import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.powerups.Powerup;
-import nl.tudelft.sem.group2.powerups.PowerupHandler;
 import nl.tudelft.sem.group2.units.Cursor;
 import nl.tudelft.sem.group2.units.Qix;
 import nl.tudelft.sem.group2.units.Sparx;
@@ -28,7 +28,7 @@ public class CollisionHandlerTest {
     private CollisionHandler handler;
     private HashSet<Unit> set;
     private Cursor cursor;
-    private PowerupHandler powerupHandler;
+    private CursorPowerupHandler cursorPowerupHandler;
 
     /**
      * Sets up the mocks and variables.
@@ -39,9 +39,9 @@ public class CollisionHandlerTest {
         handler = new CollisionHandler();
         set = new HashSet<>();
         cursor = mock(Cursor.class);
-        powerupHandler = mock(PowerupHandler.class);
-        when(powerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.NONE);
-        when(cursor.getPowerupHandler()).thenReturn(powerupHandler);
+        cursorPowerupHandler = mock(CursorPowerupHandler.class);
+        when(cursorPowerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.NONE);
+        when(cursor.getCursorPowerupHandler()).thenReturn(cursorPowerupHandler);
         set.add(cursor);
     }
 
@@ -70,7 +70,7 @@ public class CollisionHandlerTest {
         Sparx sparx = new Sparx(0, 0, 1, 1, SparxDirection.LEFT);
         set.add(sparx);
         when(cursor.intersect(sparx)).thenReturn(true);
-        when(powerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.NONE);
+        when(cursorPowerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.NONE);
         Assert.assertTrue(handler.collisions(set, cursor));
     }
 
@@ -124,7 +124,7 @@ public class CollisionHandlerTest {
         Sparx sparx = mock(Sparx.class);
         set.add(sparx);
         when(cursor.intersect(sparx)).thenReturn(false);
-        when(powerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
+        when(cursorPowerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
         Assert.assertFalse(handler.collisions(set, cursor));
     }
 

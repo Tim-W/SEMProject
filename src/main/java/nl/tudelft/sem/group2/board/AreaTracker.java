@@ -2,7 +2,7 @@ package nl.tudelft.sem.group2.board;
 
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;

@@ -1,4 +1,4 @@
-package nl.tudelft.sem.group2.controllers;
+package nl.tudelft.sem.group2.gameController;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;

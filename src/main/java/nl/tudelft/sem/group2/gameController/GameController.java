@@ -1,4 +1,4 @@
-package nl.tudelft.sem.group2.controllers;
+package nl.tudelft.sem.group2.gameController;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
@@ -12,12 +12,7 @@ import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionHandler;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.level.LevelHandler;
-import nl.tudelft.sem.group2.powerups.PowerEat;
-import nl.tudelft.sem.group2.powerups.PowerLife;
-import nl.tudelft.sem.group2.powerups.PowerSpeed;
-import nl.tudelft.sem.group2.powerups.PowerUpType;
-import nl.tudelft.sem.group2.powerups.Powerup;
-import nl.tudelft.sem.group2.powerups.PowerupEvent;
+import nl.tudelft.sem.group2.powerups.PowerupHandler;
 import nl.tudelft.sem.group2.scenes.GameScene;
 import nl.tudelft.sem.group2.scenes.ScoreScene;
 import nl.tudelft.sem.group2.sound.SoundHandler;
@@ -31,12 +26,8 @@ import nl.tudelft.sem.group2.units.Unit;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static nl.tudelft.sem.group2.global.Globals.LEVELS;
 
@@ -61,6 +52,7 @@ public final class GameController {
     private LevelHandler levelHandler;
     private GameScene gameScene;
     private boolean twoPlayers;
+    private PowerupHandler powerupHandler;
 
     /**
      * Constructor for the GameController class.
@@ -69,7 +61,7 @@ public final class GameController {
         // Initialize models for scoretracking.
         levelHandler = new LevelHandler();
         collisionHandler = new CollisionHandler();
-
+        powerupHandler = new PowerupHandler();
         //Animation timer initialization
         previousTime = System.nanoTime();
         createAnimationTimer();
@@ -299,8 +291,8 @@ public final class GameController {
                             }
                             cursor.calculateArea(qix);
                         }
-                        handlePowerups();
-                        spawnPowerup();
+                        powerupHandler.handlePowerups(units, collisionHandler, cursors);
+                        powerupHandler.spawnPowerup(units, cursors, getGrid());
                     }
 
                 }
@@ -328,102 +320,6 @@ public final class GameController {
         }
     }
 
-    private void handlePowerups() {
-        applyPowerups();
-
-        Iterator<Unit> iter = units.iterator();
-        //code to remove powerups from the board after a certain amount of time
-        while (iter.hasNext()) {
-            Unit unit = iter.next();
-            if (unit instanceof Powerup) {
-                Powerup powerup = (Powerup) unit;
-                powerup.decreaseDuration();
-                if (powerup.getDuration() <= 0) {
-                    iter.remove();
-                }
-            }
-        }
-
-        PowerupEvent powerupEvent = collisionHandler.powerUpCollisions(units, cursors);
-        if (powerupEvent != null) {
-            Cursor cursor = powerupEvent.getCursor();
-            switch (powerupEvent.getPowerUpType()) {
-                case NONE:
-                    return;
-                case LIFE:
-                    cursor.addLife();
-                    return;
-                case EAT:
-                    cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.EAT);
-                    cursor.getPowerupHandler().setPowerUpDuration(Globals.POWERUP_EAT_DURATION);
-                    return;
-                case SPEED:
-                    cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.SPEED);
-                    cursor.getPowerupHandler().setPowerUpDuration(Globals.POWERUP_SPEED_DURATION);
-            }
-        }
-    }
-
-    /**
-     * Spawns a new powerup at random and when none is active yet.
-     */
-    private void spawnPowerup() {
-        double rand = ThreadLocalRandom.current().nextDouble();
-        if (rand < Globals.POWERUP_THRESHOLD && !powerUpActive()) {
-
-            for (Cursor cursor : cursors) {
-
-                int quadrant = cursor.oppositeQuadrant();
-
-                int[] coordinates = GameController.getInstance().getGrid().findPowerupLocation(quadrant);
-                Powerup powerup = null;
-                Map<PowerUpType, Powerup> powerupMap = new HashMap<>();
-                powerupMap.put(PowerUpType.EAT, new PowerEat(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
-                powerupMap.put(PowerUpType.LIFE, new PowerLife(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
-                powerupMap.put(PowerUpType.SPEED, new PowerSpeed(coordinates[0], coordinates[1],
-                        Globals.BOARD_MARGIN * 2, Globals.BOARD_MARGIN * 2));
-                powerup = powerupMap.get(PowerUpType.randomType());
-                if (powerup == null) {
-                    return;
-                }
-                addUnit(powerup);
-            }
-        }
-    }
-
-    /**
-     * @return true if a power up is active
-     */
-    private boolean powerUpActive() {
-        for (Cursor cursor : cursors) {
-            if (cursor.getPowerupHandler().getCurrentPowerup() != PowerUpType.NONE) {
-                return true;
-            }
-        }
-
-        for (Unit u : units) {
-            if (u instanceof Powerup) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void applyPowerups() {
-        for (Cursor cursor : cursors) {
-            if (cursor.getPowerupHandler().hasPowerup()
-                    && cursor.getPowerupHandler().getPowerUpDuration() <= 0) {
-                cursor.getPowerupHandler().setCurrentPowerup(PowerUpType.NONE);
-            }
-
-            if (cursor.getPowerupHandler().hasPowerup()
-                    && cursor.getPowerupHandler().getPowerUpDuration() > 0) {
-                cursor.getPowerupHandler().decrementDuration();
-            }
-        }
-    }
 
     /**
      * check if game is multiplayer.

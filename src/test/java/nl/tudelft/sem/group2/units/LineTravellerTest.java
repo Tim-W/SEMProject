@@ -4,7 +4,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.level.Level;
 import nl.tudelft.sem.group2.level.LevelHandler;
 import org.junit.Assert;

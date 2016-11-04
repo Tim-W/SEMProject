@@ -3,7 +3,7 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
 import nl.tudelft.sem.group2.board.BoardGrid;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.level.Level;
 import nl.tudelft.sem.group2.level.LevelHandler;
