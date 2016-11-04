@@ -1,17 +1,20 @@
 package nl.tudelft.sem.group2;
 
+import javafx.scene.paint.Color;
+
+import java.util.Observable;
 import java.util.logging.Level;
 
 import static nl.tudelft.sem.group2.global.Globals.FAST_AREA_MULTIPLIER;
+import static nl.tudelft.sem.group2.global.Globals.GRID_SURFACE;
 import static nl.tudelft.sem.group2.global.Globals.SLOW_AREA_MULTIPLIER;
-import static nl.tudelft.sem.group2.global.Globals.TARGET_PERCENTAGE;
 
 /**
  * Class which keeps track of the current score of the player.
  *
  * @author Rheddes.
  */
-public class ScoreCounter {
+public class ScoreCounter extends Observable {
 
     private static final Logger LOGGER = Logger.getLogger();
 
@@ -24,16 +27,35 @@ public class ScoreCounter {
     // Percentage which player needs to achieve to win the level.
     private double targetPercentage;
 
-    private int lives;
+    private Color color;
+
+    private int cursorID;
+
+    private int recentScore;
+    private double recentPercentage;
+
 
     /**
      * Default score counter constructor.
+     *
+     * @param cursorID specifying the cursor.
+     * @param targetPercentage of the level
      */
-    public ScoreCounter() {
+    public ScoreCounter(int cursorID, int targetPercentage) {
         this.totalPercentage = 0;
         this.totalScore = 0;
-        this.targetPercentage = TARGET_PERCENTAGE;
+        this.recentPercentage = 0;
+        this.recentScore = 0;
+        this.targetPercentage = targetPercentage;
+        this.cursorID = cursorID;
+        color = Color.YELLOW;
+        //if player 2
+        if (cursorID == 1) {
+            color = Color.RED;
+        }
+
     }
+
 
     /**
      * Method to update current score and percentage.
@@ -44,31 +66,49 @@ public class ScoreCounter {
      *                      or fast (normal points)
      */
     public void updateScore(int completedArea, boolean fastArea) {
-        int totalArea = LaunchApp.getGridWidth() * LaunchApp.getGridHeight();
-        double percentageIncrease = (double) completedArea / ((double) totalArea * 2);
+        double percentageIncrease = (double) completedArea / GRID_SURFACE * 100 / 2;
         totalPercentage += percentageIncrease;
-
+        recentPercentage = percentageIncrease;
         LOGGER.log(Level.INFO, "Percentage increased with "
                 + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER) / 100.0 + " to "
                 + Math.round(totalPercentage * FAST_AREA_MULTIPLIER) / 100.0, this.getClass());
 
         if (fastArea) {
+            recentScore = (int) (percentageIncrease * FAST_AREA_MULTIPLIER);
             totalScore += percentageIncrease * FAST_AREA_MULTIPLIER;
             LOGGER.log(Level.INFO, "Score increased with "
                     + Math.round(percentageIncrease * FAST_AREA_MULTIPLIER), this.getClass());
         } else {
+            recentScore = (int) (percentageIncrease * SLOW_AREA_MULTIPLIER);
             totalScore += percentageIncrease * SLOW_AREA_MULTIPLIER;
-            LOGGER.log(Level.INFO, "Score updated with "
+            LOGGER.log(Level.INFO, "Score increased with "
                     + Math.round(percentageIncrease * SLOW_AREA_MULTIPLIER), this.getClass());
         }
 
+        setChanged();
+        notifyObservers();
+    }
+
+    /**
+     * @return true if the claimed percentage is high enough.
+     */
+    public boolean hasWon() {
+        return getTotalPercentage() >= getTargetPercentage();
+    }
+
+
+    /**
+     * @return the color of the cursor that matches this scorecounter
+     */
+    public Color getColor() {
+        return this.color;
     }
 
     public double getTotalPercentage() {
         return totalPercentage;
     }
 
-    public void setTotalPercentage(double totalPercentage) {
+    public void setTotalPercentage(int totalPercentage) {
         this.totalPercentage = totalPercentage;
     }
 
@@ -80,19 +120,38 @@ public class ScoreCounter {
         this.totalScore = totalScore;
     }
 
+    public int getRecentScore() {
+        return recentScore;
+    }
+
+    public double getRecentPercentage() {
+        return recentPercentage;
+    }
+
     public double getTargetPercentage() {
         return targetPercentage;
     }
 
-    public void setTargetPercentage(double targetPercentage) {
+    public void setTargetPercentage(int targetPercentage) {
         this.targetPercentage = targetPercentage;
     }
 
-    public int getLives() {
-        return lives;
+    /**
+     * get cursorID of the cursor.
+     *
+     * @return int cursorID
+     */
+    public int getCursorID() {
+        return cursorID;
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
+    /**
+     * notify life changed.
+     *
+     * @param lives of cursor
+     */
+    public void notifyLife(int lives) {
+        setChanged();
+        notifyObservers(lives);
     }
 }

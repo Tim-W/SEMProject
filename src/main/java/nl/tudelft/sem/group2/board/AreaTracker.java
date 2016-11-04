@@ -1,11 +1,14 @@
-package nl.tudelft.sem.group2;
+package nl.tudelft.sem.group2.board;
 
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Observable;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -13,97 +16,98 @@ import java.util.logging.Level;
 /**
  * Tracks the area of the current level, of which pixels are covered by the player.
  */
-public class AreaTracker {
+public final class AreaTracker extends Observable {
 
     private static final Logger LOGGER = Logger.getLogger();
+    private static volatile AreaTracker instance;
 
-    private AreaState[][] boardGrid = new AreaState[LaunchApp.getGridWidth() + 1][LaunchApp.getGridHeight() + 1];
+    private BoardGrid grid;
     private Stack<Point> visiting = new Stack<>();
     private LinkedList<Point> area1, area2, border1, border2, newBorder, newArea;
     private Set<Point> visited;
     private boolean foundQix;
-    private Stix stix;
+
 
     /**
      * Constructor for the AreaTracker class.
      * The constructor sets all the grid points to border and the rest to uncovered
-     * @param stix   current stix to use
      */
-    public AreaTracker(Stix stix) {
-        this.stix = stix;
-        for (int i = 0; i < boardGrid.length; i++) {
-            for (int j = 0; j < boardGrid[i].length; j++) {
-                //If the current row is the first row set all grid points border on that row
-                if (j == 0) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If the current row is the bottom row set all grid points border on that row
-                else if (j == boardGrid[i].length - 1) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If current column is the last column set the grid point on that column and the current row border
-                else if (i == 0) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If the current column is the last column set the grid point on that column and the current row border
-                else if (i == boardGrid.length - 1) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If the current point is none of the above set that point to uncovered
-                else {
-                    boardGrid[j][i] = AreaState.UNCOVERED;
-                }
-            }
-        }
+    private AreaTracker() {
     }
 
     /**
-     * Custom constructor mainly created for testing purposes.
+     * Getter for the AreaTracker this is a singleton class
+     * so everywhere the AreaTracker is used it is the same instance
+     * This method allows getting of that instance and instantiates it when it is not instantiated yet.
      *
-     * @param width  width of the boardGrid
-     * @param height height of the boardGrid
-     * @param stix   current stix to use
+     * @return the only one instance of BoardGrid.
      */
-    public AreaTracker(int width, int height, Stix stix) {
-        this.stix = stix;
-        boardGrid = new AreaState[width][height];
-        for (int i = 0; i < boardGrid.length; i++) {
-            for (int j = 0; j < boardGrid[i].length; j++) {
-                //If the current row is the first row set all grid points border on that row
-                if (j == 0) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If the current row is the bottom row set all grid points border on that row
-                else if (j == boardGrid[i].length - 1) {
-                    boardGrid[j][i] = AreaState.OUTERBORDER;
-                }
-                //If current column is the last column set the grid point on that column and the current row border
-                else {
-                    if (i == 0) {
-                        boardGrid[j][i] = AreaState.OUTERBORDER;
-                    }
-                    //If the current column is the last column,
-                    // set the grid point on that column and the current row border
-                    else if (i == boardGrid.length - 1) {
-                        boardGrid[j][i] = AreaState.OUTERBORDER;
-                    }
-                    //If the current point is none of the above set that point to uncovered
-                    else {
-                        boardGrid[j][i] = AreaState.UNCOVERED;
-                    }
+    public static AreaTracker getInstance() {
+        if (instance == null) {
+            // Put lock on class since it we do not want to instantiate it twice
+            synchronized (AreaTracker.class) {
+                // Check if logger is in the meanwhile not already instantiated.
+                if (instance == null) {
+                    instance = new AreaTracker();
                 }
             }
         }
+        return instance;
     }
 
     /**
+     *
+     */
+    public static void reset() {
+        instance = null;
+    }
+/*
+    *//**
+     * Return the quadrant the cursor is in, as follows.
+     * 12
+     * 34
+     *
+     * @return the quadrant the cursor is in
+     *//*
+    private static int quadrant(int x, int y) {
+        if (x < Globals.BOARD_WIDTH / 4) {
+            if (y < Globals.BOARD_HEIGHT / 4) {
+                return 0;
+            } else {
+                return 3;
+            }
+        } else if (y < Globals.BOARD_HEIGHT / 4) {
+            return 1;
+        }
+        return 2;
+    }*/
+/*
+    *//**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the opposite quadrant the cursor is in
+     *//*
+    public static int oppositeQuadrant(int x, int y) {
+        int quadrant = quadrant(x, y);
+
+        return (quadrant + 2) % 4;
+    }*/
+
+    /**
+     * /**
      * Method that updates the grid when a stix is completed.
      *
      * @param qixCoordinates current qix coordinates
      * @param fastArea       tells if stix was created fast or slow (double points if slow)
+     * @param stix           current stix to use
+     * @param scoreCounter   the counter that handles the score
      */
-    public void calculateNewArea(Point qixCoordinates, boolean fastArea) {
-        setOuterBorders();
+    public synchronized void calculateNewArea(Point qixCoordinates,
+                                              boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
+        this.grid = GameController.getInstance().getGrid();
+        setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm
         Point start = stix.getStixCoordinates().getFirst();
@@ -117,9 +121,10 @@ public class AreaTracker {
         // Initialize the set which contains the visited points for the
         // floodfill algorithm
         visited = new HashSet<>();
-        checkDirections(qixCoordinates, start, dir);
+        checkDirections(qixCoordinates, start, dir, stix);
         //Check in which of the two areas the qix was found and set the other one to the newly created area
         setBorders();
+        updateScoreCounter(fastArea, stix, scoreCounter);
         if (fastArea) {
             Logger.getLogger().log(Level.INFO, "New fast area claimed with size " + newArea.size(), this.getClass());
         } else {
@@ -128,16 +133,16 @@ public class AreaTracker {
         //Update the grid with the newly created area
         for (Point current : newArea) {
             if (fastArea) {
-                boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.FAST;
+                grid.setState(current, AreaState.FAST);
             } else {
-                boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.SLOW;
+                grid.setState(current, AreaState.SLOW);
             }
         }
         //Update the grid with the new inner borders
         for (Point current : newBorder) {
-            boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.INNERBORDER;
+            grid.setState(current, AreaState.INNERBORDER);
         }
-        resetAreaTracker();
+        //resetAreaTracker();
         stix.emptyStix();
     }
 
@@ -151,33 +156,14 @@ public class AreaTracker {
         area2 = new LinkedList<>();
     }
 
-    private void setOuterBorders() {
+    private void setOuterBorders(Stix stix) {
         //Set all the points from the current stix to border points on the grid
         for (Point current : stix.getStixCoordinates()) {
-            boardGrid[(int) current.getX()][(int) current.getY()] = AreaState.OUTERBORDER;
+            grid.setState(current, AreaState.OUTERBORDER);
         }
     }
 
-    private void resetAreaTracker() {
-        //Reset the temporary area tracker
-        area1 = null;
-        area2 = null;
-        border1 = null;
-        border2 = null;
-    }
-
-    /**
-     * Updates the scorecounter.
-     *
-     * @param fastArea true if the area was drawn with fast mode
-     */
-    public void updateScoreCounter(boolean fastArea) {
-        ScoreCounter scoreCounter = GameController.getInstance().getScoreCounter();
-
-        //When testing create own scoreCounter
-        if (scoreCounter == null) {
-            scoreCounter = new ScoreCounter();
-        }
+    private void updateScoreCounter(boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
 
         //Update score and percentage with newly created area,
         // therefore it's needed to know the stix was created fast or slow
@@ -194,24 +180,24 @@ public class AreaTracker {
         }
     }
 
-    private void checkDirections(Point qixCoordinates, Point start, Point dir) {
+    private void checkDirections(Point qixCoordinates, Point start, Point dir, Stix stix) {
         //Check in which direction the stix first started to move
         if (start.getX() != dir.getX() || start.getY() != dir.getY()) {
             //If stix was first moving in X direction get points above and under the first stix point,
             // start the floodfill algorithm from there
-            Point beginPoint1 = new Point((int) dir.getX(), (int) dir.getY() - 1);
-            Point beginPoint2 = new Point((int) dir.getX(), (int) dir.getY() + 1);
+            Point beginPoint1 = new Point(dir.x, dir.y - 1);
+            Point beginPoint2 = new Point(dir.x, dir.y + 1);
             if (start.getY() != dir.getY()) {
                 //If stix was first moving in Y direction get points left and right the first stix point,
                 // start the floodfill algorithm from there
-                beginPoint1 = new Point((int) dir.getX() - 1, (int) dir.getY());
-                beginPoint2 = new Point((int) dir.getX() + 1, (int) dir.getY());
+                beginPoint1 = new Point(dir.x - 1, dir.y);
+                beginPoint2 = new Point(dir.x + 1, dir.y);
             }
             foundQix = false;
-            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true);
+            floodFill(beginPoint1, qixCoordinates, AreaState.UNCOVERED, true, stix);
             visited.clear();
             foundQix = false;
-            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false);
+            floodFill(beginPoint2, qixCoordinates, AreaState.UNCOVERED, false, stix);
         }
     }
 
@@ -225,11 +211,13 @@ public class AreaTracker {
      * @param qixCoordinates The coordinates of the qix.
      * @param chosenState    The state of points which get added to the new area.
      * @param addToArea1     Boolean which describes if points should be added to area 1 or 2 and border 1 or 2.
+     * @param stix           current stix to use
      */
-    public void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState, boolean addToArea1) {
+    private void floodFill(Point pointToCheck, Point qixCoordinates, AreaState chosenState,
+                           boolean addToArea1, Stix stix) {
         visiting.push(pointToCheck);
         while (!visiting.isEmpty()) {
-            floodFill(qixCoordinates, chosenState, addToArea1);
+            floodFill(qixCoordinates, chosenState, addToArea1, stix);
         }
     }
 
@@ -246,14 +234,15 @@ public class AreaTracker {
      *                      that gets added to the new area,
      *                      practically always AreaStates.UNCOVERED
      * @param addToArea1    boolean that keeps thrack of which temporary AreaTracker to use.
+     * @param stix          current stix to use
      */
-    public void floodFill(Point qixCoorinates, AreaState chosenState, boolean addToArea1) {
+    private void floodFill(Point qixCoorinates, AreaState chosenState, boolean addToArea1, Stix stix) {
         Point pointToCheck = visiting.pop();
         if (foundQix) {
             return;
         }
         // Check if the current point on the grid is the chosen beginstate
-        if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == chosenState) {
+        if (chosenState.equals(grid.getState(pointToCheck))) {
             // Check if that point is the coordinate of the qix
             if (pointToCheck.equals(qixCoorinates)) {
                 hitQix(addToArea1);
@@ -262,7 +251,7 @@ public class AreaTracker {
                 // add that point to the right temporary area tracker
                 addPointToAreaTracker(addToArea1, pointToCheck);
             }
-        } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.OUTERBORDER
+        } else if (grid.isOuterborder(pointToCheck.x, pointToCheck.y)
                 && !stix.getStixCoordinates().contains(pointToCheck)) {
             if (addToArea1) {
                 border1.add(pointToCheck);
@@ -270,10 +259,9 @@ public class AreaTracker {
                 border2.add(pointToCheck);
             }
             visited.add(pointToCheck);
-        } else if (boardGrid[(int) pointToCheck.getX()][(int) pointToCheck.getY()] == AreaState.INNERBORDER) {
+        } else if (grid.isInnerborder(pointToCheck.x, pointToCheck.y)) {
             visited.add(pointToCheck);
         }
-
     }
 
     private void addPointToAreaTracker(boolean addToArea1, Point pointToCheck) {
@@ -308,42 +296,5 @@ public class AreaTracker {
         foundQix = true;
     }
 
-    /**
-     * Getter for the boardGrid.
-     *
-     * @return the boardGrid
-     */
-    public AreaState[][] getBoardGrid() {
-        return boardGrid;
-    }
 
-    /**
-     * Shows a log which visualise the current board grid state.
-     */
-    public void printBoardGrid() {
-        for (AreaState[] column : boardGrid) {
-            for (AreaState state : column) {
-                switch (state) {
-                    case OUTERBORDER:
-                        System.out.print("[X]");
-                        break;
-                    case INNERBORDER:
-                        System.out.print("[*]");
-                        break;
-                    case UNCOVERED:
-                        System.out.print("[ ]");
-                        break;
-                    case FAST:
-                        System.out.print("[F]");
-                        break;
-                    case SLOW:
-                        System.out.print("[S]");
-                        break;
-                    default:
-                        break;
-                }
-            }
-            System.out.println();
-        }
-    }
 }

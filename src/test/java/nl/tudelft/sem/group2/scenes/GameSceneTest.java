@@ -1,84 +1,88 @@
 package nl.tudelft.sem.group2.scenes;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.JavaFXThreadingRule;
+import nl.tudelft.sem.group2.board.AreaState;
+import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.gameController.GameController;
+import nl.tudelft.sem.group2.level.Level;
+import nl.tudelft.sem.group2.level.LevelHandler;
+import nl.tudelft.sem.group2.powerups.CursorPowerupHandler;
+import nl.tudelft.sem.group2.powerups.PowerUpType;
 import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Fuse;
-import org.junit.Assert;
+import nl.tudelft.sem.group2.units.FuseHandler;
+import nl.tudelft.sem.group2.units.Stix;
+import nl.tudelft.sem.group2.units.Unit;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
-import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 
-import static org.mockito.Mockito.spy;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 /**
- * Created by gijs on 30-9-2016.
+ * Tests the GameScene.
  */
-@Ignore
 public class GameSceneTest {
-    private GameScene scene;
-    private GameController gameController;
-    private Cursor spyCursor;
-    @BeforeClass
-    public static void BeforeClass(){
-        new JFXPanel();
-    }
+    @Rule
+    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
+    private GameScene gameScene;
+    private Set<Unit> units;
+    private Cursor cursor;
+    private Stix stix;
+    private AreaState[][] areaStates;
+    private FuseHandler fuseHandler;
+    private BoardGrid grid;
+
     @Before
-    public void setUp() throws Exception {
-        Group root = new Group();
-        Scene s = new Scene(root, 300, 300, Color.BLACK);
-        removeGameController();
-        gameController = GameController.getInstance();
-        gameController.getAnimationTimer().stop();
-        scene = gameController.getScene();
-        spyCursor = spy(gameController.getCursor());
-        gameController.setCursor(spyCursor);
+    public void setUp() {
+        units = new HashSet<>();
+        gameScene = new GameScene(new Group(), Color.BLACK, null);
+        cursor = mock(Cursor.class);
+        stix = mock(Stix.class);
+        grid = mock(BoardGrid.class);
+        LevelHandler levelHandler = mock(LevelHandler.class);
+        GameController.getInstance().setLevelHandler(levelHandler);
+        when(levelHandler.getLevel()).thenReturn(mock(Level.class));
+        when(levelHandler.getLevel().getBoardGrid()).thenReturn(grid);
+        when(cursor.getStix()).thenReturn(stix);
+        fuseHandler = mock(FuseHandler.class);
+        when(cursor.getFuseHandler()).thenReturn(fuseHandler);
+        CursorPowerupHandler cursorPowerupHandler = mock(CursorPowerupHandler.class);
+        when(cursorPowerupHandler.getCurrentPowerup()).thenReturn(PowerUpType.EAT);
+        when(cursor.getCursorPowerupHandler()).thenReturn(cursorPowerupHandler);
+        units.add(cursor);
+        areaStates = new AreaState[1][1];
     }
 
-    private void removeGameController() {
-        gameController = GameController.getInstance();
-        gameController.setCursor(null);
-        gameController.setStix(null);
-        gameController.setGameScene(null);
-        GameController.setUnits(null);
-        GameController.setGameController(null);
-    }
-
+    /**
+     * @throws Exception
+     */
     @Test
-    public void testDrawStixAndFuseVerify() throws Exception {
-        gameController.getStix().addToStix(new Point(1, 1));
-        gameController.getStix().addToStix(new Point(1, 2));
-        scene.removeFuse();
-        gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
-        scene.draw();
-        verify(spyCursor,times(1)).isFast();
-    }
-    @Test
-    public void testDrawStixAndFuseVerifyNot() throws Exception {
-        gameController.getStix().addToStix(new Point(1, 1));
-        gameController.getStix().addToStix(new Point(1, 3));
-        scene.removeFuse();
-        gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
-        scene.draw();
-        verify(spyCursor,times(0)).isFast();
-    }
-    @Test
-    public void testRemoveFuse() throws Exception {
-        int oldSize = gameController.getUnits().size();
-        scene.removeFuse();
-        gameController.getUnits().add(new Fuse(1, 2, 1, 1, gameController.getStix(), gameController.getAreaTracker()));
-        scene.removeFuse();
-        Assert.assertEquals(oldSize, gameController.getUnits().size());
+    public void testDrawCursor() throws Exception {
+        gameScene.draw(units);
+        verify(cursor, times(1)).draw(any());
 
     }
+/*
+    @Test
+    public void testDrawStixAndFuseVerifyFuse() throws Exception {
+        when(fuseHandler.getFuse()).thenReturn(mock(Fuse.class));
+        when(stix.pointEqualsFirstPoint(any())).thenReturn(false);
+        LinkedList<Point> points = new LinkedList<>();
+        Point point = mock(Point.class);
+        points.add(point);
+        when(stix.getStixCoordinates()).thenReturn(points);
+        gameScene.draw(units);
+        verify(cursor, times(0)).isFast();
+    }*/
 
 }

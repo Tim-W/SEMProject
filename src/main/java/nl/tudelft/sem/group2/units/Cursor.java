@@ -3,167 +3,156 @@ package nl.tudelft.sem.group2.units;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.AreaTracker;
+import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.Logger;
+import nl.tudelft.sem.group2.ScoreCounter;
+import nl.tudelft.sem.group2.board.AreaTracker;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
+import nl.tudelft.sem.group2.cursorMovement.CursorKeypressHandler;
+import nl.tudelft.sem.group2.global.Globals;
+import nl.tudelft.sem.group2.powerups.CursorPowerupHandler;
+import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
 import static nl.tudelft.sem.group2.scenes.GameScene.gridToCanvas;
 
 /**
  * A cursor which can travel over lines and is controlled by user input (arrow keys).
+ * There are draw keys which for player 1 are I and O and for player 2 Z and X.
+ * With these draw keys a cursor can move from the lines and create it's own lines.
+ * I and Z are used to draw fast, and O and X for drawing slowly but gaining double points.
+ * The cursor can lose a live when colliding with the qix, a sparx or the fuse.
  */
 public class Cursor extends LineTraveller implements CollisionInterface {
     private static final Logger LOGGER = Logger.getLogger();
-    private final int animationSpeed = 30;
-    private KeyCode currentMove = null;
+    private int animationSpeed = Globals.ANIMATION_SPEED;
+
     private int loops = 0;
-    private int speed = 2;
+
     private LinkedList<double[][]> oldLines = new LinkedList<>();
-    private boolean isDrawing = false;
-    private boolean isFast = true;
+
     private Stix stix;
     private int lives;
+
+    private ScoreCounter scoreCounter;
+    private boolean isDrawing = false;
+    private int speed = Globals.CURSOR_FAST;
+    private int id;
+    private CursorPowerupHandler cursorPowerupHandler;
+    private FuseHandler fuseHandler;
+    private CursorKeypressHandler cursorKeypressHandler;
 
 
     /**
      * Create a cursor.
      *
-     * @param x           start x coordinate
-     * @param y           start y coordinate
-     * @param width       width, used for collision detection
-     * @param height      height, used for collision detection
-     * @param stix        current stix to use
-     * @param areaTracker the areatracker
-     * @param lives       the amount of lives a players starts with
+     * @param position start position
+     * @param width    width, used for the sprite
+     * @param height   height, used for the sprite
+     * @param stix     current stix to use
+     * @param lives    the amount of lives a players starts with
+     * @param id       identifies the cursor.
      */
-    public Cursor(int x, int y, int width, int height, Stix stix, AreaTracker areaTracker, int lives) {
-        super(x, y, width, height, areaTracker);
+    public Cursor(Point position, int width, int height, Stix stix, int lives, int id) {
+        super(position.x, position.y, width, height);
         Image[] sprite = new Image[1];
-        sprite[0] = new Image("/images/cursor.png");
+        this.id = id;
+        String colorString = "yellow";
+        //if player 2
+        if (id == 1) {
+            colorString = "red";
+        }
+        sprite[0] = new Image("/images/cursor-" + colorString + ".png");
         setSprite(sprite);
         this.stix = stix;
         this.lives = lives;
+        cursorPowerupHandler = new CursorPowerupHandler();
+        fuseHandler = new FuseHandler(this);
+        cursorKeypressHandler = new CursorKeypressHandler(this);
+    } /*
+
+    *//*
+     * Custom constructor for testing purposes.
+     *
+     * @param position    spawn position fo cursor.
+     * @param width       width of cursor.
+     * @param height      height of cursor.
+     * @param stix        stix of the cursor.
+     *//*
+    public Cursor(Point position, int width, int height, Stix stix) {
+        super(position.x, position.y, width, height);
+        this.stix = stix;
+        cursorPowerupHandler = new CursorPowerupHandler();
+        fuseHandler = new FuseHandler(this);
     }
+*/
 
     @Override
     public void move() {
         for (int i = 0; i < speed; i++) {
-            int transX = 0;
-            int transY = 0;
-            if (currentMove != null) {
-                switch (currentMove) {
-                    case LEFT:
-                        transX = -1;
-                        break;
-                    case RIGHT:
-                        transX = 1;
-                        break;
-                    case UP:
-                        transY = -1;
-                        break;
-                    case DOWN:
-                        transY = 1;
-                        break;
-                    default:
-                        break;
-                }
-                assertMove(transX, transY);
-            }
+            cursorKeypressHandler.cursorAssertMove();
+        }
+        if (fuseHandler.getFuse() != null) {
+            fuseHandler.getFuse().move();
         }
     }
 
 
-    private void assertMove(int transX, int transY) {
-        if (getX() + transX >= 0 && getX() + transX <= BOARD_WIDTH / 2 && getY() + transY >= 0 && getY()
-                + transY <= BOARD_WIDTH / 2) {
-            if (uncoveredOn(getX() + transX, getY() + transY) && isDrawing) {
-                if (!stix.getStixCoordinates().contains(new Point(getX() + transX, getY() + transY))
-                        && !stix.getStixCoordinates().contains(new Point(getX() + transX * 2,
-                        getY() + transY * 2))
-                        && getAreaTracker().getBoardGrid()[getX() + transX + transY]
-                        [getY() + transY + transX].equals(AreaState
-                        .UNCOVERED)
-                        && getAreaTracker().getBoardGrid()[getX() + transX - transY]
-                        [getY() + transY - transX].equals(AreaState
-                        .UNCOVERED)) {
-
-                    if (outerBorderOn(getX(), getY())) {
-                        stix.addToStix(new Point(getX(), getY()));
-                    }
-                    setX(getX() + transX);
-                    setY(getY() + transY);
-                    logCurrentMove();
-                    stix.addToStix(new Point(getX(), getY()));
-                }
-            } else if (outerBorderOn(getX() + transX, getY() + transY)) {
-                setX(getX() + transX);
-                setY(getY() + transY);
-                logCurrentMove();
-            }
-        }
-    }
-
     /**
-     * @return the current move direction (up/down/left/right)
+     * Method which tests if cursor intersects with other unit.
+     *
+     * @param collidee the other unit
+     * @return if cursor intersects with other unit
      */
-    public KeyCode getCurrentMove() {
-        return currentMove;
-    }
-
-    /**
-     * @param currentMove the current move direction (up/down/left/right)
-     */
-    public void setCurrentMove(KeyCode currentMove) {
-        this.currentMove = currentMove;
+    @Override
+    public boolean intersect(Unit collidee) {
+        return super.intersect(collidee) || fuseHandler.getFuse() != null && fuseHandler.getFuse().intersect(this);
     }
 
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(GraphicsContext gc) {
         int drawX = gridToCanvas(getX());
         int drawY = gridToCanvas(getY());
+        drawStixAndFuse(gc);
         final int lineCount = 10;
         if (loops < animationSpeed + lineCount) {
-            calculateLineCoordinates(drawX, drawY, canvas);
+            calculateLineCoordinates(drawX, drawY, gc.getCanvas());
             if (oldLines.size() > lineCount || oldLines.size() > animationSpeed - loops) {
                 oldLines.removeLast();
             }
-            GraphicsContext gC = canvas.getGraphicsContext2D();
-            gC.setStroke(javafx.scene.paint.Color.WHITE);
+            gc.setStroke(Color.WHITE);
             for (double[][] l : oldLines) {
-                gC.beginPath();
+                gc.beginPath();
                 for (int i = 0; i < 4; i++) {
-                    gC.moveTo(l[i][0], l[i][1]);
-                    gC.lineTo(l[i][2], l[i][3]);
+                    gc.moveTo(l[i][0], l[i][1]);
+                    gc.lineTo(l[i][2], l[i][3]);
                 }
-                gC.stroke();
+                gc.stroke();
             }
             loops++;
         }
-        canvas.getGraphicsContext2D().drawImage(
+        gc.drawImage(
                 getSprite()[getSpriteIndex()],
                 drawX - getWidth() / 2 + 1,
                 drawY - getHeight() / 2 + 1,
                 getWidth(),
                 getHeight()
         );
+        cursorPowerupHandler.applyEffect(gc);
     }
 
     private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
         if (loops < animationSpeed) {
             double height = canvas.getHeight();
-            double heightVar = height / animationSpeed * loops;
+            double heightVar = height / Globals.ANIMATION_SPEED * loops;
             double width = canvas.getWidth();
-            double widthVar = width / animationSpeed * loops;
+            double widthVar = width / Globals.ANIMATION_SPEED * loops;
             final double lineSize = 80.0;
-            double lineSizeVar = (lineSize / animationSpeed) * loops;
+            double lineSizeVar = (lineSize / Globals.ANIMATION_SPEED) * loops;
             double[][] line = new double[4][4];
             line[0][0] = width - widthVar + drawX - (lineSize - lineSizeVar);
             line[0][1] = -(height - heightVar) + drawY;
@@ -185,6 +174,35 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         }
     }
 
+
+    /**
+     * When a new area is completed, calculate the new score.
+     *
+     * @param qix the qix of the game
+     */
+    public void calculateArea(Qix qix) {
+        if (getGrid().isOuterborder(this.getX(), this.getY()) && !this.getStix().isEmpty()) {
+
+            SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
+
+            AreaTracker.getInstance().calculateNewArea(new Point(qix.getX(), qix.getY()),
+                    this.isFast(), getStix(), scoreCounter);
+
+            //Remove the Fuse from the gameView when completing an area
+            fuseHandler.removeFuse();
+        }
+    }
+
+    /**
+     * Draw current Stix and Fuse on screen.
+     */
+    private void drawStixAndFuse(GraphicsContext gc) {
+        stix.draw(gc, fuseHandler.getFuse(), isFast());
+        if (fuseHandler.getFuse() != null) {
+            fuseHandler.getFuse().draw(gc);
+        }
+    }
+
     /**
      * @return true if the cursor is drawing
      */
@@ -192,11 +210,20 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return isDrawing;
     }
 
+    /***** Getters and setters *****/
+
     /**
      * @param drawing if cursor is moving while user has key X or Z down
      */
     public void setDrawing(boolean drawing) {
         isDrawing = drawing;
+    }
+
+    /**
+     * @return the speed of the cursor
+     */
+    public int getSpeed() {
+        return this.speed;
     }
 
     /**
@@ -207,33 +234,79 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     }
 
     /**
-     * @return whether the cursor is moving fast or slow
+     * @return the CursorKeypressHandler of the cursor.
      */
-    public boolean isFast() {
-        return isFast;
+    public CursorKeypressHandler getCursorKeypressHandler() {
+        return cursorKeypressHandler;
     }
 
     /**
-     * @param isFast whether the cursor is moving fast or slow
+     * Get id of the cursor.
+     *
+     * @return int id
      */
-    public void setFast(boolean isFast) {
-        this.isFast = isFast;
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @return whether the cursor is moving fast or slow
+     */
+    public boolean isFast() {
+        return speed != Globals.CURSOR_SLOW;
+    }
+
+    /**
+     * @return the stix of this cursor.
+     */
+    public Stix getStix() {
+        return stix;
+    }
+
+    /**
+     * only for testing.
+     *
+     * @param stix setter for stix
+     */
+    public void setStix(Stix stix) {
+        this.stix = stix;
+    }
+
+    /**
+     * @return The scoreCounter of this specific cursor.
+     */
+    public ScoreCounter getScoreCounter() {
+        return scoreCounter;
+    }
+
+    /**
+     * set the scorecounter of the cursor.
+     *
+     * @param scoreCounter of the cursor
+     */
+    public void setScoreCounter(ScoreCounter scoreCounter) {
+        this.scoreCounter = scoreCounter;
     }
 
     /**
      * Method which log the current movement of the cursor.
      * Only gets executed when log level is on detailledLogging.
      */
-    private void logCurrentMove() {
+    public void logCurrentMove() {
         LOGGER.log(Level.FINE, "Cursor moved to (" + getX() + "," + getY() + ")", this.getClass());
     }
 
     /**
      * Getter for the amount of lives the cursor has.
+     *
      * @return amount of lives left
      */
     public int getLives() {
         return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     /**
@@ -241,16 +314,104 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      */
     public void cursorDied() {
         if (lives >= 1) {
-            lives = lives - 1;
+            subtractLife();
         }
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + lives, this.getClass());
-        if (lives == 0) {
-            if (this.isDrawing()) {
-                Point newStartPos = stix.getStixCoordinates().getFirst();
-                this.setX((int) newStartPos.getX());
-                this.setY((int) newStartPos.getY());
-                stix.emptyStix();
-            }
+
+        if (stixDrawn()) {
+            Point newStartPos = stix.getStixCoordinates().getFirst();
+            this.setX((int) newStartPos.getX());
+            this.setY((int) newStartPos.getY());
+            stix.emptyStix();
+            fuseHandler.removeFuse();
         }
+
+        loops = 0;
+        animationSpeed = Globals.DEATH_ANIMATION_SPEED;
+    }
+
+    /**
+     * Return the quadrant the cursor is in, as follows.
+     * 01
+     * 32
+     *
+     * @return the quadrant the cursor is in
+     */
+    public int quadrant() {
+        if (this.getX() < Globals.BOARD_WIDTH / 4) {
+            if (this.getY() < Globals.BOARD_HEIGHT / 4) {
+                return 0;
+            } else {
+                return 3;
+            }
+        } else if (this.getY() < Globals.BOARD_HEIGHT / 4) {
+            System.out.println("in quadrant 2");
+            return 1;
+        }
+        return 2;
+    }
+
+    /**
+     * Gives the opposite quadrant the cursor is in.
+     *
+     * @return the opposite quadrant the cursor is in
+     */
+    public int oppositeQuadrant() {
+        int quadrant = this.quadrant();
+
+        return (quadrant + 2) % 4;
+    }
+
+    /**
+     * @return true if the cursor has drawn stix
+     */
+    public boolean stixDrawn() {
+        return stix != null && !stix.isStixEmpty();
+    }
+
+    /**
+     * Adds a life to the cursor.
+     */
+    public void addLife() {
+        lives++;
+        scoreCounter.notifyLife(lives);
+        //scoreCounter.addLife();
+        LOGGER.log(Level.INFO, "added life to cursor. Current lives: " + lives, Cursor.class);
+    }
+
+    /**
+     * decrement a life to the cursor.
+     */
+    public void subtractLife() {
+        lives--;
+        scoreCounter.notifyLife(lives);
+        LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
+    }
+
+    public CursorPowerupHandler getCursorPowerupHandler() {
+        return cursorPowerupHandler;
+    }
+
+    public FuseHandler getFuseHandler() {
+        return fuseHandler;
+    }
+
+    public void setFuseHandler(FuseHandler fuseHandler) {
+        this.fuseHandler = fuseHandler;
+    }
+
+    public int getLoops() {
+        return loops;
+    }
+
+    public void setLoops(int loops) {
+        this.loops = loops;
+    }
+
+    /**
+     * @return String format of cursor.
+     */
+    public String toString() {
+        return "Cursor";
     }
 }

@@ -15,4 +15,5 @@ public interface CollisionInterface {
      * @return true if the units intersect, false if they don't
      */
     boolean intersect(Unit unit);
+
 }

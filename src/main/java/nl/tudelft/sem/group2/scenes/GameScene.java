@@ -10,20 +10,17 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import nl.tudelft.sem.group2.AreaState;
-import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.controllers.GameController;
+import nl.tudelft.sem.group2.board.BoardGrid;
+import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.units.Cursor;
-import nl.tudelft.sem.group2.units.Fuse;
 import nl.tudelft.sem.group2.units.Unit;
 
-import java.awt.Point;
 import java.util.Random;
+import java.util.Set;
 
-import static nl.tudelft.sem.group2.global.Globals.BOARD_HEIGHT;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_MARGIN;
-import static nl.tudelft.sem.group2.global.Globals.BOARD_WIDTH;
+import static nl.tudelft.sem.group2.global.Globals.GRID_HEIGHT;
+import static nl.tudelft.sem.group2.global.Globals.GRID_WIDTH;
+
 
 /**
  * GameScene contains all the information about the current game.
@@ -33,25 +30,25 @@ public class GameScene extends Scene {
     private static final int LAST_IMAGE = 5;
     private static final int FIRST_IMAGE = 2;
     private static final int MARGIN = 8;
-    private static Label messageLabel;
-    private static VBox messageBox;
-    private static ScoreScene scoreScene;
-    private static Canvas canvas;
-    private static GraphicsContext gc;
-    private static Image image;
+    private ScoreScene scoreScene;
+    private Label messageLabel;
+    private VBox messageBox;
+    private Canvas canvas;
+    private GraphicsContext gc;
+    private Image image;
 
     /**
      * Create a new GameScene.
      * Sets up all listeners and default objects to play the game
      *
-     * @param root  the root scene this scene is built on
-     * @param color background color of the scene
+     * @param root       the root scene this scene is built on
+     * @param color      background color of the scene
+     * @param scoreScene the score scene
      */
-    public GameScene(final Group root, Color color) {
+    public GameScene(final Group root, Color color, ScoreScene scoreScene) {
         super(root, color);
-
+        this.scoreScene = scoreScene;
         initializeCanvas();
-
         // Initialize label in middle of screen to display start message
         messageLabel = new Label("Press SPACE to begin!");
         final int messageBoxSpacing = 10;
@@ -61,22 +58,27 @@ public class GameScene extends Scene {
         Canvas bottomBorder = new Canvas(Globals.BOARD_WIDTH, Globals.BORDER_BOTTOM_HEIGHT);
         bottomBorder.setLayoutY(Globals.BORDER_BOTTOM_POSITION_Y);
         // Add scene elements to root group
-        createScoreScene();
-        root.getChildren().add(scoreScene);
+        if (scoreScene != null) {
+            root.getChildren().add(scoreScene);
+        }
         root.getChildren().add(canvas);
         root.getChildren().add(bottomBorder);
         root.getChildren().add(messageBox);
         Random random = new Random();
         //Choose random image
         int image = random.nextInt(LAST_IMAGE - FIRST_IMAGE) + FIRST_IMAGE;
-        setImage(new Image("/images/" + image + ".png", BOARD_WIDTH, BOARD_HEIGHT, false, false));
+        setImage(new Image(
+                "/images/background-image-" + image + ".png",
+                Globals.BOARD_WIDTH, Globals.BOARD_HEIGHT,
+                false,
+                false));
         //Draw black rectangle over image to avoid spoilers
         gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, BOARD_WIDTH + 2 * BOARD_MARGIN, BOARD_HEIGHT + 2 * BOARD_MARGIN);
+        gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * Globals.BOARD_MARGIN,
+                Globals.BOARD_HEIGHT + 2 * Globals.BOARD_MARGIN);
         // Initialize key pressed an key released actions
         registerKeyPressedHandler();
         registerKeyReleasedHandler();
-        scoreScene.setLivesLabel(3);
     }
 
     /**
@@ -89,66 +91,11 @@ public class GameScene extends Scene {
         return b * 2 + MARGIN - 1;
     }
 
-    private static void drawUncovered() {
-        gc.setFill(Color.BLACK);
-        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
-            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
-                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.UNCOVERED) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
-    private static void drawBorders() {
-        gc.setFill(Color.WHITE);
-        for (int i = 0; i < GameController.getInstance().getAreaTracker().getBoardGrid().length; i++) {
-            for (int j = 0; j < GameController.getInstance().getAreaTracker().getBoardGrid()[i].length; j++) {
-                if (GameController.getInstance().getAreaTracker().getBoardGrid()[i][j] == AreaState.OUTERBORDER
-                        || GameController.getInstance().getAreaTracker().getBoardGrid()[i][j]
-                        == AreaState.INNERBORDER) {
-                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
-                }
-            }
-        }
-    }
-
     /**
-     * Draw current Stix and Fuse on screen.
+     * @return the scorescene
      */
-    private static void drawStixAndFuse() {
-        boolean foundFuse = true;
-        Point fuse = new Point(-1, -1);
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            if (unit instanceof Fuse) {
-                foundFuse = false;
-                fuse = new Point(unit.getX(), unit.getY());
-            }
-        }
-        for (Point p : GameController.getInstance().getStix().getStixCoordinates()) {
-            if (!p.equals(GameController.getInstance().getStix().getStixCoordinates().getFirst())) {
-                if (foundFuse) {
-                    if (GameController.getInstance().getCursor().isFast()) {
-                        gc.setFill(Color.MEDIUMBLUE);
-                    } else {
-                        gc.setFill(Color.DARKRED);
-                    }
-                } else {
-                    if (p.equals(fuse)) {
-                        foundFuse = true;
-                        if (GameController.getInstance().getCursor().isFast()) {
-                            gc.setFill(Color.MEDIUMBLUE);
-                        } else {
-                            gc.setFill(Color.DARKRED);
-                        }
-                    } else {
-                        gc.setFill(Color.GRAY);
-                    }
-                }
-
-                gc.fillRect(gridToCanvas(p.x), gridToCanvas(p.y), 2, 2);
-            }
-        }
+    public ScoreScene getScoreScene() {
+        return scoreScene;
     }
 
     /**
@@ -163,9 +110,7 @@ public class GameScene extends Scene {
 
         // Obtain GraphicsContext2d from canvas
         gc = canvas.getGraphicsContext2D();
-        // BLUE SCREEN IS THE SIZE OF THE BOARD, 300x300
-        gc.setFill(Color.BLUE);
-        gc.fillRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
+        gc.fillRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
     }
 
     /**
@@ -192,13 +137,6 @@ public class GameScene extends Scene {
         setOnKeyPressed((KeyEvent e) -> GameController.getInstance().keyPressed(e));
     }
 
-    private void createScoreScene() {
-        Group group = new Group();
-        scoreScene = new ScoreScene(group, Globals.GAME_WIDTH, Globals.SCORESCENE_POSITION_Y);
-
-        scoreScene.setScore(0);
-        scoreScene.setClaimedPercentage(0);
-    }
 
     private void addMessageBox() {
         // Messagebox&label for displaying start and end messages
@@ -213,34 +151,63 @@ public class GameScene extends Scene {
 
     /**
      * Draw all the units on the screen.
+     *
+     * @param units     units of the game
      */
-    public void draw() {
+    public void draw(Set<Unit> units) {
         // gc.setFill(Color.BLACK);
-        gc.clearRect(0, 0, BOARD_WIDTH + 2 * MARGIN, BOARD_HEIGHT + 2 * MARGIN);
-        gc.drawImage(image, BOARD_MARGIN, BOARD_MARGIN);
+        gc.clearRect(0, 0, Globals.BOARD_WIDTH + 2 * MARGIN, Globals.BOARD_HEIGHT + 2 * MARGIN);
+        gc.drawImage(image, Globals.BOARD_MARGIN, Globals.BOARD_MARGIN);
         gc.setFill(Color.WHITE);
         drawUncovered();
         drawBorders();
-        drawStixAndFuse();
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            unit.move();
-            unit.draw(canvas);
+        if (units != null) {
+            for (Unit unit : units) {
+                unit.draw(gc);
+            }
         }
     }
 
     /**
-     * If there is a Fuse on the screen, remove it.
+     * move all units.     *
+     *
+     * @param units units of the game
      */
-    public void removeFuse() {
-        Unit removingItem = null;
-        for (Unit unit : GameController.getInstance().getUnits()) {
-            if (unit instanceof Fuse) {
-                removingItem = unit;
+    public void move(Set<Unit> units) {
+        for (Unit unit : units) {
+            unit.move();
+        }
+    }
+
+    private void drawUncovered() {
+        gc.setFill(Color.BLACK);
+        for (int i = 0; i < GRID_WIDTH + 1; i++) {
+            for (int j = 0; j < GRID_HEIGHT + 1; j++) {
+                if (GameController.getInstance().getGrid().isUncovered(i, j)) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
             }
         }
-        if (removingItem != null) {
-            GameController.getInstance().getUnits().remove(removingItem);
+    }
+
+    private void drawBorders() {
+        gc.setFill(Color.WHITE);
+        BoardGrid grid = GameController.getInstance().getGrid();
+        for (int i = 0; i < GRID_WIDTH + 1; i++) {
+            for (int j = 0; j < GRID_HEIGHT + 1; j++) {
+                if (grid.isOuterborder(i, j) || grid.isInnerborder(i, j)) {
+                    gc.fillRect(gridToCanvas(i), gridToCanvas(j), 2, 2);
+                }
+            }
         }
+    }
+
+    /**
+     * only used for testing.
+     * @return String
+     */
+    public String getMessage() {
+        return messageLabel.getText();
     }
 
     /**
@@ -248,8 +215,8 @@ public class GameScene extends Scene {
      *
      * @param string string which the label should be
      */
-    public void setMessageLabel(String string) {
-        GameScene.messageLabel.setText(string);
+    public void setMessage(String string) {
+        messageLabel.setText(string);
     }
 
     /**
@@ -258,18 +225,16 @@ public class GameScene extends Scene {
      * @param position new x-position
      */
     public void setMessageBoxLayoutX(int position) {
-        GameScene.messageBox.setLayoutX(position);
+        messageBox.setLayoutX(position);
     }
 
     /**
-     * Update the info on the scorescene with actual info from scorecounter.
+     * only for testing.
      *
-     * @param scoreCounter scorecounter from GameController.
-     * @param cursor current cursor for which lives should be updated.
+     * @param gc GraphicsContext
      */
-    public void updateScorescene(ScoreCounter scoreCounter, Cursor cursor) {
-        scoreScene.setScore(scoreCounter.getTotalScore());
-        scoreScene.setClaimedPercentage((int) (scoreCounter.getTotalPercentage() * 100));
-        scoreScene.setLivesLabel(cursor.getLives());
+    public void setGc(GraphicsContext gc) {
+        this.gc = gc;
     }
 }
+
