@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2;
 
 import nl.tudelft.sem.group2.level.Level;
+import nl.tudelft.sem.group2.level.LevelFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,6 +29,12 @@ public class LevelFactoryTest {
     public void testCreateFromXmlNull() throws Exception {
         Level level = createFromXml(0, false);
         Assert.assertEquals(null, level);
+    }
+
+    @Test
+    public void testConstructor() throws Exception {
+        LevelFactory levelFactory = new LevelFactory();
+        Assert.assertTrue(levelFactory != null);
     }
 
 }

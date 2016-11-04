@@ -16,7 +16,7 @@ public final class LevelFactory {
     /**
      * Basic contructor for collision handler class.
      */
-    private LevelFactory() {
+    public LevelFactory() {
     }
 
     /**
