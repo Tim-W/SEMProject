@@ -150,4 +150,44 @@ public class FuseTest {
     public void testToString() {
         Assert.assertEquals(fuse.toString(), "Fuse");
     }
+
+    @Test
+    public void onPointTest1() {
+        fuse.setLastX(0);
+        fuse.setLastY(0);
+
+        Point p = new Point(0, 0);
+
+        Assert.assertTrue(fuse.onPoint(p));
+    }
+
+    @Test
+    public void onPointTest2() {
+        fuse.setLastX(0);
+        fuse.setLastY(0);
+
+        Point p = new Point(1, 0);
+
+        Assert.assertFalse(fuse.onPoint(p));
+    }
+
+    @Test
+    public void onPointTest3() {
+        fuse.setLastX(0);
+        fuse.setLastY(0);
+
+        Point p = new Point(0, 1);
+
+        Assert.assertFalse(fuse.onPoint(p));
+    }
+
+    @Test
+    public void onPointTest4() {
+        fuse.setLastX(0);
+        fuse.setLastY(0);
+
+        Point p = new Point(1, 1);
+
+        Assert.assertFalse(fuse.onPoint(p));
+    }
 }
