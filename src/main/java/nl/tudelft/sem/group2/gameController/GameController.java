@@ -166,7 +166,7 @@ public final class GameController {
      *
      * @param cursor cursor to add to cursor array.
      */
-    private void addCursor(Cursor cursor) {
+    public void addCursor(Cursor cursor) {
         if (cursor != null && cursors.size() < 2) {
             cursors.add(cursor);
         }
@@ -181,7 +181,7 @@ public final class GameController {
      *
      * @param unit unit to add
      */
-    private void addUnit(Unit unit) {
+    public void addUnit(Unit unit) {
         if (units == null) {
             units = new HashSet<>();
         }
@@ -447,6 +447,7 @@ public final class GameController {
 
     /**
      * only used for testing.
+     *
      * @param collisionHandler CollisionHandler
      */
     public void setCollisionHandler(CollisionHandler collisionHandler) {

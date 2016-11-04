@@ -339,7 +339,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      *
      * @return the quadrant the cursor is in
      */
-    private int quadrant() {
+    public int quadrant() {
         if (this.getX() < Globals.BOARD_WIDTH / 4) {
             if (this.getY() < Globals.BOARD_HEIGHT / 4) {
                 return 0;
@@ -384,7 +384,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     /**
      * decrement a life to the cursor.
      */
-    private void subtractLife() {
+    public void subtractLife() {
         lives--;
         scoreCounter.notifyLife(lives);
         LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
