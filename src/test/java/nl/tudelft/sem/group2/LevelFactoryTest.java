@@ -17,4 +17,17 @@ public class LevelFactoryTest {
         Assert.assertEquals(level.getLevelId(), id);
     }
 
+    @Test
+    public void testCreateFromXmlTwoPlayers() throws Exception {
+        int id = 1;
+        Level level = createFromXml(id, true);
+        Assert.assertEquals(10, level.getPercentage());
+    }
+
+    @Test
+    public void testCreateFromXmlNull() throws Exception {
+        Level level = createFromXml(0, false);
+        Assert.assertEquals(null, level);
+    }
+
 }
