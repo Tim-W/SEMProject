@@ -305,6 +305,10 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return lives;
     }
 
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
     /**
      * Method that decreases amount of lives cursor has upon dying.
      */
@@ -312,7 +316,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         if (lives >= 1) {
             subtractLife();
         }
-        this.quadrant();
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + lives, this.getClass());
 
         if (stixDrawn()) {
@@ -329,8 +332,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * Return the quadrant the cursor is in, as follows.
-     * 12
-     * 34
+     * 01
+     * 32
      *
      * @return the quadrant the cursor is in
      */
@@ -359,7 +362,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return (quadrant + 2) % 4;
     }
 
-
     /**
      * @return true if the cursor has drawn stix
      */
@@ -386,7 +388,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
     }
 
-
     public CursorPowerupHandler getCursorPowerupHandler() {
         return cursorPowerupHandler;
     }
@@ -399,7 +400,13 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         this.fuseHandler = fuseHandler;
     }
 
+    public int getLoops() {
+        return loops;
+    }
 
+    public void setLoops(int loops) {
+        this.loops = loops;
+    }
 
     /**
      * @return String format of cursor.

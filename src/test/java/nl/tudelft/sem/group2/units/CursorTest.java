@@ -1,6 +1,7 @@
 package nl.tudelft.sem.group2.units;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import nl.tudelft.sem.group2.JavaFXThreadingRule;
@@ -15,6 +16,7 @@ import org.junit.Test;
 import java.awt.Point;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -32,7 +34,7 @@ public class CursorTest {
     private Cursor cursor;
     private Stix stix = mock(Stix.class);
     private KeyEvent keyEventMock;
-
+    private ScoreCounter scoreCounter;
 
     @Before
     public void setUp() throws Exception {
@@ -44,6 +46,8 @@ public class CursorTest {
         cursor = new Cursor(new Point(0, 0), 2,
                 2, stix, Globals.LIVES, 0);
         cursor.setSpeed(1);
+        scoreCounter = new ScoreCounter(cursor.getId(), 20);
+        cursor.setScoreCounter(scoreCounter);
     }
 
 
@@ -343,5 +347,157 @@ public class CursorTest {
         cursor.subtractLife();
 
         Assert.assertEquals(0, cursor.getLives());
+    }
+
+
+    @Test
+    public void quadrantTest1() {
+        cursor = new Cursor(new Point(0, 0), 2, 2, stix, 1, 1);
+
+        Assert.assertEquals(0, cursor.quadrant());
+    }
+
+    @Test
+    public void quadrantTest2() {
+        cursor = new Cursor(new Point(149, 0), 2, 2, stix, 1, 1);
+
+        Assert.assertEquals(1, cursor.quadrant());
+    }
+
+    @Test
+    public void quadrantTest3() {
+        cursor = new Cursor(new Point(0, 149), 2, 2, stix, 1, 1);
+
+        Assert.assertEquals(3, cursor.quadrant());
+    }
+
+    @Test
+    public void quadrantTest4() {
+        cursor = new Cursor(new Point(149, 149), 2, 2, stix, 1, 1);
+
+        Assert.assertEquals(2, cursor.quadrant());
+    }
+
+    @Test
+    public void oppositeQuadrantTest1() {
+        cursor = new Cursor(new Point(0, 0), 2, 2, stix, 1, 1);
+
+        Assert.assertEquals(2, cursor.oppositeQuadrant());
+    }
+
+    @Test
+    public void oppositeQuadrantTest2() {
+        cursor = new Cursor(new Point(149, 0), 2, 2, stix, 1, 1);
+
+        Assert.assertEquals(3, cursor.oppositeQuadrant());
+    }
+
+    @Test
+    public void oppositeQuadrantTest3() {
+        cursor = new Cursor(new Point(0, 149), 2, 2, stix, 1, 1);
+
+        Assert.assertEquals(1, cursor.oppositeQuadrant());
+    }
+
+    @Test
+    public void oppositeQuadrantTest4() {
+        cursor = new Cursor(new Point(149, 149), 2, 2, stix, 1, 1);
+
+        Assert.assertEquals(0, cursor.oppositeQuadrant());
+    }
+
+    /**
+     * Verify loops hasnt changed (as would happen when the animation is done).
+     */
+    @Test
+    public void testAnimationDone() {
+        cursor = new Cursor(new Point(149, 149), 2, 2, stix, 1, 1);
+        cursor.setLoops(Integer.MAX_VALUE);
+        cursor.draw(mock(GraphicsContext.class));
+
+        Assert.assertEquals(Integer.MAX_VALUE, cursor.getLoops());
+    }
+
+    @Test
+    public void testCursorDiedNoLivesStixDrawn() {
+        createCursor();
+        Cursor spyCursor = spy(cursor);
+        spyCursor.setLives(0);
+        stix = new Stix();
+        stix.addToStix(new Point(1, 1));
+        spyCursor.setStix(stix);
+
+        spyCursor.cursorDied();
+
+        Assert.assertEquals(0, spyCursor.getLives());
+        verify(spyCursor, times(0)).subtractLife();
+    }
+
+    @Test
+    public void testCursorDiedEnoughLivesStixDrawn() {
+        createCursor();
+        Cursor spyCursor = spy(cursor);
+        spyCursor.setLives(1);
+        stix = new Stix();
+        stix.addToStix(new Point(1, 1));
+        spyCursor.setStix(stix);
+
+        spyCursor.cursorDied();
+
+        Assert.assertEquals(0, spyCursor.getLives());
+        verify(spyCursor, times(1)).subtractLife();
+    }
+
+    @Test
+    public void testCursorDiedNoLivesStixNull() {
+        createCursor();
+        Cursor spyCursor = spy(cursor);
+        spyCursor.setLives(0);
+        spyCursor.setStix(null);
+
+        spyCursor.cursorDied();
+
+        Assert.assertEquals(0, spyCursor.getLives());
+        verify(spyCursor, times(0)).setX(anyInt());
+    }
+
+    @Test
+    public void testCursorDiedEnoughLivesStixNull() {
+        createCursor();
+        Cursor spyCursor = spy(cursor);
+        spyCursor.setLives(1);
+        spyCursor.setStix(null);
+
+        spyCursor.cursorDied();
+
+        Assert.assertEquals(0, spyCursor.getLives());
+        verify(spyCursor, times(1)).subtractLife();
+        verify(spyCursor, times(0)).setX(anyInt());
+    }
+
+    @Test
+    public void testMoveFuseNull() {
+        createCursor();
+        FuseHandler fuseHandler = mock(FuseHandler.class);
+        when(fuseHandler.getFuse()).thenReturn(null);
+        cursor.setFuseHandler(fuseHandler);
+
+        cursor.move();
+
+        verify(fuseHandler, times(1)).getFuse();
+    }
+
+    @Test
+    public void drawStixAndFuseNull() {
+        createCursor();
+        cursor.setStix(mock(Stix.class));
+        FuseHandler fuseHandler = mock(FuseHandler.class);
+        when(fuseHandler.getFuse()).thenReturn(null);
+        cursor.setFuseHandler(fuseHandler);
+        cursor.setLoops(Integer.MAX_VALUE);
+
+        cursor.draw(mock(GraphicsContext.class));
+
+        verify(fuseHandler, times(2)).getFuse();
     }
 }
