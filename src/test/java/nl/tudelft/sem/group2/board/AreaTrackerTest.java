@@ -2,14 +2,16 @@ package nl.tudelft.sem.group2.board;
 
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.gameController.GameController;
+import nl.tudelft.sem.group2.global.Globals;
 import nl.tudelft.sem.group2.level.Level;
 import nl.tudelft.sem.group2.level.LevelHandler;
 import nl.tudelft.sem.group2.units.Stix;
-import org.junit.Before;
 
 import java.awt.Point;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,19 +21,16 @@ import static org.mockito.Mockito.when;
  * Test class for the AreaTracker class.
  */
 public class AreaTrackerTest {
-    private static final int TEST_MAP_WIDTH = 5;
-    private static final int TEST_MAP_HEIGHT = 5;
 
     private Stix stix;
     private ScoreCounter scoreCounter = mock(ScoreCounter.class);
     private BoardGrid grid;
-    private LevelHandler levelHandler;
 
-    @Before
-    public void setUp() throws Exception {
-        stix = new Stix();
+
+    private void setUpMocks() throws Exception {
+        instantiateStix();
         grid = mock(BoardGrid.class);
-        levelHandler = mock(LevelHandler.class);
+        LevelHandler levelHandler = mock(LevelHandler.class);
         GameController.getInstance().setLevelHandler(levelHandler);
         when(levelHandler.getLevel()).thenReturn(mock(Level.class));
         when(levelHandler.getLevel().getBoardGrid()).thenReturn(grid);
@@ -48,15 +47,31 @@ public class AreaTrackerTest {
     }
 
     /**
+     * Test method for the reset method.
+     *
+     * @throws Exception when the AreaTracker fails to do its job
+     */
+    @org.junit.Test
+    public void testReset() throws Exception {
+        assertNotNull(AreaTracker.getInstance());
+        AreaTracker.reset();
+        assertNull(AreaTracker.getInstanceUnchecked());
+        assertNotNull(AreaTracker.getInstance());
+
+    }
+
+
+    /**
      * Test verify setOuterBorder is called.
      *
      * @throws Exception when the AreaTracker fails to do its job
      */
     @org.junit.Test
     public void testVerifySetOuterBorder() throws Exception {
+        setUpMocks();
         stix.addToStix(new Point(1, 1));
         stix.addToStix(new Point(1, 2));
-        AreaTracker.getInstance().calculateNewArea(new Point(1, 2), true, stix, scoreCounter);
+        AreaTracker.getInstance().calculateNewArea(new Point(1, 2), true, stix, scoreCounter, grid);
         verify(grid, times(1)).setState(new Point(1, 1), AreaState.OUTERBORDER);
     }
 
@@ -67,20 +82,23 @@ public class AreaTrackerTest {
      */
     @org.junit.Test
     public void testCalculateNewSlowArea() throws Exception {
-        /*
-        AreaTracker areaTracker = instantiateAreaTracker();
+        instantiateBigStix();
+        AreaTracker areaTracker = AreaTracker.getInstance();
+        GameController gc = GameController.getInstance();
+        gc.instantiateTestGame(false);
 
-        areaTracker.calculateNewArea(new Coordinate(1, 2), false, stix, scoreCounter);
+        BoardGrid actualGrid = new BoardGrid();
+        areaTracker.calculateNewArea(new Point(1, 2), false, stix, scoreCounter, actualGrid);
 
-        AreaState[][] expectedGrid = createExpectedBoardGridQixAboveStix(false);
 
-        AreaState[][] currentGrid = areaTracker.getBoardGrid();
-        for (int i = 0; i < TEST_MAP_HEIGHT; i++) {
-            for (int j = 0; j < TEST_MAP_WIDTH; j++) {
-                assertEquals(expectedGrid[j][i], currentGrid[j][i]);
+        BoardGrid expectedGrid = createExpectedBoardGridQixAboveStix(false);
+
+        for (int i = 0; i < expectedGrid.getWidth(); i++) {
+            for (int j = 0; j < expectedGrid.getHeight(); j++) {
+                Coordinate coor = new Coordinate(i, j);
+                assertEquals(actualGrid.getState(coor), expectedGrid.getState(coor));
             }
         }
-        */
     }
 
     /**
@@ -90,75 +108,68 @@ public class AreaTrackerTest {
      */
     @org.junit.Test
     public void testCalculateNewFastAreaWithQixOnOtherSide() throws Exception {
-        /*
-        AreaTracker areaTracker = instantiateAreaTracker();
+        instantiateBigStix();
+        AreaTracker areaTracker = AreaTracker.getInstance();
 
-        areaTracker.calculateNewArea(new Coordinate(3, 2), true, stix, scoreCounter);
+        BoardGrid actualGrid = new BoardGrid();
+        areaTracker.calculateNewArea(new Point(3, 2), true, stix, scoreCounter, actualGrid);
 
-        AreaState[][] expectedGrid = createExpectedBoardGridQixUnderStix(true);
+        BoardGrid expectedGrid = createExpectedBoardGridQixUnderStix(true);
 
-
-        AreaState[][] currentGrid = areaTracker.getBoardGrid();
-        for (int i = 0; i < TEST_MAP_HEIGHT; i++) {
-            for (int j = 0; j < TEST_MAP_WIDTH; j++) {
-                assertEquals(expectedGrid[j][i], currentGrid[j][i]);
+        for (int i = 0; i < expectedGrid.getWidth(); i++) {
+            for (int j = 0; j < expectedGrid.getHeight(); j++) {
+                Coordinate coor = new Coordinate(i, j);
+                assertEquals(actualGrid.getState(coor), expectedGrid.getState(coor));
             }
         }
-        */
     }
 
-    private AreaState[][] createExpectedBoardGridQixAboveStix(boolean fastArea) {
-        AreaState[][] expectedGrid = new AreaState[TEST_MAP_WIDTH][TEST_MAP_HEIGHT];
-        for (int y = 0; y < TEST_MAP_HEIGHT; y++) {
-            for (int x = 0; x < TEST_MAP_WIDTH; x++) {
-                if (x == 0) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else if ((x == 1 || x == 4) && (y == 0 || y == 4)) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else if (x == 1) {
-                    expectedGrid[x][y] = AreaState.UNCOVERED;
-                } else if (x == 2) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else if (x == 3 && (y == 0 || y == 4)) {
-                    expectedGrid[x][y] = AreaState.INNERBORDER;
-                } else if (x == 3 && fastArea) {
-                    expectedGrid[x][y] = AreaState.FAST;
-                } else if (x == 3) {
-                    expectedGrid[x][y] = AreaState.SLOW;
-                } else if (x == 4 && y > 0 && y < 4) {
-                    expectedGrid[x][y] = AreaState.INNERBORDER;
+    private BoardGrid createExpectedBoardGridQixAboveStix(boolean fastArea) {
+        BoardGrid boardGrid = new BoardGrid();
+        for (int x = 0; x < boardGrid.getWidth(); x++) {
+            for (int y = 0; y < boardGrid.getHeight(); y++) {
+                if (y == boardGrid.getHeight() - 1 && x != 0 && x != boardGrid.getWidth() - 1) {
+                    boardGrid.setState(new Coordinate(y, x), AreaState.INNERBORDER);
+                } else if (y == 2 && x != 0 && x != boardGrid.getWidth() - 1) {
+                    boardGrid.setState(new Coordinate(y, x), AreaState.OUTERBORDER);
+                } else if (y > 2 && y < boardGrid.getHeight() - 1) {
+                    if (x != 0 && x != boardGrid.getWidth() - 1) {
+                        if (fastArea) {
+                            boardGrid.setState(new Coordinate(y, x), AreaState.FAST);
+                        } else {
+                            boardGrid.setState(new Coordinate(y, x), AreaState.SLOW);
+                        }
+                    } else {
+                        boardGrid.setState(new Coordinate(y, x), AreaState.INNERBORDER);
+                    }
                 }
             }
         }
-        return expectedGrid;
+        return boardGrid;
     }
 
-    private AreaState[][] createExpectedBoardGridQixUnderStix(boolean fastArea) {
-        AreaState[][] expectedGrid = new AreaState[TEST_MAP_WIDTH][TEST_MAP_HEIGHT];
-        for (int y = 0; y < TEST_MAP_HEIGHT; y++) {
-            for (int x = 0; x < TEST_MAP_WIDTH; x++) {
-                if (x == 0 && (y == 0 || y == 4)) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else if (x == 0) {
-                    expectedGrid[x][y] = AreaState.INNERBORDER;
-                } else if (x == 1 && (y == 0 || y == 4)) {
-                    expectedGrid[x][y] = AreaState.INNERBORDER;
-                } else if (x == 1 && fastArea) {
-                    expectedGrid[x][y] = AreaState.FAST;
-                } else if (x == 1) {
-                    expectedGrid[x][y] = AreaState.SLOW;
-                } else if (x == 2) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else if (x == 3 && (y == 0 || y == 4)) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
-                } else if (x == 3) {
-                    expectedGrid[x][y] = AreaState.UNCOVERED;
-                } else if (x == 4) {
-                    expectedGrid[x][y] = AreaState.OUTERBORDER;
+    private BoardGrid createExpectedBoardGridQixUnderStix(boolean fastArea) {
+        BoardGrid boardGrid = new BoardGrid();
+        for (int x = 0; x < boardGrid.getWidth(); x++) {
+            for (int y = 0; y < boardGrid.getHeight(); y++) {
+                if (y == 0 && x != 0 && x != boardGrid.getWidth() - 1) {
+                    boardGrid.setState(new Coordinate(y, x), AreaState.INNERBORDER);
+                } else if (y == 2 && x != 0 && x != boardGrid.getWidth() - 1) {
+                    boardGrid.setState(new Coordinate(y, x), AreaState.OUTERBORDER);
+                } else if (y == 1) {
+                    if (x != 0 && x != boardGrid.getWidth() - 1) {
+                        if (fastArea) {
+                            boardGrid.setState(new Coordinate(y, x), AreaState.FAST);
+                        } else {
+                            boardGrid.setState(new Coordinate(y, x), AreaState.SLOW);
+                        }
+                    } else {
+                        boardGrid.setState(new Coordinate(y, x), AreaState.INNERBORDER);
+                    }
                 }
             }
         }
-        return expectedGrid;
+        return boardGrid;
     }
 
     private void instantiateStix() {
@@ -168,5 +179,12 @@ public class AreaTrackerTest {
         stix.addToStix(new Point(2, 2));
         stix.addToStix(new Point(2, 3));
         stix.addToStix(new Point(2, 4));
+    }
+
+    private void instantiateBigStix() {
+        stix = new Stix();
+        for (int i = 0; i <= Globals.GRID_WIDTH; i++) {
+            stix.addToStix(new Point(2, i));
+        }
     }
 }

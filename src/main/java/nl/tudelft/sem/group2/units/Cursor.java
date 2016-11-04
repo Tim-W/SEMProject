@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
 import nl.tudelft.sem.group2.board.AreaTracker;
+import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.cursorMovement.CursorKeypressHandler;
 import nl.tudelft.sem.group2.global.Globals;
@@ -179,14 +180,15 @@ public class Cursor extends LineTraveller implements CollisionInterface {
      * When a new area is completed, calculate the new score.
      *
      * @param qix the qix of the game
+     * @param boardGrid the boardgrid of the game
      */
-    public void calculateArea(Qix qix) {
+    public void calculateArea(Qix qix, BoardGrid boardGrid) {
         if (getGrid().isOuterborder(this.getX(), this.getY()) && !this.getStix().isEmpty()) {
 
             SoundHandler.playSound("/sounds/qix-success.mp3", Globals.SUCCESS_SOUND_VOLUME);
 
             AreaTracker.getInstance().calculateNewArea(new Point(qix.getX(), qix.getY()),
-                    this.isFast(), getStix(), scoreCounter);
+                    this.isFast(), getStix(), scoreCounter, boardGrid);
 
             //Remove the Fuse from the gameView when completing an area
             fuseHandler.removeFuse();

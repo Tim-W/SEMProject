@@ -199,7 +199,7 @@ public final class GameController {
     /**
      * Start animations.
      */
-    public void animationTimerStart() {
+    private void animationTimerStart() {
         animationTimer.start();
     }
 
@@ -208,7 +208,7 @@ public final class GameController {
      *
      * @return animationTimer
      */
-    public AnimationTimer getAnimationTimer() {
+    AnimationTimer getAnimationTimer() {
         return animationTimer;
     }
 
@@ -217,7 +217,7 @@ public final class GameController {
      *
      * @param previousTime setter
      */
-    public void setPreviousTime(long previousTime) {
+    void setPreviousTime(long previousTime) {
         this.previousTime = previousTime;
     }
 
@@ -266,7 +266,7 @@ public final class GameController {
     /**
      * Setup an animation timer that runs at 300FPS.
      */
-    public void createAnimationTimer() {
+    private void createAnimationTimer() {
         // animation timer for handling a loop
         animationTimer = new AnimationTimer() {
             public void handle(long now) {
@@ -289,7 +289,7 @@ public final class GameController {
                                     gameOver();
                                 }
                             }
-                            cursor.calculateArea(qix);
+                            cursor.calculateArea(qix, levelHandler.getLevel().getBoardGrid());
                         }
                         powerupHandler.handlePowerups(units, collisionHandler, cursors);
                         powerupHandler.spawnPowerup(units, cursors, getGrid());
@@ -382,11 +382,11 @@ public final class GameController {
         return gameScene;
     }
 
-    public void setGameScene(GameScene scene) {
+    void setGameScene(GameScene scene) {
         this.gameScene = scene;
     }
 
-    public ArrayList<Cursor> getCursors() {
+    ArrayList<Cursor> getCursors() {
         return cursors;
     }
 
@@ -437,7 +437,17 @@ public final class GameController {
     }
 
     /**
+     * Create a test game.
+     *
+     * @param twoPlayers boolean which describes if it is a two player game.
+     */
+    public void instantiateTestGame(boolean twoPlayers) {
+        levelHandler.nextLevel(twoPlayers);
+    }
+
+    /**
      * only used for testing.
+     *
      * @param collisionHandler CollisionHandler
      */
     public void setCollisionHandler(CollisionHandler collisionHandler) {

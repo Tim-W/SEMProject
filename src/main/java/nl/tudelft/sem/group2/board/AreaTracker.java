@@ -2,7 +2,6 @@ package nl.tudelft.sem.group2.board;
 
 import nl.tudelft.sem.group2.Logger;
 import nl.tudelft.sem.group2.ScoreCounter;
-import nl.tudelft.sem.group2.gameController.GameController;
 import nl.tudelft.sem.group2.units.Stix;
 
 import java.awt.Point;
@@ -61,52 +60,24 @@ public final class AreaTracker extends Observable {
     public static void reset() {
         instance = null;
     }
-/*
-    *//**
-     * Return the quadrant the cursor is in, as follows.
-     * 12
-     * 34
-     *
-     * @return the quadrant the cursor is in
-     *//*
-    private static int quadrant(int x, int y) {
-        if (x < Globals.BOARD_WIDTH / 4) {
-            if (y < Globals.BOARD_HEIGHT / 4) {
-                return 0;
-            } else {
-                return 3;
-            }
-        } else if (y < Globals.BOARD_HEIGHT / 4) {
-            return 1;
-        }
-        return 2;
-    }*/
-/*
-    *//**
-     * Gives the opposite quadrant the cursor is in.
-     *
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @return the opposite quadrant the cursor is in
-     *//*
-    public static int oppositeQuadrant(int x, int y) {
-        int quadrant = quadrant(x, y);
 
-        return (quadrant + 2) % 4;
-    }*/
+    static AreaTracker getInstanceUnchecked() {
+        return instance;
+    }
 
     /**
-     * /**
      * Method that updates the grid when a stix is completed.
      *
      * @param qixCoordinates current qix coordinates
      * @param fastArea       tells if stix was created fast or slow (double points if slow)
      * @param stix           current stix to use
      * @param scoreCounter   the counter that handles the score
+     * @param boardGrid      the boardgrid
      */
     public synchronized void calculateNewArea(Point qixCoordinates,
-                                              boolean fastArea, Stix stix, ScoreCounter scoreCounter) {
-        this.grid = GameController.getInstance().getGrid();
+                                              boolean fastArea, Stix stix, ScoreCounter scoreCounter,
+                                              BoardGrid boardGrid) {
+        this.grid = boardGrid;
         setOuterBorders(stix);
         // Obtain first and second point from the stix to determine
         // beginposition for the floodfill algorithm
@@ -296,5 +267,7 @@ public final class AreaTracker extends Observable {
         foundQix = true;
     }
 
-
+    public BoardGrid getBoardGrid() {
+        return grid;
+    }
 }

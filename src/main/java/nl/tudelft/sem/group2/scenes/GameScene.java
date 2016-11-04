@@ -204,6 +204,7 @@ public class GameScene extends Scene {
 
     /**
      * only used for testing.
+     *
      * @return String
      */
     public String getMessage() {
