@@ -53,6 +53,37 @@ public class BoardGridTest {
     @Test
     public void setStateNull() {
         BoardGrid copy = boardGrid;
+        boardGrid.setState(new Point(-1, -1), AreaState.UNCOVERED);
+
+        Assert.assertEquals(copy, boardGrid);
+    }
+
+    /**
+     * Test if the areastates are initialized good.
+     *
+     * @throws Exception when the BoardGrid fails to do its job
+     */
+    @Test
+    public void testAssertStateCor() throws Exception {
+        Assert.assertEquals(boardGrid.getState(new Coordinate(0, 0)), AreaState.OUTERBORDER);
+    }
+
+    /**
+     * test if getstate returns null.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetStateNullCor() throws Exception {
+        Assert.assertEquals(null, boardGrid.getState(new Coordinate(-1, 0)));
+    }
+
+    /**
+     * Test nothing has changed when setting an invalid coordinate.
+     */
+    @Test
+    public void setStateNullCor() {
+        BoardGrid copy = boardGrid;
         boardGrid.setState(new Coordinate(-1, -1), AreaState.UNCOVERED);
 
         Assert.assertEquals(copy, boardGrid);
