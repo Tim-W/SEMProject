@@ -49,7 +49,6 @@ public abstract class Unit extends Coordinate implements Draw, Movable, Collisio
      * @return true if the collidee is on the same (x,y) coordinate as the current unit
      */
     public boolean intersect(Unit collidee) {
-        collidee.toString();
         if (collidee instanceof Qix) {
             Qix qix = (Qix) collidee;
             return qix.intersect(this);
