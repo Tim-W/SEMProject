@@ -11,7 +11,7 @@ import nl.tudelft.sem.group2.board.BoardGrid;
 import nl.tudelft.sem.group2.collisions.CollisionInterface;
 import nl.tudelft.sem.group2.cursorMovement.CursorKeypressHandler;
 import nl.tudelft.sem.group2.global.Globals;
-import nl.tudelft.sem.group2.powerups.PowerupHandler;
+import nl.tudelft.sem.group2.powerups.CursorPowerupHandler;
 import nl.tudelft.sem.group2.sound.SoundHandler;
 
 import java.awt.Point;
@@ -42,7 +42,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     private boolean isDrawing = false;
     private int speed = Globals.CURSOR_FAST;
     private int id;
-    private PowerupHandler powerupHandler;
+    private CursorPowerupHandler cursorPowerupHandler;
     private FuseHandler fuseHandler;
     private CursorKeypressHandler cursorKeypressHandler;
 
@@ -70,7 +70,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         setSprite(sprite);
         this.stix = stix;
         this.lives = lives;
-        powerupHandler = new PowerupHandler();
+        cursorPowerupHandler = new CursorPowerupHandler();
         fuseHandler = new FuseHandler(this);
         cursorKeypressHandler = new CursorKeypressHandler(this);
     } /*
@@ -86,7 +86,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
     public Cursor(Point position, int width, int height, Stix stix) {
         super(position.x, position.y, width, height);
         this.stix = stix;
-        powerupHandler = new PowerupHandler();
+        cursorPowerupHandler = new CursorPowerupHandler();
         fuseHandler = new FuseHandler(this);
     }
 */
@@ -143,7 +143,7 @@ public class Cursor extends LineTraveller implements CollisionInterface {
                 getWidth(),
                 getHeight()
         );
-        powerupHandler.applyEffect(gc);
+        cursorPowerupHandler.applyEffect(gc);
     }
 
     private void calculateLineCoordinates(int drawX, int drawY, Canvas canvas) {
@@ -307,6 +307,10 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return lives;
     }
 
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
     /**
      * Method that decreases amount of lives cursor has upon dying.
      */
@@ -314,7 +318,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         if (lives >= 1) {
             subtractLife();
         }
-        this.quadrant();
         LOGGER.log(Level.INFO, "Player died, lives remaining: " + lives, this.getClass());
 
         if (stixDrawn()) {
@@ -331,8 +334,8 @@ public class Cursor extends LineTraveller implements CollisionInterface {
 
     /**
      * Return the quadrant the cursor is in, as follows.
-     * 12
-     * 34
+     * 01
+     * 32
      *
      * @return the quadrant the cursor is in
      */
@@ -361,7 +364,6 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         return (quadrant + 2) % 4;
     }
 
-
     /**
      * @return true if the cursor has drawn stix
      */
@@ -388,13 +390,24 @@ public class Cursor extends LineTraveller implements CollisionInterface {
         LOGGER.log(Level.INFO, "subract life of cursor. Current lives: " + lives, Cursor.class);
     }
 
-
-    public PowerupHandler getPowerupHandler() {
-        return powerupHandler;
+    public CursorPowerupHandler getCursorPowerupHandler() {
+        return cursorPowerupHandler;
     }
 
     public FuseHandler getFuseHandler() {
         return fuseHandler;
+    }
+
+    public void setFuseHandler(FuseHandler fuseHandler) {
+        this.fuseHandler = fuseHandler;
+    }
+
+    public int getLoops() {
+        return loops;
+    }
+
+    public void setLoops(int loops) {
+        this.loops = loops;
     }
 
     /**

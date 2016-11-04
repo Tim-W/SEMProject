@@ -12,11 +12,11 @@ import java.io.InputStream;
 /**
  * Class creates levels of xml files.
  */
-public final class LevelFactory {
+public class LevelFactory {
     /**
      * Basic contructor for collision handler class.
      */
-    private LevelFactory() {
+    public LevelFactory() {
     }
 
     /**
@@ -26,7 +26,7 @@ public final class LevelFactory {
      * @param twoPlayer true if game is multiplayer
      * @return - returns a level.
      */
-    public static Level createFromXml(int levelNumber, boolean twoPlayer)
+    public Level createFromXml(int levelNumber, boolean twoPlayer)
             throws IOException, ParserConfigurationException, SAXException {
         String player = "singlePlayer";
         if (twoPlayer) {
@@ -50,7 +50,7 @@ public final class LevelFactory {
      * @param xmlFile - Path/name of the XML-file to be parsed.
      * @return - returns a new FileReader if no exception is thrown, else it will return null.
      */
-    private static Document getFileReader(String xmlFile)
+    private Document getFileReader(String xmlFile)
             throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         try (InputStream in = Level.class.getResourceAsStream(xmlFile)) {
