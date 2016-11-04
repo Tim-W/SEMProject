@@ -349,14 +349,16 @@ public final class GameController {
      */
     public void keyPressed(KeyEvent e) {
         initializeCursorSpeed();
-        if (e.getCode().equals(KeyCode.SPACE) && !levelHandler.getLevel().isRunning()) {
-            SoundHandler.playSound("/sounds/qix-new-life.mp3", Globals.GAME_START_SOUND_VOLUME);
-            if (!levelHandler.getLevel().isRunning()) {
-                animationTimerStart();
-                LOGGER.log(java.util.logging.Level.INFO, "Game started succesfully", this.getClass());
+        if (!levelHandler.getLevel().isRunning()) {
+            if (e.getCode().equals(KeyCode.SPACE)) {
+                SoundHandler.playSound("/sounds/qix-new-life.mp3", Globals.GAME_START_SOUND_VOLUME);
+                if (!levelHandler.getLevel().isRunning()) {
+                    animationTimerStart();
+                    LOGGER.log(java.util.logging.Level.INFO, "Game started succesfully", this.getClass());
+                }
+                levelHandler.getLevel().start();
+                gameScene.setMessage("");
             }
-            levelHandler.getLevel().start();
-            gameScene.setMessage("");
         } else {
             for (Cursor cursor : cursors) {
                 cursor.getCursorKeypressHandler().keyPressed(e);
@@ -366,7 +368,7 @@ public final class GameController {
 
     private void initializeCursorSpeed() {
         for (Cursor cursor : cursors) {
-            if (cursor.isFast() || !cursor.isDrawing()) {
+            if (!cursor.isDrawing()) {
                 cursor.setSpeed(Globals.CURSOR_FAST);
             } else {
                 cursor.setSpeed(Globals.CURSOR_SLOW);
@@ -432,5 +434,14 @@ public final class GameController {
             return null;
         }
         return levelHandler.getLevel().getBoardGrid();
+    }
+
+    /**
+     * only used for testing.
+     *
+     * @param collisionHandler CollisionHandler
+     */
+    public void setCollisionHandler(CollisionHandler collisionHandler) {
+        this.collisionHandler = collisionHandler;
     }
 }

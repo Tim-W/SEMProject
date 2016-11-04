@@ -203,6 +203,14 @@ public class GameScene extends Scene {
     }
 
     /**
+     * only used for testing.
+     * @return String
+     */
+    public String getMessage() {
+        return messageLabel.getText();
+    }
+
+    /**
      * Set the label for the message in the middle of the screen.
      *
      * @param string string which the label should be
